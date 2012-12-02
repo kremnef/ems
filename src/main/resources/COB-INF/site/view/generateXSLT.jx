@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-
+    <!--todo: Вынести эти пути в настройки сайта -->
     <jx:set var="XSLT_TYPE_FILES_REAL_LOCATION" value="WEB-INF/xslt/types/"/>
     <jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>
     <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/templates/"/>

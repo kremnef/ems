@@ -146,12 +146,11 @@
                     <fd:failmessage><i18n:text catalogue="core" key="Content.docTypeSetError"/></fd:failmessage>
                 </fd:assert>
             </fd:validation>
-            <!--<fd:on-value-changed>
-                <fd:javascript>
-                    print("dtID:" +this.value);
-                    print ("newDT: " +cocoon.session.getAttribute("documentTypeId"));
-                </fd:javascript>
-            </fd:on-value-changed>-->
+            <!--<fd:on-value-changed>-->
+                <!--<fd:javascript>-->
+                    <!--print("dtID:" +this.value);-->
+                <!--</fd:javascript>-->
+            <!--</fd:on-value-changed>-->
         </fd:field>
         <fd:booleanfield id="isProtected" state="invisible">
             <fd:initial-value>false</fd:initial-value>
