@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.ecommerce.model">
+
+    <!--<union-subclass name="Product" table="EcommerceProduct" extends="ru.strela.ems.core.model.TypifiedObject">-->
+    <!--<union-subclass name="Product" table="EcommerceProduct" >-->
+    <class name="ru.strela.ems.ecommerce.model.Product"  table="ecommerce_product">
+        <id name="id" column="id" type="int">
+            <generator class="increment"/>
+        </id>
+        <property name="model" column="model" type="string" not-null="false"/>
+        <property name="vendor" column="vendor" type="string" not-null="false"/>
+        <property name="sku" column="sku" type="string" not-null="false"/>
+        <property name="upc" column="upc" type="string" not-null="false"/>
+        <property name="sellingUOM" column="sellingUOM" type="string" not-null="false"/>
+
+        <property name="basePrice" column="base_price" type="double" not-null="false"/>
+        <property name="specialPrice" column="special_price" type="double" not-null="false"/>
+
+        <property name="discount" column="discount" type="int" not-null="false"/>
+        <property name="minimumSellingUnits" column="minimum_selling_units" type="int" not-null="false"/>
+        <property name="onHandQuantity" column="on_hand_quantity" type="int" not-null="false"/>
+        <!--<one-to-one name="product" class="ru.strela.ems.ecommerce.model.Product" property-ref="subject_id"/>-->
+
+        <!--<bag name="catalogues" lazy="false" table="EcommerceCatalogueProduct">
+            <key column="product_id"/>
+            <many-to-many column="catalogue_id" class="Catalogue" lazy="false"/>
+        </bag>-->
+
+
+    </class>
+    <!--</union-subclass>-->
+</hibernate-mapping>

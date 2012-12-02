@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<root xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <head>
+        <title>Contents successful</title>
+    </head>
+    <body>
+        <jx:import uri="view/SystemNode/SystemNode_template.jx"/>
+    </body>
+</root>

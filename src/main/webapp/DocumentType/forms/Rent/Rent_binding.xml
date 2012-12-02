@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+
+    <fb:group id="Rent" path="Rent">
+        <fb:repeater id="Rent-table" parent-path="Rent-table" row-path="item">
+            <fb:identity>
+            </fb:identity>
+            <fb:on-bind>
+                <fb:value id="address" path="address"/>
+                <fb:value id="object" path="object"/>
+                <fb:value id="object-description" path="object-description"/>
+                <fb:value id="building" path="building"/>
+                <fb:value id="category" path="category"/>
+                <fb:value id="area" path="area"/>
+            </fb:on-bind>
+        </fb:repeater>
+
+    </fb:group>
+
+</fb:context>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+
+    <fb:group id="Tariffs" path="Tariffs">
+        <fb:repeater id="Tariffs-termal" parent-path="Tariffs-termal" row-path="item">
+            <fb:identity>
+            </fb:identity>
+            <fb:on-bind>
+                <!--Категория потребителей-->
+                <fb:value id="category" path="category"/>
+                <!--Горячая вода-->
+                <fb:value id="hot-water" path="hot-water"/>
+                <fb:value id="selected-vapor" path="selected-vapor"/>
+                <fb:value id="live-steam" path="live-steam"/>
+            </fb:on-bind>
+        </fb:repeater>
+
+    </fb:group>
+
+</fb:context>

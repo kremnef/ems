@@ -1,0 +1,101 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listCustomer() {
+    print("1111");
+//    listTypifiedObjects(0);
+    var list = listCommon("customer", "firstName", "desc","")
+    cocoon.sendPage(list.displayURI,list);
+}
+
+
+function createCustomer(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var customerService = cocoon.getComponent("customerService");
+    var customer = createTypifiedObject(customerService);
+
+    var parentId = 0;
+    var parentName = "";
+//    var parentObject = customer.getParent();
+//    if (parentObject != null) {
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//    }
+
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+
+    customer = showEmsObjectForm(form, customerService, customer, showFormURI, {
+        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+
+
+    customerService.save(customer);
+    cocoon.releaseComponent(customerService);
+
+    var id = customer.getId();
+    cocoon.disposeObject(customer);
+
+    cocoon.redirectTo("Customer-edit?id=" + id);
+}
+
+
+function editCustomerById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("createCustomer");
+    }
+    var customerService = cocoon.getComponent("customerService");
+    var customer = customerService.getTypifiedObject(id);
+    if (customer == null) {
+        cocoon.releaseComponent(customerService);
+        cocoon.redirectTo("createCustomer");
+    }
+
+    var parentId = customer.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = customer.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+    var actionState = "edit";
+    var viewData = {
+        "actionState": actionState, "type": "photo"
+    }
+
+
+    customer = showEmsObjectForm(form, customerService, customer, showFormURI, {
+        "viewData": viewData,
+        "customerId": id,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+
+    customerService.save(customer);
+    cocoon.releaseComponent(customerService);
+
+    cocoon.redirectTo("Customer-edit?id=" + customer.getId());
+}
+
+function deleteCustomerById() {
+    deleteObjectById("Customer");
+}

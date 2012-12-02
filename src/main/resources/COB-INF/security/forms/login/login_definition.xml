@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fd:form id="loginform"
+         xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+         xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+    <fd:widgets>
+
+        <fd:field id="errorMessage" state="invisible">
+            <fd:label><i18n:text catalogue="security" key="auth.incorrect"/></fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+        <fd:field id="loggedInMessage" state="invisible">
+            <fd:label><i18n:text catalogue="security" key="auth.loggedIn"/></fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+        <fd:field id="login" required="true">
+            <fd:label><i18n:text catalogue="security" key="auth.login"/></fd:label>
+            <fd:datatype base="string"/>
+            <fd:validation>
+                <fd:length min="2">
+                    <fd:failmessage>Много или мало цифр</fd:failmessage>
+                </fd:length>
+            </fd:validation>
+            <!--<fd:validation>
+                <fd:email>
+                    <fd:failmessage>Not a valid email address!</fd:failmessage>
+                </fd:email>
+            </fd:validation>-->
+            <!--<fd:validation>
+                <fd:length min="2">
+                    <fd:failmessage>Много или мало цифр</fd:failmessage>
+                </fd:length>
+                <fd:javascript>
+                    var success=true;
+                    if (some-test) {widget.setValidationError(new
+                    Packages.org.apache.cocoon.forms.validation.ValidationError("my-error",true)); success=false;}
+                    return success;
+                </fd:javascript>
+
+            </fd:validation>-->
+            <!--<fd:validation>
+                <fd:length min="2"/>
+            </fd:validation>-->
+        </fd:field>
+
+        <fd:field id="password" required="true">
+            <fd:label><i18n:text catalogue="security" key="auth.password"/></fd:label>
+            <fd:datatype base="string"/>
+            <fd:validation>
+                <fd:length min="5" max="20">
+                    <fd:failmessage>Много или мало цифр</fd:failmessage>
+                </fd:length>
+            </fd:validation>
+        </fd:field>
+        <fd:booleanfield id="rememberme" required="false">
+            <fd:label>
+                <i18n:text catalogue="security" key="auth.rememberme"/>
+            </fd:label>
+            <!--<fd:datatype base="checkbox"/>-->
+            <!--<fd:validation>
+                <fd:length min="5" max="20"/>
+            </fd:validation>-->
+        </fd:booleanfield>
+        <fd:field id="locale">
+            <fd:label><i18n:text catalogue="ems" key="interface.languages"/></fd:label>
+            <fd:initial-value>ru</fd:initial-value>
+            <fd:datatype base="string"/>
+            <fd:on-value-changed>
+                <javascript>
+                    cocoon.session.setAttribute("locale", this.value);
+                    <!--print(getLocale());-->
+                </javascript>
+            </fd:on-value-changed>
+            <fd:selection-list>
+                <fd:item value="ru">
+                    <fd:label>
+                        <i18n:text catalogue="security" key="auth.locale_ru"/>
+                    </fd:label>
+                </fd:item>
+                <fd:item value="en">
+                    <fd:label>
+                        <i18n:text catalogue="security" key="auth.locale_en"/>
+                    </fd:label>
+                </fd:item>
+            </fd:selection-list>
+        </fd:field>
+
+        <!--<fd:field id="email" required="true">
+          <fd:label>Email:</fd:label>
+          <fd:datatype base="string"/>
+          <fd:validation>
+            <fd:email/>
+          </fd:validation>
+        </fd:field>-->
+
+        <!--<fd:field id="age">
+          <fd:label>Your age:</fd:label>
+          <fd:datatype base="long"/>
+          <fd:validation>
+            <fd:range min="0" max="150"/>
+          </fd:validation>
+        </fd:field>-->
+
+        <!--<fd:field id="confirmPassword" required="true">
+          <fd:label>Повторите пароль:</fd:label>
+          <fd:datatype base="string"/>
+          <fd:validation>
+            <fd:assert test="password = confirmPassword">
+              <fd:failmessage>The two passwords are not equal.</fd:failmessage>
+            </fd:assert>
+          </fd:validation>
+        </fd:field>-->
+
+        <!--<fd:booleanfield id="spam">
+          <fd:label>Send me spam</fd:label>
+        </fd:booleanfield>-->
+        <fd:submit id="enter">
+            <fd:label><i18n:text catalogue="security" key="auth.enter"/></fd:label>
+        </fd:submit>
+        <!--<fd:action id="enter">
+            <fd:label><i18n:text catalogue="security" key="auth.enter"/></fd:label>
+        </fd:action>-->
+        <fd:action id="changeAccount">
+            <fd:label>
+                <i18n:text catalogue="security" key="auth.changeAccount"/>
+            </fd:label>
+            <fd:on-action>
+                <fd:javascript>
+                    cocoon.redirectTo('logout');
+                </fd:javascript>
+            </fd:on-action>
+        </fd:action>
+    </fd:widgets>
+
+</fd:form>

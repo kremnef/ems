@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.security">
+    <class name="ru.strela.ems.security.model.Role" table="roles">
+        <id name="roleId" column="id" type="int">
+            <generator class="increment"/>
+        </id>
+        <property name="roleName" column="role_name" type="string" not-null="true"/>
+        <property name="authority" column="authority" type="string" not-null="true"/>
+
+    </class>
+</hibernate-mapping>
+

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+    <jx:forEach select="#{Product}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        <Product id="#{id}">
+            <languageCode>#{languageCode}</languageCode>
+            <name>#{name}</name>
+            <charset>#{charset}</charset>
+        </Product>
+    <!--ssяяяффф-->
+    </jx:forEach>

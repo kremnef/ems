@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <content>
+        <jx:macro name="objectRows"/>
+
+        <userDataMacro/>
+        <parentObjects/>
+        <style type="text/css">
+            /* Additional styles for alternating row colors */
+            .forms-row-0 td {
+            padding: 5px;
+            background-color: #E0E0E0;
+            }
+
+            .forms-row-1 td {
+            padding: 5px;
+            }
+        </style>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data" ajax="true">
+            <!--ajax="true">-->
+            <script type="text/javascript">
+                $(function() {
+                $("#navigation-tabs").tabs();
+                });
+            </script>
+            <translate/>
+
+            <div id="navigation-tabs" class="panel">
+                <ul>
+                    <!--<li>
+                        <a href="#fileObject-tabs-1">
+                            <i18n:text catalogue="core" key="SystemNode.settings"/>
+                        </a>
+                    </li>-->
+                </ul>
+                <div id="navigation-tabs-1">
+
+                    <emsFields entity="Navigation" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+
+                </div>
+            </div>
+
+            <script>
+                $(function() {
+                $( "#tabs" ).tabs();
+                });
+            </script>
+
+            <div id="tabs">
+                <ul>
+                    <li>
+                        <a href="#tabs-1">
+                            <i18n:text catalogue="core" key="SystemNode.name"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tabs-2">
+                            <label for="outerURL:input" class="forms field">
+                                <ft:widget-label id="outerURL"/>
+                            </label>
+                        </a>
+                    </li>
+                </ul>
+                <div id="tabs-1">
+                    <ft:widget id="systemNodeId">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+                    <label for="systemNodeName" class="forms field">
+                        <ft:widget-label id="systemNodeName"/>
+                    </label>
+                    <a href="SystemNode-edit?id=#{systemNodeId}" title="#{systemNodeName}" id="systemNodeName"
+                       class="">#{systemNodeName}
+                    </a>
+                    <!--<ft:widget id="systemNodeName">
+                                               ${widget.lookupWidget('../systemNodeName').value =}
+                        <fi:styling type="link"
+                                    src="SystemNode-edit?id=${widget.lookupWidget('../systemNodeId').value}"/>
+                    </ft:widget>-->
+
+
+                    <script type="text/javascript">
+                        function openPagesDialog() {
+                        $( "#treeContainer:ui-dialog" ).dialog( "destroy" );
+                        $( "#treeContainer").dialog({
+                        width: 800,
+                        height:400,
+                        modal: true,
+                        buttons: {
+                        "<i18n:text key="Save"/>": function() {
+                        $( this ).dialog( "close" );
+                        }
+                        }
+                        });
+                        };
+                        $(function () {
+                        var divId = "#xmlMenuTree";
+                        var entity = "SystemNode";
+                        var ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+
+                        initXmlTree(divId, ajaxUrl);
+                        $("#xmlMenuTree").click( function (e) {
+                        var f = jQuery.jstree._focused();
+                        var id=f.data.ui.selected.attr("id");
+                        var name=f.data.ui.selected.attr("name");
+
+                        var systemNodeNameElement = document.getElementById('systemNodeName');
+                        systemNodeNameElement.innerHTML = name;
+                        systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
+                        document.getElementById('systemNodeId').value = id;
+
+
+                        // $("#test1").html("456"+name);
+                        });
+
+
+                        });
+
+
+                    </script>
+
+                    <div i18n:attr="title" title="core:SystemNode.choose" id="treeContainer" class="dialogContent">
+                        <div id="xmlMenuTree"></div>
+                    </div>
+
+                    <input type="button" id="selectPage" i18n:attr="value" value="core:SystemNode.choose"
+                           onclick="openPagesDialog(this); $('#systemNodeName').show();"/>
+                    <input type="button" i18n:attr="value" value="core:Navigation.clear" onclick="detouchPage();"/>
+                    <script>
+                        function detouchPage(){
+
+                        $("#systemNodeId").val(0);
+                        $("#systemNodeName").hide();
+                        }
+                    </script>
+                </div>
+                <!--<div id="tabs-2">-->
+                <!--<ft:widget id="redirectTo">-->
+                <!--<fi:styling type="hidden"/>-->
+                <!--</ft:widget>-->
+                <!--<ft:widget id="redirectToName">-->
+                <!--<fi:styling type="link"-->
+                <!--src="Navigation-edit?id=${widget.lookupWidget('../redirectTo').value}"/>-->
+                <!--</ft:widget>-->
+
+
+                <!--<script type="text/javascript">-->
+                <!--function openNavigationsDialog() {-->
+                <!--$( "#navigationTreeContainer:ui-dialog" ).dialog( "destroy" );-->
+                <!--$( "#navigationTreeContainer").dialog({-->
+                <!--width: 800,-->
+                <!--height:400,-->
+                <!--modal: true,-->
+                <!--buttons: {-->
+                <!--"<i18n:text key="Save"/>": function() {-->
+                <!--$( this ).dialog( "close" );-->
+                <!--}-->
+                <!--}-->
+                <!--});-->
+                <!--};-->
+                <!--$(function () {-->
+                <!--var divId = "#navigationXmlMenuTree";-->
+                <!--var entity = "Navigation";-->
+                <!--var ajaxUrl = "/ems/core/treeObjects?entity="+entity;-->
+
+                <!--initXmlTree(divId, ajaxUrl);-->
+                <!--$(divId).click( function (e) {-->
+                <!--var f = jQuery.jstree._focused();-->
+                <!--var id=f.data.ui.selected.attr("id");-->
+                <!--var name=f.data.ui.selected.attr("name");-->
+
+                <!--var navigationElement = document.getElementById('redirectToName');-->
+                <!--navigationElement.innerHTML = name;-->
+                <!--navigationElement.href = 'Navigation-edit?id=' + id;-->
+                <!--document.getElementById('redirectTo').value = id;-->
+                <!--});-->
+
+
+                <!--});-->
+
+
+                <!--</script>-->
+
+                <!--<div i18n:attr="title" title="core:Navigation.choose" id="navigationTreeContainer"-->
+                <!--class="dialogContent">-->
+                <!--<div id="navigationXmlMenuTree"></div>-->
+                <!--</div>-->
+                <!--<input type="button" i18n:attr="value" value="core:Navigation.choose"-->
+                <!--onclick="openNavigationsDialog(this)"/>-->
+                <!--<input type="button" i18n:attr="value" value="core:Navigation.clear"-->
+                <!--onclick="document.getElementById('redirectToName').innerHTML = '';document.getElementById('redirectTo').value = 0;"/>-->
+
+                <!--</div>-->
+                <div id="tabs-2">
+                    <ft:widget id="outerURL">
+                        <fi:styling size="60"/>
+                    </ft:widget>
+                </div>
+
+            </div>
+
+            <ft:widget id="saveNavigation" class="ui-button"/>
+        </ft:form-template>
+    </content>
+</jx:template>

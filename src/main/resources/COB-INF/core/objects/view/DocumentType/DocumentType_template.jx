@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+    <jx:forEach select="#{documentType}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        <documentType documentTypeId="#{documentTypeId}">
+            <name>#{name}</name>
+            <type>#{type}</type>
+            <path>#{path}</path>
+        </documentType>
+    </jx:forEach>

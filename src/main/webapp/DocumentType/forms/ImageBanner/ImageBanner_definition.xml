@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<fd:form 
+         xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+         xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <fd:widgets>
+        <fd:group id="ImageBanner">
+
+            <fd:widgets>
+                <fd:field id="image">
+                    <fd:label>
+                        <i18n:text key="Image"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="50"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="link">
+                    <fd:label>
+                        <i18n:text key="Link"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="200"/>
+                    </fd:validation>
+                </fd:field>
+            </fd:widgets>
+        </fd:group>
+        <fd:submit id="saveDocumentType">
+            <fd:label><i18n:text key="Save"/></fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

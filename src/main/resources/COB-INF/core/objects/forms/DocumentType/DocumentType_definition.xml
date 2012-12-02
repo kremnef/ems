@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<fd:form xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <fd:widgets>
+        <fd:field id="name" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="DocumentType.name"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+        <fd:field id="path" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="DocumentType.path"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+
+        </fd:field>
+
+        <fd:booleanfield id="advertisement">
+            <fd:initial-value>false</fd:initial-value>
+            <fd:label>
+                <i18n:text catalogue="core" key="DocumentType.advertisement"/>
+            </fd:label>
+        </fd:booleanfield>
+
+        <fd:field id="type" state="invisible">
+            <fd:label>
+                <i18n:text catalogue="core" key="DocumentType.type"/>
+            </fd:label>
+            <fd:datatype base="integer"/>
+        </fd:field>
+
+        <fd:submit id="saveDocumentType">
+            <fd:label><i18n:text key="Save"/></fd:label>
+        </fd:submit>
+    </fd:widgets>
+</fd:form>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      systemName="${item.systemName}"
+                      expireDateTime="${item.expireDateTime}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      position="${item.position}">
+                    <name>${item.name}</name>
+                    <publishDateTime>${item.publishDateTime}</publishDateTime>
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="core">publishDateTime</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

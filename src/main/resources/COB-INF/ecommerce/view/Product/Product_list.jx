@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      childrenCount="${item.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      position="${item.position}">
+                    <!--<name>${item.name}</name>-->
+                    <sku>${item.sku}</sku>
+                    <basePrice>${item.basePrice}</basePrice>
+                    <specialPrice>${item.specialPrice}</specialPrice>
+                    <discount>${item.discount}</discount>
+                    <model>${item.model}</model>
+                    <vendor>${item.vendor}</vendor>
+                    <minumumSellingUnits>${item.minumumSellingUnits}</minumumSellingUnits>
+                    <onHandQuantity>${item.onHandQuantity}</onHandQuantity>
+                    <!--<jx:forEach items="${item.subject}" var="subject" varStatus="status">-->
+                    <subject id="${item.subject.id}">
+                        <name>${item.subject.name}</name>
+                        <format>${item.subject.format}</format>
+                    </subject>
+            <!--</jx:forEach>-->
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="ecommerce">sku</header>
+            <header i18nCatalogueName="ecommerce">basePrice</header>
+            <header i18nCatalogueName="ecommerce">specialPrice</header>
+            <header i18nCatalogueName="ecommerce">discount</header>
+            <header i18nCatalogueName="ecommerce">model</header>
+            <header i18nCatalogueName="ecommerce">vendor</header>
+            <header i18nCatalogueName="ecommerce">minumumSellingUnits</header>
+            <header i18nCatalogueName="ecommerce">onHandQuantity</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

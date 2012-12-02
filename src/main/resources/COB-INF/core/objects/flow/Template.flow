@@ -1,0 +1,150 @@
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listTemplate() {
+    var list = listCommon("template", "name", "desc", "")
+    cocoon.sendPage(list.displayURI, list);
+}
+
+
+function createTemplate(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var templateService = cocoon.getComponent("templateService");
+//    var template = createEmsObject(templateService);
+    var template = cocoon.createObject("ru.strela.ems.core.model.Template");
+
+
+    /*var parentId = 0;
+     var parentName = "";
+     var parentObject = template.getParent();
+     if (parentObject != null) {
+     parentId = parentObject.getId();
+     parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+     }
+     */
+    var actionState = "create";
+    /*  var viewData = {
+     "actionState": actionState
+     }*/
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+//    template = showEmsObjectForm(form, template, showFormURI, {    
+    form.showForm(showFormURI, {
+//        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData": getLoggedInUser(),
+        "actionState": actionState
+    });
+
+    form.save(template);
+    templateService.saveTemplate(template);
+    cocoon.releaseComponent(templateService);
+
+    var id = template.getId();
+    cocoon.disposeObject(template);
+
+    cocoon.redirectTo("Template-edit?id=" + id);
+}
+
+
+function editTemplateById(form) {
+
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Template-create");
+    }
+
+    var templateService = cocoon.getComponent("templateService");
+    var template = templateService.getTemplate(id);
+    if (template == null) {
+
+        cocoon.releaseComponent(templateService);
+        cocoon.redirectTo("Template-create");
+    }
+
+    /*var parentId = template.getParentId();
+     var parentName = "";
+     if (parentId > 0) {
+     var parent = template.getParent();
+     parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+     }*/
+
+    var actionState = "edit";
+    /*var viewData = {
+     "actionState": actionState
+     }*/
+    var xslEditor = form.getChild("xslEditor");
+    var cssEditor = form.getChild("cssEditor");
+
+    var fileObjectService = cocoon.getComponent("fileObjectService");
+    var contextRealPath = fileObjectService.getContextRealPath();
+
+    var xslURI = contextRealPath+"/WEB-INF/xslt/templates/" + template.getURI();
+    var cssURI = contextRealPath+"/css/templates/" + template.getName()+".css";
+    importClass(Packages.ru.tastika.tools.file.FileAddition);
+    var FileAdditional = new Packages.ru.tastika.tools.file.FileAddition();
+    print("--"+contextRealPath);
+    var fileXSL = FileAdditional.getFile(xslURI);
+    var fileXSL_str;
+    if (fileXSL != null) {
+        fileXSL_str = FileAdditional.getFileStringContent(fileXSL, true);
+        xslEditor.value = fileXSL_str;
+    }
+        print(fileXSL_str);
+    var fileCSS = FileAdditional.getFile(cssURI);
+    var fileCSS_str;
+    if (fileCSS != null) {
+        fileCSS_str = FileAdditional.getFileStringContent(fileCSS, true);
+        cssEditor.value = fileCSS_str;
+    }
+
+
+    form.load(template);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+    form.showForm(showFormURI, {
+
+        "templateId": id,
+//        "parentId" : parentId,
+//        "parentName" : parentName,
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath,
+        "actionState": actionState
+    });
+    form.save(template);
+    var resultXSL = form.getChild("xslEditor").value;
+    var resultCSS = form.getChild("cssEditor").value;
+//    print(resultXSL);
+    FileAdditional.createFile(xslURI, resultXSL);
+    FileAdditional.createFile(cssURI, resultCSS);
+    templateService.saveTemplate(template);
+    cocoon.releaseComponent(templateService);
+    cocoon.disposeObject(fileXSL);
+    cocoon.disposeObject(fileCSS);
+    cocoon.disposeObject(template);
+    cocoon.redirectTo("Template-edit?id=" + template.getId());
+}
+
+
+
+
+function deleteTemplateById(id) {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = null;
+    id = parseInt(cocoon.request.getParameter("id"));
+    var templateService = cocoon.getComponent("templateService");
+    var template = templateService.getTemplate(id);
+    templateService.deleteTemplate(template);
+    cocoon.releaseComponent(templateService);
+    cocoon.redirectTo("Template-list");
+}
+

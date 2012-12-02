@@ -1,0 +1,97 @@
+function editFileObjectById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var blockPrefix = cocoon.parameters.blockPrefix;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("FileObject-create");
+    }
+    var fileObjectService = cocoon.getComponent("fileObjectService");
+    var fileObject = fileObjectService.getTypifiedObject(id, true);
+    if (fileObject == null) {
+        cocoon.releaseComponent(fileObjectService);
+        cocoon.redirectTo("FileObject-create");
+    }
+
+    var parentId = fileObject.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = fileObject.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+    var actionState = "edit";
+
+    var availableLanguages = getAvailableLanguages();
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+    importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+
+    fileObject = showEmsObjectForm(form, fileObjectService, fileObject, showFormURI, {
+        "navigationId": id,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath,
+        "id" : id,
+        "blockPrefix" : blockPrefix,
+        "availableLanguages" : availableLanguages,
+        "formLocale" : locale,
+        "actionState": actionState
+    });
+
+    fileObjectService.save(fileObject);
+     if (fileObject.getId() > 0) {
+        saveObjectLabelList(fileObject);
+        saveMetaInfoList(fileObject);
+    }
+    cocoon.releaseComponent(fileObjectService);
+    cocoon.disposeObject(fileObject);
+
+    cocoon.redirectTo("FileObject-edit?id=" + fileObject.getId());
+}
+
+
+function deleteFileObjectById() {
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Folder-list");
+    }
+    var objectService = cocoon.getComponent("fileObjectService");
+    var object = objectService.getTypifiedObject(id, false);
+    if (object == null) {
+        cocoon.releaseComponent(objectService);
+        cocoon.redirectTo("Folder-list");
+    }
+
+    var parentId = object.getEmsObject().getParentId();
+    print("!!!! AHTUNG object.getEmsObject().getParentId();"+object.getEmsObject().getParentId());
+    objectService.deleteObject(object);
+    cocoon.releaseComponent(objectService);
+
+    cocoon.redirectTo("Folder-list?parentId=" + parentId);
+}
+
+function addFileObject() {
+    print("addFileObject()!!!!!!!!");
+    if (cocoon.request.getParameter("fileOjectId") != null) {
+        var fileOjectId = Utilities.parseStringToInteger(cocoon.request.getParameter("fileOjectId"));
+//        print("treeObjects: excludedId: "+excludedId);
+    }
+    else {
+        print("ERROR Not Defined fileOjectId: " + fileOjectId);
+    }
+    var documentService = cocoon.getComponent("documentService");
+    var fileObjectService = cocoon.getComponent("fileObjectService");
+    var fileObject = fileObjectService.getTypifiedObject(id, false);
+    addFileSystemObject(fileObject);
+    cocoon.sendStatus(200);
+}

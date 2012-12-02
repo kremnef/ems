@@ -1,0 +1,68 @@
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listCommon(entityName, defSortName, defSotOrder, params) {
+    var displayURI = cocoon.parameters.displayURI;
+    var itemsOnPage = Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
+    var json = cocoon.request.getParameter("json") == 'true';
+    var servletPath = cocoon.parameters.servletPath;
+
+
+    var itemsOnPage = json ? Utilities.parseStringToInteger(cocoon.request.getParameter("rp")) : Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
+    /*
+     if (cocoon.parameters.entity != "") {
+     entity = cocoon.parameters.entity;
+     } else {
+     }
+     */
+    var entityService = cocoon.getComponent(entityName + "Service");
+    //var entity = null;
+
+
+    if (itemsOnPage < 0) {
+        itemsOnPage = 10;
+    }
+    var page = Utilities.parseStringToInteger(cocoon.request.getParameter("page"));
+    if (page <= 1) {
+        page = new java.lang.Integer(1);
+    }
+    var sortName = cocoon.request.getParameter("sortname");
+    if (sortName != defSortName) {
+        sortName = '';
+    }
+    var sortDesc = cocoon.request.getParameter("sortorder") == 'desc';
+
+//    var total = entityService.getChildrenCount(0);
+    print("entityService" + entityService);
+
+
+    var total;
+    /*if (entityService.getChildrenCount(0) != null) {*/
+        total = entityService.getChildrenCount(0);
+//    } else {
+//        total = entityService.getChildrenCount(entityName, 0);
+
+//    }
+
+    print("total Common" + total);
+    var children = entityService.getChildren(0, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc);
+    //entity = entityService.getEntities();
+//    print (children);
+
+    cocoon.releaseComponent(entityService);
+
+    if (json) {
+        displayURI += "-json";
+    }
+    return {
+        "displayURI": displayURI,
+        "children": children,
+        "page": page,
+        "total": total,
+        "itemsOnPage": itemsOnPage,
+        "servletPath" : servletPath,
+        "userData" : getLoggedInUser()
+    };
+//    cocoon.sendPage(displayURI, {"transactionHistory": transactionHistory, "viewData":viewData, "userData" : getLoggedInUser()});
+}
+
+

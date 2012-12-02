@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <jx:macro name="objectRows">
+
+        <tr>
+            <td class="forms label"><label for="code:input" class="forms field"><ft:widget-label id="code" /></label></td>
+            <td  class="forms content">
+                <ft:widget id="code">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+        <tr class="odd">
+            <td class="forms label"><label for="charset:input" class="forms field"><ft:widget-label id="charset" /></label></td>
+            <td  class="forms content">
+                <ft:widget id="charset">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+        <tr>
+            <td class="forms label"><label for="isPublished:input" class="forms field"><ft:widget-label id="isPublished" /></label></td>
+            <td  class="forms content">
+                <ft:widget id="isPublished" />
+            </td>
+        </tr>
+        <tr class="odd">
+            <td class="forms label"><label for="isDefaultLang:input" class="forms field"><ft:widget-label id="isDefaultLang" /></label></td>
+            <td  class="forms content">
+                <ft:widget id="isDefaultLang" />
+            </td>
+        </tr>
+
+    </jx:macro>
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST">
+            <emsFields entity="Language" parentId="0" parentName="" showParents="0"/>
+            <!--<ft:group id="language">-->
+                <!--<fi:group>-->
+                    <!--<fi:styling layout="columns"/>-->
+                    <!--<fi:items>-->
+                        <!--<ft:widget-label id="code"/>-->
+                        <!--<ft:widget id="code">-->
+                            <!--<fi:styling size="10"/>-->
+                        <!--</ft:widget>-->
+                        <!--<ft:widget-label id="name"/>-->
+                        <!--<ft:widget id="name">-->
+                            <!--<fi:styling size="30"/>-->
+                        <!--</ft:widget>-->
+                        <!--<ft:widget-label id="charset"/>-->
+                        <!--<ft:widget id="charset">-->
+                            <!--<fi:styling size="10"/>-->
+                        <!--</ft:widget>-->
+                        <!--<ft:widget id="isPublished"/>-->
+                        <!--&lt;!&ndash;<ft:widget-label id="visible"/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<ft:widget id="visible" />&ndash;&gt;-->
+                        <!--<ft:widget-label id="isDefaultLang"/>-->
+                        <!--<ft:widget id="isDefaultLang" />-->
+                    <!--</fi:items>-->
+                <!--</fi:group>-->
+            <!--</ft:group>-->
+            <ft:widget id="saveLanguage" class="ui-button"/>
+        </ft:form-template>
+    </content>
+</jx:template>

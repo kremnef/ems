@@ -1,0 +1,94 @@
+/*
+ * jXMLTree jQuery Plugin
+ * Examples and documentation at: http://roy-jin.appspot.com/jsp/jqueryXmlMenuTreeDemo.jsp
+ * Copyright (c) 2010 Roy Jin
+ * Version: 1.0.0 (18-JUN-2010)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ * Requires: jQuery v1.4.2 or later
+ */
+/**
+	Start Define the xmlMenuTree style
+	(Please do not change the class name but can modify any values)
+**/
+#xmlMenuTree ul, #xmlMenuTree ul ul {
+	list-style-type: none; 
+	margin: 0; 
+	padding: 0; 
+	font-size: 12px; 
+	font-weight: bold;
+}
+#xmlMenuTree ul ul { 
+	margin-left: 10px;
+}
+#xmlMenuTree ul li { 
+	margin: 0 0 0 10px; 
+	padding: 0 12px 0 12px; 
+	line-height: 20px; 
+	background: url(../images/node.png) no-repeat; 
+	color: #369; 
+	font-weight: normal;
+}
+#xmlMenuTree ul li.last { 
+	background: url(../images/lastnode.png) no-repeat; 
+} 
+#xmlMenuTree span {
+	margin-left: 5px;
+	cursor: pointer;
+}
+#xmlMenuTree span:hover {
+	background: #CCCCCC;
+}
+
+#xmlMenuTree li span a:hover {
+	text-decoration: underline;
+}
+#xmlMenuTree .toggleIcon {
+	margin-top: 5px; 
+	margin-right: 5px; 
+	width:9px;
+	height:9px; 
+	float: left; 
+	cursor: pointer;
+}
+#xmlMenuTree .parentIcon {
+	width: 16px;
+	height: 16px; 
+	float: left; 
+	cursor: pointer;
+}
+#xmlMenuTree .childIcon {
+	width: 16px;
+	height: 16px; 
+	float: left; 
+	cursor: pointer;
+}
+/**
+	End Define the xmlMenuTree style
+**/
+/*
+Define toggle Icon
+*/
+#xmlMenuTree .toggleIconDown {background: url(../images/toggle_minus.png) no-repeat;}
+#xmlMenuTree .toggleIconUp {background: url(../images/toggle_plus.png) no-repeat;}
+/*
+Specify the parent Icon
+*/
+#xmlMenuTree .homeIcon {background: url(../images/house.png) no-repeat;}
+#xmlMenuTree .computerIcon {background: url(../images/cd.png) no-repeat;}
+#xmlMenuTree .lectureIcon {background: url(../images/bookmark_book_open.png) no-repeat;}
+#xmlMenuTree .tutorialIcon {background: url(../images/group.png) no-repeat;}
+#xmlMenuTree .assignmentIcon {background: url(../images/disk.png) no-repeat;}
+#xmlMenuTree .testsIcon {background: url(../images/nuclear.png) no-repeat;}
+/*
+Specify the child Icon
+*/
+#xmlMenuTree .pdfIcon {background: url(../images/doc_pdf.png) no-repeat;}
+#xmlMenuTree .powerPointer {background: url(../images/page_white_powerpoint.png) no-repeat;}
+#xmlMenuTree .docIcon {background: url(../images/page_white_word.png) no-repeat;}
+#xmlMenuTree .cPlusPlusIcon {background: url(../images/page_white_cplusplus.png) no-repeat;}
+#xmlMenuTree .javaIcon {background: url(../images/page_white_cup.png) no-repeat;}
+#xmlMenuTree .contactUs {background: url(../images/email_open_image.png) no-repeat;}
+#xmlMenuTree .discussion {background: url(../images/comment.png) no-repeat;}
+#xmlMenuTree .winning {background: url(../images/award_star_bronze_1.png) no-repeat;}

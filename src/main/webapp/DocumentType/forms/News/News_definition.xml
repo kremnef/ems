@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<fd:form
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <fd:widgets>
+        <fd:group id="News">
+
+            <fd:widgets>
+
+
+                <fd:field id="title">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="SMI.title"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <!--<fd:initial-value>-->
+                    <!--<fd:on-create>
+                        <javascript>
+                            var contentNameWidget = widget.lookupWidget("../name");
+                            print("contentNameWidget: "+contentNameWidget.value)
+                            var thisTitleWidget = widget.lookupWidget("../title");
+                            print("thisTitleWidget: "+thisTitleWidget.value)
+                            thisTitleWidget.value = contentNameWidget.value;
+                        </javascript>
+                    </fd:on-create>-->
+                    <fd:validation>
+                        <fd:length max="400"/>
+                    </fd:validation>
+                </fd:field>
+
+
+                <!--<fd:field id="date">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="SMI.datetime"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                        <fd:convertor>
+                            <fd:patterns>
+                                <fd:pattern>dd/MM/yyyy</fd:pattern>
+                            </fd:patterns>
+                        </fd:convertor>
+                    </fd:datatype>
+
+                </fd:field>-->
+                <fd:field id="text">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="SMI.text"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+
+                </fd:field>
+
+            </fd:widgets>
+        </fd:group>
+        <fd:submit id="saveDocumentType">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

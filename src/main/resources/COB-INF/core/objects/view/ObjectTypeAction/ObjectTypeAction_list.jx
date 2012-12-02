@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <jx:macro name="xfilter">
+        <filter>
+            <jx:forEach items="${objectType}" var="item" varStatus="status">
+                <object-type id="${item.id}">
+                    <name>${item.name}</name>
+                </object-type>
+            </jx:forEach>
+        </filter>
+    </jx:macro>
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}">
+                    <name>${item.name}</name>
+                    <URI>${item.URI}</URI>
+                    <objectTypeId>${item.objectTypeId}</objectTypeId>
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="core">name</header>
+            <header i18nCatalogueName="core">URI</header>
+            <header i18nCatalogueName="core">objectTypeId</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<catalogue xml:lang="en">
+
+    <!--repository-->
+    <message key="Role.name">Role Name</message>
+
+    <!--repository-->
+    <message key="Repository.name">Name</message>
+    <message key="Repository.DNS">DNS name</message>
+    <message key="Repository.description">description</message>
+
+    <!--mateInfo-->
+    <message key="MetaInfo.title">Page Title</message>
+    <message key="MetaInfo.description">Page Description</message>
+    <message key="MetaInfo.keywords">Page Keywords</message>
+    <!--label-->
+    <message key="Label.translate">Translation</message>
+    <message key="Label.alt">Tooltip</message>
+    <message key="Label.copyright">Copyright</message>
+    <!--language-->
+    <message key="Languages">Languages</message>
+    <message key="Language.name">Language</message>
+    <message key="Language.code">Code</message>
+    <message key="Language.charset">Charset</message>
+    <message key="Language.isPublished">Visible</message>
+    <message key="Language.isDefaultLang">Default</message>
+    <message key="Language.addNew">Add Language</message>
+    <message key="Language.list">List of Languages</message>
+    <message key="Language.edit">Edit Language</message>
+
+    <!--templates-->
+    <message key="Templates">Template</message>
+    <message key="Template.name">Name</message>
+    <message key="Template.URI">URI</message>
+    <message key="Template.positionsAmount">Position</message>
+    <message key="Template.list">List Templates</message>
+    <message key="Template.addNew">Add New</message>
+    <message key="Template.edit">Edit Template</message>
+    <message key="Template.xsl">XSL</message>
+    <message key="Template.css">CSS</message>
+
+
+    <!--ObjectType-->
+    <message key="ObjectType">Entity</message>
+    <message key="ObjectType.Content">Content</message>
+    <message key="ObjectType.Page">Page</message>
+    <message key="ObjectType.Navigation">Navigation</message>
+    <message key="ObjectType.Language">Language</message>
+    <message key="ObjectType.Folder">Folder</message>
+    <message key="ObjectType.FileObject">File</message>
+    <message key="ObjectType.User">User</message>
+
+    <!--ObjectTypeAction-->
+    <message key="ObjectTypeAction">Snippet</message>
+    <message key="ObjectTypeAction.name">Name</message>
+    <message key="ObjectTypeAction.URI">URI</message>
+    <message key="ObjectTypeAction.objectTypeId">id Type</message>
+    <message key="ObjectTypeAction.list">Snippets List</message>
+    <message key="ObjectTypeAction.addNew">Add New</message>
+    <message key="ObjectTypeAction.edit">Edit Snippet</message>
+    <message key="ObjectTypeAction.xsl">XSL</message>
+    <message key="ObjectTypeAction.css">CSS</message>
+
+    <!--systemNode-->
+    <message key="SystemNodes">Pages</message>
+    <message key="SystemNode.template">Template</message>
+    <message key="SystemNode.settings">Settings</message>
+    <message key="SystemNode.widgets">Widgets</message>
+    <message key="SystemNode.name">Page name</message>
+    <message key="SystemNode.list">List of Pages</message>
+    <message key="SystemNode.addNew">Add New Page</message>
+    <message key="SystemNode.create">Create Page</message>
+    <message key="SystemNode.edit">Edit Page</message>
+    <message key="SystemNode.publishDateTime">Last&#160;modified</message>
+    <message key="SystemNode.choose">Сhoose Page</message>
+    <message key="SystemNode.hide">Hide</message>
+    <message key="SystemNode.redirectTo">Redirect To</message>
+
+
+    <message key="SystemNodeObject.objectTypeSelect">Objects of the page</message>
+    <message key="SystemNodeObject.levels">Levels amount</message>
+    <message key="SystemNodeObject.itemsOnPage">Items on Page</message>
+    <message key="SystemNodeObject.position">Position</message>
+    <message key="SystemNodeObject.sort">Sort</message>
+    <message key="SystemNodeObject.sortByAsc">by Asc</message>
+    <message key="SystemNodeObject.sortByDesc">by Desc</message>
+    <message key="SystemNodeObject.direction">Direction</message>
+    <message key="SystemNodeObject.renderLike">Render Like</message>
+
+    <!--navigation-->
+    <message key="Navigation">Menu</message>
+    <message key="Navigation.systemNodeName">Page Name</message>
+    <message key="Navigation.create">Create Menu</message>
+    <message key="Navigation.list">List of Menus</message>
+    <message key="Navigation.addNew">Add New Menu</message>
+    <message key="Navigation.edit">Edit Menu</message>
+    <message key="Navigation.outerURL">Outer URL</message>
+    <message key="Navigation.choose">Сhoose Navigation</message>
+    <message key="Navigation.clear">Clear</message>
+
+    <!--content-->
+    <message key="Content">Document</message>
+    <message key="Contents">Documents</message>
+    <message key="Content.isFolder">Is Folder?</message>
+    <message key="Content.linked">Linked Documents</message>
+    <message key="Content.choose">Choose Document</message>
+    <message key="Content.chooseLinks">Choose documents for this relation</message>
+    <message key="Content.publishing">Workflow Publish</message>
+    <message key="Content.publishDateTime">Publish DateTime</message>
+    <message key="Content.expireDateTime">Expired DateTime</message>
+    <message key="Content.documentType">Document Type</message>
+    <message key="Content.documentTypeId">Document Type ID</message>
+    <message key="Content.isProtected">Protected</message>
+    <message key="Content.creatorName">Сreator</message>
+    <message key="Content.list">List of Documents</message>
+    <message key="Content.create">Create New</message>
+    <message key="Content.addNew">Add New</message>
+    <message key="Content.addNewFolder">Add New Folder</message>
+    <message key="Content.edit">Edit Document</message>
+    <message key="Content.features">Document Features</message>
+    <message key="Content.additional">Additional Data</message>
+    <message key="Content.attachedFiles">Files</message>
+    <message key="Content.versions">Versions</message>
+    <message key="Content.systemNameUseDate">Use date in URL</message>
+    <message key="Content.docTypeSetError">Document Type Should Be Set</message>
+    <message key="Content.homeURL">Home URL</message>
+    <message key="Content.asc">asc</message>
+    <message key="Content.desc">desc</message>
+    <message key="Content.SEO">SEO</message>
+    <!--document-->
+    <message key="Document">Document Version</message>
+    <message key="Document.createdDateTime">Created</message>
+    <message key="Document.modifiedDateTime">Modified</message>
+
+    <message key="document.xmlSource">XML</message>
+    <message key="Document.state">State</message>
+    <message key="document.state_1">Draft</message>
+    <message key="document.state_2">Ready</message>
+    <message key="Document.title">Title</message>
+    <message key="Document.description">Description</message>
+    <message key="Document.tags">Tags</message>
+    <message key="Document.version">Version</message>
+    <message key="Document.versionComment">Version Comment</message>
+    <message key="document.versionModifierId">Editor</message>
+    <message key="document.addAction">Create New Version</message>
+    <message key="document.removeAction">Remove</message>
+    <message key="Document.list">List of Documents</message>
+    <message key="Document.create">Create Document</message>
+    <message key="Document.edit">Edit Document Version</message>
+    <message key="Document.addNew">Add New</message>
+    <message key="Document.save">Save Document</message>
+    <message key="Document.editXML">Edit Document Data</message>
+    <message key="Document.metaData">Meta Data</message>
+    <message key="Document.workflowData">Workflow Data</message>
+    <message key="Document.revisionData">Revision Data</message>
+    <message key="Document.langVersions">Languages,Version</message>
+    <message key="Document.thumbnail">The thumbnail</message>
+
+    <!--documentType-->
+    <message key="DocumentTypes">Document Types</message>
+    <message key="DocumentType.type">Type</message>
+    <message key="DocumentType.path">Path</message>
+    <message key="DocumentType.name">Name</message>
+    <message key="DocumentType.list">List</message>
+    <message key="DocumentType.addNew">AddNew</message>
+    <message key="DocumentType.advertisement">Advertisement</message>
+
+    <!--folder-->
+    <message key="Folders">Folders</message>
+    <message key="Folder.path">Path</message>
+    <message key="Folder.list">Folders and Files List</message>
+    <message key="Folder.addNew">Add New Folder</message>
+    <message key="Folder.tree">Folders and Files Tree</message>
+
+
+    <!--fileObject-->
+    <message key="FileObjects">Files</message>
+    <message key="FileObject.upload">Upload File</message>
+    <message key="FileObject.download">Download File</message>
+    <message key="FileObject.name">File Name</message>
+    <message key="FileObject.mimeType">File Type</message>
+    <message key="FileObject.contentType">File Type</message>
+    <message key="FileObject.size">Size</message>
+    <message key="FileObject.path">Path</message>
+    <message key="FileObject.choose">Select Object for attaching</message>
+    <message key="FileObject.hide">Hide Object Tree</message>
+    <message key="FileObject.root">Avaliables Objects in Mediateka</message>
+    <message key="Folder.edit">Edit Folder</message>
+
+
+    <message key="FileTypeGroup">Files Type</message>
+    <message key="FileTypeGroup.images">Images</message>
+    <message key="FileTypeGroup.sound">Sound</message>
+    <message key="FileTypeGroup.video">Video</message>
+    <message key="FileTypeGroup.files">Files</message>
+
+    <!--digitaAsset-->
+    <message key="Media">Media</message>
+    <message key="Media.list">List</message>
+    <message key="Media.addNew">AddNew</message>
+    <message key="Mediateka">Mediateka</message>
+    <!--<message key="DigitalAsset.root">Avaliables Objects in Mediateka</message>-->
+    <!--<message key="DigitalAsset.id">id</message>-->
+    <!--<message key="DigitalAsset.name">Object Name</message>-->
+    <!--<message key="DigitalAsset.assetFileName">Object Name</message>-->
+    <!--<message key="DigitalAsset.mimeType">Media Type</message>-->
+    <!--<message key="DigitalAsset.choose">Select Object fot attaching</message>-->
+    <!--<message key="DigitalAsset.hide">Hide object Tree</message>-->
+    <!--<message key="DigitalAsset.assetKey">Key</message>-->
+    <!--<message key="DigitalAsset.assetFileSize">Size</message>-->
+    <!--<message key="DigitalAsset.assetFilePath">Path to Object</message>-->
+    <!--<message key="DigitalAsset.assetContentType">OnlyContent Type</message>-->
+
+    <!--services-->
+    <message key="Services">Services</message>
+    <message key="Service.list">List of Services</message>
+    <message key="Service.addNew">Add New</message>
+
+    <!--Tag-->
+    <message key="Tag.confirmRemoval">Do you really want to remove the tag?</message>
+    <message key="Tag.choose">Choosre Tags</message>
+
+
+</catalogue>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <fb:value id="name" path="name"/>
+    <fb:value id="path" path="path"/>
+    <fb:value id="type" path="type"/>
+    <fb:value id="advertisement" path="advertisement"/>
+</fb:context>

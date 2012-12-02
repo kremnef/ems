@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+
+    <class name="SystemNodeObject" table="system_node_object" abstract="true" discriminator-value="2">
+        <id name="id" column="id" type="int">
+            <generator class="native"/>
+        </id>
+        <discriminator column="object_type" type="integer" force="true" insert="true" />
+        <property name="systemNodeId" column="system_node_id" type="int" not-null="true" insert="false" update="false" lazy="true"/>
+        <property name="objectId" column="object_id" type="int" not-null="true" lazy="true"/>
+        <property name="position" column="position" type="int" not-null="true" lazy="true"/>
+        <property name="typeActionId" column="type_action_id" type="int" not-null="true"/>
+        <many-to-one name="typeAction" class="ObjectTypeAction" column="type_action_id" insert="false" update="false" lazy="false"/>
+        <property name="levels" column="levels" type="int" not-null="true" lazy="true"/>
+        <property name="itemsOnPage" column="items_on_page" type="int" not-null="true" lazy="true"/>
+        <property name="sortField" column="sort_field" type="string" not-null="false" lazy="true"/>
+        <property name="renderLike" column="render_like" type="string" not-null="false" lazy="true"/>
+        <property name="sortDirection" column="sort_direction" type="string" not-null="false" lazy="true"/>
+        <property name="tagId" column="tag_id" type="int" not-null="false" lazy="true"/>
+    </class>
+</hibernate-mapping>
+

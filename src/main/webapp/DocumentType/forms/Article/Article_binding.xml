@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+
+    <fb:group id="Article" path="Article">
+        <!--<fb:value id="image" path="image"/>-->
+        <fb:value id="text" path="text"/>
+    </fb:group>
+
+</fb:context>

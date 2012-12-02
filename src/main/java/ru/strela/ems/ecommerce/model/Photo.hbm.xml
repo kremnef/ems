@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.ecommerce.model">
+
+    <!--<union-subclass name="Photo" table="EcommercePhoto" extends="ru.strela.ems.ecommerce.model.Product" lazy="false">-->
+    <union-subclass name="ru.strela.ems.ecommerce.model.Photo" table="ecommerce_photo" extends="ru.strela.ems.core.model.TypifiedObject" lazy="false">
+
+        <property name="format" column="format" type="string" not-null="true"/>
+        <property name="season" column="season" type="string" not-null="true"/>
+        <property name="daytime" column="daytime" type="string" not-null="true"/>
+
+        <property name="date" column="date" type="date" not-null="true"/>
+        <many-to-one name="product" class="ru.strela.ems.ecommerce.model.Product" column="product_id" not-null="false" cascade="all" unique="true" lazy="false"/>
+        <many-to-one name="country" class="ru.strela.ems.ecommerce.model.Country" column="country_id" not-null="false" cascade="all" unique="true" lazy="false"/>
+        <many-to-one name="emsObject" class="ru.strela.ems.core.model.EmsObject" column="ems_object_id" unique="true" cascade="all"
+                     lazy="false"/>
+
+        <property name="countryId" column="country_id" type="int" insert="false" update="false" not-null="true"/>
+        <!--<property name="regionId" column="region_id" type="int" not-null="true"/>-->
+        <!--<property name="cityId" column="city_id" type="int" not-null="true"/>-->
+        <!--<property name="authorId" column="author_id" type="int" not-null="true"/>-->
+        <many-to-one name="file" class="ru.strela.ems.core.model.FileObject" column="file_id" not-null="true" cascade="all" insert="true" update="true" unique="true"/>
+<!--<one-to-one name="product" class="ru.strela.ems.ecommerce.model.Product" property-ref="subject"/>-->
+    </union-subclass>
+</hibernate-mapping>
+

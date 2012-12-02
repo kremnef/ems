@@ -1,0 +1,541 @@
+<?xml version="1.0"?>
+<fd:form
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <fd:widgets>
+        <!--<fd:field id="emsObjectId" state="invisible">
+            <fd:datatype base="integer"/>
+        </fd:field>-->
+        <fd:field id="parentId">
+            <fd:datatype base="integer"/>
+            <fd:on-value-changed>
+                <javascript>
+                    var parentId = widget.value;
+                    if (parentId != null) {
+                    var entityWidget = widget.lookupWidget("../entity");
+                    print("---entityWidget " + entityWidget.getValue());
+
+                    var parentPath = getParentPath(entityWidget.value, parentId);
+
+                    var systemNameWidget = widget.lookupWidget("../systemName");
+                    if (systemNameWidget != null){
+                    print("---systemNameWidget " + systemNameWidget.getValue());
+
+                    var fullURLWidget = widget.lookupWidget("../fullURL");
+                    print("---fullURLWidget " + fullURLWidget.getValue());
+
+                    fullURLWidget.value = parentPath + systemNameWidget.value;
+                    }
+                    }
+                </javascript>
+            </fd:on-value-changed>
+        </fd:field>
+
+
+        <fd:field id="entity" state="invisible">
+            <fd:datatype base="string"/>
+            <fd:initial-value>SystemNode</fd:initial-value>
+        </fd:field>
+        <!-- <fd:tree id="parentsTree">
+            <fd:tree-model type="java" ref="parentsTreeModel" />
+            <fd:on-create>
+                <javascript>
+                    this.getModel().setEntity("systemNode");
+                </javascript>
+            </fd:on-create>
+        </fd:tree>-->
+
+
+        <fd:field id="redirectTo">
+            <fd:datatype base="integer"/>
+        </fd:field>
+        <fd:field id="fullURL" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="Folder.path"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+            <fd:validation>
+                <fd:length min="0" max="255"/>
+                <fd:java ref="pathValidator">
+                    <fd:failmessage>
+                        Bad PATH !!!
+                    </fd:failmessage>
+                </fd:java>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="redirectToName" state="output">
+            <fd:initial-value/>
+            <fd:label>
+                <i18n:text catalogue="core" key="SystemNode.redirectTo"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+        <!--<fd:field id="publishDateTime">
+            <fd:label>
+                <i18n:text key="common.publishDateTime"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor>
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+
+        </fd:field>
+        <fd:field id="expireDateTime">
+            <fd:label>
+                <i18n:text key="common.expiredDateTime"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor>
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+        </fd:field>-->
+        <fd:field id="templateId" required="true">
+            <fd:label>
+                <i18n:text catalogue="core" key="SystemNode.template"/>
+            </fd:label>
+            <fd:datatype base="integer"/>
+        </fd:field>
+
+        <fd:field id="position">
+            <fd:datatype base="integer"/>
+        </fd:field>
+
+
+        <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+
+        <fd:expand id="core:translate"/>
+        <fd:expand id="core:labels"/>
+        <fd:expand id="core:formLocale"/>
+        <fd:expand id="core:metaInfo"/>
+        <fd:expand id="core:systemURL"/>
+
+        <fd:repeater id="addedObjects" orderable="true">
+            <fd:widgets>
+                <fd:field id="linkId" state="invisible">
+                    <fd:datatype base="integer"/>
+                </fd:field>
+                <fd:field id="objectId">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:field>
+                <fd:output id="objectName">
+                    <fd:label>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+
+                <fd:output id="objectPosition">
+                    <fd:label>
+                        <i18n:text key="EmsObject.position"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.position"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+
+                <fd:field id="objectTypeName">
+                    <fd:label>
+                        <i18n:text key="EmsObject.typeName"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.typeName"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                    <fd:on-value-changed>
+                        <!--<javascript>
+
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var objectType = selectedRow.getChild("objectTypeName").value;
+
+                            var objectTypeId = selectedRow.getChild("objectTypeId").value;
+                            print("objectType "+objectType+" objectTypeId "+objectTypeId);
+                            var selectedNodeDataid = selectedRow.getChild("linkId");
+                                selectedRow.getChild("objectTypeAction").setSelectionList("cocoon:/typeActions/" + objectTypeId);
+                        </javascript>-->
+                    </fd:on-value-changed>
+                </fd:field>
+                <fd:field id="objectTypeSelect">
+                    <fd:label>
+                        <i18n:text key="SystemNodeObject.objectTypeSelect" catalogue="core"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="SystemNodeObject.objectTypeSelect" catalogue="core"/>
+                    </fd:hint>
+                    <!--<fd:initial-value locale="ru"><fd:label>
+                        SelectOne
+                    </fd:label></fd:initial-value>-->
+                    <fd:datatype base="integer"/>
+                    <fd:on-value-changed>
+                        <javascript>
+
+
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            if (widget.value > 0) {
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            if (parentObjectsDataList.size() > 0) {
+                            var parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                            var linkId = parentObjectsData.getId();
+                            if (linkId > 0 &amp;&amp; linkId == selectedRow.getChild("linkId").value) {
+                            selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                            }
+                            }
+                            var objectTypeId = widget.value;
+                            selectedRow.getChild("objectTypeAction").setSelectionList("cocoon:/typeActions/"+objectTypeId);
+                            selectedRow.getChild("objectTypeAction").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                            }
+                            else {
+                            selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("objectId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("objectName").value = 'Empty';
+                            selectedRow.getChild("objectTypeName").value = '';
+                            selectedRow.getChild("objectLevels").value = new java.lang.Integer(0);
+                            selectedRow.getChild("objectItemsOnPage").value = new java.lang.Integer(0);
+                            }
+
+                            <!--var repeater = widget.lookupWidget("/addedObjects");-->
+                            <!--var selectedRow = repeater.getParentRow(widget);-->
+                            <!--var objectTypeId = widget.value;-->
+                            <!--selectedRow.getChild("objectTypeAction").setSelectionList("cocoon:/typeActions/"+objectTypeId);-->
+                            <!--selectedRow.getChild("objectTypeAction").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);-->
+                            <!--var position =selectedRow.getChild("objectPosition").value;-->
+                        </javascript>
+                    </fd:on-value-changed>
+                    <!--<fd:on-selection-changed>
+                <fd:javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                                    var selectedRow = repeater.getParentRow(widget);
+                                    var objectTypeId = widget.value;
+                                    selectedRow.getChild("objectTypeAction").setSelectionList("cocoon:/typeActions/" +objectTypeId);
+                                    print("Alert!!!!!! - objectTypeId "+objectTypeId);
+                    </fd:javascript>
+                    </fd:on-selection-changed>-->
+                    <!--<fd:attributes>
+                        <fd:attribute name="initial" value="true"/>
+                    </fd:attributes>-->
+                    <fd:selection-list type="flow-jxpath" list-path="objectTypeList" value-path="id" label-path="name"/>
+
+
+                </fd:field>
+                <fd:field id="objectTypeAction">
+                    <fd:label>
+                        <i18n:text key="EmsObject.typeAction"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.typeAction"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                    <!--<fd:selection-list src="cocoon:/typeActions/${widget.value}" cache="true"/>-->
+                    <!--<fd:on-value-changed>
+                        <javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            if (selectedRow.getChild("objectId").value > 0) {
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            if (parentObjectsDataList.size() > 0) {
+                            var parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                            var linkId = parentObjectsData.getId();
+                            var parentTypeActionId = parentObjectsData.getTypeActionId();
+                            print("selectedRow.getChild(\"objectTypeAction\").value = " +
+                            selectedRow.getChild("objectTypeAction").value);
+                            if (linkId > 0 &amp;&amp;
+                            linkId == selectedRow.getChild("linkId").value &amp;&amp;
+                            parentTypeActionId != selectedRow.getChild("objectTypeAction").value) {
+                            selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                            }
+                            }
+                            }
+                        </javascript>
+                    </fd:on-value-changed>-->
+
+                </fd:field>
+                <!--<fd:field id="homeId">-->
+                <!--<fd:label>-->
+                <!--<i18n:text catalogue="core" key="SystemNodeObject.homeURL"/>-->
+                <!--</fd:label>-->
+                <!--<fd:hint>-->
+                <!--<i18n:text catalogue="core" key="SystemNodeObject.homeURL"/>-->
+                <!--</fd:hint>-->
+                <!--&lt;!&ndash;<fd:datatype base="integer"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<fd:initial-value>0</fd:initial-value>&ndash;&gt;-->
+                <!--<fd:datatype base="integer"/>-->
+                <!--&lt;!&ndash;<fd:selection-list type="flow-jxpath" list-path="documentTypeList"-->
+                <!--value-path="value" label-path="label"/>-->
+                <!--<fd:validation>-->
+                <!--<fd:assert test="documentTypeId &gt; 0">-->
+                <!--<fd:failmessage>-->
+                <!--<i18n:text catalogue="core" key="Content.docTypeSetError"/>-->
+                <!--</fd:failmessage>-->
+                <!--</fd:assert>-->
+                <!--</fd:validation>&ndash;&gt;-->
+                <!--<fd:selection-list/>-->
+                <!--</fd:field>-->
+                <fd:field id="objectLevels">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="SystemNodeObject.levels"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="SystemNodeObject.levels"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                    <fd:on-value-changed>
+                        <javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            if (selectedRow.getChild("objectId").value > 0) {
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            if (parentObjectsDataList.size() > 0) {
+                            var parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                            var linkId = parentObjectsData.getId();
+                            var parentLevel = parentObjectsData.getLevels();
+                            if (linkId > 0 &amp;&amp; linkId == selectedRow.getChild("linkId").value &amp;&amp;
+                            parentLevel != selectedRow.getChild("objectLevels").value) {
+                            selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                            }
+                            }
+                            }
+                            else {
+                            widget.value = new java.lang.Integer(0);
+                            }
+                        </javascript>
+                    </fd:on-value-changed>
+                    <!--fd:selection-list type="flow-jxpath" list-path="objectTypeActions" value-path="value" label-path="label" /-->
+                </fd:field>
+                <fd:field id="objectItemsOnPage">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="SystemNodeObject.itemsOnPage"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="SystemNodeObject.itemsOnPage"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                    <fd:on-value-changed>
+                        <javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            if (selectedRow.getChild("objectId").value > 0) {
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            if (parentObjectsDataList.size() > 0) {
+                            var parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                            var linkId = parentObjectsData.getId();
+                            var parentItemsOnPage = parentObjectsData.getItemsOnPage();
+                            if (linkId > 0 &amp;&amp; linkId == selectedRow.getChild("linkId").value &amp;&amp;
+                            parentItemsOnPage != selectedRow.getChild("objectItemsOnPage").value) {
+                            selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                            }
+                            }
+                            }
+                            else {
+                            widget.value = new java.lang.Integer(0);
+                            }
+                        </javascript>
+                    </fd:on-value-changed>
+                    <!--fd:selection-list type="flow-jxpath" list-path="objectTypeActions" value-path="value" label-path="label" /-->
+                </fd:field>
+                <fd:field id="objectType">
+                    <fd:datatype base="boolean"/>
+                </fd:field>
+                <!--<fd:multivaluefield id="tagId">-->
+                <fd:field id="tagId">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Tag.choose"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="Tag.choose"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                </fd:field>
+                <!--</fd:multivaluefield>-->
+
+                <fd:field id="sortField">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="SystemNodeObject.sort"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="SystemNodeObject.sort"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:field>
+
+                <fd:field id="sortDirection">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="SystemNodeObject.direction"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="SystemNodeObject.direction"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:field>
+
+                <fd:field id="renderLike">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="SystemNodeObject.renderLike"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="SystemNodeObject.renderLike"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:field>
+
+                <!--<fd:row-action id="up" command="move-up">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            print("selectedRowIndex = " + selectedRowIndex);
+                            selectedRow.getChild("objectPosition").value = new java.lang.Integer(selectedRowIndex);
+                            repeater.getWidget(selectedRowIndex + 1, "objectPosition").value = new java.lang.Integer(selectedRowIndex + 1);
+
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            if (parentObjectsDataList.size() > 0) {
+                                var parentObjectsData = parentObjectsDataList.get(selectedRowIndex + 1);
+                                var linkId = parentObjectsData.getId();
+                                if (linkId > 0 &amp;&amp; linkId == selectedRow.getChild("linkId").value) {
+                                    selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                                    selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                                }
+                                var otherRow = repeater.getRow(selectedRowIndex + 1);
+                                parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                                linkId = parentObjectsData.getId();
+                                if (linkId > 0 &amp;&amp; linkId ==  otherRow.getChild("linkId").value) {
+                                    otherRow.getChild("linkId").value = new java.lang.Integer(0);
+                                    otherRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                                }
+                            }
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:row-action>
+                <fd:row-action id="down" command="move-down">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            selectedRow.getChild("objectPosition").value = new java.lang.Integer(selectedRowIndex);
+                            repeater.getWidget(selectedRowIndex - 1, "objectPosition").value = new java.lang.Integer(selectedRowIndex - 1);
+
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            if (parentObjectsDataList.size() > 0) {
+                                var parentObjectsData = parentObjectsDataList.get(selectedRowIndex - 1);
+                                var linkId = parentObjectsData.getId();
+                                if (linkId > 0 &amp;&amp; linkId ==  selectedRow.getChild("linkId").value) {
+                                    selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                                    selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                                }
+                                var otherRow = repeater.getRow(selectedRowIndex - 1);
+                                parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                                linkId = parentObjectsData.getId();
+                                if (linkId > 0 &amp;&amp; linkId ==  otherRow.getChild("linkId").value) {
+                                    otherRow.getChild("linkId").value = new java.lang.Integer(0);
+                                    otherRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
+                                }
+                            }
+
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:row-action>-->
+                <fd:action id="delete">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/addedObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
+                            var toParentObject = false;
+                            if (parentObjectsDataList.size() > 0) {
+                            var parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
+                            var parentObjectsDataId = new java.lang.Integer(parentObjectsData.id);
+                            selectedRow.getChild("linkId").value = parentObjectsDataId;
+                            selectedRow.getChild("objectId").value = new java.lang.Integer(parentObjectsData.objectId);
+                            selectedRow.getChild("objectName").value = parentObjectsData.name;
+                            selectedRow.getChild("objectTypeName").value = parentObjectsData.typeName;
+                            var objectTypeSelectId = new java.lang.Integer(0);
+                            for (var objectType in widget.form.getAttribute('objectTypeList')) {
+                            if (objectType.name == parentObjectsData.name) {
+                            objectTypeSelectId = objectType.id;
+                            break;
+                            }
+                            }
+                            selectedRow.getChild("objectTypeSelect").value = objectTypeSelectId;
+                            var typeActionField = selectedRow.getChild("objectTypeAction");
+                            var selectionList = parentObjectsData.getTypeActionsSelectionList();
+                            selectionList.setDatatype(typeActionField.getDatatype());
+                            typeActionField.setSelectionList(selectionList);
+                            typeActionField.value = new java.lang.Integer(parentObjectsData.typeActionId);
+                            selectedRow.getChild("objectLevels").value = new
+                            java.lang.Integer(parentObjectsData.levels);
+                            selectedRow.getChild("objectItemsOnPage").value = new
+                            java.lang.Integer(parentObjectsData.itemsOnPage);
+                            selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.INVISIBLE);
+                            }
+                            else {
+                            selectedRow.getChild("linkId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("objectId").value = new java.lang.Integer(0);
+                            selectedRow.getChild("objectName").value = 'Empty';
+                            selectedRow.getChild("objectTypeName").value = '';
+                            selectedRow.getChild("objectLevels").value = new java.lang.Integer(0);
+                            selectedRow.getChild("objectItemsOnPage").value = new java.lang.Integer(0);
+                            }
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:action>
+                <fd:booleanfield id="select">
+                    <fd:label>Select</fd:label>
+                </fd:booleanfield>
+            </fd:widgets>
+        </fd:repeater>
+        <!--fd:repeater-action id="removeObjects" command="delete-rows" repeater="objects" select="select">
+            <fd:label><i18n:text key="EmsObject.removeObjects"/></fd:label>
+        </fd:repeater-action>
+        <fd:repeater-action id="addObject" command="add-row" repeater="objects">
+            <fd:label><i18n:text key="EmsObject.addObject"/></fd:label>
+            <fd:on-action>
+                <fd:javascript>
+                    // Increment the row creation ID counter (it has been initialized in
+                    // the flowscript when the form was created).
+                    // This shows how attributes can be used as a communication means between
+                    // application logic and widget event handlers.
+                    var form = event.source.form;
+                    var count = new java.lang.Integer(Packages.ru.tastika.tools.util.Utilities.parseStringToInteger(form.getAttribute("counter")) + 1);
+                    form.setAttribute("counter", count);
+                    var repeater = form.getChild("objects");
+                    repeater.getRow(repeater.getSize() - 1).getChild("objectId").setValue(count);
+                </fd:javascript>
+            </fd:on-action>
+        </fd:repeater-action-->
+
+        <fd:submit id="saveSystemNode">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

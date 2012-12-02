@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="DocumentType" table="document_type">
+        <id name="id" column="id" type="int">
+            <generator class="identity" />
+        </id>
+        <property name="path" column="path" type="string" lazy="true"/>
+        <property name="name" column="name" type="string" lazy="true"/>
+        <property name="description" column="description" type="string" lazy="true"/>
+        <property name="type" column="type" type="int" lazy="true"/>
+        <!--<property name="advertisement" column="advertisement" type="boolean" lazy="true"/>-->
+    </class>
+</hibernate-mapping>
+

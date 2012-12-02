@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+    <jx:forEach select="#{Order}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        <Order id="#{id}" position="#{position}" customerId="#{customerId}">
+            <languageCode>#{languageCode}</languageCode>
+            <name>#{name}</name>
+            <totalPrice>#{totalPrice}</totalPrice>
+            <orderStatus>#{orderStatus}</orderStatus>
+            <submittedDate>#{submittedDate}</submittedDate>
+            <submittedDate>#{submittedDate}</submittedDate>
+        </Order>
+    </jx:forEach>

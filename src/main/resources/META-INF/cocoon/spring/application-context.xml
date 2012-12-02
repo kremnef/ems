@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- $Id: demo-application-context.xml 641850 2008-03-27 15:34:55Z reinhard $ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:servlet="http://cocoon.apache.org/schema/servlet"
+       xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+
+    <!-- COCOON USERS-->
+    <!-- CoWarp's application manager: -->
+
+    <!--<bean name="org.apache.cocoon.auth.Application/ems"
+               class="ru.strela.ems.auth.EmsApplication">
+      <property name="securityHandler" ref="org.apache.cocoon.auth.SecurityHandler/ems-handler" />
+    </bean>
+    <bean name="org.apache.cocoon.auth.SecurityHandler/ems-handler"
+           class="ru.strela.ems.auth.EmsSecurityHandler" scope="singleton">
+    </bean>-->
+
+    <bean name="org.apache.cocoon.reading.Reader/servletLinkRewriter"
+          class="org.apache.cocoon.servletservice.components.LinkRewriterReader">
+        <!--<property name="inputModule" ref="org.apache.cocoon.components.modules.input.InputModule/servlet"/>-->
+        <!-- Set character encoding of processed files. Defaults to "UTF-8" -->
+        <!-- <property name="encoding" value="UTF-8"/> -->
+        <!-- Set HTTP expires. Defaults to -1 -->
+        <!-- <property name="expires" value="-1" -->
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">-->
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.connection.pool_size">10</prop>
+                <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
+                <prop key="hibernate.current_session_context_class">
+                    org.springframework.orm.hibernate4.SpringSessionContext
+                </prop>
+                <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>-->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLMyISAMDialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+            </props>
+        </property>
+        <property name="configLocation" value="classpath:/META-INF/hibernate/hibernate.cfg.xml"/>
+
+
+        <!--&lt;!&ndash;property name="mappingResources">-->
+        <!--<list>-->
+        <!--<value>/ru/strela/ems/OnlyContent.hbm.xml</value>-->
+        <!--</list>-->
+        <!--</property&ndash;&gt;-->
+        <!--<property name="mappingJarLocations">
+            <list>
+                <value>/WEB-INF/lib/ems-1.0.0.jar</value>
+            </list>
+        </property>-->
+        <!--<property name="mappingDirectoryLocations">
+            <list>
+                <value>classpath:/ru/strela/ems/model</value>
+            </list>
+        </property>-->
+    </bean>
+
+    <!--todo: проверить необходимость использования бина-->
+    <bean lazy-init="true" id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate"
+          autowire="byName"/>
+
+
+    <!-- OnlyContent -->
+    <bean id="content" class="ru.strela.ems.core.model.Content" autowire="byName"/>
+    <bean id="contentDao" class="ru.strela.ems.core.dao.hibernate.ContentDaoImpl" autowire="byName"/>
+    <bean id="contentService" class="ru.strela.ems.core.service.spring.ContentServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="contentDao"/>
+    </bean>
+
+    <bean id="documentType" class="ru.strela.ems.core.model.DocumentType" autowire="byName"/>
+    <bean id="documentTypeDao" class="ru.strela.ems.core.dao.hibernate.DocumentTypeDaoImpl" autowire="byName"/>
+    <bean id="documentTypeService" class="ru.strela.ems.core.service.spring.DocumentTypeServiceImpl" autowire="byName">
+        <property name="documentTypeDao" ref="documentTypeDao"/>
+    </bean>
+    <bean id="language" class="ru.strela.ems.core.model.Language" autowire="byName"/>
+    <bean id="languageDao" class="ru.strela.ems.core.dao.hibernate.LanguageDaoImpl" autowire="byName"/>
+    <bean id="languageService" class="ru.strela.ems.core.service.spring.LanguageServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="languageDao"/>
+    </bean>
+    <!--Document -->
+    <bean id="document" class="ru.strela.ems.core.model.Document" autowire="byName"/>
+    <bean id="documentDao" class="ru.strela.ems.core.dao.hibernate.DocumentDaoImpl" autowire="byName"/>
+    <bean id="documentService" class="ru.strela.ems.core.service.spring.DocumentServiceImpl" autowire="byName">
+        <property name="documentDao" ref="documentDao"/>
+    </bean>
+
+    <!--DocumentVersion -->
+    <bean id="documentVersion" class="ru.strela.ems.core.model.DocumentVersion" autowire="byName"/>
+    <bean id="documentVersionDao" class="ru.strela.ems.core.dao.hibernate.DocumentVersionDaoImpl" autowire="byName"/>
+    <bean id="documentVersionService" class="ru.strela.ems.core.service.spring.DocumentVersionServiceImpl"
+          autowire="byName">
+        <property name="documentVersionDao" ref="documentVersionDao"/>
+    </bean>
+
+    <bean id="objectLabel" class="ru.strela.ems.core.model.ObjectLabel" autowire="byName"/>
+    <bean id="objectLabelDao" class="ru.strela.ems.core.dao.hibernate.ObjectLabelDaoImpl" autowire="byName"/>
+    <bean id="objectLabelService" class="ru.strela.ems.core.service.spring.ObjectLabelServiceImpl" autowire="byName">
+        <property name="objectLabelDao" ref="objectLabelDao"/>
+    </bean>
+
+    <bean id="metaInfo" class="ru.strela.ems.core.model.MetaInfo" autowire="byName"/>
+    <bean id="metaInfoDao" class="ru.strela.ems.core.dao.hibernate.MetaInfoDaoImpl" autowire="byName"/>
+    <bean id="metaInfoService" class="ru.strela.ems.core.service.spring.MetaInfoServiceImpl" autowire="byName">
+        <property name="metaInfoDao" ref="metaInfoDao"/>
+    </bean>
+
+    <bean id="folder" class="ru.strela.ems.core.model.Folder" autowire="byName"/>
+    <bean id="folderDao" class="ru.strela.ems.core.dao.hibernate.FolderDaoImpl" autowire="byName"/>
+    <bean id="folderService" class="ru.strela.ems.core.service.spring.FolderServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="folderDao"/>
+    </bean>
+
+    <bean id="fileObject" class="ru.strela.ems.core.model.FileObject" autowire="byName"/>
+    <bean id="fileObjectDao" class="ru.strela.ems.core.dao.hibernate.FileObjectDaoImpl" autowire="byName"/>
+    <bean id="fileObjectService" class="ru.strela.ems.core.service.spring.FileObjectServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="fileObjectDao"/>
+    </bean>
+
+    <bean id="fileTypeGroup" class="ru.strela.ems.core.model.FileTypeGroup" autowire="byName"/>
+    <bean id="fileTypeGroupDao" class="ru.strela.ems.core.dao.hibernate.FileTypeGroupDaoImpl" autowire="byName"/>
+    <bean id="fileTypeGroupService" class="ru.strela.ems.core.service.spring.FileTypeGroupServiceImpl"
+          autowire="byName">
+        <property name="fileTypeGroupDao" ref="fileTypeGroupDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="tag" class="ru.strela.ems.core.model.Tag" autowire="byName"/>
+    <bean lazy-init="true" id="tagDao" class="ru.strela.ems.core.dao.hibernate.TagDaoImpl" autowire="byName"/>
+    <bean lazy-init="true" id="tagService" class="ru.strela.ems.core.service.spring.TagServiceImpl" autowire="byName">
+        <property name="tagDao" ref="tagDao"/>
+    </bean>
+
+
+    <!--<bean id="objectTypeDao" class="ru.strela.ems.core.dao.hibernate.ObjectTypeDaoImpl" autowire="byName"/>-->
+
+    <!-- Structure-->
+    <bean id="systemNode" class="ru.strela.ems.core.model.SystemNode" autowire="byName"/>
+    <bean id="systemNodeDao" class="ru.strela.ems.core.dao.hibernate.SystemNodeDaoImpl" autowire="byName"/>
+
+    <bean id="systemNodeService" class="ru.strela.ems.core.service.spring.SystemNodeServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="systemNodeDao"/>
+    </bean>
+
+
+    <!-- Structure-->
+    <bean id="typifiedObject" class="ru.strela.ems.core.model.TypifiedObject" autowire="byName" abstract="true"/>
+    <bean id="typifiedObjectDao" class="ru.strela.ems.core.dao.hibernate.TypifiedObjectDaoImpl" autowire="byName"/>
+
+    <bean id="typifiedObjectService" class="ru.strela.ems.core.service.spring.TypifiedObjectServiceImpl"
+          autowire="byName">
+        <property name="typifiedObjectDao" ref="typifiedObjectDao"/>
+    </bean>
+    <!-- Gallery-->
+
+
+    <!-- SiteMap-->
+    <bean lazy-init="true" id="siteDao" class="ru.strela.ems.core.dao.hibernate.SiteDaoImpl" autowire="byName"/>
+    <bean lazy-init="true" id="siteService" class="ru.strela.ems.core.service.spring.SiteServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="siteDao"/>
+    </bean>
+
+    <bean id="navigation" class="ru.strela.ems.core.model.Navigation" autowire="byName"/>
+    <bean id="navigationDao" class="ru.strela.ems.core.dao.hibernate.NavigationDaoImpl" autowire="byName"/>
+    <bean id="navigationService" class="ru.strela.ems.core.service.spring.NavigationServiceImpl" autowire="byName">
+        <property name="typifiedObjectDao" ref="navigationDao"/>
+    </bean>
+    <bean id="template" class="ru.strela.ems.core.model.Template" autowire="byName"/>
+    <bean id="templateDao" class="ru.strela.ems.core.dao.hibernate.TemplateDaoImpl" autowire="byName"/>
+    <bean id="templateService" class="ru.strela.ems.core.service.spring.TemplateServiceImpl" autowire="byName">
+        <property name="templateDao" ref="templateDao"/>
+    </bean>
+
+
+    <bean lazy-init="true" id="objectTypeAction" class="ru.strela.ems.core.model.ObjectTypeAction" autowire="byName"/>
+    <bean lazy-init="true" id="objectTypeActionDao" class="ru.strela.ems.core.dao.hibernate.ObjectTypeActionDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="objectTypeActionService"
+          class="ru.strela.ems.core.service.spring.ObjectTypeActionServiceImpl"
+          autowire="byName">
+        <property name="objectTypeActionDao" ref="objectTypeActionDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="objectType" class="ru.strela.ems.core.model.ObjectType" autowire="byName"/>
+    <bean lazy-init="true" id="objectTypeDao" class="ru.strela.ems.core.dao.hibernate.ObjectTypeDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="objectTypeService" class="ru.strela.ems.core.service.spring.ObjectTypeServiceImpl"
+          autowire="byName">
+        <property name="objectTypeDao" ref="objectTypeDao"/>
+    </bean>
+
+
+    <bean id="systemObjectDao" class="ru.strela.ems.core.dao.hibernate.SystemObjectDaoImpl" autowire="byName"/>
+
+    <bean id="systemNameUniquenessValidator" class="ru.strela.ems.validators.SystemNameUniquenessValidator"/>
+    <bean id="pathValidator" class="ru.strela.ems.validators.PathValidator"/>
+    <bean id="loginUniquenessValidator" class="ru.strela.ems.validators.LoginUniquenessValidator"/>
+    <bean lazy-init="true" id="emsObjectsTreeModel" class="ru.strela.ems.treemodel.EmsObjectsTreeModel"/>
+    <bean lazy-init="true" id="parentsTreeModel" class="ru.strela.ems.treemodel.ParentsTreeModel"/>
+
+    <!--<bean lazy-init="true" id="embeddedObjectsTreeModel" class="ru.strela.ems.treemodel.EmbeddedObjectsTreeModel"/>-->
+
+    <bean id="siteProcessorDao" class="ru.strela.ems.core.dao.hibernate.SiteProcessorDaoImpl" autowire="byName"/>
+    <bean id="siteProcessorService" class="ru.strela.ems.core.service.spring.SiteProcessorServiceImpl"
+          autowire="byName">
+        <property name="siteProcessorDao" ref="siteProcessorDao"/>
+    </bean>
+
+    <!--<bean name="ru.strela.ems.entityResolving" class="ru.strela.ems.entityResolving.LocalCatalogConfigurator"
+          scope="singleton">
+        <constructor-arg ref="org.xml.sax.EntityResolver"/>
+    </bean>-->
+    <!-- Ecommerce -->
+    <bean lazy-init="true" id="order" class="ru.strela.ems.ecommerce.model.Order" autowire="byName"/>
+    <bean lazy-init="true" id="orderDao" class="ru.strela.ems.ecommerce.dao.hibernate.OrderDaoImpl" autowire="byName"/>
+    <bean lazy-init="true" id="orderService" class="ru.strela.ems.ecommerce.service.spring.OrderServiceImpl"
+          autowire="byName">
+        <property name="typifiedObjectDao" ref="orderDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="orderItem" class="ru.strela.ems.ecommerce.model.OrderItem" autowire="byName"/>
+    <bean lazy-init="true" id="orderItemDao" class="ru.strela.ems.ecommerce.dao.hibernate.OrderItemDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="orderItemService" class="ru.strela.ems.ecommerce.service.spring.OrderItemServiceImpl"
+          autowire="byName">
+        <property name="orderItemDao" ref="orderItemDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="product" class="ru.strela.ems.ecommerce.model.Product" autowire="byName"/>
+    <bean lazy-init="true" id="productDao" class="ru.strela.ems.ecommerce.dao.hibernate.ProductDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="productService" class="ru.strela.ems.ecommerce.service.spring.ProductServiceImpl"
+          autowire="byName">
+        <property name="productDao" ref="productDao"/>
+    </bean>
+
+
+    <bean lazy-init="true" id="photo" class="ru.strela.ems.ecommerce.model.Photo" autowire="byName"/>
+    <bean lazy-init="true" id="photoDao" class="ru.strela.ems.ecommerce.dao.hibernate.PhotoDaoImpl" autowire="byName"/>
+    <bean lazy-init="true" id="photoService" class="ru.strela.ems.ecommerce.service.spring.PhotoServiceImpl"
+          autowire="byName">
+        <property name="typifiedObjectDao" ref="photoDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="catalogue" class="ru.strela.ems.ecommerce.model.Catalogue" autowire="byName"/>
+    <bean lazy-init="true" id="catalogueDao" class="ru.strela.ems.ecommerce.dao.hibernate.CatalogueDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="catalogueService" class="ru.strela.ems.ecommerce.service.spring.CatalogueServiceImpl"
+          autowire="byName">
+        <property name="typifiedObjectDao" ref="catalogueDao"/>
+    </bean>
+    <bean lazy-init="true" id="countryDao" class="ru.strela.ems.ecommerce.dao.hibernate.CountryDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="countryService" class="ru.strela.ems.ecommerce.service.spring.CountryServiceImpl"
+          autowire="byName">
+        <property name="countryDao" ref="countryDao"/>
+    </bean>
+    <bean lazy-init="true" id="CountryNameSelectionList" class="ru.strela.ems.selectionlist.CountryNameSelectionList"
+          autowire="byName"/>
+
+    <!--security-->
+    <bean id="customer" class="ru.strela.ems.security.model.Customer" autowire="byName"/>
+    <bean id="customerDao" class="ru.strela.ems.security.dao.hibernate.CustomerDaoImpl" autowire="byName"/>
+    <bean id="customerService" class="ru.strela.ems.security.service.spring.CustomerServiceImpl" autowire="byName">
+        <!--<property name="typifiedObjectDao" ref="customerDao"/>-->
+        <property name="customerDao" ref="customerDao"/>
+    </bean>
+
+
+    <!--<bean id="user" class="org.springframework.security.core.userdetails.User" autowire="byName"/>-->
+    <bean id="userDao" class="ru.strela.ems.security.dao.hibernate.UserDaoImpl" autowire="byName"/>
+    <bean id="userService" class="ru.strela.ems.security.service.spring.UserServiceImpl" autowire="byName">
+        <!--<property name="typifiedObjectDao" ref="customerDao"/>-->
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
+    <!--<bean id="user" class="ru.strela.ems.core.model.UserProperties" autowire="byName"/>-->
+    <!--<bean id="user" class="org.springframework.security.core.userdetails.User" autowire="byName"/>-->
+    <!-- <bean id="userDao" class="ru.strela.ems.security.dao.hibernate.UserDaoImpl" autowire="byName"/>
+    <bean id="userService" class="ru.strela.ems.security.service.spring.UserServiceImpl" autowire="byName">
+        <property name="userDao" ref="userDao"/>
+    </bean>-->
+
+    <bean lazy-init="true" id="role" class="ru.strela.ems.security.model.Role" autowire="byName"/>
+    <bean lazy-init="true" id="roleDao" class="ru.strela.ems.security.dao.hibernate.RoleDaoImpl" autowire="byName"/>
+    <bean lazy-init="true" id="roleService" class="ru.strela.ems.security.service.spring.RoleServiceImpl"
+          autowire="byName">
+        <property name="roleDao" ref="roleDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="group" class="ru.strela.ems.security.model.Group" autowire="byName"/>
+    <bean lazy-init="true" id="groupDao" class="ru.strela.ems.security.dao.hibernate.GroupDaoImpl" autowire="byName"/>
+    <bean lazy-init="true" id="groupService" class="ru.strela.ems.security.service.spring.GroupServiceImpl"
+          autowire="byName">
+        <property name="groupDao" ref="groupDao"/>
+    </bean>
+
+    <bean lazy-init="true" id="transactionHistory" class="ru.strela.ems.security.model.TransactionHistory"
+          autowire="byName"/>
+    <bean lazy-init="true" id="transactionHistoryDao"
+          class="ru.strela.ems.security.dao.hibernate.TransactionHistoryDaoImpl"
+          autowire="byName"/>
+    <bean lazy-init="true" id="transactionHistoryService"
+          class="ru.strela.ems.security.service.spring.TransactionHistoryServiceImpl"
+          autowire="byName">
+        <property name="transactionHistoryDao" ref="transactionHistoryDao"/>
+    </bean>
+
+
+    <!--
+        <bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" id="passwordEncoder"/>
+        <bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" id="saltSource">
+            <property name="userPropertyToUse" value="username"/>
+        </bean>
+    -->
+
+
+    <!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="net.rkbloom.logdriver.LogDriver"/>
+        <property name="jdbcUrl" value="jdbc:log:com.mysql.jdbc.Driver:mysql://localhost:3306/tgk2?useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="user" value="tgk2"/>
+        <property name="password" value="vQ678V@gs"/>
+    </bean>-->
+
+    <bean id="hibernateUtil" class="ru.strela.ems.core.dao.hibernate.HibernateUtil" autowire="byName"/>
+
+
+</beans>

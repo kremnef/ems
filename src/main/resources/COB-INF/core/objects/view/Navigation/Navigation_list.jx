@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      position="${item.position}">
+                    <name>${item.name}</name>
+                    <jx:choose>
+                        <jx:when test="${item.systemNodeId > 0}">
+                            <!--@@@${item.getSystemNode()}@@@-->
+                            <systemNodeId>${item.systemNodeId}</systemNodeId>
+                            <systemNodeName>${item.pathURL}</systemNodeName>
+                        </jx:when>
+                        <jx:otherwise>
+                            <systemNodeId>0</systemNodeId>
+                        </jx:otherwise>
+                    </jx:choose>
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="core">systemNodeName</header>
+            <!--<header>position</header>-->
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

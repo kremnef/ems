@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+    <!--<jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>-->
+    <jx:import uri="context:/DocumentType/forms/Common/template.xml"/>
+
+    <!--<content>-->
+        <!--<userDataMacro />-->
+        <!--<parentObjects />-->
+        <ft:form-template id="dynamicForm" location="${cocoon.request.getAttribute('dynamicForm')}" ajax-action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" method="POST" ajax="false">
+            <!--<h3><a href="editDocument?id=#{viewData/document/@id}&amp;documentTypeId=#{viewData/documentTypeId}"><i18n:text key="Document"/> ID #{viewData/document/@id}</a></h3>-->
+            <ft:group id="Movie">
+                <fi:group>
+                    <fi:styling layout="columns"/>
+                    <fi:items>
+                        <ft:widget id="title">
+                            <fi:styling size="100"/>
+                        </ft:widget>
+                        <ft:widget id="description">
+                            <fi:styling type="textarea" size="100"/>
+                        </ft:widget>
+
+                        <ft:widget id="link">
+                            <fi:styling size="100"/>
+                        </ft:widget>
+                        <ft:widget id="width">
+                            <fi:styling size="3"/>
+                        </ft:widget>
+                        <ft:widget id="height">
+                            <fi:styling size="3"/>
+                        </ft:widget>
+                    </fi:items>
+                </fi:group>
+            </ft:group>
+            <br />
+            <!--<input class="button-primary" type="submit" value="Save"/>-->
+            <ft:widget id="saveDocumentType" class="button-primary">
+                <fi:styling type="hidden"/>
+            </ft:widget>
+        </ft:form-template>
+     <!--</content>-->
+</jx:template>

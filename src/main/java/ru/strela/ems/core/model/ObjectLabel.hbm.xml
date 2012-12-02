@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="ObjectLabel" table="object_label" proxy="ObjectLabel">
+        <id name="id">
+            <generator class="increment"/>
+        </id>
+        <!--<natural-id mutable="false">-->
+        <natural-id>
+            <property name="objectId" column="object_id" type="int" not-null="true" />
+            <property name="languageCode" column="language_code" type="string" not-null="true"/>
+        </natural-id>
+        <property name="label" column="label" type="string" not-null="true"/>
+
+    </class>
+</hibernate-mapping>
+        <!--<property name="alt" column="alt" type="string" not-null="true"/>-->
+        <!--<property name="copyright" column="copyright" type="string" not-null="true"/>-->

@@ -1,0 +1,98 @@
+
+
+function editImageGalleryById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("ImageGallery-create");
+    }
+
+    var imageGalleryService = cocoon.getComponent("imageGalleryService");
+    var imageGallery = imageGalleryService.getImageGallery(id);
+    if (imageGallery == null) {
+        cocoon.releaseComponent(imageGalleryService);
+        cocoon.redirectTo("ImageGallery-create");
+    }
+    var parentId = 0;
+    var parentName = "";
+
+    var images = imageGallery.getImages();
+    var imageIds = new java.util.HashSet();
+    for (var iterator = images.iterator(); iterator.hasNext();) {
+        var galleryImage = iterator.next();
+        imageIds.add(galleryImage.fileObject.id);
+    }
+
+    cocoon.session.setAttribute("excludedIds", imageIds);
+
+    var actionState = "edit";
+    /*var viewData = {
+//        "images" : images
+    }*/
+
+
+
+    imageGallery = showEmsObjectForm(form, imageGalleryService, imageGallery, showFormURI, {
+        "actionState": actionState,
+//        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath,
+        "id" : id
+    });
+
+    imageGalleryService.save(imageGallery);
+    cocoon.releaseComponent(imageGalleryService);
+    cocoon.session.removeAttribute("excludedIds");
+
+    cocoon.redirectTo("ImageGallery-edit?id=" + imageGallery.getId());
+}
+
+
+function createImageGallery(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var imageGalleryService = cocoon.getComponent("imageGalleryService");
+    var imageGallery = createTypifiedObject(imageGalleryService);
+//    imageGallery.setParentId(0);
+
+    cocoon.session.setAttribute("excludedIds", new java.util.HashSet());
+
+    var actionState = "create";
+//    var viewData = {};
+
+    var parentId = 0;
+    var parentName = "";
+
+    imageGallery = showEmsObjectForm(form, imageGalleryService, imageGallery, showFormURI, {
+        "actionState": actionState,
+//        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+    imageGalleryService.save(imageGallery);
+
+    cocoon.releaseComponent(imageGalleryService);
+
+    var id = imageGallery.getId();
+    cocoon.disposeObject(imageGallery);
+    cocoon.redirectTo("ImageGallery-edit?id=" + id);
+}
+
+
+function listImageGallery(parentId) {
+    listTypifiedObjects(parentId);
+}
+
+
+function deleteImageGalleryById() {
+    deleteObjectById("ImageGallery");
+}

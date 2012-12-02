@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0" xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <answers>
+    <jx:forEach select="${obj}" var="val">
+        <answer>
+            <name>${val.name}</name>
+            <value>
+                <jx:choose>
+                    <jx:when test="${val.key}">
+                        <i18n:text key="${val.key}"/>
+                    </jx:when>
+                    <jx:otherwise>${val.value}</jx:otherwise>
+                </jx:choose>
+            </value>
+        </answer>
+    </jx:forEach>
+    </answers>
+</jx:template>

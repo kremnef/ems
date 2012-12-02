@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+
+
+    <jx:macro name="objectRows">
+        <li>
+            <label for="login" class="label">
+                <ft:widget-label id="login"/>
+            </label>
+            <ft:widget id="login">
+                <fi:styling size="50"/>
+            </ft:widget>
+            <ft:widget id="checkLogin"/>
+        </li>
+        <li>
+            <label for="firstName" class="label">
+                <ft:widget-label id="firstName"/>
+            </label>
+            <ft:widget id="firstName">
+                <fi:styling size="50"/>
+            </ft:widget>
+        </li>
+        <li>
+            <label for="lastName" class="label">
+                <ft:widget-label id="lastName"/>
+            </label>
+            <ft:widget id="lastName">
+                <fi:styling size="50"/>
+            </ft:widget>
+        </li>
+
+        <li>
+            <label for="email" class="label">
+                <ft:widget-label id="email"/>
+            </label>
+            <ft:widget id="email">
+                <fi:styling size="50"/>
+            </ft:widget>
+        </li>
+
+    </jx:macro>
+
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                          ajax="true">
+            <script>
+                $(function() {
+                $( "#user-tabs" ).tabs();
+                $( "#tabs" ).tabs();
+                });
+            </script>
+            <div id="user-tabs">
+                <ul>
+                    <li>
+                        <a href="#user-tabs-1">
+                            <fi:label>
+                                <i18n:text catalogue="security" key="User"/>
+                            </fi:label>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#user-tabs-2">
+                            <fi:label>
+                                <i18n:text catalogue="security" key="Customer"/>
+                            </fi:label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#user-tabs-3">
+                            <fi:label>
+                                <i18n:text catalogue="security" key="Change Password"/>
+                            </fi:label>
+                        </a>
+                    </li>
+
+                </ul>
+                <div id="user-tabs-1">
+                    <ul class="simple-list">
+                        <objectRows/>
+                    </ul>
+                </div>
+                <div id="user-tabs-2">
+                    <ul class="simple-list">
+                        <li>
+                            <label for="creditStatus" class="label">
+                                <ft:widget-label id="creditStatus"/>
+                            </label>
+                            <ft:widget id="creditStatus">
+                                <fi:styling size="10"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <label for="accountStatus" class="label">
+                                <ft:widget-label id="accountStatus"/>
+                            </label>
+                            <ft:widget id="accountStatus">
+                                <fi:styling size="10"/>
+                            </ft:widget>
+                        </li>
+                         <li>
+                            <label for="expires" class="label">
+                                <ft:widget-label id="expires"/>
+                            </label>
+                            <ft:widget id="expires">
+                                <fi:styling format="datetime"/>
+                            </ft:widget>
+                        </li>
+                    </ul>
+                </div>
+                <div id="user-tabs-3">
+                    <ul class="simple-list">
+                        <li>
+                            <label for="password" class="label">
+                                <ft:widget-label id="password"/>
+                            </label>
+                            <ft:widget id="password">
+                                <fi:styling size="45" type="password"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <label for="confirmPassword" class="label">
+                                <ft:widget-label id="confirmPassword"/>
+                            </label>
+                            <ft:widget id="confirmPassword">
+                                <fi:styling size="45" type="password"/>
+                            </ft:widget>
+                        </li>
+
+                    </ul>
+                    <ft:widget id="changePassword"/>
+                </div>
+            </div>
+
+
+            <div id="tabs">
+                <ul>
+                    <li>
+                        <a href="#tabs-1">
+                            <fi:label>
+                                <i18n:text catalogue="security" key="Roles"/>
+                            </fi:label>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#tabs-2">
+                            <fi:label>
+                                <i18n:text catalogue="security" key="Groups"/>
+                            </fi:label>
+                        </a>
+                    </li>
+
+                </ul>
+                <div id="tabs-1">
+                    <ft:repeater id="roles">
+                        <table border="0" class="order">
+                            <thead>
+                                <tr>
+
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="name"/>
+                                    </th>
+                                    <th width="10" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="delete"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ft:repeater-rows>
+                                    <tr class="forms-row">
+                                        <td>
+                                            <ft:widget id="name"/>
+
+                                        </td>
+
+                                        <td>
+                                            <ft:widget id="delete">
+                                                <fi:styling type="image"
+                                                            src="${servletPath}/images/forms/delete.gif"/>
+                                            </ft:widget>
+                                        </td>
+                                    </tr>
+                                </ft:repeater-rows>
+
+
+                            </tbody>
+                        </table>
+                    </ft:repeater>
+                </div>
+                <div id="tabs-2">
+
+                    <ft:repeater id="groups">
+                        <table border="0" class="order">
+                            <thead>
+                                <tr>
+
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="name"/>
+                                    </th>
+                                    <th width="10" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="delete"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ft:repeater-rows>
+                                    <tr class="forms-row">
+
+                                        <td>
+                                            <ft:widget id="name"/>
+
+                                        </td>
+
+                                        <td>
+                                            <ft:widget id="delete">
+                                                <fi:styling type="link"/>
+                                            </ft:widget>
+                                        </td>
+                                    </tr>
+                                </ft:repeater-rows>
+
+
+                            </tbody>
+                        </table>
+                    </ft:repeater>
+                </div>
+            </div>
+
+            <ft:widget id="saveUser" class="ui-button"/>
+
+        </ft:form-template>
+
+    </content>
+</jx:template>

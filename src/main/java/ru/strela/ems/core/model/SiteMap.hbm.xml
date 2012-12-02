@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="SiteMap" table="site_map">
+        <id name="id" column="id" type="int">
+            <generator class="native"/>
+        </id>
+        <property name="url" column="url" type="string" not-null="true" lazy="true"/>
+        <property name="systemNodeId" column="system_node_id" type="int" not-null="true" lazy="true"/>
+        <property name="parentId" column="parent_id" type="int" lazy="true"/>
+        <property name="objectId" column="object_id" type="int" not-null="true" lazy="true"/>
+        <property name="activeObjectPosition" column="active_object_position" type="int" not-null="true" lazy="true"/>
+        <property name="levels" column="levels" type="int" not-null="true" lazy="true"/>
+        <property name="redirectTo" column="redirect_to" type="int" not-null="true" lazy="true"/>
+        <property name="navigationId" column="navigation_id" type="int" not-null="true" lazy="true"/>
+        <property name="mainObject" column="main_object" type="boolean" lazy="true"/>
+        <set name="children" cascade="all" lazy="true">
+            <key column="parent_id"/>
+            <one-to-many class="SiteMap"/>
+        </set>
+         <!--<map name="siteMapObjects" cascade="all" lazy="false">-->
+            <!--<key column="site_map_id" not-null="true"/>-->
+            <!--<map-key column="position" type="integer"/>-->
+            <!--<one-to-many class="SiteMapObject"/>-->
+        <!--</map>-->
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+    <!--<jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>-->
+    <jx:import uri="context:/DocumentType/forms/Common/template.xml"/>
+
+    <!--<content>-->
+    <!--<userDataMacro/>-->
+    <!--<parentObjects />-->
+    <div></div>
+    <ft:form-template id="dynamicForm" location="${cocoon.request.getAttribute('dynamicForm')}"
+                      ajax-action="${cocoon.session.getAttribute('dynamicForm.id')}.continue"
+                      action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" method="POST" ajax="false">
+
+        <!--<script type="text/javascript">
+
+            function openFileDialog() {
+            $("#fileTree:ui-dialog").dialog("destroy");
+            $("#fileTree").dialog({
+            width: 800,
+            modal: true,
+            buttons: {
+            "<i18n:text key="Save"/>": function() {
+            $(this).dialog("close");
+            }
+            }
+            });
+
+
+            var divId2 = "#fileTree";
+            var entity2 = "Folder";
+            var ajaxUrl2 = "/ems/core/treeObjects?entity=" + entity2;
+
+            document.getElementById('parentTreeRootNode').value = 0;
+            document.getElementById('parentTreeRootNode').innerHTML = entity2;
+            initXmlTree(divId2, ajaxUrl2);
+
+            $("#fileTree").click(function (e) {
+            var f = jQuery.jstree._focused();
+            var id = f.data.ui.selected.attr("id");
+            var name = f.data.ui.selected.attr("name");
+            var imagePath = f.data.ui.selected.attr("path");
+            //var systemName = f.data.ui.selected.attr("systemName");
+            document.forms['dynamicForm'].elements['Article.image'].value = imagePath;
+            //document.forms['dynamicForm'].elements['Article.imagePreview'].src = systemName+'.png';
+            });
+            };
+        </script>
+        <div i18n:attr="title" title="core:FileObject.choose" id="fileTreeContainer" class="dialogContent">
+            <div class="common-div">
+                <span class="ui-icon-home"></span>
+                <a id="parentTreeRootNode" href="#" class=""></a>
+            </div>
+            <div id="fileTree"></div>
+        </div>-->
+        <ft:group id="Article">
+            <fi:group>
+                <fi:styling layout="columns"/>
+
+                <fi:items>
+                    <!--<ft:widget-label id="image"/>
+                    <ft:widget id="image">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                    <input type="button" value="Choose" i18n:attr="value"
+                           onclick="openFileDialog('#fileTreeContainer')"/>-->
+                    <!--<ft:widget id="text">
+                        &lt;!&ndash;<fi:styling size="100" type="aloha-editor"/>&ndash;&gt;
+                        <fi:styling size="100" type="HTML-editor"/>
+                    </ft:widget>-->
+                    <script language="javascript">
+                            function setImagePath(imagePath, functionNumber) {
+                                CKEDITOR.tools.callFunction(functionNumber, imagePath);
+                            }
+                        </script>
+                        <ft:widget id="text">
+                            <fi:styling size="100" type="ckeditor"/>
+                        </ft:widget>
+                </fi:items>
+            </fi:group>
+        </ft:group>
+        <ft:widget id="saveDocumentType" class="button-primary">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+    </ft:form-template>
+    <!--</content>-->
+</jx:template>

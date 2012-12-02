@@ -1,0 +1,334 @@
+
+importClass(Packages.javax.xml.parsers.DocumentBuilder);
+importClass(Packages.javax.xml.parsers.DocumentBuilderFactory);
+importClass(Packages.org.apache.xerces.dom.DocumentImpl);
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+
+
+function listDocumentType() {
+     var list = listCommon("documentType", "name", "desc","")
+    cocoon.sendPage(list.displayURI,list);
+}
+
+/*function editDocumentType() {
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+
+    var contentId = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+//    var languageId = Utilities.parseStringToInteger(cocoon.request.getParameter("languageId"));
+    var defaultLanguageId = 0;
+    var correctLanguageId = false;
+
+    var languageService = cocoon.getComponent("languageService");
+    var availableLanguages = languageService.getVisibleLanguages();
+    cocoon.releaseComponent(languageService);
+    var languageList = new Array(availableLanguages.size());
+
+    for (var i = 0; i < availableLanguages.size(); i++) {
+        var language = availableLanguages.get(i);
+        languageList[i] = {
+            value: language.getId(),
+            label:language.getName()
+        };
+        if (language.getIsDefaultLang()) {
+            defaultLanguageId = language.getId();
+        }
+        if (language.getId() == languageId) {
+            correctLanguageId = true;
+            break;
+        }
+    }
+    if (!correctLanguageId) {
+        languageId = defaultLanguageId;
+    }
+    var contentService = cocoon.getComponent("contentService");
+    var content = contentService.getContent(contentId);
+
+    if (content == null) {
+        cocoon.releaseComponent(contentService);
+        cocoon.redirectTo("Content-create?parentId=0t");
+        return;
+    }
+    var documentService = cocoon.getComponent("documentService");
+    var versionObj = cocoon.request.getParameter("version");
+    if (versionObj == null) {
+//        versionObj = new java.lang.Integer(content.getLastVersion(languageId));
+
+//        print("languageId) "+languageId);
+//        print("contentId) "+contentId);
+//        print("documentService.getLastVersion(contentId, languageId) "+documentService.getLastVersion(contentId, languageId));
+
+        versionObj = new java.lang.Integer(documentService.getLastVersion(contentId, languageId));
+    }
+    var version = Utilities.parseStringToInteger(versionObj);
+
+    if (version == 0) {
+        version = parseInt(cocoon.request.getAttribute('version'));
+    }
+    var document = version == 0 ? null : getDocument(content, languageId, version, '');
+
+
+    var actionState = cocoon.request.getParameter("actionState");
+
+    // doctype get Name
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    var documentTypeId = content.getDocumentTypeId();
+    var currentDocumentType = documentTypeService.getDocumentType(documentTypeId);
+    cocoon.releaseComponent(documentTypeService);
+
+
+    var currentDocumentTypeName = "";
+    if (currentDocumentType != null) {
+        currentDocumentTypeName = currentDocumentType.getName()
+        var definitionURI = "context://DocumentType/forms/" + currentDocumentTypeName + "/" + currentDocumentTypeName + "_definition.xml";
+        var bindingURI = "context://DocumentType/forms/" + currentDocumentTypeName + "/" + currentDocumentTypeName + "_binding.xml";
+        var showFormURI = currentDocumentTypeName + "_template-pipeline";
+        var displayURI = currentDocumentTypeName + "_success-pipeline";
+
+
+        var form = new Form(definitionURI);
+        var xml = document != null ? document.getXML() : null;
+        form.createBinding(bindingURI);
+
+        if (xml != null) {
+            form.load(xml);
+        }
+
+        var locale = getLocale();
+        form.locale = new java.util.Locale(locale);
+
+        var formData = {
+            "servletPath" : servletPath,
+            "userData": getLoggedInUser(),
+            "inner" : inner,
+            "actionState": actionState,
+            "displayURI": displayURI,
+            "document" : document,
+            "documentTypeId" : documentTypeId,
+            "id" : contentId
+            //"parents" : parents
+        };
+        form.setAttribute('formName', 'dynamicForm');
+
+        form.showForm(showFormURI, formData);
+
+        if (xml != null) {
+            form.save(xml);
+        }
+        var xmlForm = form.getChild(currentDocumentTypeName);
+        content = contentService.getContent(contentId);
+        document = getDocument(content, languageId, version);
+        var xmlSource = document.setForm(xmlForm);
+        document.setXmlSource(xmlSource);
+
+        documentService.saveDocument(document);
+
+        cocoon.releaseComponent(documentService);
+
+        //    cocoon.sendPage(displayURI, {"document": document, "xmlForm":xmlForm});
+        var url = "Content-edit?id=" + contentId;
+        if (languageId > 0) {
+            url += '&languageId=' + languageId;
+        }
+        if (version > 0) {
+            url += '&version=' + version;
+        }
+        cocoon.redirectTo(url);
+
+//        cocoon.sendPage(displayURI, {
+//            "document": document,
+//            "xmlForm":xmlForm
+//        });
+    }
+    else {
+        cocoon.releaseComponent(documentService);
+        cocoon.sendStatus(404);
+    }
+
+}*/
+
+
+function createDocumentType() {
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+
+    var contentId = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    var languageId = Utilities.parseStringToInteger(cocoon.request.getParameter("languageId"));
+    var version = Utilities.parseStringToInteger(cocoon.request.getParameter("version"));
+    var documentTypeId = Utilities.parseStringToInteger(cocoon.request.getParameter("documentTypeId"));
+    var defaultLanguageId = 0;
+    var correctLanguageId = false;
+
+    var languageService = cocoon.getComponent("languageService");
+    var availableLanguages = languageService.getVisibleLanguages();
+    cocoon.releaseComponent(languageService);
+    var languageList = new Array(availableLanguages.size());
+
+    for (var i = 0; i < availableLanguages.size(); i++) {
+        var language = availableLanguages.get(i);
+        languageList[i] = {
+            value: language.getId(),
+            label:language.getName()
+        };
+        if (language.getIsDefaultLang()) {
+            defaultLanguageId = language.getId();
+        }
+        if (language.getId() == languageId) {
+            correctLanguageId = true;
+            break;
+        }
+    }
+    if (!correctLanguageId) {
+        languageId = defaultLanguageId;
+    }
+    if (version == 0) {
+        version = 1;
+    }
+
+
+//    var documentId = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+//    var documentTypeId = Utilities.parseStringToInteger(cocoon.request.getParameter("documentTypeId"));
+    var actionState = "create";
+
+    var contentService = cocoon.getComponent("contentService");
+    var parentDocumentTypeId = 0;
+    if (cocoon.request.getParameter("parentId") != null) {
+        var parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+        if (parentId > 0) {
+            var parentObject = contentService.getTypifiedObject(parentId);
+            if (parentObject != null) {
+                parentDocumentTypeId = parentObject.getDocumentTypeId();
+            }
+        }
+    }
+    cocoon.releaseComponent(contentService);
+    if (parentDocumentTypeId == 0) {
+        parentDocumentTypeId = documentTypeId;
+    }
+
+
+
+    // doctype get Name
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    var currentDocumentType = documentTypeService.getDocumentType(documentTypeId);
+    cocoon.releaseComponent(documentTypeService);
+    var currentDocumentTypeName = "";
+    if (currentDocumentType != null) {
+        currentDocumentTypeName = currentDocumentType.getName();
+        var definitionURI = "context://DocumentType/forms/" + currentDocumentTypeName + "/" + currentDocumentTypeName + "_definition.xml";
+        var showFormURI = currentDocumentTypeName + "_template-pipeline";
+        var displayURI = currentDocumentTypeName + "_success-pipeline";
+
+
+        var form = new Form(definitionURI);
+
+      /*  var viewData = {
+            "actionState": actionState,
+            "displayURI": displayURI,
+            "documentTypeId" : documentTypeId,
+            "id" : contentId
+        };*/
+
+        var locale = getLocale();
+        form.locale = new java.util.Locale(locale);
+
+        form.setAttribute('formName', 'dynamicForm');
+        
+        form.showForm(showFormURI, {
+//            "viewData": viewData,
+            "servletPath" : servletPath,
+            "userData": getLoggedInUser(),
+            "inner" : inner,
+             "actionState": actionState,
+            "displayURI": displayURI,
+            "documentTypeId" : documentTypeId,
+            "id" : contentId
+        });
+
+        var xmlForm = form.getChild(currentDocumentTypeName);
+        var xmlSource = document.setForm(xmlForm);
+        document.setXmlSource(xmlSource);
+        var documentService = cocoon.getComponent("documentService");
+        documentService.saveDocument(document);
+        cocoon.releaseComponent(documentService);
+
+        var url = "Content-edit?id=" + contentId;
+        if (languageId > 0) {
+            url += '&languageId=' + languageId;
+        }
+        if (version > 0) {
+            url += '&version=' + version;
+        }
+        cocoon.redirectTo(url);
+
+        //cocoon.redirectTo("editDocument?id=" + documentId + "&documentTypeId=" + documentTypeId);
+    }
+    else {
+        var form = new Form("forms/EmptyDocument/EmptyDocument_definition.xml");
+        var locale = getLocale();
+        form.locale = new java.util.Locale(locale);
+
+        form.setAttribute('formName', 'dynamicForm');
+
+        form.showForm("EmptyDocument-edit-template-pipeline", {
+            "servletPath" : servletPath,
+            "userData": getLoggedInUser(),
+            "inner" : inner
+        });
+
+        cocoon.sendStatus(200);
+    }
+
+}
+
+
+function viewDocumentTypeById() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
+
+    var documentSourceXMLService = cocoon.getComponent("documentSourceXMLService");
+    var documentSourceXML = documentSourceXMLService.getDocumentSourceXML(id);
+
+    cocoon.releaseComponent(documentSourceXMLService);
+
+    cocoon.sendPage(displayURI, {"documentSourceXML": documentSourceXML});
+
+}
+
+function editDocumentTypeById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("listDocumentType");
+    }
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    var documentType = documentTypeService.getDocumentType(id);
+    if (documentType == null) {
+        cocoon.releaseComponent(documentTypeService);
+        cocoon.redirectTo("listDocumentType");
+    }
+
+    var actionState = "edit";
+    /*var viewData = {
+        "actionState": actionState
+    };*/
+
+    documentType = showObjectForm(form, documentTypeService, documentType, showFormURI, {
+//        "viewData": viewData,
+        "id": id,
+        "servletPath" : servletPath,
+        "actionState": actionState
+
+    });
+
+    documentTypeService.saveDocumentType(documentType);
+    cocoon.releaseComponent(documentTypeService);
+
+    cocoon.redirectTo("listDocumentType");
+}

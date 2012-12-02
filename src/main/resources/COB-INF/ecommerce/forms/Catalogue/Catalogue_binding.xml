@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+
+    <!--<fb:value id="emsObjectId" path="emsObject/id"/>-->
+
+    <fb:value id="parentId" path="emsObject/parentId"/>
+
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+    <fb:expand id="core:labels"/>
+    <!--<fb:expand id="core:metaInfo"/>
+    <fb:expand id="core:linked"/>-->
+    <fb:expand id="core:systemURL"/>
+
+
+    <!--Producs-->
+    <fb:repeater id="items" parent-path="." row-path="items">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="id" path="id"/>
+            <fb:value id="name" path="name"/>
+            <fb:value id="model" path="model"/>
+            <fb:value id="basePrice" path="basePrice"/>
+            <fb:value id="subjectId" path="subject/id"/>
+        </fb:on-bind>
+        <fb:on-insert-row>
+            <fb:insert-bean classname="ru.strela.ems.ecommerce.model.Product" addmethod="addProduct"/>
+        </fb:on-insert-row>
+    </fb:repeater>
+
+
+</fb:context>

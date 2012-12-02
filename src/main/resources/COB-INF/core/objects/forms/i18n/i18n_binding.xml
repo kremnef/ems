@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+    <fb:repeater id="messages" parent-path="." row-path="objectLabelList">
+
+        <fb:identity>
+            <fb:value id="languageCode" path="languageCode"/>
+        </fb:identity>
+
+        <fb:on-bind>
+            <!--<fb:value id="id" path="id"/>-->
+            <fb:value id="languageCode" path="languageCode"/>
+            <fb:value id="xmlEditor" path="xmlEditor"/>
+            <!--<fb:value id="alt" path="value3"/>-->
+            <!--<fb:value id="copyright" path="value4"/>-->
+        </fb:on-bind>
+    </fb:repeater>
+
+    <!--<fb:expand id="core:labels"/>-->
+
+
+</fb:context>

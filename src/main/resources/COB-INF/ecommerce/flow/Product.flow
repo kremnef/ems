@@ -1,0 +1,100 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+
+function listProduct() {
+    var list = listCommon("product", "name", "desc","");
+     cocoon.sendPage(list.displayURI, list);
+}
+
+
+function createProduct(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var productService = cocoon.getComponent("productService");
+    var product = createTypifiedObject(productService);
+
+    var parentId = 0;
+    var parentName = "";
+//    var parentObject = product.getParent();
+//    if (parentObject != null) {
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//    }
+
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+
+    product = showEmsObjectForm(form, productService, product, showFormURI, {
+        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+
+
+    productService.save(product);
+    cocoon.releaseComponent(productService);
+
+    var id = product.getId();
+    cocoon.disposeObject(product);
+
+    cocoon.redirectTo("Product-edit?id=" + id);
+}
+
+
+function editProductById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Product-create");
+    }
+    var productService = cocoon.getComponent("productService");
+    var product = productService.getTypifiedObject(id);
+    if (product == null) {
+        cocoon.releaseComponent(productService);
+        cocoon.redirectTo("Product-create");
+    }
+
+    var parentId = product.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = product.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+    var actionState = "edit";
+    var viewData = {
+        "actionState": actionState, "type": "photo"
+    }
+
+
+    product = showEmsObjectForm(form, productService, product, showFormURI, {
+        "viewData": viewData,
+        "productId": id,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+
+    productService.save(product);
+    cocoon.releaseComponent(productService);
+
+    cocoon.redirectTo("Product-edit?id=" + product.getId());
+}
+
+function deleteProductById() {
+    deleteObjectById("Product");
+}

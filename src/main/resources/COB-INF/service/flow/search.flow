@@ -1,0 +1,9 @@
+function search() {
+    var query = '' + cocoon.request.getParameter('query');
+    print('query = ' + query);
+    var searchAction = new Packages.ru.strela.ems.actions.SearchAction();
+    var results = searchAction.search(cocoon.request);
+    cocoon.sendPage('search-results', {results: results, query: query});
+}
+
+

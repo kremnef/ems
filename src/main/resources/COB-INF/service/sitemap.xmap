@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://apache.org/cocoon/sitemap/1.0 http://cocoon.apache.org/schema/sitemap/cocoon-sitemap-1.0.xsd"
+             xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+    <map:components>
+
+
+        <map:transformers default="xslt">
+            <map:transformer name="browser-update" src="org.apache.cocoon.ajax.BrowserUpdateTransformer"/>
+            <map:transformer name="i18n"
+                             src="org.apache.cocoon.transformation.I18nTransformer">
+                <use-store>true</use-store>
+                <!--<use-request-parameters>true</use-request-parameters>-->
+                <!--<use-session-parameters>true</use-session-parameters>-->
+                <!--<use-cookie-parameters>true</use-cookie-parameters>-->
+                <!--<xslt-processor-role>xalan</xslt-processor-role>-->
+                <check-includes>true</check-includes>
+                <use-request-parameters>true</use-request-parameters>
+                <catalogues default="ems">
+                    <catalogue id="ems" name="messages" location="../i18n"/>
+                    <catalogue id="forms" name="messages"
+                               location="resource://org/apache/cocoon/forms/system/i18n"/>
+                </catalogues>
+                <cache-at-startup>true</cache-at-startup>
+                <encoding>UTF-8</encoding>
+            </map:transformer>
+            <map:transformer name="sendmail" src="org.apache.cocoon.mail.transformation.SendMailTransformer">
+                <encoding>UTF-8</encoding>
+            </map:transformer>
+        </map:transformers>
+
+        <!-- Serializers -->
+
+        <map:serializers default="html">
+
+            <!-- CMS (changes begin): setting encoding UTF-8 -->
+            <map:serializer logger="sitemap.serializer.xml" mime-type="text/xml" name="xml"
+                            src="org.apache.cocoon.serialization.XMLSerializer">
+                <encoding>UTF-8</encoding>
+            </map:serializer>
+
+            <map:serializer logger="sitemap.serializer.html" mime-type="text/html" name="html"
+                            pool-max="32" src="org.apache.cocoon.serialization.HTMLSerializer">
+                <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+                <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
+                <encoding>UTF-8</encoding>
+            </map:serializer>
+
+            <!-- CMS (changes end) -->
+        </map:serializers>
+
+        <map:selectors>
+            <map:selector name="ajax-request" src="org.apache.cocoon.ajax.AjaxRequestSelector"/>
+        </map:selectors>
+        <map:readers>
+            <map:reader name="captcha" src="org.apache.cocoon.reading.CaptchaReader" mime-type="image/jpg"/>
+        </map:readers>
+
+        <map:actions>
+            <map:action name="search" src="ru.strela.ems.actions.SearchAction"/>
+        </map:actions>
+
+    </map:components>
+
+    <map:flow language="javascript">
+        <map:script src="flow/service.flow"/>
+        <map:script src="flow/search.flow"/>
+        <map:script src="../flow/json.flow"/>
+        <map:script src="blockcontext:/ems/flow/Form.js"/>
+    </map:flow>
+
+
+    <map:resources>
+
+        <map:resource name="xml">
+            <map:transform src="../stylesheets/system/xml2html.xslt">
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+            </map:transform>
+            <map:serialize type="html"/>
+        </map:resource>
+        <map:resource name="search-result">
+            <map:transform src="transformer/search-result.xsl">
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                <map:parameter name="requestURI" value="{request:requestURI}"/>
+                <map:parameter name="query" value="{request-param:query}"/>
+            </map:transform>
+            <map:serialize type="html"/>
+        </map:resource>
+
+    </map:resources>
+
+
+    <map:pipelines id="static">
+        <map:pipeline type="caching">
+
+            <map:match pattern="captcha">
+                <map:call function="captcha"/>
+            </map:match>
+            <map:match pattern="sendletter">
+                <map:call function="sendletter"/>
+            </map:match>
+
+        </map:pipeline>
+        <map:pipeline internal-only="true">
+            <map:match pattern="show-captcha/*/*">
+                <map:read type="captcha" src="{1}">
+                    <map:parameter name="background" value="{2}"/>
+                    <map:parameter name="quality" value="1"/>
+                </map:read>
+            </map:match>
+            <map:match pattern="sendmail">
+                <map:generate type="jx" src="view/mail.jx"/>
+                <map:transform type="sendmail"/>
+                <map:serialize type="xml"/>
+            </map:match>
+
+        </map:pipeline>
+        <map:pipeline type="caching" id="interface">
+            <map:match pattern="generateInterface/">
+                <map:generate type="file" src="blockcontext:/ems/view/ems_interface_menu.xml"/>
+                <map:serialize type="xml"/>
+            </map:match>
+        </map:pipeline>
+        <map:pipeline type="caching">
+
+            <!--<map:match pattern="search">
+                <map:call function="search"/>
+            </map:match>
+
+
+
+
+-->
+
+
+            <map:match pattern="*-template-generate">
+                <map:generate type="jx" src="forms/{1}/{1}_template.xml">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+                <map:serialize type="xml"/>
+            </map:match>
+
+            <!--<map:match pattern="*">
+                <map:redirect-to uri="{1}/"/>
+            </map:match>-->
+
+            <!--<map:match pattern="*-aggregate-pipeline">-->
+           <!-- <map:match pattern="search-results">
+                <map:aggregate element="root">
+                    &lt;!&ndash;<map:part src="cocoon:/{1}-template-generate"/>&ndash;&gt;
+                    <map:part src="cocoon:/search-obj"/>
+                    &lt;!&ndash;<map:part src="cocoon:/generateInterface/"/>&ndash;&gt;
+                </map:aggregate>
+                <map:serialize type="xml"/>-->
+                <!--<map:call resource="search-result"/>-->
+                <!--<map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="edit"/>
+                    <map:parameter name="id" value="{flow-attribute:id}"/>
+                    <map:parameter name="inner" value="{flow-attribute:inner}"/>
+                </map:call>-->
+            <!--</map:match>-->
+            <map:match pattern="search-results">
+                <map:generate type="jx" src="view/search_list.jx">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+                <map:serialize type="xml"/>
+            </map:match>
+
+
+            <map:match pattern="search">
+                <map:call function="search"/>
+            </map:match>
+            <!--<map:match pattern="search-results">
+                <map:aggregate element="root1">
+                    <map:part src="cocoon:/investors/registrar-auditor"/>
+                    <map:part src="cocoon:/search-obj/"/>
+                </map:aggregate>
+                <map:serialize type="xml"/>
+                &lt;!&ndash;<map:call resource="generate">
+                    <map:parameter name="block" value="true"/>
+                </map:call>&ndash;&gt;
+            </map:match>
+-->
+
+        </map:pipeline>
+
+
+    </map:pipelines>
+
+
+</map:sitemap>

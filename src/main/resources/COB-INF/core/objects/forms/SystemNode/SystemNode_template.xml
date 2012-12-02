@@ -1,0 +1,587 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <jx:macro name="objectRows">
+        <!--<ul class="simple-list">-->
+        <li>
+            <label for="fullURL:input" class="label">
+                <ft:widget-label id="fullURL"/>
+            </label>
+            <ft:widget id="fullURL">
+                <fi:styling size="60" class=""/>
+            </ft:widget>
+        </li>
+        <li>
+            <label for="templateId:input" class="label">
+                <ft:widget-label id="templateId"/>
+            </label>
+        </li>
+        <li>
+            <ft:widget id="templateId">
+                <fi:selection-list>
+                    <jx:if test="${parentId > 0}">
+                        <fi:item value="0">
+                            <fi:label>INHERIT</fi:label>
+                        </fi:item>
+                    </jx:if>
+                    <jx:forEach items="${availableTemplates}" var="template">
+                        <fi:item value="${template.id}">
+                            <fi:label>${template.name}</fi:label>
+                        </fi:item>
+                    </jx:forEach>
+                </fi:selection-list>
+            </ft:widget>
+        </li>
+        <!--</ul>-->
+    </jx:macro>
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <style type="text/css">
+            /* Additional styles for alternating row colors */
+            .forms-row-0 td {
+            padding: 5px;
+            background-color: #E0E0E0;
+            }
+
+            .forms-row-1 td {
+            padding: 5px;
+            }
+        </style>
+
+        <!--<tree-script />-->
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                          ajax="true">
+
+
+            <script type="text/javascript">
+
+                <!--alert(locale);-->
+                var globalRowId;
+                var globalEntity;
+                var globalEntityId;
+
+
+                jQuery(document).ready(function() {
+                jQuery("#treeContainer").dialog({
+                autoOpen: false,
+                width: 800,
+                height:400,
+                modal: true,
+                buttons: {
+                "<i18n:text key="Save"/>": function() {
+                jQuery(this).dialog("close");
+                }
+                }
+                });
+
+                <!--jQuery('#xmlObjectsTree').click( function (e) {-->
+                <!--alert(this.id);-->
+
+                <!--var f = jQuery.jstree._focused();-->
+                <!--var id=f.data.ui.selected.attr("id");-->
+                <!--alert(id);-->
+                <!--var name=f.data.ui.selected.attr("name");-->
+                <!--alert(name);-->
+                <!--updateRowData(name, id, false);-->
+                <!--});-->
+
+
+                });
+
+                <!-- function getNavigationPath(id){
+                    var ajaxUrl = "/ems/core/navigationPath?navigationId="+id;
+                    jQuery.ajax( ajaxUrl);
+                }-->
+                function openModalTree(entity, entityId, rowId){
+
+                globalRowId = rowId;
+                globalEntity = entity;
+                globalEntityId = entityId;
+
+                document.getElementById('treeRootNode').value=entityId;
+                document.getElementById('treeRootNode').innerHTML=entity;
+
+                var divId = "#xmlObjectsTree";
+                var ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+
+                initXmlTree(divId, ajaxUrl);
+
+                jQuery("#treeRootNode").click( function () {
+                updateRowData(globalEntity, globalEntityId, true);
+                });
+
+
+                jQuery('#xmlObjectsTree').bind("loaded.jstree", function (e, data) {
+                jQuery('#xmlObjectsTree a').click(function() {
+                var li = this.parentNode;
+                var id=li.id;
+                var name=li.getAttribute('name');
+                updateRowData(name, id, false);
+                });
+                });
+                jQuery('#xmlObjectsTree').bind("open_node.jstree", function (e, data) {
+                jQuery('#xmlObjectsTree a').unbind('click').click(function() {
+                var li = this.parentNode;
+                var id=li.id;
+                var name=li.getAttribute('name');
+                updateRowData(name, id, false);
+                });
+                });
+
+                jQuery("#treeContainer").dialog("open");
+                }
+
+
+                function updateRowData(name, id, objectType) {
+                var objectNameElement = document.getElementById('addedObjects.'+globalRowId+'.objectName');
+                var objectIdElement = document.getElementById('addedObjects.'+globalRowId+'.objectId');
+                var objectTypeNameElement = document.getElementById('addedObjects.'+globalRowId+'.objectTypeName');
+                var objectTypeIdElement = document.getElementById('addedObjects.'+globalRowId+'.objectTypeId');
+                var objectTypeElement = document.getElementById('addedObjects.'+globalRowId+'.objectType');
+
+                objectNameElement.innerHTML = name;
+                objectNameElement.href = 'edit'+globalEntity+'?id=' + id;
+                //objectIdElement.innerHTML = id;
+                objectIdElement.value = id;
+                <!--objectTypeIdElement.value = entityId;-->
+                objectTypeNameElement.value = globalEntity;
+                objectTypeElement.value = objectType;
+
+                }
+
+
+            </script>
+
+
+            <script type="text/javascript">
+                $(function() {
+                $("#tabs").tabs();
+                $("#ftabs").tabs();
+                $("#redirect").tabs();
+                });
+            </script>
+            <translate/>
+            <div id="tabs" class="panel">
+                <ul>
+                    <li>
+                        <a href="#tabs-1">
+                            <i18n:text catalogue="core" key="SystemNode.settings"/>
+                        </a>
+                    </li>
+                    <!--<jx:if test="${actionState == 'edit'} ">-->
+                    <li>
+                        <a href="#tabs-2">
+                            <i18n:text catalogue="core" key="SystemNode.widgets"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tabs-3">
+                            <i18n:text catalogue="core" key="Document.metaData"/>
+                        </a>
+                    </li>
+                    <!--</jx:if>-->
+
+
+                </ul>
+                <div id="tabs-1">
+                    <emsFields entity="SystemNode" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                </div>
+
+                <div id="tabs-2">
+                    <div>
+                        <h3>
+                            <i18n:text key="EmsObject.addedObjects"/>
+                        </h3>
+                        <!--<style>
+                            #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+                            #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height:
+                            18px; }
+                            #sortable li span { position: absolute; margin-left: -1.3em; }
+                        </style>-->
+                        <script type="text/javascript">
+
+                            function process(v,RowIndex){
+                            var exp =
+                            parseInt(document.getElementById('addedObjects.'+RowIndex+'.objectLevels').value)+v;
+                            if (exp >= 0){
+                            document.getElementById('addedObjects.'+RowIndex+'.objectLevels').value=exp;
+                            }
+                            }
+
+                        </script>
+
+                        <!-- /*update: function(event, ui) {
+                                                     var info = $(this).sortable("serialize");
+                                                     alert(info); } */
+                        -->
+                        <ft:repeater id="addedObjects">
+                            <table border="0" class="order">
+                                <thead>
+                                    <tr>
+                                        <th width="30">
+                                            <ft:repeater-widget-label widget-id="objectPosition"/>
+                                        </th>
+
+                                        <th width="150">
+                                            <ft:repeater-widget-label widget-id="objectName"/>
+                                        </th>
+                                        <th width="150">
+                                            <ft:repeater-widget-label widget-id="objectTypeSelect"/>
+                                        </th>
+
+                                        <th width="150">
+                                            <ft:repeater-widget-label widget-id="objectTypeAction"/>
+                                        </th>
+
+                                        <th width="40">
+                                            <ft:repeater-widget-label widget-id="objectLevels"/>
+                                        </th>
+                                        <th width="40">
+                                            <ft:repeater-widget-label widget-id="objectItemsOnPage"/>
+                                        </th>
+
+                                        <th width="70"/>
+                                    </tr>
+                                </thead>
+                                <tbody id="sortable">
+                                    <ft:repeater-rows>
+                                        <tr class="forms-row">
+                                            <td>
+                                                <ft:widget id="objectPosition"/>
+                                            </td>
+                                            <td>
+                                                <ft:widget id="objectId">
+                                                    <fi:styling type="hidden"/>
+                                                </ft:widget>
+                                                <ft:widget id="objectType">
+                                                    <fi:styling type="hidden"/>
+                                                </ft:widget>
+                                                <ft:widget id="objectName">
+                                                    <jx:if test="${repeater.getRow(repeaterLoop.index).getChild('objectId').value > 0}">
+                                                        <fi:styling type="link"
+                                                                    src="${repeater.getRow(repeaterLoop.index).getChild('objectTypeName').value}-edit?id=${repeater.getRow(repeaterLoop.index).getChild('objectId').value}"/>
+                                                    </jx:if>
+                                                </ft:widget>
+                                            </td>
+
+                                            <td>
+                                                <ft:widget id="objectTypeName">
+                                                    <fi:styling type="hidden"/>
+                                                </ft:widget>
+                                                <div class="ui-widget">
+                                                    <ft:widget id="objectTypeSelect"
+                                                               onchange="if(this.value!=0){openModalTree(this.options[this.selectedIndex].id, this.value, ${repeater.getRow(repeaterLoop.index).getChild('objectPosition').value})} else { document.getElementById('addedObjects.${repeaterLoop.index}.objectName').innerHTML = 'Empty';}cocoon.forms.submitForm(this);">
+                                                        <fi:styling class="chooseOne" i18n:attr="title"
+                                                                    title="core:action.${this.value}"/>
+                                                    </ft:widget>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+                                                <ft:widget id="objectTypeAction">
+                                                    <fi:styling i18n:attr="title" title="core:action.${this.value}"/>
+                                                </ft:widget>
+                                            </td>
+
+                                            <td>
+                                                <div class="common-div">
+                                                    <a role="button"
+                                                       class="ui-button ui-icon ui-icon-minus  ui-widget ui-corner-all"
+                                                       onclick="javascript:process(-1, ${repeater.getRow(repeaterLoop.index).getChild('objectPosition').value})"/>
+                                                    <ft:widget id="objectLevels">
+                                                        <fi:styling size="5"/>
+                                                    </ft:widget>
+                                                    <a role="button"
+                                                       class="ui-button ui-icon ui-icon-plus  ui-widget ui-corner-all"
+                                                       onclick="javascript:process(1, ${repeater.getRow(repeaterLoop.index).getChild('objectPosition').value})"/>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+                                                <ft:widget id="objectItemsOnPage">
+                                                    <fi:styling size="5"/>
+                                                </ft:widget>
+
+                                            </td>
+                                            <td>
+
+                                                <ft:widget id="delete">
+                                                    <fi:styling type="link" role="button"
+                                                                class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
+                                                </ft:widget>
+                                            </td>
+                                        </tr>
+                                        <!--<jx:set var="itemsOnPage" select="repeater.getRow(repeaterLoop.index).getChild('objectItemsOnPage').value"/>
+                                        ${itemsOnPage}-->
+
+                                        <!--<jx:if test="${repeater.getRow(repeaterLoop.index).getChild('objectTypeName').value == 'Content' and repeater.getRow(repeaterLoop.index).getChild('itemsOnPage').value &gt; 2} ">-->
+                                        <jx:if test="${repeater.getRow(repeaterLoop.index).getChild('objectTypeName').value == 'Content' and repeater.getRow(repeaterLoop.index).getChild('objectItemsOnPage').value &gt; 1} ">
+                                            <!--<jx:if test="${repeater.getRow(repeaterLoop.index).getChild('sortField').value} != '' or ${repeater.getRow(repeaterLoop.index).getChild('tagId').value} != ''">-->
+                                            <tr>
+
+                                                <td bgcolor="#efefef" colspan="3">
+                                                    <label for="tagId" class="label">
+                                                        <ft:widget-label id="tagId"/>
+                                                    </label>
+                                                    <ft:widget id="tagId">
+                                                        <fi:styling class="chzn-select" style="width:350px;"/>
+                                                        <fi:selection-list>
+                                                            <fi:item value="">
+                                                                <fi:label>--</fi:label>
+                                                            </fi:item>
+                                                            <jx:forEach items="${availableTags}" var="tag">
+                                                                <fi:item value="${tag.id}">
+                                                                    <fi:label>${tag.tag}</fi:label>
+                                                                </fi:item>
+                                                            </jx:forEach>
+                                                        </fi:selection-list>
+                                                    </ft:widget>
+                                                    <script>
+                                                        $(".chzn-select").chosen();
+                                                    </script>
+
+                                                </td>
+                                                <td bgcolor="#efefef">
+                                                    <label for="sortField:input" class="label">
+                                                        <ft:widget-label id="sortField"/>
+                                                    </label>
+                                                    <ft:widget id="sortField">
+                                                        <!--<fi:styling class="chzn-select" style="width:350px;"/>-->
+                                                        <fi:selection-list>
+                                                            <fi:item value="">
+                                                                <fi:label>--</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="publishDateTime">
+                                                                <fi:label>
+                                                                    <i18n:text catalogue="core"
+                                                                               key="Content.publishDateTime"/>
+                                                                </fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="position">
+                                                                <fi:label>
+                                                                    <i18n:text catalogue="core"
+                                                                               key="SystemNodeObject.position"/>
+                                                                </fi:label>
+                                                            </fi:item>
+
+
+                                                        </fi:selection-list>
+                                                    </ft:widget>
+                                                </td>
+                                                <td bgcolor="#efefef">
+                                                    <label for="sortDirection:input" class="label">
+                                                        <ft:widget-label id="sortDirection"/>
+                                                    </label>
+                                                    <ft:widget id="sortDirection">
+                                                        <fi:selection-list>
+                                                            <fi:item value="">
+                                                                <fi:label>--</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="asc">
+                                                                <fi:label>
+                                                                    <i18n:text catalogue="core"
+                                                                               key="SystemNodeObject.sortByAsc"/>
+                                                                </fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="desc">
+                                                                <fi:label>
+                                                                    <i18n:text catalogue="core"
+                                                                               key="SystemNodeObject.sortByDesc"/>
+                                                                </fi:label>
+                                                            </fi:item>
+                                                        </fi:selection-list>
+                                                    </ft:widget>
+                                                </td>
+                                                <td bgcolor="#efefef" colspan="2">
+                                                    <ft:widget id="renderLike">
+                                                        <!--<fi:styling class="chzn-select" style="width:60px;"/>-->
+                                                        <fi:selection-list>
+                                                            <!-- <fi:item value="1">
+                                                                <fi:label>List</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="2">
+                                                                <fi:label>object</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="3">
+                                                                <fi:label>tree</fi:label>
+                                                            </fi:item>-->
+                                                            <jx:forEach items="${renderLikeItems}" var="renderLike">
+                                                                <fi:item value="${renderLike.item}">
+                                                                    <!--<jx:if test="${renderLike.item} = "-->
+                                                                    <fi:label>${renderLike.item}</fi:label>
+                                                                </fi:item>
+                                                            </jx:forEach>
+                                                        </fi:selection-list>
+                                                    </ft:widget>
+
+                                                </td>
+                                            </tr>
+                                        </jx:if>
+                                    </ft:repeater-rows>
+                                </tbody>
+                            </table>
+                        </ft:repeater>
+
+                        <!--  <a role="button" class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed">close</a>
+                                                    <a role="button" class="ui-button ui-corner-all ui-icon ui-icon-folder-open">close</a>
+                                                    <a role="button" class="ui-button ui-corner-all ui-icon ui-icon-document">close</a>
+                                                    <a role="button" class="ui-button ui-corner-all ui-icon ui-icon-shuffle">close</a>
+                        -->
+
+                        <div i18n:attr="title" title="core:SystemNode.choose" id="treeContainer"
+                             class="dialogContent">
+                            <div class="common-div">
+                                <span class="ui-icon-home"></span>
+                                <a id="treeRootNode" href="#" class=""></a>
+                            </div>
+
+                            <div id="xmlObjectsTree"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <jx:if test="${actionState == 'edit'} ">
+                    <div id="tabs-3">
+
+
+                        <metaInfo/>
+
+                    </div>
+                </jx:if>
+            </div>
+            <div id="redirect" class="panel">
+                <ul>
+                    <li>
+                        <a href="#redirect-1">
+                            <i18n:text catalogue="core" key="SystemNode.redirectTo"/>
+                        </a>
+                    </li>
+
+
+                </ul>
+                <div id="redirect-1">
+                    <ul class="simple-list">
+                        <li>
+                            <!-- <label for="redirectToName:input" class="label">
+                                <ft:widget-label id="redirectToName"/>
+                            </label>-->
+                            <ft:widget id="redirectToName">
+                                <fi:styling type="link"
+                                            src="SystemNode-edit?id=${widget.lookupWidget('../redirectTo').value}"/>
+                            </ft:widget>
+
+                        </li>
+                        <li>
+
+                            <script type="text/javascript">
+                                function openNavigationsDialog() {
+                                jQuery("#navigationTreeContainer").dialog("open");
+                                };
+
+                                jQuery(function () {
+
+                                jQuery("#navigationTreeContainer").dialog({
+                                width: 800,
+                                height:400,
+                                modal: true,
+                                autoOpen: false,
+                                buttons: {
+                                "<i18n:text key="Save"/>": function() {
+                                jQuery(this).dialog("close");
+                                }
+                                }
+                                });
+
+
+                                var divId = "#navigationXmlMenuTree";
+                                var entity = "SystemNode";
+                                var ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+
+                                initXmlTree(divId, ajaxUrl);
+                                jQuery(divId).click( function (e) {
+                                var f = jQuery.jstree._focused();
+                                console.log(f.data.ui.selected);
+                                var id=f.data.ui.selected.attr("id");
+                                var name=f.data.ui.selected.attr("name");
+                                var obj = jQuery(divId).jstree("get_path", f.data.ui.selected);
+                                var path = '';
+                                for (var key in obj) {
+                                path += ' / ' + obj[key];
+                                }
+                                if (path.length > 0) {
+                                path = path.substr(3);
+                                }
+
+                                var navigationElement = document.getElementById('redirectToName');
+                                navigationElement.innerHTML = path;
+                                navigationElement.href = 'SystemNode-edit?id=' + id;
+                                document.getElementById('redirectTo').value = id;
+                                });
+
+
+                                });
+                            </script>
+
+                            <div i18n:attr="title" title="core:Navigation.choose" id="navigationTreeContainer"
+                                 class="dialogContent">
+                                <div id="navigationXmlMenuTree"></div>
+                            </div>
+                            <input type="button" i18n:attr="value" value="core:SystemNode.choose"
+                                   onclick="openNavigationsDialog(this)"/>
+                            <input type="button" i18n:attr="value" value="core:Navigation.clear"
+                                   onclick="document.getElementById('redirectToName').innerHTML = '';document.getElementById('redirectTo').value = 0;"/>
+                            <ft:widget id="redirectTo">
+                                <fi:styling type="hidden"/>
+                            </ft:widget>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+
+            <!--
+               var url = "/ems/core/typeActions/"+entityId;
+                   $.ajax({
+                       url: url,
+                       dataType: "xml"});
+                function log( message ) {
+                       $( "<div/>" ).text( message ).prependTo( "#log" );
+                       $( "#log" ).attr( "scrollTop", 0 );
+                   }
+               success: function( xmlResponse ) {
+                   var data = $( "geoname", xmlResponse ).map(function() {
+                       return {
+                           value: $( "name", this ).text() + ", " +
+                               ( $.trim( $( "countryName", this ).text() ) || "(unknown country)" ),
+                           id: $( "geonameId", this ).text()
+                       };
+                   }).get();
+                   $( "#birds" ).autocomplete({
+                       source: data,
+                       minLength: 0,
+                       select: function( event, ui ) {
+                           log( ui.item ?
+                               "Selected: " + ui.item.value + ", geonameId: " + ui.item.id :
+                               "Nothing selected, input was " + this.value );
+                       }
+                   });
+               }-->
+
+            <!--<ft:widget id="saveSystemNode" class="ui-button"/>-->
+            <input type="button" i18n:attr="value" value="Save" onclick="cocoon.forms.submitForm(this);"/>
+        </ft:form-template>
+    </content>
+</jx:template>

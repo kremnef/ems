@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="DocumentVersion" table="document">
+        <id name="id" column="id" type="int">
+            <generator class="identity"/>
+        </id>
+
+        <property name="createdDateTime" column="created_datetime" type="timestamp" lazy="true"/>
+        <property name="modifiedDateTime" column="modified_datetime" type="timestamp" lazy="true"/>
+
+
+        <property name="version" column="version" type="int" lazy="true"/>
+        <property name="versionModifierId" column="version_modifier_id" type="int" lazy="true"/>
+        <property name="versionComment" column="version_comment" type="string" lazy="true"/>
+
+        <property name="state" column="state" type="string" lazy="true"/>
+        <property name="contentId" column="content_id" type="int" not-null="true" lazy="true"/>
+        <property name="languageCode" column="language_code" type="string" lazy="true"/>
+        <property name="isLastVersion" column="is_last_version" type="boolean" lazy="true"/>
+        <!--<many-to-one name="language" column="language_id" class="Language" insert="false" update="false"
+                     cascade="none" lazy="false" />-->
+
+   <!--     <many-to-one name="versionModifier" column="version_modifier_Id" class="ru.strela.ems.security.model.Customer"
+                     insert="false" update="false"
+                     cascade="none" lazy="false"/>-->
+
+
+        <!--</subclass>-->
+    </class>
+
+
+</hibernate-mapping>
+

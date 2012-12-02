@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST">
+            <!--<ft:group id="template">-->
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <fi:items>
+                    <ft:widget-label id="name"/>
+                    <ft:widget id="name">
+                        <fi:styling size="30"/>
+                    </ft:widget>
+                    <ft:widget-label id="URI"/>
+                    <ft:widget id="URI">
+                        <fi:styling size="30"/>
+                    </ft:widget>
+                    <ft:widget-label id="objectTypeId"/>
+                    <ft:widget id="objectTypeId">
+                        <fi:styling size="10"/>
+                    </ft:widget>
+
+
+                </fi:items>
+            </fi:group>
+            <!--</ft:group>-->
+            <!--CODEMIRROR-->
+            <script src="/ems/resource/js/jquery-plugin/codemirror/lib/codemirror.js"></script>
+            <link rel="stylesheet" href="/ems/resource/js/jquery-plugin/codemirror/lib/codemirror.css"/>
+            <script src="/ems/resource/js/jquery-plugin/codemirror/mode/css/css.js"></script>
+            <script src="/ems/resource/js/jquery-plugin/codemirror/mode/xml/xml.js"></script>
+            <script>
+                $(function() {
+                $( "#tabs" ).tabs();
+                var xslEditor = document.getElementById("xslEditor");
+                var cssEditor = document.getElementById("cssEditor");
+                var xslCodeMirror = CodeMirror.fromTextArea(xslEditor);
+                var cssCodeMirror = CodeMirror.fromTextArea(cssEditor);
+
+                });
+            </script>
+
+            <div id="tabs">
+                <ul>
+                    <li>
+                        <a href="#tabs-1">
+                            XSL
+                            <i18n:text catalogue="core" key="ObjectTypeAction.XSL"/>
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#tabs-2">
+                            CSS
+                            <i18n:text catalogue="core" key="ObjectTypeAction.CSS"/>
+                        </a>
+                    </li>
+
+                </ul>
+                <div id="tabs-1">
+                    <ft:widget id="xslEditor">
+                        <fi:styling type="textarea"/>
+                    </ft:widget>
+                </div>
+
+                <div id="tabs-2">
+                    <ft:widget id="cssEditor">
+                        <fi:styling type="textarea"/>
+                    </ft:widget>
+                </div>
+
+            </div>
+            <ft:widget id="saveObjectTypeAction"/>
+        </ft:form-template>
+    </content>
+</jx:template>

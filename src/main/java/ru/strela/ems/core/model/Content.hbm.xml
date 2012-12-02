@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <!--<union-subclass name="Content" table="content" extends="TypifiedObject" proxy="Content" lazy="true">-->
+    <union-subclass name="Content" table="content" extends="TypifiedObject">
+
+        <property name="publishDateTime" column="publish_datetime" type="timestamp" not-null="false"/>
+        <property name="expireDateTime" column="expire_datetime" type="timestamp" not-null="false"/>
+
+        <property name="documentTypeId" column="document_type_id" type="int" insert="false" update="false"/>
+        <many-to-one name="documentType" class="DocumentType" column="document_type_id" unique="true" cascade="none"
+                     lazy="false"/>
+
+        <many-to-one name="emsObject" class="EmsObject" column="ems_object_id" unique="true" cascade="all"
+                     lazy="false"/>
+        <property name="homeId" column="home_id" type="int" not-null="true"/>
+        <property name="thumbnailId" column="thumbnail_id" type="int" insert="false" update="false"/>
+        <many-to-one name="thumbnail"
+                     column="thumbnail_id"
+                     class="FileObject"
+                     unique="true" cascade="none" lazy="false"/>
+        <!--<set name="documents" inverse="true" cascade="all" lazy="false">
+            <key column="content_id"/>
+            <one-to-many class="Document"/>
+            &lt;!&ndash;<one-to-many entity-name=""/>&ndash;&gt;
+        </set>-->
+
+        <!--<set name="content" inverse="true">
+            <key column="parentContentId"/>
+            <one-to-many class="ru.strela.ems.core.model.OnlyContent"/>
+        </set>-->
+
+        <!-- <bag name="linked" lazy="false" table="content_linked">
+            <key column="content_id"/>
+            <many-to-many column="linked_id" class="Content" lazy="false"/>
+        </bag>-->
+    </union-subclass>
+</hibernate-mapping>
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.ecommerce.model">
+    <class name="ru.strela.ems.ecommerce.model.Saleable" abstract="true" lazy="false">
+        <id name="id" column="id" type="int">
+            <generator class="increment"/>
+        </id>
+        <!--<property name="name" column="name" type="string" not-null="true"/>-->
+    </class>
+</hibernate-mapping>
+

@@ -1,0 +1,117 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listRole() {
+    var list = listCommon("role", "roleName", "desc","")
+    cocoon.sendPage(list.displayURI,list);
+
+}
+
+function createRole(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var roleService = cocoon.getComponent("roleService");
+
+//    var className = "" + roleService.getEntityClassName();
+
+//    var role = cocoon.createObject(className);
+    var role = cocoon.createObject("ru.strela.ems.security.model.User");
+
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+
+
+  form.load(role);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+    form.showForm(showFormURI, {
+        "viewData": viewData,
+        "userId": id,
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath
+    })
+    form.save(role);
+
+    roleService.save(role);
+    cocoon.releaseComponent(roleService);
+
+    var id = role.getId();
+    cocoon.disposeObject(role);
+    cocoon.redirectTo("Role-edit?id=" + id);
+}
+
+
+function editRoleById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Role-create");
+    }
+    var roleService = cocoon.getComponent("roleService");
+    var role = roleService.getRole(id);
+    if (role == null) {
+        cocoon.releaseComponent(roleService);
+        cocoon.redirectTo("Role-create");
+    }
+
+    var actionState = "edit";
+    var viewData = {
+        "actionState": actionState
+    };
+
+
+    form.load(role);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+    form.showForm(showFormURI, {
+        "viewData": viewData,
+        "userId": id,
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath
+    })
+    form.save(role);
+
+   /* role = showEmsObjectForm(form, roleService, role, showFormURI, {
+        "viewData": viewData,
+        "roleId": id,
+        "servletPath" : servletPath
+    });*/
+
+    roleService.save(role);
+    cocoon.releaseComponent(roleService);
+
+    cocoon.redirectTo("Role-edit?id=" + role.getId());
+}
+
+function deleteRoleById() {
+
+    var entity = "Role";
+    var id = 0;
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo(entity+"-list");
+    }
+    var roleService = cocoon.getComponent("roleService");
+    var role = roleService.getRole(id);
+    if (role == null) {
+        cocoon.releaseComponent(roleService);
+        cocoon.redirectTo(entity+"-list");
+    }
+
+    roleService.deleteRole(role);
+
+    cocoon.releaseComponent(roleService);
+
+    cocoon.redirectTo(entity+"-list");
+}

@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+
+    <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                      ajax="true" class="media-upload-form type-form validate" id="file-form">
+        <ft:widget-label id="upload"/>
+        <ft:widget id="upload"/>
+        <!--<ft:widget id="uploadFile" class="ui-button"/><br /><br />-->
+        <script type="text/javascript">
+            //<![CDATA[
+addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
+var userSettings = {
+		'url': '/',
+		'uid': '14692443',
+		'time':'1284106460'
+	},
+	ajaxurl = 'http://kremnef.wordpress.com/wp-admin/admin-ajax.php',
+	pagenow = 'media',
+	typenow = '',
+	adminpage = 'media-new-php',
+	thousandsSeparator = ',',
+	decimalPoint = '.',
+	isRtl = 0;
+//]]>
+        </script>
+        <script type="text/javascript">
+            if (window.top !== window.self) {
+            window.top.location.href = window.self.location.href; }
+        </script>
+        <script type='text/javascript' src='resource/js/lib/jquery/jquery.js?ver=1.5.1'></script>
+        <!--<script type='text/javascript' src='resource/js/lib/jquery/jquery.js?ver=1.4.2'></script>-->
+        <script type='text/javascript' src='resource/js/lib/utils.js?ver=20090102'></script>
+        <script type='text/javascript'
+                src='resource/js/lib/swfupload/swfupload-all.js?ver=2201'></script>
+        <script type='text/javascript'>
+
+var swfuploadL10n = {
+	queue_limit_exceeded: "Вы поставили в очередь слишком много файлов.",
+	file_exceeds_size_limit: "This file exceeds the maximum upload size for this site.",
+	zero_byte_file: "Файл пуст. Пожалуйста, выберите другой.",
+	invalid_filetype: "Файл не принадлежит к разрешённым типам. Пожалуйста, выберите другой.",
+	default_error: "Во время загрузки произошла ошибка. Пожалуйста, повторите попытку позже.",
+	missing_upload_url: "Ошибка конфигурации. Пожалуйста, свяжитесь с администратором сервера.",
+	upload_limit_exceeded: "Вы можете загрузить только 1 файл.",
+	http_error: "Ошибка HTTP.",
+	upload_failed: "Загрузка не удалась.",
+	io_error: "Ошибка ввода/вывода.",
+	security_error: "Ошибка безопасности.",
+	file_cancelled: "File canceled.",
+	upload_stopped: "Загрузка остановлена.",
+	dismiss: "Отмена",
+	crunching: "Обработка",
+	deleted: "перемещён в корзину.",
+	error_uploading: "&#8220;%s&#8221; has failed to upload due to an error"
+};
+try{convertEntities(swfuploadL10n);}catch(e){};
+
+        </script>
+        <script type='text/javascript' src='resource/js/lib/swfupload/handlers.js?ver=2201-20100523'></script>
+        <script type='text/javascript' src='resource/js/lib/json2.js?ver=20090817'></script>
+        <script type='text/javascript' src='http://s2.wp.com/wp-includes/js/feedback.js?ver=20081201'></script>
+        <script type="text/javascript" src="resource/js/lib/swfupload/swfupload.js"></script>
+        <script type="text/javascript">
+            var uploaderMode = 0;
+            jQuery(document).ready(function($){
+            uploaderMode = getUserSetting('uploader');
+            $('.upload-html-bypass
+            a').click(function(){deleteUserSetting('uploader');uploaderMode=0;swfuploadPreLoad();return false;});
+            $('.upload-flash-bypass a').click(function(){setUserSetting('uploader',
+            '1');uploaderMode=1;swfuploadPreLoad();return false;});
+            });
+        </script>
+        <div id="media-upload-notice">
+        </div>
+        <div id="media-upload-error">
+        </div>
+        <p class="upload-filetypes">Разрешенные типы файлов:<strong>jpg, jpeg, png, gif, pdf, doc, ppt, odt, pptx, docx,
+            pps, ppsx</strong>.
+        </p>
+        <script type="text/javascript">
+            var swfu;
+            SWFUpload.onload = function() {
+            var settings = {
+            button_text: '<span class="button">Выберите файлы</span>',
+            button_text_style: '.button { text-align: center; font-weight: bold; font-family:"Lucida
+            Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif; font-size: 11px; text-shadow: 0 1px 0 #FFFFFF;
+            color:#464646; }',
+            button_height: "23",
+            button_width: "132",
+            button_text_top_padding: 3,
+            button_image_url: 'resource/img/upload.png?ver=20100531',
+            button_placeholder_id: "flash-browse-button",
+            upload_url : "http://kremnef.wordpress.com/wp-admin/async-upload.php",
+            flash_url : "resource/js/swfupload/swfupload.swf",
+            file_post_name: "async-upload",
+            file_types: "*.jpg;*.jpeg;*.png;*.gif;*.pdf;*.doc;*.ppt;*.odt;*.pptx;*.docx;*.pps;*.ppsx",
+            post_params : {
+            "post_id" : "0",
+            "auth_cookie" : "kremnef|1284279214|68f505e81d6b7ea7d6c5b898aa9df5d6",
+            "logged_in_cookie": "kremnef|1284279214|470d76543cc15233b81f013af9d7f2d7",
+            "_wpnonce" : "d009b52471",
+            "type" : "",
+            "tab" : "",
+            "short" : "1"
+            },
+            file_size_limit : "1536000000b",
+            file_dialog_start_handler : fileDialogStart,
+            file_queued_handler : fileQueued,
+            upload_start_handler : uploadStart,
+            upload_progress_handler : uploadProgress,
+            upload_error_handler : uploadError,
+            upload_success_handler : uploadSuccess,
+            upload_complete_handler : uploadComplete,
+            file_queue_error_handler : fileQueueError,
+            file_dialog_complete_handler : fileDialogComplete,
+            swfupload_pre_load_handler: swfuploadPreLoad,
+            swfupload_load_failed_handler: swfuploadLoadFailed,
+            custom_settings : {
+            degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
+            swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
+            },
+            debug: false
+            };
+            swfu = new SWFUpload(settings);
+            };
+
+        </script>
+
+        <div id="flash-upload-ui" class="hide-if-no-js">
+
+            <div>
+                Выберите файл для загрузки
+                <div id="flash-browse-button"></div>
+                <span>
+                    <input id="cancel-upload" disabled="disabled" onclick="cancelUpload()" type="button"
+                           value="Отменить загрузку" class="button"/>
+                </span>
+            </div>
+            <p class="media-upload-size">Maximum upload file size: 1GB</p>
+            <p class="upload-flash-bypass">Вы используете Flash-загрузчик. Проблемы? Попробуйте<a
+                    href="/wp-admin/media-new.php?flash=0">загрузчик браузера</a>.
+            </p>
+            <p class="howto">Когда файл будет загружен, вы сможете добавить заголовки и описания.</p>
+        </div>
+
+        <div id="html-upload-ui">
+            <p id="async-upload-wrap">
+                <label class="screen-reader-text" for="async-upload">Загрузка</label>
+                <input type="file" name="async-upload" id="async-upload"/>
+                <input type="submit" class="button" name="html-upload" value="Загрузка"/>
+                <a href="#" onclick="try{top.tb_remove();}catch(e){}; return false;">Отмена</a>
+            </p>
+            <div class="clear"></div>
+            <p class="media-upload-size">Maximum upload file size: 1GB</p>
+            <p class="upload-html-bypass hide-if-no-js">Вы используете загрузчик браузера. Попробуйте<a
+                    href="/wp-admin/media-new.php?flash=1">Flash-загрузчик</a>.
+            </p>
+        </div>
+        <p class="upload-quota">
+            <strong>9.0 MB</strong>
+            использовано,
+            <strong>3.0 GB</strong>
+            (<strong>99.7%</strong>) места для загрузки свободно.
+            You can upload mp3, m4a, wav, ogg audio files and increase your available space with a<a
+                href="http://support.wordpress.com/space-upgrade/" target="_blank">Space Upgrade</a>.
+            You can upload videos and embed them directly on your blog with a<a
+                href="http://support.wordpress.com/videopress/" target="_blank">Video Upgrade</a>.
+        </p>
+        <script type="text/javascript">
+            jQuery(function($){
+            var preloaded = $(".media-item.preloaded");
+            if ( preloaded.length > 0 ) {
+            preloaded.each(function(){prepareMediaItem({id:this.id.replace(/[^0-9]/g, '')},'');});
+            }
+            updateMediaForm();
+            post_id = 0;
+            shortform = 1;
+            });
+        </script>
+        <input type="hidden" name="post_id" id="post_id" value="0"/>
+        <input type="hidden" id="_wpnonce" name="_wpnonce" value="d009b52471"/>
+        <input type="hidden" name="_wp_http_referer" value="/wp-admin/media-new.php"/>
+        <div id="media-items" class="hide-if-no-js"></div>
+        <p>
+            <input type="submit" class="button savebutton hide-if-no-js" name="save" value="Сохранить все изменения"/>
+        </p>
+        <!--<input type="hidden" name="post_id" id="post_id" value="0" />
+
+            <div id="media-items" class="hide-if-no-js"> </div>
+            <p>
+            <input type="submit" class="button savebutton hide-if-no-js" name="save" value="<?php esc_attr_e( 'Save all changes' ); ?>" />
+            </p>
+            </form>
+        -->
+    </ft:form-template>
+
+
+</jx:template>

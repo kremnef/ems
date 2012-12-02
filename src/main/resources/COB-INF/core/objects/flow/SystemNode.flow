@@ -1,0 +1,284 @@
+function getSystemNodesByOwner() {
+    var displayURI = cocoon.parameters.displayURI;
+    var owner = cocoon.parameters.owner;
+
+    var systemNodeService = cocoon.getComponent("systemNodeService");
+    var systemNodes = systemNodeService.getSystemNodes(owner);
+    var name = "error";
+    if (systemNodes != null) {
+        name = "contetnName:";
+    }
+
+    cocoon.releaseComponent(systemNodeService);
+
+    cocoon.sendPage(displayURI, {
+        "systemNode": systemNode,
+        "name": name
+    });
+}
+
+function showSystemNode(systemNodeService, systemNode, form, actionState) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = systemNode.getId();
+    var parentName = "";
+    var parentId = systemNode.getParentId();
+    if (parentId > 0) {
+//        print("systemNode = " + systemNode);
+//        var parent = systemNode.getParent();
+//        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+        var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
+        var parent = typifiedObjectService.getParent(parentId);
+//        var parent = contentService.getParent(parentId);
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+
+    var templateService = cocoon.getComponent("templateService");
+    var availableTemplates = templateService.getTemplates();
+
+
+    var tagService = cocoon.getComponent("tagService");
+    var availableTags = tagService.getTags();
+
+
+//    var actionState = "edit";
+    var parentObjectsDataList = systemNode.getParentObjectsDataList();
+    var objectsDataList = systemNode.getObjectsDataList();
+
+    var availableLanguages = getAvailableLanguages();
+    loadTranslations(systemNode, availableLanguages);
+
+
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+    form.setAttribute("parentObjectsDataList", parentObjectsDataList);
+    var parents;
+    if (parentId != null) {
+        parents = systemNodeService.getTypifiedObjectParents(parentId, true);
+    }
+    var objectTypeDao = cocoon.getComponent("objectTypeDao");
+    var objectTypeList = objectTypeDao.getObjectTypes(true);
+
+
+    var redirectPath = "";
+    if (systemNode.getRedirectTo() > 0) {
+        var redirectParents = systemNodeService.getTypifiedObjectParents(systemNode.getRedirectTo(), true);
+        for (var i = 0; i < redirectParents.size(); i++) {
+            redirectPath += ' / ' + redirectParents.get(i).getName();
+        }
+    }
+    if (redirectPath.length > 0) {
+        redirectPath = redirectPath.substr(3);
+    }
+    form.getChild("redirectToName").value = redirectPath;
+    form.setAttribute('objectTypeList', objectTypeList);
+
+  //  var  renderLikeItems['list','tree','object'];
+
+    var formData = {
+        "objectTypeList": objectTypeList,
+        "actionState": actionState,
+//        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "redirectPath" : redirectPath,
+        "servletPath" : servletPath,
+        "id" : id,
+        "userData" : getLoggedInUser(),
+        "parents" : parents,
+    //    "renderLikeItems": renderLikeItems,
+        "availableTags": availableTags,
+        "availableTemplates": availableTemplates,
+        "availableLanguages":availableLanguages,
+        "formLocale":locale
+    };
+
+
+    form.load(systemNode);
+
+    importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+    importClass(Packages.ru.strela.ems.selectionlist.EmsSelectionList);
+    var repeater = form.getChild("addedObjects");
+    if (parentObjectsDataList.size() > 0) {
+        for (var i = 0; i < repeater.getSize(); i++) {
+            var parentObjectsDataId = parentObjectsDataList.get(i).getId();
+            var isParentObjectData = parentObjectsDataId > 0 && parentObjectsDataId == objectsDataList.get(i).getId();
+            if (isParentObjectData) {
+                var row = repeater.getRow(i);
+                row.getChild("linkId").setValue(new java.lang.Integer(parentObjectsDataId));
+                row.getChild("delete").setState(WidgetState.INVISIBLE);
+            }
+        }
+    }
+    var homeId = 0;
+    var navigation = systemNodeService.getNavigationBySystemNodeId(systemNode.getId());
+    if (navigation != null) {
+        homeId = navigation.getId();
+    }
+
+    form.showForm(showFormURI, formData);
+
+    form.save(systemNode);
+    saveObjectLabelList(systemNode);
+    saveMetaInfoList(systemNode);
+
+
+    cocoon.disposeObject(availableTags);
+    cocoon.disposeObject(objectTypeList);
+    cocoon.disposeObject(availableTemplates);
+    cocoon.releaseComponent(tagService);
+    cocoon.releaseComponent(objectTypeDao);
+    cocoon.releaseComponent(templateService);
+    cocoon.releaseComponent(typifiedObjectService);
+}
+
+function editSystemNodeById(form) {
+    var actionState = "edit";
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("SystemNode-create");
+    }
+
+    var systemNodeService = cocoon.getComponent("systemNodeService");
+
+    var systemNode = null;
+    systemNode = systemNodeService.getSystemNode(id, true, true);
+
+    if (systemNode == null) {
+        cocoon.releaseComponent(systemNodeService);
+        cocoon.redirectTo("SystemNode-create");
+    }
+
+    showSystemNode(systemNodeService, systemNode, form, actionState);
+
+    var parentId = 0;
+    var parentName = "";
+    var parentPath = new java.lang.String("");
+       var parentObject = systemNode.getParent();
+       if (parentObject != null) {
+           parentId = parentObject.getId();
+           parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+           parentPath = parentObject.getFullURL();
+       }
+       systemNode.setFullURL(parentPath.length() > 0 ? parentPath + '/' + systemNode.getSystemName() : systemNode.getSystemName());
+
+    try {
+        systemNodeService.save(systemNode);
+
+    } finally {
+        cocoon.disposeObject(systemNode);
+        cocoon.releaseComponent(systemNodeService);
+    }
+    cocoon.redirectTo("SystemNode-edit?id=" + systemNode.getId());
+
+}
+
+
+function createSystemNode(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var systemNodeService = cocoon.getComponent("systemNodeService");
+    var systemNode = createTypifiedObject(systemNodeService);
+    var templateService = cocoon.getComponent("templateService");
+    var availableTemplates = templateService.getTemplates();
+    cocoon.releaseComponent(templateService);
+
+    var actionState = "create";
+
+    var parentId = 0;
+    var parentName = "";
+    var parentPath = new java.lang.String("");
+    var parentObject = systemNode.getParent();
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+        parentPath = parentObject.getFullURL();
+    }
+    systemNode.setFullURL(parentPath.length() > 0 ? parentPath + '/' + systemNode.getSystemName() : systemNode.getSystemName());
+
+    var objectTypeDao = cocoon.getComponent("objectTypeDao");
+    var objectTypeList = objectTypeDao.getObjectTypes(true);
+    cocoon.releaseComponent(objectTypeDao);
+    form.setAttribute('objectTypeList', objectTypeList);
+
+    var pathWidget = form.getChild('path');
+    showSystemNode(systemNodeService, systemNode, form, actionState);
+    systemNodeService.save(systemNode);
+
+    cocoon.releaseComponent(systemNodeService);
+
+    var id = systemNode.getId();
+    cocoon.disposeObject(systemNode);
+    cocoon.redirectTo("SystemNode-edit?id=" + id);
+}
+
+
+function viewSystemNodeById() {
+    var displayURI = cocoon.parameters.displayURI;
+    var systemNodeId = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        systemNodeId = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+//    var systemNodeId = parseInt(cocoon.request.getParameter("systemNodeId"));
+
+    var systemNodeService = cocoon.getComponent("systemNodeService");
+    var systemNode = systemNodeService.getSystemNode(systemNodeId);
+    cocoon.releaseComponent(systemNodeService);
+     cocoon.disposeObject(systemNode);
+
+    cocoon.sendPage(displayURI, {
+        "systemNode": systemNode
+    });
+}
+
+
+function getSystemNodesByDocumentType() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("systemNodeId"));
+    var systemNodeService = cocoon.getComponent("systemNodeService");
+    var systemNode = systemNodeService.getSystemNodesByDocumentType(id);
+    cocoon.releaseComponent(systemNodeService);
+
+    cocoon.sendPage(displayURI, {
+        "systemNode": systemNode
+    });
+}
+
+
+function listSystemNode(parentId) {
+    listTypifiedObjects(parentId);
+
+}
+
+
+function deleteSystemNodeById() {
+    deleteObjectById("SystemNode");
+}
+
+
+/*function treeSystemNode(parentId){
+ var displayXMLURI = cocoon.parameters.displayXMLURI;
+ var listData = prepareListData(parentId);
+ cocoon.sendPage(displayXMLURI, listData);
+
+ }*/
+
+
+/*
+ function treeObjects(){
+ var displayXMLURI = cocoon.parameters.displayXMLURI;
+ var navigationTreeService = cocoon.getComponent("embeddedObjectsTreeModel");
+ //    navigationTreeService.setEntity("navigation");
+ var children = navigationTreeService.getChildren(navigationTreeService.getRoot());
+
+ cocoon.sendPage(displayXMLURI, {children : children});
+ }*/

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!--<union-subclass name="Customer" table="users">-->
+    <class name="org.springframework.security.core.userdetails.User" table="users">
+        <id name="username" column="username" type="string" access="field">
+            <!--<generator class="assigned"/>-->
+            <!--<generator class="native"/>-->
+        </id>
+        <property name="password" column="password" type="string" not-null="true" access="field"/>
+        <property name="enabled" column="enabled" type="boolean" not-null="true" access="field" />
+        <!--<property name="salt" column="salt" type="string" not-null="true" />-->
+    <!--<union-subclass name="User" extends="TypifiedObject" table="User" >-->
+    <!--<joined-subclass name="User" table="User" extends="EmsObject">-->
+        <!--<property name="password" column="password" type="string" not-null="true" />-->
+        <!--<property name="expires" column="expires" type="timestamp" not-null="false" />-->
+        <!--<property name="login" column="login" type="string" not-null="true" />-->
+
+        <!--<set name="roles" lazy="false" table="RoleRelation" >
+            <key column="user_id"/>
+            <many-to-many column="role_id" class="Role"/>
+        </set>
+        <set name="groups" lazy="false" table="GroupRelation">
+            <key column="user_id"/>
+            <many-to-many column="group_id" class="Group"/>
+        </set>-->
+        <!--<property name="position" column="position" type="int" insert="false" update="false"/>-->
+        
+        <!--<set name="roles" inverse="true" cascade="all-delete-orphan" lazy="false">
+            <key column="user_id" />
+            <one-to-many class="ru.strela.ems.core.model.Role" />
+        </set>-->
+    </class>
+    <!--</union-subclass>-->
+</hibernate-mapping>
+

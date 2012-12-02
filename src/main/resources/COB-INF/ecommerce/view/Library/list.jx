@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="parentObjects">
+        <parents>
+            <jx:forEach items="${parents}" var="parent" varStatus="status">
+                <parent id="${parent.id}">
+                    <name>${parent.name}</name>
+                </parent>
+            </jx:forEach>
+        </parents>
+    </jx:macro>
+
+    <request>
+        <filter>
+            <name>${requestParam}</name>
+            <value>${requestParam.value}</value>
+        </filter>
+    </request>
+    <content>
+        <userData id="${userData.customer.id}" >
+            <login>${userData.customer.firstName}</login>
+            <firstName>${userData.customer.firstName}</firstName>
+            <lastName>${userData.customer.lastName}</lastName>
+        </userData>
+        <paging page="${page}" total="${total}" />
+        <topData>
+            <topDataMacro />
+        </topData>
+        <xfilter/>
+        <currentNode />
+        <parentObjects />
+        <bottomData>
+            <bottomDataMacro />
+        </bottomData>
+    </content>
+
+</jx:template>

@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<fd:form
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <fd:widgets>
+        <fd:field id="id" state="output">
+            <fd:label>ID</fd:label>
+            <fd:datatype base="integer" />
+            <fd:on-value-changed>
+                <javascript>
+                    var value = new java.lang.Integer(this.value);
+                </javascript>
+            </fd:on-value-changed>
+        </fd:field>
+        <!--<fd:field id="emsObjectId" state="invisible">
+            <fd:datatype base="integer" />
+        </fd:field>-->
+        <fd:field id="parentId">
+            <fd:datatype base="integer"/>
+        </fd:field>
+        <fd:field id="entity" state="invisible">
+            <fd:datatype base="string"/>
+            <fd:initial-value>FileObject</fd:initial-value>
+        </fd:field>
+
+
+
+        <fd:field id="path" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="FileObject.path"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+        
+        <fd:field id="size" state="output">
+            <fd:label>
+                <i18n:text catalogue="core" key="FileObject.size"/>
+            </fd:label>
+            <fd:datatype base="integer"/>
+        </fd:field>
+        
+        <fd:field id="contentType" state="output">
+            <fd:label>
+                <i18n:text catalogue="core" key="FileObject.contentType"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+
+        <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+
+        <fd:expand id="core:translate"/>
+        <fd:expand id="core:formLocale"/>
+        <fd:expand id="core:labels"/>
+        <fd:expand id="core:metaInfo"/>
+        <fd:expand id="core:systemURL"/>
+
+        <fd:submit id="saveFileObject">
+            <fd:label><i18n:text key="Save"/></fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

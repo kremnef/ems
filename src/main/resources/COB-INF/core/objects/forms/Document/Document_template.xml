@@ -1,0 +1,585 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <jx:macro name="fileSystemObjects">
+           <ft:repeater id="fileSystemObjects">
+               <table border="0" class="order">
+                   <tbody>
+                       <ft:repeater-rows>
+                           <tr class="forms-row">
+                               <!--<td>-->
+                                   <!--<ft:widget id="id"/>-->
+                               <!--</td>-->
+                               <td>
+                                   <jx:set var="fileId"
+                                           value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
+                                   <jx:set var="fileName"
+                                           value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
+                                   <jx:set var="fileType"
+                                           value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>
+                                   <jx:set var="filePath"
+                                           value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
+                                   <jx:set var="fileSystemName"
+                                           value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
+
+                                   <!--<jx:set var="fileSize"
+                                   value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>-->
+                                   <jx:if test="${fileType.contains('image')}">
+                                       <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
+
+
+                                       <img src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg" border="0"
+                                            width="30px"
+                                            height="30px"/>
+                                   </jx:if>
+                                   <jx:if test="${fileType.contains('folder')}">
+                                       <a role="button"
+                                          class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
+                                   </jx:if>
+                                   <!--<jx:if test="${item.fileType.contains('image')}">
+                                       <jx:set var="prepath"
+                                               value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
+                                       <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
+                                            height="30px"/>
+                                   </jx:if>-->
+                               </td>
+                               <td>
+                                   <span class="label">
+                                       <!--<a>-->
+                                       <!--<jx:if test="${fileType != 'folder'}">
+                                           <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
+                                       </jx:if>-->
+                                       ${fileName}
+                                       <!--</a>-->
+                                   </span>
+                                   <!--<ft:widget id="name"/>-->
+                               </td>
+                               <!--<td>
+                                   <ft:widget id="systemName"/>
+                               </td>
+                               --><!--<td>
+                                           <ft:widget id="contentType"/>
+                                       </td>-->
+                               <td>
+                                   <span class="label">
+                                       <a>
+                                           <jx:if test="${fileType != 'folder'}">
+                                               <jx:attribute name="href">/ems/${filePath}</jx:attribute>
+                                               <jx:attribute name="target">_blank</jx:attribute>
+                                           </jx:if>
+                                           ${filePath}
+                                       </a>
+                                   </span>
+                                   <!--<ft:widget id="path"/>-->
+                               </td>
+                               <!--<td>-->
+                               <!--<jx:set var="sizeMb">-->
+                               <!--<ft:widget id="size"/>-->
+                               <!--</jx:set>-->
+                               <!--<jx:out value="${fileSize/1024}"/>-->
+                               <!--</td>-->
+
+                               <td>
+                                   <ft:widget id="delete">
+                                       <fi:styling type="link" role="button"
+                                                   class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
+                                   </ft:widget>
+                               </td>
+                           </tr>
+                       </ft:repeater-rows>
+
+
+                   </tbody>
+               </table>
+           </ft:repeater>
+
+       </jx:macro>
+
+    <jx:macro name="document">
+        <!--<script type="text/javascript"
+                src="/ems/resource/js/flowplayer/jquery.tools.min.js"/>
+        <link media="screen"
+              href="/ems/resource/js/flowplayer/css/form.css"
+              type="text/css"
+              rel="stylesheet"/>-->
+        <!--<jx:set var="blockPrefix" value="'/ems'"/>-->
+        <!--<jx:out value="{$blockPrefix}"/>-->
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/fileuploader/fileuploader.css"
+              media="all"/>
+        <script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/fileuploader/fileuploader.js"
+                charset="utf-8"/>
+
+
+        <!--  <div id="document-tabs" class="panel">
+        <ul>
+            <li>
+                <a href="#document-tabs-1">
+                    <i18n:text catalogue="core" key="Content.attachedFiles"/>
+                </a>
+            </li>
+            <jx:if test="${documentActionState == 'edit'}">
+                <li>
+                    <a href="#document-tabs-2">
+                        <i18n:text catalogue="core" key="Document.langVersions"/>
+                    </a>
+                </li>
+            </jx:if>
+            <li>
+                <a href="#document-tabs-3">
+                    <i18n:text catalogue="core" key="Content.publishing"/>
+                </a>
+            </li>
+        </ul>-->
+        <!--<div class="panel">-->
+
+        <script type="text/javascript">
+
+            jQuery(function() {
+            <!--accodrion -->
+            var accIndex = parseInt(jQuery('h3.selected').attr('position'));
+            jQuery( "#accordion-doc" ).accordion({autoHeight: false,
+            navigation: true, active: accIndex-1});
+            });
+        </script>
+        <div id="accordion-doc">
+            <!--<jx:if test="${documentActionState == 'edit'}">-->
+            <h3 position="1">
+                <a href="#">
+                    <i18n:text catalogue="core" key="Content.attachedFiles"/>
+                </a>
+            </h3>
+
+            <div id="document-tabs-1">
+                <jx:set var="excludedIds" value="${cocoon.session.getAttribute('excludedIds')}"/>
+
+                <!-- <script type="text/javascript">
+
+                    $(function() {
+                    $("ul.tabs").tabs("div.panes > div", {
+                    effect: 'slide'
+                    });
+
+
+                    $.tools.validator.localize("ru", {
+                    '*' : 'Обязательно',
+                    ':email' : 'Неверный еmail',
+                    ':number' : 'Только цифры',
+                    ':url' : 'Неверный URL',
+                    '[max]' : 'Максимум $1',
+                    '[min]' : 'Минимум $1',
+                    '[required]' : 'Заполните это поле!'
+                    });
+
+                    // use the finnish language in the validator
+
+                    $("#sendForm").validator({ lang: 'ru' });
+
+                    });
+                </script>-->
+
+                <input type="hidden" id="reset_form" value="no"/>
+                <fileFields/>
+              <!--  <ft:widget id="addFile">
+                    &lt;!&ndash;<fi:styling type="hidden" onchange="11"/>&ndash;&gt;
+                </ft:widget>
+                <ft:widget id="addFileName">
+                    <fi:styling type="hidden"/>
+                </ft:widget>
+                <ft:widget id="addFileSystemName">
+                    <fi:styling type="hidden"/>
+                </ft:widget>
+                <ft:widget id="addFilePath">
+                    <fi:styling type="hidden"/>
+                </ft:widget>
+                <ft:widget id="addFileType">
+                    <fi:styling type="hidden"/>
+                </ft:widget>
+                <ft:widget id="addFileSize">
+                    <fi:styling type="hidden"/>
+                </ft:widget>
+-->
+                <!--<jx:import uri="view/Tree/FileTree_modal.jx"/>-->
+                <!--<fileSystemObjects/>-->
+                <ft:repeater id="fileSystemObjects">
+                    <table border="0" class="order">
+                        <tbody>
+                            <ft:repeater-rows>
+                                <tr class="forms-row">
+                                    <td>
+                                    <ft:widget id="id"/>
+                                    </td>
+                                    <td>
+                                        <jx:set var="fileId"
+                                                value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
+                                        <jx:set var="fileName"
+                                                value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
+                                        <jx:set var="fileType"
+                                                value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>
+                                        <jx:set var="filePath"
+                                                value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
+                                        <jx:set var="fileSystemName"
+                                                value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
+
+                                        <!--<jx:set var="fileSize"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>-->
+                                        <jx:if test="${fileType.contains('image')}">
+                                            <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
+
+
+                                            <img src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg" border="0"
+                                                 width="30px"
+                                                 height="30px"/>
+                                        </jx:if>
+                                        <jx:if test="${fileType.contains('folder')}">
+                                            <a role="button"
+                                               class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
+                                        </jx:if>
+                                        <!--<jx:if test="${item.fileType.contains('image')}">
+                                            <jx:set var="prepath"
+                                                    value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
+                                            <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
+                                                 height="30px"/>
+                                        </jx:if>-->
+                                    </td>
+                                    <td>
+                                        <span class="label">
+                                            <!--<a>-->
+                                            <!--<jx:if test="${fileType != 'folder'}">
+                                                <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
+                                            </jx:if>-->
+                                            ${fileName}
+                                            <!--</a>-->
+                                        </span>
+                                        <!--<ft:widget id="name"/>-->
+                                    </td>
+                                    <!--<td>
+                                        <ft:widget id="systemName"/>
+                                    </td>
+                                    --><!--<td>
+                                           <ft:widget id="contentType"/>
+                                       </td>-->
+                                    <td>
+                                        <span class="label">
+                                            <a>
+                                                <jx:if test="${fileType != 'folder'}">
+                                                    <jx:attribute name="href">/ems/${filePath}</jx:attribute>
+                                                    <jx:attribute name="target">_blank</jx:attribute>
+                                                </jx:if>
+                                                ${filePath}
+                                            </a>
+                                        </span>
+                                        <!--<ft:widget id="path"/>-->
+                                    </td>
+                                    <!--<td>-->
+                                    <!--<jx:set var="sizeMb">-->
+                                    <!--<ft:widget id="size"/>-->
+                                    <!--</jx:set>-->
+                                    <!--<jx:out value="${fileSize/1024}"/>-->
+                                    <!--</td>-->
+
+                                    <td>
+                                        <ft:widget id="delete">
+                                            <fi:styling type="link" role="button"
+                                                        class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
+                                        </ft:widget>
+                                    </td>
+                                </tr>
+                            </ft:repeater-rows>
+
+
+                        </tbody>
+                    </table>
+                </ft:repeater>
+                <div class="panel">
+
+                    <input type="button" i18n:attr="value" value="core:FileObject.choose"
+                           onclick="openXMLTree('Folder', 'null', 'true', '#folderTree')"/>
+                </div>
+            </div>
+
+            <h3 position="2">
+                <a href="#">
+                    <i18n:text catalogue="core" key="Content.publishing"/>
+                    <!--<i18n:text catalogue="core" key="Document.langVersions"/>-->
+                </a>
+            </h3>
+
+
+
+                <div id="document-tabs-2">
+                    <!--<script language="javascript">
+                        var comments = [];
+                        <jx:set var="languageIds" value="${documentVersions.keySet()}"/>
+                        <jx:forEach items="${languageIds}" var="languageId">
+                            comments['${languageId}'] = [];
+                            <jx:set var="versions" value="${documentVersions.get(languageId)}"/>
+                            <jx:set var="versionNumbers" value="${versions.keySet()}"/>
+                            <jx:forEach items="${versionNumbers}" var="versionNumber">
+                                <jx:set var="comment" value="${versions.get(versionNumber)}"/>
+                                comments['${languageId}']['${versionNumber}'] = '${comment}';
+                            </jx:forEach>
+
+                        </jx:forEach>
+                        function goToLocation(eltId, languageId) {
+                        var prefix = eltId.substring(0, eltId.lastIndexOf('.'));
+                        var version = document.getElementById(prefix + '.version').value;
+                        var href = 'Content-edit?id=${contentId}&amp;languageId=' + languageId + '&amp;version='
+                        + version;
+                        if (version == 0) {
+                        href += '&amp;comment=' + document.getElementById(prefix +
+                        '.comment').value;
+                        }
+                        window.location.href = href;
+                        }
+
+                        function changeVersion(elt, languageId) {
+                        var eltId = elt.id;
+                        var prefix = eltId.substring(0, eltId.lastIndexOf('.'));
+                        var commentElt = document.getElementById(prefix + '.comment');
+                        if (elt.value > 0) {
+                        $(commentElt).addClass('disabled');
+                        commentElt.disabled = true;
+                        commentElt.value = comments[languageId][elt.value];
+                        }
+                        else {
+                        $(commentElt).removeClass('disabled');
+                        commentElt.disabled = false;
+                        commentElt.value = '';
+                        }
+                        }
+                    </script>-->
+                    <jx:forEach items="${availableLanguages}" var="language">
+                        <!--${language.getId()}-->
+                        <jx:set var="rowLanguageCode" value="${language.code}"/>
+                        <div name="translate_${rowLanguageCode}" class="meta-info">
+                            <jx:attribute name="style">
+                                <jx:choose>
+                                    <jx:when test="${rowLanguageCode == formLocale}">
+                                        display:block;
+                                    </jx:when>
+                                    <jx:otherwise>
+                                        display:none;
+                                    </jx:otherwise>
+                                </jx:choose>
+                            </jx:attribute>
+                            <!--${rowLanguageCode}-->
+                            <table class="order" cellpadding="0" cellspacing="8">
+                                <thead>
+                                    <tr>
+                                        <th width="15px" class="label">
+                                            <i18n:text catalogue="core" key="Document.version"/>
+                                        </th>
+                                        <th width="20%" class="label">
+                                            <i18n:text catalogue="core" key="Document.createdDateTime"/>
+                                        </th>
+                                        <th width="20%" class="label">
+                                            <i18n:text catalogue="core" key="Document.modifiedDateTime"/>
+                                        </th>
+                                        <th width="auto" class="label">
+                                            <i18n:text catalogue="core" key="Document.versionComment"/>
+                                        </th>
+                                        <th width="10%" class="label">
+                                            <i18n:text catalogue="core" key="Document.state"/>
+                                        </th>
+                                        <th width="10%" class="label"/>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <jx:forEach items="${documentVersions}" var="doc">
+                                        <jx:if test="${doc.languageCode == rowLanguageCode}">
+                                            <tr class="forms-row">
+                                                <td>${doc.version}</td>
+                                                <td>${doc.createdDateTime}</td>
+                                                <td>${doc.modifiedDateTime}</td>
+                                                <td>${doc.versionComment}</td>
+                                                <td>
+                                                    <jx:choose>
+                                                        <jx:when test="${doc.isLastVersion == true}">
+
+                                                            <!-- <label for="state" class="label">
+                                                                <ft:widget-label id="state"/>
+                                                            </label>-->
+                                                            <ft:widget id="state">
+                                                                <fi:selection-list>
+                                                                    <fi:item value="draft">
+                                                                        <fi:label>
+                                                                            <i18n:text catalogue="core"
+                                                                                       key="document.state_1"/>
+                                                                        </fi:label>
+                                                                    </fi:item>
+                                                                    <fi:item value="needcheck">
+                                                                        <fi:label>
+                                                                            <i18n:text catalogue="core"
+                                                                                       key="document.state_2"/>
+                                                                        </fi:label>
+                                                                    </fi:item>
+                                                                    <fi:item value="forpublish">
+                                                                        <fi:label>
+                                                                            <i18n:text catalogue="core"
+                                                                                       key="document.state_3"/>
+                                                                        </fi:label>
+                                                                    </fi:item>
+                                                                    <fi:item value="published">
+                                                                        <fi:label>
+                                                                            <i18n:text catalogue="core"
+                                                                                       key="document.state_4"/>
+                                                                        </fi:label>
+                                                                    </fi:item>
+                                                                </fi:selection-list>
+                                                                <fi:styling width="150px"/>
+                                                            </ft:widget>
+
+                                                        </jx:when>
+                                                        <jx:otherwise>
+                                                            ${doc.state}
+                                                        </jx:otherwise>
+                                                    </jx:choose>
+
+
+                                                </td>
+                                                <td>
+                                                    <jx:choose>
+                                                        <jx:when test="${doc.isLastVersion == true}">
+
+                                                            <!-- <label for="state" class="label">
+                                                                <ft:widget-label id="state"/>
+                                                            </label>-->
+                                                            <input type="button" class="go"
+                                                                   name="langVersions.${repeaterLoop.index}.go"
+                                                                   id="langVersions.${repeaterLoop.index}.go" value="addNew"
+                                                                   i18n:attr="value"
+                                                                   onclick="goToLocation(this.id, ${widget.lookupWidget('languageCode').value})"/>
+                                                        </jx:when>
+                                                        <jx:otherwise>
+                                                            <input type="button" class="go"
+                                                                   name="langVersions.${repeaterLoop.index}.go"
+                                                                   id="langVersions.${repeaterLoop.index}.go" value="go"
+                                                                   i18n:attr="value"
+                                                                   onclick="goToLocation(this.id, ${widget.lookupWidget('languageCode').value})"/>
+                                                        </jx:otherwise>
+                                                    </jx:choose>
+                                                </td>
+                                            </tr>
+                                        </jx:if>
+                                    </jx:forEach>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </jx:forEach>
+
+                </div>
+            <!--</jx:if>-->
+
+
+            <!-- Управление публикациями-->
+            <!--<h3 position="3">
+                <a href="#">
+                    <i18n:text catalogue="core" key="Content.publishing"/>
+                </a>
+            </h3>
+            <div id="document-tabs-3">
+                <table class="panel" cellspacing="10px">
+                    <tr>
+                        <td>
+                            <jx:if test="${documentActionState != 'edit'}">
+                                <jx:attribute name="colspan" value="3"/>
+                            </jx:if>
+                            <label for="createdDateTime:date" class="label">
+                                <ft:widget-label id="createdDateTime"/>
+                            </label>
+                            <ft:widget id="createdDateTime"/>
+                        </td>
+                        <td>
+                            <label for="modifiedDateTime:date" class="label">
+                                <ft:widget-label id="modifiedDateTime"/>
+                            </label>
+                            <ft:widget id="modifiedDateTime"/>
+                        </td>
+                        <td>
+                            <span class="label">Пользователь</span>
+                            <jx:out value="${userData.login}"/>
+                        </td>
+                        <td>
+                            <label for="state" class="label">
+                                <ft:widget-label id="state"/>
+                            </label>
+                            <ft:widget id="state">
+                                <fi:selection-list>
+                                    <fi:item value="draft">
+                                        <fi:label>
+                                            <i18n:text catalogue="core" key="document.state_1"/>
+                                        </fi:label>
+                                    </fi:item>
+                                    <fi:item value="needcheck">
+                                        <fi:label>
+                                            <i18n:text catalogue="core" key="document.state_2"/>
+                                        </fi:label>
+                                    </fi:item>
+                                    <fi:item value="forpublish">
+                                        <fi:label>
+                                            <i18n:text catalogue="core" key="document.state_3"/>
+                                        </fi:label>
+                                    </fi:item>
+                                    <fi:item value="published">
+                                        <fi:label>
+                                            <i18n:text catalogue="core" key="document.state_4"/>
+                                        </fi:label>
+                                    </fi:item>
+                                </fi:selection-list>
+                                <fi:styling width="150px"/>
+                            </ft:widget>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>-->
+        </div>
+
+        <script type="text/javascript">
+            $(function() {
+            $("#document-tabs").tabs();
+            <!--$("#ftabs").tabs();-->
+            });
+        </script>
+
+    </jx:macro>
+    <ft:form-template id="documentForm" location="${cocoon.request.getAttribute('documentForm')}"
+                      action="${cocoon.session.getAttribute('documentForm.id')}.continue"
+                      ajax-action="${cocoon.session.getAttribute('documentForm.id')}.continue" method="POST"
+                      ajax="true">
+                      <!--enctype="multipart/form-data"-->
+                      <!--ajax="true">-->
+
+        <!--enctype="multipart/form-data"-->
+        <document/>
+        <ft:widget id="saveDocument">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+    </ft:form-template>
+
+</jx:template>

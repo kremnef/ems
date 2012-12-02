@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+
+    <subclass name="SystemNodeTypifiedObject" discriminator-value="0" lazy="false" extends="SystemNodeObject">
+        <many-to-one name="typifiedObject" class="TypifiedObject" column="object_id" unique="true" insert="false" update="false" lazy="false"/>
+    </subclass>
+</hibernate-mapping>
+

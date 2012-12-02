@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{digitalAsset}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <digitalAsset id="#{digitalAssetId}">
+        <assetKey>#{assetKey}</assetKey>
+        <assetFileName>#{assetFileName}</assetFileName>
+        <assetFilePath>#{assetFilePath}</assetFilePath>
+        <assetContentType>#{assetContentType}</assetContentType>
+    </digitalAsset>
+</jx:forEach>

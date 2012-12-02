@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}">
+                   <!-- <object>${item.objectId}</object>
+                    <objectType>${item.objectId}</objectType>
+                    <user>${item.userId}</user>-->
+                    <userAction>${item.userAction}</userAction>
+                    <date>${item.date}</date>
+                    <ipAddress>${item.ipAddress}</ipAddress>
+                    <user id="${item.customer.id}">
+                           <login>${item.customer.login}</login>
+                           <firstName>${item.customer.firstName}</firstName>
+                           <lastName>${item.customer.lastName}</lastName>
+                    </user>
+
+                    <!--<object>${item.object.id}</object>-->
+                    <object id="${item.object.id}">
+                        <name>${item.object.name}</name>
+                        <type>${item.object.objectType}</type>
+                    </object>
+                    <!--<customer>${item.customer}</customer>-->
+                    <!--<jx: items="${item.customer}" var="customer" varStatus="status">
+                        <сustomer>
+                            <login>${customer.login}</login>
+                        </сustomer>
+                    </jx:forEach>-->
+
+
+                    <!--<jx:forEach items="${item.object}" var="object" varStatus="status">
+                        <object id="${object.id}">
+                            <name>${object.name}</name>
+                        </object>
+                    </jx:forEach>-->
+                    <!--<login>${item.customer.login}</login>-->
+
+                    <!--<URI>${item.URI}</URI>-->
+                    <!--<positionsAmount>${item.positionsAmount}</positionsAmount>-->
+
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="security">object</header>
+            <header i18nCatalogueName="security">user</header>
+            <header i18nCatalogueName="security">userAction</header>
+            <header i18nCatalogueName="security">date</header>
+            <header i18nCatalogueName="security">ipAddress</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

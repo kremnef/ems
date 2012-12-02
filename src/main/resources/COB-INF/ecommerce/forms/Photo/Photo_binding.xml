@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <fb:import prefix="lib" uri="blockcontext:/ems/ecommerce/forms/Product/Product_binding.xml"/>
+
+    <!--<fb:value id="name" path="name"/>-->
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+    <fb:expand id="core:labels"/>
+     <fb:expand id="core:systemURL"/>
+
+    <fb:value id="parentId" path="emsObject/parentId"/>
+    <!--<fb:expand id="core:metaInfo"/>-->
+
+    <!--<fb:expand id="core:fileSystemObjects"/>-->
+
+
+
+    <fb:context id="product" path="product">
+        <fb:expand id="lib:product"/>
+    </fb:context>
+
+
+
+
+
+
+
+    <fb:value id="date" path="date"/>
+
+    <fb:value id="season" path="season"/>
+    <fb:value id="format" path="format"/>
+    <fb:value id="daytime" path="daytime"/>
+
+
+    <fb:value id="countryId" path="countryId"/>
+    <!--<fb:value id="countryName" path="country/name"/>-->
+
+
+    <!--<fb:repeater id="countryList" parent-path="." row-path="country">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="name" path="name"/>
+
+        </fb:on-bind>
+    </fb:repeater>-->
+
+
+</fb:context>

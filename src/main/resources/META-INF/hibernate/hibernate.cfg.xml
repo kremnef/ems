@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+
+    <session-factory>
+        <!--<property name="hibernate.search.default.directory_provider">filesystem</property>-->
+        <!--<property name="hibernate.search.default.indexBase">/1/tomcat/sites/tgc-2/lucene/indexes</property>-->
+        <!--<property name="hibernate.search.default.indexBase">lucene/indexes</property>-->
+
+
+        <property name="connection.url">jdbc:log:com.mysql.jdbc.Driver:mysql://localhost:3306/kremnevdb?useUnicode=true&amp;characterEncoding=UTF-8</property>
+        <property name="connection.username">tomcat</property>
+        <property name="connection.password">nx4MViU3Gg2n</property>
+        <!--<property name="connection.driver_class">net.rkbloom.logdriver.LogDriver</property>-->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="dialect">org.hibernate.dialect.MySQLMyISAMDialect</property>
+        <!--<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>-->
+        <!--<property name="connection.datasource">datasource</property>-->
+        <!--<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>-->
+        <property name="connection.provider_class">
+            org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider
+        </property>
+
+
+        <!--<property name="transaction.factory_class">
+            org.hibernate.transaction.JTATransactionFactory
+        </property>
+        <property name="jta.UserTransaction">java:comp/UserTransaction</property>
+-->
+        <!--logging-->
+        <!--<property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>-->
+
+        <!--Cache-->
+
+
+
+
+<!--
+
+        <property name="hibernate.cache.region.factory_class">
+            org.hibernate.cache.infinispan.JndiInfinispanRegionFactory
+        </property>
+        <property name="hibernate.cache.infinispan.cachemanager">java:CacheManager/entity</property>
+-->
+
+
+        <!--<property name="hibernate.cache.use_query_cache">true</property>-->
+        <!--<property name="hibernate.cache.use_second_level_cache">true</property>-->
+
+        <!--<property name="hibernate.cache.provider_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>-->
+
+        <!--<property name="hibernate.cache.default_cache_concurrency_strategy">read-only</property>-->
+
+        <!--statistics-->
+        <property name="hibernate.generate_statistics">false</property>
+        <property name="hibernate.connection.autocommit">true</property>
+        <property name="hibernate.jdbc.use_scrollable_resultset">true</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">150</property>
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Mapping files will go here.... -->
+        <!--<property name="hibernate.connection.url">${jdbc.url}</property>-->
+
+        <!--POOL PRO-->
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+
+        <property name="hibernate.c3p0.min_size">2</property>
+        <property name="hibernate.c3p0.max_size">150</property>
+        <property name="hibernate.c3p0.timeout">1800</property>
+        <property name="hibernate.c3p0.max_statements">150</property>
+        <property name="hibernate.c3p0.idle_test_period">300</property>
+
+
+        <!--core-->
+        <mapping resource="ru/strela/ems/core/model/Content.hbm.xml"/>
+        <!--<mapping resource="ru/strela/ems/core/model/ContentSimple.hbm.xml"/>-->
+        <!--<mapping resource="ru/strela/ems/core/model/DocumentSimple.hbm.xml"/>-->
+
+        <mapping resource="ru/strela/ems/core/model/Document.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/DocumentVersion.hbm.xml"/>
+
+        <mapping resource="ru/strela/ems/core/model/DocumentType.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/EmsObject.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/FileObject.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/FileTypeGroup.hbm.xml"/>
+
+        <mapping resource="ru/strela/ems/core/model/Folder.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/Language.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/Navigation.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/ObjectLabel.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/ObjectType.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/ObjectTypeAction.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/SiteMap.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/SystemNode.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/SystemNodeObject.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/SiteMapObject.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/SystemNodeObjectType.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/SystemNodeTypifiedObject.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/Tag.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/Template.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/TypifiedObject.hbm.xml"/>
+        <mapping resource="ru/strela/ems/core/model/MetaInfo.hbm.xml"/>
+
+        <!--ecommerce-->
+        <mapping resource="ru/strela/ems/ecommerce/model/Catalogue.hbm.xml"/>
+        <mapping resource="ru/strela/ems/ecommerce/model/Country.hbm.xml"/>
+        <mapping resource="ru/strela/ems/ecommerce/model/Order.hbm.xml"/>
+        <mapping resource="ru/strela/ems/ecommerce/model/OrderItem.hbm.xml"/>
+        <mapping resource="ru/strela/ems/ecommerce/model/Photo.hbm.xml"/>
+        <mapping resource="ru/strela/ems/ecommerce/model/Product.hbm.xml"/>
+        <mapping resource="ru/strela/ems/ecommerce/model/Saleable.hbm.xml"/>
+
+        <!--security-->
+        <mapping resource="ru/strela/ems/security/model/Customer.hbm.xml"/>
+        <mapping resource="ru/strela/ems/security/model/User.hbm.xml"/>
+        <mapping resource="ru/strela/ems/security/model/Role.hbm.xml"/>
+        <mapping resource="ru/strela/ems/security/model/Group.hbm.xml"/>
+        <mapping resource="ru/strela/ems/security/model/TransactionHistroy.hbm.xml"/>
+    </session-factory>
+
+</hibernate-configuration>
+
+

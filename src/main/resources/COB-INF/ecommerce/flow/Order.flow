@@ -1,0 +1,128 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listOrder() {
+    listTypifiedObjects(0);
+}
+
+
+function createOrder(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var orderService = cocoon.getComponent("orderService");
+    var order = createTypifiedObject(orderService);
+
+    var parentId = 0;
+    var parentName = "";
+//    var parentObject = order.getParent();
+//    if (parentObject != null) {
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//    }
+
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+
+    order = showEmsObjectForm(form, orderService, order, showFormURI, {
+        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+
+
+    orderService.save(order);
+    cocoon.releaseComponent(orderService);
+
+    var id = order.getId();
+    cocoon.disposeObject(order);
+
+    cocoon.redirectTo("Order-edit?id=" + id);
+}
+
+
+function editOrderById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Order-create");
+    }
+    var orderService = cocoon.getComponent("orderService");
+    var order = orderService.getTypifiedObject(id);
+    if (order == null) {
+        cocoon.releaseComponent(orderService);
+        cocoon.redirectTo("Order-create");
+    }
+
+    var parentId = order.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = order.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+
+    var actionState = "edit";
+//    var objectTypes = getTypeActions();
+    var viewData = {
+        "actionState": actionState}
+
+
+    order = showEmsObjectForm(form, orderService, order, showFormURI, {
+        "viewData": viewData,
+        "orderId": id,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+
+    orderService.save(order);
+    cocoon.releaseComponent(orderService);
+
+    cocoon.redirectTo("Order-edit?id=" + order.getId());
+}
+
+function deleteOrderById() {
+    deleteObjectById("Order");
+}
+
+
+function viewOrderById() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
+
+    var orderService = cocoon.getComponent("orderService");
+    var order = orderService.getOrder(id);
+    cocoon.releaseComponent(orderService);
+
+
+
+
+    cocoon.sendPage(displayURI, {"order": order});
+}
+
+function viewOrderItemById() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
+
+    var orderItemService = cocoon.getComponent("orderItemService");
+    var order = orderItemService.getOrderItem(id);
+    cocoon.releaseComponent(orderItemService);
+
+
+
+
+    cocoon.sendPage(displayURI, {"order": order});
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  und
+-->
+<!-- $Id: block-servlet-service.xml 642117 2008-03-28 08:03:19Z reinhard $ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:servlet="http://cocoon.apache.org/schema/servlet"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://cocoon.apache.org/schema/servlet http://cocoon.apache.org/schema/servlet/cocoon-servlet-1.0.xsd">
+
+
+
+
+    <!-- Configure dataSource -->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.rkbloom.logdriver.LogDriver"/>
+        <property name="url" value="jdbc:log:com.mysql.jdbc.Driver:mysql://localhost:3306/dp?useUnicode=true&amp;characterEncoding=UTF-8"/>
+
+        <property name="username" value="dp"/>
+        <property name="password" value="fG7Vrlb^fs"/>
+
+    </bean>-->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.rkbloom.logdriver.LogDriver"/>
+        <property name="url" value="jdbc:log:com.mysql.jdbc.Driver:mysql://localhost:3306/msl2?useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="username" value="msl"/>
+        <property name="password" value="vQ678V@gs"/>
+    </bean>-->
+    <!--<bean id="ru.strela.ems.service" class="org.apache.cocoon.sitemap.SitemapServlet">-->
+    <bean id="ru.strela.ems.core.service" class="org.apache.cocoon.sitemap.SitemapServlet">
+        <servlet:context mount-path="/ems" context-path="blockcontext:/ems/">
+            <servlet:connections>
+                <entry key="ajax" value-ref="org.apache.cocoon.ajax.impl.servlet"/>
+                <entry key="forms" value-ref="org.apache.cocoon.forms.impl.servlet"/>
+            </servlet:connections>
+        </servlet:context>
+        <!-- <servlet:connections>
+          <entry key="myBlock2" value-ref="ru.strelato.myBlock2.service"/>
+        </servlet:connections>-->
+    </bean>
+    <!--<bean id="skin.service" class="org.apache.cocoon.sitemap.SitemapServlet">
+        <servlet:context mount-path="/skin" context-path="blockcontext:/skin/"/>
+    </bean>
+
+
+    <bean id="customized-skin.service" class="org.apache.cocoon.sitemap.SitemapServlet">
+        <servlet:context mount-path="/customized-skin"
+                         context-path="blockcontext:/customized-skin/">
+            <servlet:connections>
+                <entry key="super" value-ref="skin.service"/>
+            </servlet:connections>
+        </servlet:context>
+    </bean>-->
+
+</beans>

@@ -1,0 +1,740 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+
+    <jx:macro name="form-template" targetNamespace="http://apache.org/cocoon/forms/1.0#template">
+        <jx:parameter name="location"/>
+
+        <jx:set var="localeSitemapParameter" value="${cocoon.parameters.getParameter('locale', '')}"/>
+        <jx:set var="cformsHelper"
+                value="#{org.apache.cocoon.forms.generation.JXMacrosHelper.createHelper($cocoon/consumer,$cocoon/request,$localeSitemapParameter)}"/>
+        <jx:set var="attributeName" value="${cocoon.parameters['attribute-name']}"/>
+        <jx:choose>
+            <jx:when test="${attributeName and attributeName.length() > 0}">
+                <jx:set var="form" value="${cformsHelper.getForm(null, attributeName)}"/>
+            </jx:when>
+            <jx:when test="${location}">
+                <jx:set var="var" value="${macro.arguments.remove('location')}"/>
+                <jx:set var="form" value="${cformsHelper.getForm(location, attributeName)}"/>
+            </jx:when>
+            <jx:otherwise>
+                <jx:set var="form" value="${cformsHelper.getForm(CocoonFormsInstance, attributeName)}"/>
+            </jx:otherwise>
+        </jx:choose>
+
+        <jx:if test="${form != null and cformsHelper.isVisible(form)}">
+            <jx:set var="cformsDummy" value="${cformsHelper.startForm(form, macro.arguments)}"/>
+            <!--  the form is also the current widget
+            -->
+            <jx:set var="widget" value="${form}"/>
+            <jx:evalBody/>
+            <jx:set var="cformsDummy" value="${cformsHelper.endForm()}"/>
+        </jx:if>
+    </jx:macro>
+
+
+    <jx:macro name="systemURL">
+        <ft:group id="systemURL">
+            <li>
+                <label title="name" for="name" class="label">
+                    <ft:widget-label id="name"/>
+                </label>
+                <ft:widget id="name">
+                    <fi:styling size="50"/>
+                </ft:widget>
+                <!--<ft:widget id="id">
+                    <fi:styling type="hidden"/>
+                </ft:widget>-->
+            </li>
+            <li>
+                <label for="systemName" class="label">
+                    <ft:widget-label id="systemName"/>
+                </label>
+                <ft:widget id="systemName">
+                    <fi:styling size="45"/>
+                </ft:widget>
+
+                <ft:widget id="checkSystemName"/>
+
+            </li>
+        </ft:group>
+    </jx:macro>
+    <jx:macro name="translate">
+
+        <div class="punto"/>
+        <script type="text/javascript">
+            function changeLocale(currentlocale){
+
+            $("div.meta-info").hide();
+            var targetDivName ='translate_'+currentlocale;
+            '*[name= targetDivName]'
+            $('*[name='+ targetDivName+']').show();
+            <!--var newFormLocale = document.getElementById('translate');-->
+            var newFormLocale = document.getElementById('formLocale');
+            newFormLocale.value = currentlocale;
+            cocoon.forms.submitForm(newFormLocale);
+            <!--submit DocType-->
+            var documentTypeForm =document.getElementById('dynamicForm');
+            if(documentTypeForm != null){
+            <!--cocoon.forms.submitForm(documentTypeForm);-->
+            <!--cocoon.forms.submitForm(contentForm);-->
+            <!--cocoon.forms.submitForm(documentTypeForm);-->
+            <!--cocoon.forms.submitForm(all);-->
+            }
+            }
+        </script>
+
+        <ft:widget id="translate">
+            <!--<fi:styling class="chzn-select" style="width:350px;" onChange="changeLocale(this.value);"/>-->
+            <fi:styling class="chzn-select" style="width:350px;" onChange="changeLocale(this.value);"/>
+            <fi:selection-list>
+
+                <jx:forEach items="${availableLanguages}" var="language">
+                    <fi:item value="${language.code}">
+                        <fi:label>${language.name}</fi:label>
+                    </fi:item>
+                </jx:forEach>
+            </fi:selection-list>
+        </ft:widget>
+
+        <script type="text/javascript">
+            $(".chzn-select").chosen();
+        </script>
+        <ft:widget id="formLocale">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+
+    </jx:macro>
+    <jx:macro name="emsFields">
+        <jx:parameter name="entity"/>
+        <jx:parameter name="id"/>
+        <jx:parameter name="parentId" default="0"/>
+        <jx:parameter name="parentName" default=""/>
+        <jx:parameter name="showParents" default="0"/>
+        <jx:set var="attributeName" value="${cocoon.parameters['attribute-name']}"/>
+        <ul class="simple-list">
+            <jx:if test="${showParents == 1}">
+                <li>
+                    <label title="" for="parentName" class="label">
+                        <i18n:text key="EmsObject.parentElement"/>
+                    </label>
+
+                    <span id="parentName">
+                        <jx:choose>
+                            <jx:when test="${parentId > 0}">
+                                <a href="${entity}-edit?id=${parentId}">${parentName}</a>
+                            </jx:when>
+                            <jx:otherwise>
+                                <i18n:text key="EmsObject.noParentElement"/>
+                            </jx:otherwise>
+                        </jx:choose>
+                    </span>
+                    <span align="right" width="300px">
+                        <input type="button" i18n:attr="value" value="Modify" onclick="openParentDialog()"/>
+                        <ft:widget id="parentId">
+                            <fi:styling type="hidden"/>
+                        </ft:widget>
+                    </span>
+                </li>
+
+                <script type="text/javascript">
+                    var noParentLabel = '!<i18n:text key="EmsObject.noParentElement"/>';
+
+                    function openParentDialog() {
+                    $("#parentTreeContainer:ui-dialog").dialog("destroy");
+                    $("#parentTreeContainer").dialog({
+                    width: 800,
+                    height:400,
+                    modal: true,
+                    buttons: {
+                    "<i18n:text key="Save"/>": function() {
+                    $(this).dialog("close");
+                    }
+                    }
+                    });
+
+
+                    var divId = "#parentTree";
+                    var entity = "${entity}";
+                    if (entity =='FileObject'){
+                    entity ='Folder'
+                    }
+                    var ajaxUrl;
+                    var thisId = parseInt('${id}');
+                    if(thisId > 0){
+                    var excludedId =thisId;
+                    ajaxUrl = "/ems/core/treeObjects?entity="+entity+"&amp;excludedId="+excludedId;
+                    }
+                    else{
+                    ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+                    }
+
+
+                    document.getElementById('parentTreeRootNode').value=0;
+                    document.getElementById('parentTreeRootNode').innerHTML=entity;
+                    initXmlTree(divId, ajaxUrl);
+
+                    $("#parentTreeRootNode").click( function () {
+                    updateParentData(noParentLabel,0);
+                    });
+                    $("#parentTree").click(function (e) {
+                    var f = jQuery.jstree._focused();
+                    var id = f.data.ui.selected.attr("id");
+                    var name = f.data.ui.selected.attr("name");
+                    updateParentData(name,id);
+                    });
+
+                    function updateParentData(name,id){
+
+                    document.getElementById('parentId').value = id;
+                    document.getElementById('parentName').innerHTML =name;
+                    cocoon.forms.submitForm(document.getElementById('parentId'));
+                    };
+                    };
+
+                </script>
+
+                <div i18n:attr="title" title="core:Content.choose" id="parentTreeContainer" class="dialogContent">
+                    <div class="common-div">
+                        <span class="ui-icon-home"></span>
+                        <a id="parentTreeRootNode" href="#" class="">HOME</a>
+                    </div>
+                    <div id="parentTree"></div>
+                </div>
+
+            </jx:if>
+            <lables/>
+            <systemURL/>
+            <objectRows/>
+        </ul>
+
+
+    </jx:macro>
+
+    <jx:macro name="userDataMacro">
+        <userData name="${userData.name}" id="${userData.id}"/>
+    </jx:macro>
+
+
+    <jx:macro name="parentObjects">
+        <parents>
+            <jx:forEach items="${parents}" var="parent" varStatus="status">
+                <parent id="${parent.id}">
+                    <name>${parent.name}</name>
+                </parent>
+            </jx:forEach>
+        </parents>
+    </jx:macro>
+
+
+    <jx:macro name="metaInfo">
+        <tags/>
+        <!-- <jx:forEach items="${viewData.availableTags}" var="tag">
+           ${tag.tag}
+        </jx:forEach>-->
+        <ft:repeater id="metaInfo">
+
+            <ft:repeater-rows>
+                <jx:set var="rowLanguageCode"
+                        value="${repeater.getRow(repeaterLoop.index).getChild('languageCode').value}"/>
+                <!--<ft:group id="metaInfo">-->
+
+                <div class="meta-info" name="translate_${rowLanguageCode}">
+                    <jx:attribute name="style">
+                        <jx:choose>
+                            <jx:when test="${rowLanguageCode == formLocale}">
+                                display:block;
+                            </jx:when>
+                            <jx:otherwise>
+                                display:none;
+                            </jx:otherwise>
+                        </jx:choose>
+
+                    </jx:attribute>
+                    <!--<ft:widget id="id">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>-->
+                    <ft:widget id="languageCode">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+                    <ft:widget id="objectId">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+
+                    <ul class="simple-list">
+                        <li>
+                            <!--   <script type="text/javascript">
+                                <![CDATA[
+                        var metaTitle = document.getElementById("title");
+                        var contentName = document.getElementById("name");
+                        if (metaTitle.value == ''){
+                                metaTitle.value = contentName.value;
+                            }
+                        ]]>
+                            </script>-->
+                            <label for="title" class="label">
+                                <ft:widget-label id="title"/>
+                            </label>
+                            <ft:widget id="title">
+                                <fi:styling size="50"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <label for="description" class="label">
+                                <ft:widget-label id="description"/>
+                            </label>
+                            <ft:widget id="description">
+                                <fi:styling cols="50" type="textarea" rows="5"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <label for="keywords" class="label">
+                                <ft:widget-label id="keywords"/>
+                            </label>
+                            <ft:widget id="keywords">
+                                <fi:styling cols="50" type="textarea" rows="3"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <!--<script type="text/javascript">
+                                function addTag(item){
+                                $("#tags").tagEditorAddTag(item);
+                                }
+                                $(document).ready(function() {
+
+                                $("#tags").tagEditor({
+                                confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
+                                confirmRemoval: true,
+                                continuousOutputBuild: true
+                                });
+
+
+                                });
+                            </script>-->
+                            <jx:set var="rowIndex" value="${repeaterLoop.index}"/>
+
+
+                            <!--<script type="text/javascript">
+                                function addTag(item){
+                                var rowTag = document.getElementById("metaInfo.${repeaterLoop.index}.tags");
+                                    $(rowTag).tagEditorAddTag(item);
+                                }
+                                $(document).ready(function() {
+                                 var rowTag = document.getElementById("metaInfo.${repeaterLoop.index}.tags");
+                                $(rowTag).tagEditor({
+                                confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
+                                confirmRemoval: true,
+                                continuousOutputBuild: true
+                                });
+
+
+                                });
+                            </script>-->
+                            <!--
+                                                                $("#tags").autocomplete({ source:'{% url tags %}',minChars: 2 ,
+                            -->
+
+                            <label for="addTag" class="label">
+                                <ft:widget-label id="addTag"/>
+                            </label>
+                            <ft:widget id="addTag">
+
+                                <!--<fi:styling type="hidden"/>-->
+                                <fi:styling class="availableTags" style="font-size:20px; width:270px;"
+                                            onChange="cocoon.forms.submitForm(this);"/>
+                                <!--onChange="repeaterAddAction($(this).val());"/>-->
+                            </ft:widget>
+                            <script type="text/javascript">
+                                $(function() {
+                                var availableTags = [
+                                <jx:forEach items="${availableTags}" var="item">
+                                    { "id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
+                                </jx:forEach>
+                                ];
+                                <!--$( '.tags_${rowLanguageCode} input.tag' ).tagedit({
+                                autocompleteOptions: {
+                                source: localJSON
+                                }
+                                });-->
+                                $( ".availableTags" ).autocomplete({
+                                source: availableTags
+                                });
+
+
+                                <!--})-->
+
+                                });
+                            </script>
+                            <ft:repeater id="tagList">
+
+                                <div class="tags_${rowLanguageCode}">
+                                    <ul class="tagedit-list">
+                                        <ft:repeater-rows>
+                                            <!--<li class="tagedit-listelement tagedit-listelement-old">-->
+                                            <li class="tagedit-listelement tagedit-listelement-old">
+                                                <span dir="ltr">
+                                                    ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
+                                                </span>
+                                                <ft:widget id="tag">
+                                                    <fi:styling class="tag" name="tag[]" type="hidden"/>
+                                                </ft:widget>
+                                                <ft:widget id="delete">
+                                                    <!--<fi:styling type="link" role="button" class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>-->
+                                                    <!--tagedit-close-->
+                                                    <fi:styling type="link"
+                                                                class="tagedit-close ui-icon ui-icon-closethick"
+                                                                title="Remove from list."/>
+                                                </ft:widget>
+                                                <!--<a class="tagedit-close" title="Remove from list." onclick="">x</a>-->
+                                            </li>
+
+                                            <!--<ft:widget id="tagValue">
+                                                <fi:styling class="tag" name="tag[]"/>
+                                            </ft:widget>-->
+                                        </ft:repeater-rows>
+                                    </ul>
+                                </div>
+
+                            </ft:repeater>
+
+
+                            <!--Пример Array List !но не нужный-->
+                            <!--<jx:forEach items="${viewData.tags}" var="tag" varStatus="status">
+
+                                <jx:if test="${status.index == repeaterLoop.index}">
+                                  &lt;!&ndash;  <input type="text" name="tags" id="metaInfo${repeaterLoop.index}tags"
+                                           value="${tag}"/>&ndash;&gt;
+                                    <ft:widget id="tags">
+                                        <fi:styling name="${repeaterLoop.index}tags"/>
+                                    </ft:widget>
+                                </jx:if>
+                            </jx:forEach>-->
+                            <!--Пример Array List !но не нужный-->
+
+
+                            <!--<ft:widget id="tags">
+                                <fi:styling class="chzn-select" style="width:350px;"/>
+                                <fi:selection-list>
+                                    <fi:item value="">
+                                        <fi:label>-</fi:label>
+                                    </fi:item>
+                                    <jx:forEach items="${viewData.availableTags}" var="tag">
+                                        <fi:item value="${tag.id}">
+                                            <fi:label>${tag.tag}</fi:label>
+                                        </fi:item>
+                                    </jx:forEach>
+                                </fi:selection-list>
+                            </ft:widget>
+                            <script>
+                                $(".chzn-select").chosen();
+                            </script>-->
+                        </li>
+                    </ul>
+                </div>
+                <!--</ft:group>-->
+            </ft:repeater-rows>
+        </ft:repeater>
+
+    </jx:macro>
+
+    <!--<jx:macro name="simpleTags">
+        <div class="line-item">
+            <script type="text/javascript"
+                    src="/ems/resource/js/jquery-plugin/tageditor/jquery.tag.editor.js"/>
+            <link rel="stylesheet" type="text/css"
+                  href="/ems/resource/js/jquery-plugin/tageditor/demo.css"
+                  media="all"/>
+
+            <script type="text/javascript">
+                function addTag(item){
+                &lt;!&ndash;if (!jQuery.contains(item, $("#tags").val())){&ndash;&gt;
+                $("#tags").tagEditorAddTag(item);
+                &lt;!&ndash;}&ndash;&gt;
+                }
+                $(document).ready(function() {
+
+                $("#tags").tagEditor({
+                confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
+                confirmRemoval: true,
+                continuousOutputBuild: true
+                });
+
+
+                });
+            </script>
+            &lt;!&ndash;
+                                                $("#tags").autocomplete({ source:'{% url tags %}',minChars: 2 ,
+                                                                                                                                      select: function(event, ui) {
+                                                                                                                                         $("#tags").tagEditorAddTag(ui.item.value);
+                                                                                                                                         $("#tags").val('');
+                                                                                                                                      return false;
+                                                                                                                                      }
+                                                                                                                                  });
+            &ndash;&gt;
+
+            <label for="simpleTags" class="label">
+                <ft:widget-label id="simpleTags"/>
+            </label>
+
+            <input type="text" name="tags" id="tags" value="${tags}"/>
+        </div>
+    </jx:macro>-->
+
+    <jx:macro name="tags">
+        <!-- <script type="text/javascript"
+        src="/ems/resource/js/jquery-plugin/tagedit/js/jquery-ui-1.8.6.custom.min.js"/>-->
+        <script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagedit/js/jquery.tagedit.js"/>
+        <script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagedit/js/jquery.autoGrowInput.js"/>
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/tagedit/css/jquery.tagedit.css"
+              media="all"/>
+        <!--<link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/tagedit/css/ui-lightness/jquery-ui-1.8.6.custom.css"
+              media="all"/>-->
+    </jx:macro>
+    <jx:macro name="lables">
+        <!--<a href="#" id="labelsLink2" i18n:attr="title" title="ems:common.labels"
+           onclick="hideLabelsDialog()">
+            <i18n:text catalogue="ems" key="common.close"/>CLOSE
+        </a>-->
+        <ft:repeater id="labels">
+            <!--<jx:if test="${actionState == 'create'}">
+                <div style="display:none">
+            </jx:if>-->
+            <!-- <script type="text/javascript">
+
+                jQuery(function() {
+                &lt;!&ndash;accodrion &ndash;&gt;
+                jQuery( "#accordion-translation" ).accordion({autoHeight: false,
+                navigation: true});
+                });
+            </script>-->
+            <!--<div id="accordion-translation">-->
+            <!--class="widget-black"-->
+            <jx:choose>
+                <jx:when test="${repeater.getSize() == 0}">
+                    <br/>
+                    <em>LABLES: There is no data to display</em>
+                </jx:when>
+                <jx:otherwise>
+                    <ft:repeater-rows>
+                        <jx:set var="rowLanguageCode"
+                                value="${repeater.getRow(repeaterLoop.index).getChild('languageCode').value}"/>
+                        <!--<ft:group id="metaInfo">-->
+                        <!--      <h3 position="${repeaterLoop.index % 2}" style="padding-left:30px">
+                            ${widget.lookupWidget('languageCode').value} :
+                            ${widget.lookupWidget('languageName').value}
+                        </h3>-->
+                        <!--forms-row-${repeaterLoop.index % 2}-->
+                        <div class="meta-info" name="translate_${rowLanguageCode}">
+                            <jx:attribute name="style">
+                                <jx:choose>
+                                    <jx:when test="${rowLanguageCode == formLocale}">
+                                        <!--<jx:when test="${rowLanguageCode == languageCode}">-->
+                                        display:block;
+                                    </jx:when>
+                                    <jx:otherwise>
+                                        display:none;
+                                    </jx:otherwise>
+                                </jx:choose>
+                            </jx:attribute>
+
+                            <!--<ft:widget id="id">
+                                <fi:styling type="hidden"/>
+                            </ft:widget>-->
+                            <ft:widget id="languageCode">
+                                <fi:styling type="hidden"/>
+                            </ft:widget>
+                            <ft:widget id="objectId">
+                                <fi:styling type="hidden"/>
+                            </ft:widget>
+                            <label for="label" class="label">
+                                <ft:widget-label id="label"/>
+
+                            </label>
+                            <ft:widget id="label">
+                                <fi:styling size="50" style="font-size:23px;"/>
+                            </ft:widget>
+
+                        </div>
+                    </ft:repeater-rows>
+
+                </jx:otherwise>
+            </jx:choose>
+            <!--</div>-->
+        </ft:repeater>
+    </jx:macro>
+   <!-- <jx:macro name="fileSystemObjects">
+
+        <ft:repeater id="fileSystemObjects">
+            &lt;!&ndash;id="attachedFiles"&ndash;&gt;
+            <table border="0" class="order">
+                <tbody>
+                    <ft:repeater-rows>
+                        <tr class="forms-row">
+                            &lt;!&ndash;<td>
+                                <ft:widget id="position"/>
+                            </td>&ndash;&gt;
+                            &lt;!&ndash;<td>
+                                <ft:widget id="id">
+                                    &lt;!&ndash;<fi:styling type="hidden"/>&ndash;&gt;
+                                </ft:widget>
+                            </td>&ndash;&gt;
+                            &lt;!&ndash;<td>
+                                <ft:widget id="used">
+                                    &lt;!&ndash;<fi:styling type="hidden"/>&ndash;&gt;
+                                </ft:widget>
+                            </td>&ndash;&gt;
+                            <td>
+                                <jx:set var="fileId"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
+                                <jx:set var="fileName"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
+                                <jx:set var="fileType"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>
+                                <jx:set var="filePath"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
+                                <jx:set var="fileSystemName"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
+
+                                &lt;!&ndash;<jx:set var="fileSize"
+                                value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>&ndash;&gt;
+                                <jx:if test="${fileType.contains('image')}">
+                                    <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
+
+
+                                    <img src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg" border="0"
+                                         width="30px"
+                                         height="30px"/>
+                                </jx:if>
+                                <jx:if test="${fileType.contains('folder')}">
+                                    <a role="button"
+                                       class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
+                                </jx:if>
+                                &lt;!&ndash;<jx:if test="${item.fileType.contains('image')}">
+                                    <jx:set var="prepath"
+                                            value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
+                                    <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
+                                         height="30px"/>
+                                </jx:if>&ndash;&gt;
+                            </td>
+                            <td>
+                                <span class="label">
+                                    &lt;!&ndash;<a>&ndash;&gt;
+                                    &lt;!&ndash;<jx:if test="${fileType != 'folder'}">
+                                        <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
+                                    </jx:if>&ndash;&gt;
+                                    ${fileName}
+                                    &lt;!&ndash;</a>&ndash;&gt;
+                                </span>
+                                &lt;!&ndash;<ft:widget id="name"/>&ndash;&gt;
+                            </td>
+                            &lt;!&ndash;<td>
+                                <ft:widget id="systemName"/>
+                            </td>
+                            &ndash;&gt;&lt;!&ndash;<td>
+                                        <ft:widget id="contentType"/>
+                                    </td>&ndash;&gt;
+                            <td>
+                                <span class="label">
+                                    <a>
+                                        <jx:if test="${fileType != 'folder'}">
+                                            <jx:attribute name="href">/ems/${filePath}</jx:attribute>
+                                            <jx:attribute name="target">_blank</jx:attribute>
+                                        </jx:if>
+                                        ${filePath}
+                                    </a>
+                                </span>
+                                &lt;!&ndash;<ft:widget id="path"/>&ndash;&gt;
+                            </td>
+                            &lt;!&ndash;<td>&ndash;&gt;
+                            &lt;!&ndash;<jx:set var="sizeMb">&ndash;&gt;
+                            &lt;!&ndash;<ft:widget id="size"/>&ndash;&gt;
+                            &lt;!&ndash;</jx:set>&ndash;&gt;
+                            &lt;!&ndash;<jx:out value="${fileSize/1024}"/>&ndash;&gt;
+                            &lt;!&ndash;</td>&ndash;&gt;
+
+                            <td>
+                                <ft:widget id="delete">
+                                    <fi:styling type="link" role="button"
+                                                class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
+                                </ft:widget>
+                            </td>
+                        </tr>
+                    </ft:repeater-rows>
+
+
+                </tbody>
+            </table>
+        </ft:repeater>
+    </jx:macro>-->
+    <jx:macro name="linked">
+        <ft:repeater id="linked">
+            <table border="0" class="order">
+                <tbody>
+                    <ft:repeater-rows>
+                        <tr class="forms-row">
+                            <td>
+                                <jx:set var="linkId"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"></jx:set>
+
+                                <jx:set var="linkName"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"></jx:set>
+                                <jx:set var="linkDate"
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('publishDateTime').value}"></jx:set>
+                                <!--<ft:widget id="id"/>-->
+                            </td>
+                            <td>
+                                <span class="label">
+                                    <a>
+                                        <jx:attribute name="href">/ems/core/Content-edit?id=${linkId}</jx:attribute>
+                                        ${linkName}
+                                    </a>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="label">
+                                    ${linkDate}
+                                </span>
+                            </td>
+                            <td>
+                                <ft:widget id="delete">
+                                    <fi:styling type="link" role="button"
+                                                class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
+                                </ft:widget>
+                            </td>
+                        </tr>
+                    </ft:repeater-rows>
+                </tbody>
+            </table>
+        </ft:repeater>
+
+
+    </jx:macro>
+    <jx:macro name="fileFields">
+        <ft:widget id="addFile">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+        <ft:widget id="addFileName">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+        <ft:widget id="addFileSystemName">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+        <ft:widget id="addFilePath">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+        <ft:widget id="addFileType">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+        <ft:widget id="addFileSize">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+    </jx:macro>
+</jx:template>

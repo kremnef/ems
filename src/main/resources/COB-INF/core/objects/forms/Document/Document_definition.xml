@@ -1,0 +1,270 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<fd:form
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <!--id="documentForm"-->
+    <fd:widgets>
+        <!--<fd:field id="tab-state">
+            <fd:datatype base="string"/>
+        </fd:field>-->
+        <fd:field id="contentId" required="false" state="disabled">
+            <fd:datatype base="integer"/>
+        </fd:field>
+
+        <fd:field id="thumbnailId">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.thumbnail"/>
+            </fd:label>
+            <fd:datatype base="integer"/>
+        </fd:field>
+
+        <fd:field id="state">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.state"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+        <fd:field id="createdDateTime" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.createdDateTime"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor>
+                    <fd:variant>datetime</fd:variant>
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+        </fd:field>
+
+        <fd:output id="modifiedDateTime" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.modifiedDateTime"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor>
+                    <fd:variant>datetime</fd:variant>
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+            <!--<fd:initial-value>
+
+            </fd:initial-value>-->
+        </fd:output>
+
+
+        <!--Revision Group-->
+
+
+        <fd:output id="version" state="disabled">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.version"/>
+            </fd:label>
+            <fd:datatype base="integer"/>
+        </fd:output>
+
+
+        <fd:field id="versionComment" required="false">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.versionComment"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>
+
+
+        <!--Objects Group-->
+
+
+        <!--<fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+        <fd:expand id="core:fileSystemObjects"/>-->
+
+        <fd:repeater id="fileSystemObjects" orderable="true">
+                   <fd:widgets>
+
+                       <fd:output id="id">
+                           <fd:label>ID</fd:label>
+                           <fd:datatype base="integer"/>
+                       </fd:output>
+                     <!--  <fd:field id="position">
+                           <fd:label>
+                               <i18n:text key="EmsObject.position"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text key="EmsObject.position"/>
+                           </fd:hint>
+                           <fd:datatype base="integer"/>
+                       </fd:field>-->
+                       <fd:field id="name">
+                           <fd:label>
+                               <i18n:text key="EmsObject.name"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text key="EmsObject.name"/>
+                           </fd:hint>
+                           <fd:datatype base="string"/>
+                       </fd:field>
+                       <!--<fd:field id="used">
+                           <fd:label>
+                               <i18n:text key="EmsObject.name"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text key="EmsObject.name"/>
+                           </fd:hint>
+                           <fd:datatype base="integer"/>
+                       </fd:field>-->
+
+                       <fd:output id="systemName">
+                           <fd:label>
+                               <i18n:text key="EmsObject.systemName"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text key="EmsObject.systemName"/>
+                           </fd:hint>
+                           <fd:datatype base="string"/>
+                       </fd:output>
+
+                       <fd:output id="contentType">
+                           <fd:label>
+                               <i18n:text catalogue="core" key="FileObject.mimeType"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text catalogue="core" key="FileObject.mimeType"/>
+                           </fd:hint>
+                           <fd:datatype base="string"/>
+                       </fd:output>
+                       <fd:output id="size">
+                           <fd:label>
+                               <i18n:text catalogue="core" key="FileObject.size"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text catalogue="core" key="FileObject.size"/>
+                           </fd:hint>
+                           <fd:datatype base="integer"/>
+                       </fd:output>
+
+                       <fd:output id="path">
+                           <fd:label>
+                               <i18n:text catalogue="core" key="FileObject.path"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text catalogue="core" key="FileObject.path"/>
+                           </fd:hint>
+                           <fd:datatype base="string"/>
+                       </fd:output>
+
+
+                       <!--<fd:output id="objectType">
+                           <fd:label>
+                               <i18n:text key="EmsObject.typeName"/>
+                           </fd:label>
+                           <fd:hint>
+                               <i18n:text key="EmsObject.typeName"/>
+                           </fd:hint>
+                           <fd:datatype base="enum">
+                               <fd:convertor type="enum">
+                                   <fd:enum>ru.strela.ems.core.model.ObjectType</fd:enum>
+                               </fd:convertor>
+                               <fd:selection-list type="enum" class="ru.strela.ems.core.model.ObjectType"/>
+                           </fd:datatype>
+                       </fd:output>
+                       <fd:booleanfield id="folder" state="invisible"/>-->
+
+
+                       <fd:action id="delete">
+                           <fd:on-action>
+                               <fd:javascript>
+                                   var repeater = widget.lookupWidget("/fileSystemObjects");
+                                   var selectedRow = repeater.getParentRow(widget);
+                                   var fileId = selectedRow.getChild("id").value;
+                                   var selectedRowIndex = repeater.indexOf(selectedRow);
+                                   repeater.removeRow(selectedRowIndex);
+                                   var excludedIds = cocoon.session.getAttribute("excludedIds");
+                                   //excludedIds.remove(fileId);
+                               </fd:javascript>
+                           </fd:on-action>
+                       </fd:action>
+                       <fd:booleanfield id="select">
+                           <fd:label>Select</fd:label>
+                       </fd:booleanfield>
+                   </fd:widgets>
+               </fd:repeater>
+
+        <fd:field id="addFile">
+            <fd:datatype base="integer"/>
+            <fd:on-value-changed>
+                <fd:javascript>
+                    print ("addFile: "+this.value);
+                    var repeater = widget.lookupWidget("../fileSystemObjects");
+                    var lastPosition = repeater.getSize();
+                    var newRow = repeater.addRow();
+
+                    <!--print("122"+this.value);-->
+                    <!--print("111"+newRow.getChild("id").value);-->
+
+                    if(this.value != null){
+                        newRow.getChild("id").value = new java.lang.Integer (this.value);
+                    }
+                    var addFileName = widget.lookupWidget("../addFileName");
+                    newRow.getChild("name").value = addFileName.value;
+
+                    <!--var addFilePath=widget.lookupWidget("../addFilePath");-->
+                    <!--newRow.getChild("path").value =addFilePath.value;-->
+
+
+                    <!--var addFileType=widget.lookupWidget("../addFileType");-->
+                    <!--newRow.getChild("contentType").value =addFileType.value;-->
+
+                    <!--var addFileSystemName=widget.lookupWidget("../addFileSystemName");-->
+                    <!--newRow.getChild("systemName").value =addFileSystemName.value;-->
+
+                    <!--if(addFileType.value =='folder'){-->
+                    <!--newRow.getChild("folder").value = true;-->
+                    <!--}-->
+
+
+                </fd:javascript>
+            </fd:on-value-changed>
+        </fd:field>
+        <fd:field id="addFileName">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFileSystemName">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFilePath">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFileType">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFileSize">
+            <fd:datatype base="integer"/>
+        </fd:field>
+        <fd:submit id="saveDocument">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

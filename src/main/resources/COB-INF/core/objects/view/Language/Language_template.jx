@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+    <jx:forEach select="#{language}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        <language id="#{code}">
+            <code>#{languageCode}</code>
+            <name>#{name}</name>
+            <charset>#{charset}</charset>
+        </language>
+    </jx:forEach>

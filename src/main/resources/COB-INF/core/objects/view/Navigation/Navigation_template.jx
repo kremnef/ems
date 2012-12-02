@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <jx:macro name="currentNavigation">
+        <jx:parameter name="parentId"/>
+        <jx:forEach select="#{navigation}">
+            <jx:if test="#{$parentId = parentNavigationId}">
+                <navigation navigationId="#{id}"
+                            isBranch="#{isBranch}"
+                            parentNavigationId="#{parentNavigationId}">
+                    <navigationName>#{navigationName}</navigationName>
+                    <URI>#{URI}</URI>
+                    <jx:choose>
+                        <jx:when test="#{isBranch = 'true'}">
+                            <h1> branch</h1>
+                            <!--<currentContent parentId="#{id}" current="${status.index}" itemsOnPage="${itemsOnPage}"/>-->
+                            <!--<currentNavigation parentId="#{id}"/>-->
+                        </jx:when>
+                        <jx:otherwise/>
+                    </jx:choose>
+                </navigation>
+            </jx:if>
+        </jx:forEach>
+    </jx:macro>
+
+    <!--<jx:choose>-->
+    <!--<jx:when test="${viewData.parentNodeId > 0}">
+        <currentNavigation parentId="${viewData.parentNodeId}"/>
+    </jx:when>
+    <jx:otherwise>-->
+
+    <!--</jx:otherwise>-->
+    <!--</jx:choose>-->
+    <!--<jx:macro name="currentNavigation">
+            <jx:parameter name="parentId"/>
+            <jx:forEach items="${navigation}" var="item" varStatus="status">
+
+                   <jx:if test="${parentId == item.parentNavigationId}">
+                    <navigation navigationId="${item.id}"
+                                isBranch="${item.isBranch}"
+                                parentNavigationId="${item.parentNavigationId}">
+                        <navigationName>${item.navigationName}</navigationName>
+                        <URI>${item.URI}</URI>
+                        <jx:choose>
+                            <jx:when test="${item.isBranch == 'true'}">
+                                <currentNavigation parentId="${item.id}"/>
+                            </jx:when>
+                            <jx:otherwise/>
+                        </jx:choose>
+                    </navigation>
+                    </jx:if>
+            </jx:forEach>
+        </jx:macro>-->
+         <currentNavigation parentId="0"/>
+</jx:template>

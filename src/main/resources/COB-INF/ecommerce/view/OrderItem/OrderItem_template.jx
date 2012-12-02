@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{OrderItem}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <Order id="#{id}">
+        <name>#{item.name}</name>
+        <unitPrice>#{item.unitPrice}</unitPrice>
+        <extendedPrice>#{item.extendedPrice}</extendedPrice>
+        <orderItemNumber>#{item.orderItemNumber}</orderItemNumber>
+        <quantity>#{item.quantity}</quantity>
+    </Order>
+</jx:forEach>

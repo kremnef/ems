@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<jx:forEach items="#{catalogue}" var="item" varStatus="status" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <item id="${item.id}"
+          childrenCount="${item.childrenCount}"
+          hasChildren="${item.objectType.hasChildren}"
+          parentId="${item.parentId}"
+          position="${item.position}">
+        <name>${item.name}</name>
+        <jx:forEach items="${item.items}" var="product" varStatus="status">
+            <product id="${product.id}">
+                <name>${product.name}</name>
+                <!--<subject id="${product.subject.id}" type="${product.subject.type}">-->
+                <subject id="${product.subject.id}" type="${product.subject.getClass().getSimpleName()}">
+                    <!--<name>${product.subject.name}</name>-->
+                    <format>${product.subject.format}</format>
+                    <file>${product.subject.file.path}</file>
+                </subject>
+            </product>
+        </jx:forEach>
+
+    </item>
+</jx:forEach>

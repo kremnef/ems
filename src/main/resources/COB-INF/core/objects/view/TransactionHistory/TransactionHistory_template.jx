@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{template}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <template templateId="#{id}">
+        <name>#{name}</name>
+        <URI>#{URI}</URI>
+    </template>
+</jx:forEach>

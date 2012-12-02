@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <union-subclass name="Language" table="language" lazy="true" extends="TypifiedObject">
+        <!--<property name="name" column="name" type="string" not-null="true"/>-->
+        <property name="code" column="code" type="string" not-null="true" unique="true" lazy="true"/>
+        <property name="charset" column="charset" type="string" not-null="true" lazy="true"/>
+        <!--<property name="visible" column="visible" type="boolean" not-null="true"/>-->
+        <property name="isPublished" column="is_published" type="boolean" not-null="true" lazy="true"/>
+        <property name="isDefaultLang" column="is_default_lang" type="boolean" not-null="true" lazy="true"/>
+    </union-subclass>
+</hibernate-mapping>
+
+    

@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<fb:library xmlns:fb="http://apache.org/cocoon/forms/1.0#binding">
+    <!--<fb:group id="emsObject" path=".">
+
+        <fb:value id="emsObjectId" path="id"/>
+        <fb:value id="name" path="name"/>
+        <fb:value id="systemName" path="systemName"/>
+        <fb:value id="parentId" path="parentId"/>
+
+    </fb:group>-->
+    <fb:group id="systemURL" path=".">
+        <fb:value id="emsObjectId" path="id"/>
+        <!--<fb:value id="id" path="id"/>-->
+        <fb:value id="name" path="name"/>
+        <fb:value id="systemName" path="emsObject/systemName"/>
+    </fb:group>
+
+
+    <fb:repeater id="labels" parent-path="." row-path="objectLabelList">
+        <fb:identity>
+            <fb:value id="languageCode" path="languageCode"/>
+        </fb:identity>
+        <fb:on-bind>
+            <!--<fb:value id="id" path="id"/>-->
+            <fb:value id="languageCode" path="languageCode"/>
+            <fb:value id="objectId" path="objectId"/>
+            <fb:value id="label" path="label"/>
+            <!--<fb:value id="alt" path="value3"/>-->
+            <!--<fb:value id="copyright" path="value4"/>-->
+        </fb:on-bind>
+    </fb:repeater>
+
+    <!--test-->
+    <fb:repeater id="linked" parent-path="." row-path="linked">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="id" path="id"/>
+            <fb:value id="name" path="name"/>
+            <fb:value id="publishDateTime" path="publishDateTime"/>
+
+        </fb:on-bind>
+        <!--todo: ???? не существующий метод -> hobal-->
+        <fb:on-insert-row>
+            <fb:insert-bean classname="ru.strela.ems.core.model.Content" addmethod="addLink"/>
+        </fb:on-insert-row>
+    </fb:repeater>
+
+    <fb:repeater id="metaInfo" parent-path="." row-path="metaInfoList">
+        <fb:identity>
+            <fb:value id="languageCode" path="languageCode"/>
+        </fb:identity>
+
+        <fb:on-bind>
+            <fb:value id="languageCode" path="languageCode"/>
+            <fb:value id="objectId" path="objectId"/>
+            <fb:value id="title" path="title"/>
+            <fb:value id="description" path="description"/>
+            <fb:value id="keywords" path="keywords"/>
+            <fb:repeater id="tagList" parent-path="." row-path="tags">
+                <fb:identity>
+                    <fb:value id="id" path="id"/>
+                </fb:identity>
+                <fb:on-bind>
+                    <fb:value id="tag" path="tag"/>
+                </fb:on-bind>
+                <fb:on-insert-row>
+                    <fb:insert-bean classname="ru.strela.ems.core.model.Tag"
+                                    addmethod="addTag"/>
+                </fb:on-insert-row>
+            </fb:repeater>
+        </fb:on-bind>
+
+
+    </fb:repeater>
+    <!--</fb:group>-->
+
+</fb:library>

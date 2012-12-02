@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <jx:macro name="xfilter">
+        <filter>
+            <jx:forEach items="${fileTypes}" var="file" varStatus="status">
+                <file-type id="${file.id}">
+                    <type>${file.name}</type>
+                </file-type>
+            </jx:forEach>
+        </filter>
+    </jx:macro>
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      systemName="${item.systemName}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      class="${item.class.name}"
+                      position="${item.position}">
+
+                    <name>${item.name}</name>
+                    <path>${item.path}</path>
+                    <contentType>${item.contentType}</contentType>
+
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <!--<header i18nCatalogueName="core">name</header>-->
+            <header i18nCatalogueName="core">path</header>
+            <header i18nCatalogueName="core">contentType</header>
+        </headers>
+    </jx:macro>
+    <!-- <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="core">path</header>
+        </headers>
+    </jx:macro>-->
+
+    <jx:macro name="topDataMacro">
+        <jx:import uri="forms/FileObject/upload_template.xml"/>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+
+</jx:template>

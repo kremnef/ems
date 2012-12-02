@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<catalogue xml:lang="ru">
+   <!--ecommerce-->
+    <message key="Ecommerce">Интернет-магазин</message>
+   <!--Order-->
+    <message key="interface.orders">Заказы</message>
+    <message key="Orders">Заказы</message>
+    <message key="Order">Заказ</message>
+    <message key="Order.totalPrice">Стоимость</message>
+    <message key="Order.orderStatus">Статус заказа</message>
+    <message key="Order.orderType">Тип заказа</message>
+    <message key="Order.orderNumber">Номер заказа</message>
+    <message key="Order.submittedDate">Дата отправки</message>
+    <message key="Order.addNew">Добавить Заказ</message>
+
+    <message key="Order.list">Список Заказов</message>
+    <!--<message key="Order.addNew">AddNew Order</message>-->
+    <!--OrderItem-->
+
+    <message key="OrderItems">Позиции заказа</message>
+    <message key="OrderItem">Позиция</message>
+    <message key="OrderItem.unitPrice">Стоимость</message>
+    <message key="OrderItem.extendedPrice">Расширенная цена</message>
+    <message key="OrderItem.OrderItemNumber">Номер</message>
+    <message key="OrderItem.quantity">Колличество</message>
+    <message key="OrderItem.list">Список Позиций Заказа</message>
+    <!--<message key="Order.addNew">AddNew Order</message>-->
+
+
+
+
+     <!--Photo-->
+    <message key="interface.photos">Фотографии</message>
+    <message key="Photos">Фотографии</message>
+    <message key="Photo">Фотография</message>
+    <message key="Photo.season">Сезон</message>
+    <message key="Photo.season.winter">Зима</message>
+    <message key="Photo.season.spring">Весна</message>
+    <message key="Photo.season.summer">Лето</message>
+    <message key="Photo.season.authem">Осень</message>
+    <message key="Photo.daytime">Время дня</message>
+    <message key="Photo.format">Формат снимка</message>
+    <message key="Photo.author">Автор</message>
+    <message key="Photo.date">Дата</message>
+    <message key="Photo.addNew">Добавить Фотографию</message>
+    <message key="Photo.list">Список Фотографий</message>
+    <message key="Photo.edit">Редактировать Фотографию</message>
+
+
+    <!--Product-->
+    <message key="interface.products">Продукты</message>
+    <message key="Products">Продукты</message>
+
+    <message key="Product">Продукт</message>
+    <message key="Product.name">Название</message>
+    <message key="Product.model">Модель</message>
+    <message key="Product.vendor">Производитель</message>
+    <message key="Product.sku">Артикул</message>
+    <message key="Product.upc">Upc</message>
+    <message key="Product.sellingUOM">SellingUOM</message>
+    <message key="Product.basePrice">Базовая цена</message>
+    <message key="Product.specialPrice">Специальная цена</message>
+    <message key="Product.discount">Скидка</message>
+    <message key="Product.minimumSellingUnits">Минмиальное колличество</message>
+    <message key="Product.onHandQuantity">Доступный остаток</message>
+    <message key="Product.addNew">Добавить продукт</message>
+    <message key="Product.hide">Спрятать продукт</message>
+    <message key="Product.choose">Выбрать продукт</message>
+    <message key="Product.root">Корень продукта</message>
+    <message key="Product.list">Список Продуктов</message>
+    <message key="Product.edit">Редактировать Продукт</message>
+    <!--Catalogue-->
+    <message key="Catalogues">Каталоги</message>
+    <message key="Catalogue">Каталог</message>
+    <message key="Catalogue.category">Категория</message>
+    <message key="Catalogue.addNew">добавить каталог или категорию</message>
+    <message key="Catalogue.attachedProducts">Список продуктов</message>
+    <message key="Catalogue.list">Список Каталогов</message>
+    <message key="Catalogue.edit">Редактировать Каталог</message>
+
+    <!--Country-->
+    <message key="Country">Страна</message>
+</catalogue>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <!--<fb:import prefix="lib" uri="blockcontext:/ems/ecommerce/forms/Product/Product_binding.xml"/>-->
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+
+    <fb:expand id="core:labels"/>
+
+
+    <!--<fb:context id="product" path="product">-->
+        <!--<fb:expand id="lib:product"/>-->
+    <!--</fb:context>-->
+    <fb:value id="id" path="id"/>
+    <fb:value id="name" path="name"/>
+    <fb:value id="totalPrice" path="totalPrice"/>
+    <fb:value id="orderStatus" path="orderStatus"/>
+    <fb:value id="orderNumber" path="orderNumber"/>
+    <fb:value id="orderType" path="orderType"/>
+    <fb:value id="submittedDate" path="submittedDate"/>
+<!---->
+    <fb:repeater id="orderItems" parent-path="." row-path="orderItem">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="id" path="id"/>
+            <fb:value id="name" path="product/name"/>
+            <fb:value id="pid" path="product/subject/id"/>
+            <fb:value id="ptypeName" path="product/objectType/id"/>
+            <!--<fb:value id="ptypeName" path="product/objectType/name"/>-->
+            <fb:value id="unitPrice" path="unitPrice"/>
+            <fb:value id="extendedPrice" path="extendedPrice"/>
+            <fb:value id="quantity" path="quantity"/>
+        </fb:on-bind>
+        <fb:on-insert-row>
+            <fb:insert-bean classname="ru.strela.ems.ecommerce.model.Order" addmethod="addOrderItems"/>
+        </fb:on-insert-row>
+    </fb:repeater>
+    <!--<fb:value id="season" path="season"/>-->
+    <!--<fb:value id="format" path="format"/>-->
+    <!--<fb:value id="daytime" path="daytime"/>-->
+
+
+</fb:context>

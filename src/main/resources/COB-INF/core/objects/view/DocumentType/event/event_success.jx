@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{XML/Event}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <Event>
+        #{image}
+        #{issue}
+        #{datetime}
+        <!--<image>#{image}</image>-->
+        <!--<issue>#{issue}</issue>-->
+        <!--<datetime>#{datetime}</datetime>-->
+    </Event>
+
+</jx:forEach>

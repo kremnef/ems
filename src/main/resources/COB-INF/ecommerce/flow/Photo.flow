@@ -1,0 +1,169 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listPhoto() {
+    listTypifiedObjects(0);
+}
+
+function showPhoto(photoService, photo, form, actionState) {
+
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+//    var parentId = photo.getParentId();
+    var parentId = 0;
+    var parentName = "";
+    /*var parentName = "";
+    if (parentId > 0) {
+        var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
+        var parent = typifiedObjectService.getParent(parentId);
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }*/
+    var id = photo.getId();
+    var availableLanguages = getAvailableLanguages();
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+
+    var countryId = Utilities.parseStringToInteger(cocoon.request.getParameter("countryId"));
+    var defaultCountryId = 0;
+    var countryService = cocoon.getComponent("countryService");
+    var availableCountries = countryService.getVisibleCountries();
+    var countryList = new Array(availableCountries.size());
+
+    for (var i = 0; i < availableCountries.size(); i++) {
+        var country = availableCountries.get(i);
+        countryList[i] = {
+            value: country.getId(),
+//            value: country.getName(),
+            label: country.getName()
+        };
+        /*if (country.getIsDefaultCountry()) {
+            defaultCountryId = country.getId();
+        }
+        if (country.getId() == countryId) {
+            correctCountryId = true;
+            break;
+        }*/
+    }
+    print(1111);
+    try {
+        photo = showEmsObjectForm(form, photoService, photo, showFormURI, {
+            "formLocale": locale,
+            "availableLanguages": availableLanguages,
+            "photoId": id,
+            "parentId" : parentId,
+            "parentName" : parentName,
+            "countryList": countryList,
+            "servletPath" : servletPath,
+            "id" : id,
+            "actionState": actionState
+        });
+        print(2222);
+    }
+
+    finally {
+       cocoon.releaseComponent(countryService);
+    }
+}
+
+function createPhoto(form) {
+
+    var photoService = cocoon.getComponent("photoService");
+    var photo = createTypifiedObject(photoService);
+
+    var parentId = 0;
+    var parentName = "";
+//    var parentObject = photo.getParent();
+//    if (paren     tObject != null) {
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//    }
+
+    var actionState = "create";
+    showPhoto(photoService, photo, form, actionState);
+    print("PhotoSaved111");
+    photoService.save(photo);
+    if (photo.getId() > 0) {
+        print("!!!!save translates for photo :" + photo.getId() > 0);
+        saveObjectLabelList(photo);
+        saveMetaInfoList(photo);
+    }
+    print("PhotoSaved");
+    cocoon.releaseComponent(photoService);
+
+    var id = photo.getId();
+    cocoon.disposeObject(photo);
+
+    cocoon.redirectTo("Photo-edit?id=" + id);
+}
+
+
+function editPhotoById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Photo-create");
+    }
+    var photoService = cocoon.getComponent("photoService");
+    var photo = photoService.getTypifiedObject(id);
+    if (photo == null) {
+        cocoon.releaseComponent(photoService);
+        cocoon.redirectTo("Photo-create");
+    }
+
+//    var parentId = photo.getParentId();
+    /*var parentName = "";
+    if (parentId > 0) {
+        var parent = photo.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }*/
+
+
+
+    var actionState = "edit";
+    /*var viewData = {
+        "actionState": actionState, "type": "photo"
+    }*/
+
+
+    /*photo = showEmsObjectForm(form, photoService, photo, showFormURI, {
+        "countryList":countryList,
+        "viewData": viewData,
+        "photoId": id,
+//        "parentId" : parentId,
+//        "parentName" : parentName,
+        "servletPath" : servletPath
+    });*/
+    showPhoto(photoService, photo, form, actionState);
+
+    photoService.save(photo);
+    cocoon.releaseComponent(photoService);
+
+    cocoon.redirectTo("Photo-edit?id=" + photo.getId());
+}
+
+function deletePhotoById() {
+    deleteObjectById("Photo");
+}
+
+function viewPhotoById() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
+
+    var photoService = cocoon.getComponent("photoService");
+    var order = photoService.getPhoto(id);
+    cocoon.releaseComponent(photoService);
+
+
+
+
+    cocoon.sendPage(displayURI, {"order": order});
+}

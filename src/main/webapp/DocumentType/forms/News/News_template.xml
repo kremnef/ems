@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <!--<jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>-->
+    <jx:import uri="context:/DocumentType/forms/Common/template.xml"/>
+
+    <!--<content>-->
+    <!--<userDataMacro/>-->
+    <!--<parentObjects />-->
+    <ft:form-template id="dynamicForm" location="${cocoon.request.getAttribute('dynamicForm')}"
+                      ajax-action="${cocoon.session.getAttribute('dynamicForm.id')}.continue"
+                      action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" method="POST" ajax="false">
+        <!--<h3>-->
+        <!--<a href="editDocument?id=#{viewData/document/@id}&amp;documentTypeId=#{viewData/documentTypeId}">-->
+        <!--<i18n:text key="Document"/>-->
+        <!--ID #{viewData/document/@id}-->
+        <!--</a>-->
+        <!--</h3>-->
+        <script type="text/javascript">
+            <!--var field = document.getElementById('News.date');-->
+            <!--if(field != null){-->
+            <!--alert(field);-->
+            <!--field.setValue() ="NewsDate";-->
+
+
+            $(function() {
+            $("#News\\.date").datepicker({numberOfMonths: 3, dateFormat:'dd/mm/yy', showButtonPanel: true});
+            if($("#News\\.date").val() == ''){
+                $("#News\\.date").datepicker('setDate', new Date());
+
+            <!--    var myDate = new Date();
+                var prettyDate =myDate.getDate() + '/' + (myDate.getMonth()+1) + '/' +
+                    myDate.getFullYear();
+                $("#News\\.date").val(prettyDate);-->
+            }
+
+            });
+            <!--};-->
+        </script>
+        <ft:group id="News">
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <fi:items>
+
+                    <!--<script language="javascript">
+                        function setImagePath(imagePath, functionNumber) {
+                        CKEDITOR.tools.callFunction(functionNumber, imagePath);
+                        }
+                    </script>-->
+                    <ft:widget id="title">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                    <!--<ft:widget id="date">
+                        <fi:styling format="date"/>
+                    </ft:widget>-->
+                    <ft:widget id="text">
+                        <!--<fi:styling size="100" type="ckeditor"/>-->
+                        <fi:styling size="100" type="HTML-editor"/>
+                    </ft:widget>
+
+                </fi:items>
+            </fi:group>
+        </ft:group>
+        <ft:widget id="saveDocumentType" class="button-primary">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+    </ft:form-template>
+
+    <!--</content>-->
+</jx:template>

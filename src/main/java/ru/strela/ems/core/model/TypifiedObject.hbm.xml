@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="TypifiedObject" abstract="true">
+        <!--<cache usage="read-only"/>-->
+        <id name="id" column="id" type="int">
+            <generator class="increment"/>
+        </id>
+        <property name="name" column="name" type="string" not-null="true"/>
+
+        <property name="objectTypeId" column="type_id" type="int" not-null="true" insert="false" update="false"/>
+        <many-to-one name="objectType"
+                     column="type_id"
+                     class="ObjectType"
+                     not-null="true"
+                     lazy="proxy"/>
+        <property name="ownerId" column="owner_id" type="int" not-null="true"/>
+        <!--<property name="ownerId" column="owner_id" type="string" not-null="true" insert="false" update="false"/>-->
+        <!--<many-to-one name="owner"
+                     column="owner_id"
+                     class="ru.strela.ems.security.model.Customer"
+                     not-null="true"
+                     lazy="proxy"/>-->
+        <!--speed test-->
+        <!--<set name="labels" table="object_label_link" cascade="all-delete-orphan" lazy="false">
+        &lt;!&ndash;<set name="labels" table="object_label_link" cascade="all,delete-orphan" lazy="true">&ndash;&gt;
+            <key column="object_id"/>
+            <many-to-many column="object_label_id" class="ObjectLabel"/>
+        </set>-->
+        <property name="position" column="position" type="int" not-null="true"/>
+
+    </class>
+    <!--<filter-def name="hasTag">
+        <filter-param name="tagId" type="int"/>
+    </filter-def>-->
+</hibernate-mapping>
+

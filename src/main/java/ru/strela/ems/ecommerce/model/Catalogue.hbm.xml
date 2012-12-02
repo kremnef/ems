@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.ecommerce.model">
+    <union-subclass name="ru.strela.ems.ecommerce.model.Catalogue" table="ecommerce_catalogue" extends="ru.strela.ems.core.model.TypifiedObject">
+        <!--<property name="rootId" column="root_id" type="int" not-null="true"/>-->
+        <many-to-one name="emsObject" class="ru.strela.ems.core.model.EmsObject" column="ems_object_id" unique="true" cascade="all" lazy="false"/>
+        <bag name="items" lazy="false" table="ecommerce_catalogue_items">
+            <key column="catalogue_id"/>
+            <many-to-many column="item_id" class="ru.strela.ems.core.model.TypifiedObject" lazy="false"/>
+        </bag>
+    </union-subclass>
+</hibernate-mapping>
+

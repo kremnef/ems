@@ -1,0 +1,79 @@
+/***************************************************************************************/
+/** Author: Robby Pelssers                                                            **/
+/** Utility function for creating JSON objects                                        **/
+/***************************************************************************************/
+var JSONUTIL = {};
+
+JSONUTIL.array = function() {
+    var objects = [];
+    return {
+        add: function(object) {
+            objects.push(object);
+            return object;
+        },
+        toString: function() {
+            return "[" + objects.join(",") + "]";
+        }
+    }
+}
+
+JSONUTIL.string = function(object) {
+    return {
+        toString: function() {
+            return "\"" + object + "\"";
+        }
+    }
+}
+
+JSONUTIL.property = function(name, object) {
+   return {
+       getName: function() {
+           return name;
+       },
+       getObject: function() {
+           return object;
+       },
+       toString:  function() {
+           return "\"" + name + "\": " + object;
+       }
+    }
+}
+
+JSONUTIL.stringProperty = function(name, value) {
+     return JSONUTIL.property(name, JSONUTIL.string(value));
+}
+
+JSONUTIL.arrayProperty = function(name) {
+    var that = JSONUTIL.property(name, JSONUTIL.array());
+    that.add = function(object) {
+        this.getObject().add(object);
+    };
+    return that;
+}
+
+JSONUTIL.object = function() {
+    var properties = [];
+    return {
+        getProperties: function() {
+            return properties;
+        },
+        addProperty: function(name, object) {
+            var property = JSONUTIL.property(name, object);
+            properties.push(property);
+            return property;
+        },
+        addStringProperty:  function(name, object) {
+            var strProperty = JSONUTIL.stringProperty(name, object);
+            properties.push(strProperty);
+            return strProperty;
+        },
+        addArrayProperty: function(name) {
+            var arrayProperty = JSONUTIL.arrayProperty(name);
+            properties.push(arrayProperty);
+            return arrayProperty;
+        },
+        toString: function() {
+            return "{" + properties.join(",") + "}";
+        }
+    }
+}

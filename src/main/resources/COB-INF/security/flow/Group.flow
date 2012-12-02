@@ -1,0 +1,104 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listGroup() {
+    var list = listCommon("group", "groupName", "desc","")
+    cocoon.sendPage(list.displayURI,list);
+}
+
+
+
+function createGroup(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var groupService = cocoon.getComponent("groupService");
+//    var group = createEmsObject(groupService);
+    var group = cocoon.createObject("ru.strela.ems.security.model.Group");
+
+
+    /*var parentId = 0;
+    var parentName = "";
+    var parentObject = group.getParent();
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+    }
+*/
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+//    group = showEmsObjectForm(form, group, showFormURI, {    
+    form.showForm(showFormURI, {
+        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData": getLoggedInUser()
+    });
+
+    form.save(group);
+    groupService.saveGroup(group);
+    cocoon.releaseComponent(groupService);
+
+    var id = group.getId();
+    cocoon.disposeObject(group);
+
+    cocoon.redirectTo("Group-edit?id=" + id);
+}
+
+
+function editGroupById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Group-create");
+    }
+
+    var groupService = cocoon.getComponent("groupService");
+    var group = groupService.getGroup(id);
+    if (group == null) {
+
+        cocoon.releaseComponent(groupService);
+        cocoon.redirectTo("Group-create");
+    }
+
+    /*var parentId = group.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = group.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }*/
+
+    var actionState = "edit";
+    var viewData = {
+        "actionState": actionState
+    }
+
+    form.load(group);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+     /*group = showEmsObjectForm(form, group, showFormURI, {;*/
+    form.showForm(showFormURI, {
+   
+        "viewData": viewData,
+        "groupId": id,
+//        "parentId" : parentId,
+//        "parentName" : parentName,
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath
+    })
+    form.save(group);
+    groupService.saveGroup(group);
+    cocoon.releaseComponent(groupService);
+
+    cocoon.redirectTo("Group-edit?id=" + group.getId());
+}

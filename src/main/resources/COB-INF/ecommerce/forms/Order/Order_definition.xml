@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<fd:form
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+    <fd:widgets>
+
+        <!--<fd:import prefix="lib" uri="blockcontext:/ems/ecommerce/forms/Product/Product_definition.xml"/>-->
+        <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+
+        <!--<fd:expand id="core:fileSystemObjects"/>-->
+        <fd:expand id="core:labels"/>
+
+
+        <!--<fd:expand id="lib:product"/>-->
+        <fd:field id="tab-state">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="id" state="output">
+            <fd:label>ID</fd:label>
+            <fd:datatype base="integer"/>
+        </fd:field>
+        <fd:field id="name" required="true">
+            <fd:label>
+                <i18n:text key="EmsObject.name"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length min="2" max="50"/>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="totalPrice" required="false">
+            <fd:label>
+                <i18n:text catalogue="ecommerce" key="Order.totalPrice"/>
+            </fd:label>
+            <fd:datatype base="double">
+                <!--<fd:convertor type="formatting" variant="currency"/>-->
+            </fd:datatype>
+            <!--<fd:validation>
+                <fd:length max="30"/>
+            </fd:validation>-->
+        </fd:field>
+        <fd:field id="orderStatus" required="false">
+            <fd:label>
+                <i18n:text catalogue="ecommerce" key="Order.orderStatus"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <!--<fd:validation>
+                <fd:length max="3"/>
+            </fd:validation>-->
+        </fd:field>
+        <fd:field id="orderNumber" required="false">
+            <fd:label>
+                <i18n:text catalogue="ecommerce" key="Order.orderNumber"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <!--<fd:validation>
+                <fd:length max="3"/>
+            </fd:validation>-->
+        </fd:field>
+        <fd:field id="orderType" required="false">
+            <fd:label>
+                <i18n:text catalogue="ecommerce" key="Order.orderType"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <!--<fd:validation>
+                <fd:length max="3"/>
+            </fd:validation>-->
+        </fd:field>
+        <fd:field id="submittedDate">
+            <fd:label>
+                <i18n:text catalogue="ecommerce" key="Order.submittedDate"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor>
+                    <fd:patterns>
+                        <fd:pattern>dd/mm/yyyy</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+        </fd:field>
+
+
+
+        <!--Objects Group-->
+        <fd:tree id="tree" selection="multiple">
+            <fd:label>
+                <i18n:text catalogue="ecommerce" key="Product.name"/>
+            </fd:label>
+            <fd:tree-model type="java" ref="emsObjectsTreeModel"/>
+            <fd:on-selection-changed>
+                <fd:javascript>
+                    print('FFFF');
+                    var node = event.tree.model.getNode(event.path);
+                    if (node &amp;&amp; event.tree.isPathSelected(event.path)) {
+                    var newNodeData = event.tree.model.getNode(event.path).data;
+                    var id = newNodeData.id;
+
+                    var repeater = widget.lookupWidget("../orderItems");
+                    var hasFileId = false;
+                    var lastPosition = repeater.getSize();
+                    for (var i = 0; i &lt; lastPosition; i++) {
+                    var fileId = repeater.getRow(i).getChild("id").value;
+                    if (id.equals(fileId)) {
+                    hasFileId = true;
+                    break;
+                    }
+                    }
+
+                    if (!hasFileId) {
+                    print('hasFileId');
+                    var newRow = repeater.addRow();
+                    newRow.getChild("id").value = newNodeData.getId();
+                    newRow.getChild("name").value = newNodeData.name;
+                    var excludedIds = cocoon.session.getAttribute("excludedIds");
+                    excludedIds.add(newNodeData.getId());
+                    }
+                    }
+                    else {
+                    print("tree in document null ");
+                    }
+                </fd:javascript>
+            </fd:on-selection-changed>
+            <fd:on-create>
+                <javascript>
+
+                </javascript>
+            </fd:on-create>
+        </fd:tree>
+
+        <fd:repeater id="orderItems" orderable="true">
+            <fd:widgets>
+
+                <fd:output id="id">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="pid" state="invisible">
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="ptype" state="invisible">
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="ptypeName" >
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="name">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.name"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="ecommerce" key="Product.name"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <fd:output id="unitPrice">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="OrderItem.unitPrice"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="ecommerce" key="OrderItem.unitPrice"/>
+                    </fd:hint>
+                    <fd:datatype base="double"/>
+                </fd:output>
+                <fd:output id="extendedPrice">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="OrderItem.extendedPrice"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="ecommerce" key="OrderItem.extendedPrice"/>
+                    </fd:hint>
+                    <fd:datatype base="double"/>
+                </fd:output>
+                <fd:output id="quantity">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="OrderItem.quantity"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="ecommerce" key="OrderItem.quantity"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+
+
+                <fd:action id="delete">
+                    <fd:on-action>
+                        <fd:javascript>
+
+                            var repeater = widget.lookupWidget("/orderItems");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var fileId = selectedRow.getChild("id").value;
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            repeater.removeRow(selectedRowIndex);
+                            <!--var excludedIds = cocoon.session.getAttribute("excludedIds");-->
+                            <!--excludedIds.remove(productId);-->
+                            <!--var tree = widget.lookupWidget("/tree");-->
+                            <!--tree.clearSelection();-->
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:action>
+                <fd:booleanfield id="select">
+                    <fd:label>Select</fd:label>
+                </fd:booleanfield>
+            </fd:widgets>
+        </fd:repeater>
+
+        <fd:submit id="saveOrder">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+
+    </fd:widgets>
+</fd:form>

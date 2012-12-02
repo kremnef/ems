@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<fd:form
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <fd:widgets>
+        <fd:group id="Tariffs">
+
+            <fd:widgets>
+
+                <fd:repeater id="Tariffs-termal" initial-size="1" orderable="true">
+
+                    <fd:widgets>
+
+                        <fd:field id="category">
+                            <fd:label>
+                                <i18n:text i18n:catalogue="documenttypes" key="Tariffs.category"/>
+                            </fd:label>
+                            <fd:datatype base="string">
+                            </fd:datatype>
+                            <fd:validation>
+                                <fd:length max="400"/>
+                            </fd:validation>
+                        </fd:field>
+
+                        <fd:field id="hot-water">
+                            <fd:label>
+                                <i18n:text i18n:catalogue="documenttypes" key="Tariffs.hot-water"/>
+                            </fd:label>
+                            <fd:datatype base="string">
+                            </fd:datatype>
+                            <fd:validation>
+                                <fd:length max="100" />
+                            </fd:validation>
+                        </fd:field>
+
+                        <fd:field id="selected-vapor">
+                            <fd:label>
+                                <i18n:text i18n:catalogue="documenttypes" key="Tariffs.selected-vapor"/>
+                            </fd:label>
+                            <fd:datatype base="string">
+                            </fd:datatype>
+                            <fd:validation>
+                                <fd:length max="100"/>
+                            </fd:validation>
+                        </fd:field>
+
+                        <fd:field id="live-steam">
+                            <fd:label>
+                                <i18n:text i18n:catalogue="documenttypes" key="Tariffs.live-steam"/>
+                            </fd:label>
+                            <fd:datatype base="string">
+                            </fd:datatype>
+                            <fd:validation>
+                                <fd:length max="200"/>
+                            </fd:validation>
+                        </fd:field>
+                        <fd:row-action id="up" command="move-up"/>
+                        <fd:row-action id="down" command="move-down"/>
+
+                        <fd:booleanfield id="select">
+                            <fd:label>Select</fd:label>
+                        </fd:booleanfield>
+                    </fd:widgets>
+                    <fd:on-create>
+                        <fd:javascript>
+                            var repeater = widget;
+                            print("repeater!! = " + repeater.getSize());
+                        </fd:javascript>
+                    </fd:on-create>
+                </fd:repeater>
+
+                <fd:repeater-action id="remove" command="delete-rows" repeater="Tariffs-termal" select="select">
+                    <fd:label>Remove selected</fd:label>
+                </fd:repeater-action>
+
+                <fd:repeater-action id="add" command="add-row" repeater="Tariffs-termal">
+                    <fd:label>Add Publication</fd:label>
+
+                </fd:repeater-action>
+
+            </fd:widgets>
+        </fd:group>
+        <fd:submit id="saveDocumentType">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

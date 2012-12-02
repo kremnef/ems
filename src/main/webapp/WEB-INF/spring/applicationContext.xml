@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- @version $Id: applicationContext.xml 561608 2007-08-01 00:33:12Z vgritsenko $ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:servlet="http://cocoon.apache.org/schema/servlet"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:configurator="http://cocoon.apache.org/schema/configurator"
+       xmlns:avalon="http://cocoon.apache.org/schema/avalon"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+                           http://cocoon.apache.org/schema/configurator http://cocoon.apache.org/schema/configurator/cocoon-configurator-1.0.1.xsd
+                           http://cocoon.apache.org/schema/avalon http://cocoon.apache.org/schema/avalon/cocoon-avalon-1.0.xsd
+                           http://cocoon.apache.org/schema/servlet http://cocoon.apache.org/schema/servlet/cocoon-servlet-1.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+">
+
+    <!-- Activate Cocoon Spring Configurator -->
+    <configurator:settings/>
+
+    <configurator:bean-map
+            id="org.apache.cocoon.servletservice.spring.BlockServletMap"
+            type="javax.servlet.Servlet"
+            has-properties="mountPath"
+            key-property="mountPath"/>
+
+
+    <!-- Configure Log4j -->
+    <bean id="org.apache.cocoon.spring.configurator.log4j"
+          class="org.apache.cocoon.spring.configurator.log4j.Log4JConfigurator"
+          scope="singleton">
+        <!--<property name="settings" ref="org.apache.cocoon.configuration.Settings"/>-->
+        <property name="resource" value="/WEB-INF/log4j.xml"/>
+    </bean>
+
+
+    <!--<bean name="ru.strela.tgk2.service" class="org.apache.cocoon.sitemap.SitemapServlet">
+        <servlet:context mount-path="/" context-path="blockcontext:/tgk2/">
+            <servlet:connections>
+                <entry key="ems" value-ref="ru.strela.ems.core.service"/>
+            </servlet:connections>
+        </servlet:context>
+    </bean>-->
+
+    <!--<bean name="test" class="org.apache.cocoon.sitemap.SitemapServlet">-->
+    <!--<servlet:context mount-path="/msl" context-path="blockcontext:/msl/">-->
+    <!--<servlet:context mount-path="" context-path="${webapp.root}">-->
+    <!--<servlet:context mount-path="/" context-path="file:///${webapp.root}">-->
+    <!--<servlet:context mount-path="" context-path="file:///${webroot}">-->
+    <!--<servlet:context mount-path="/" context-path="file:///Users/andrejkremnev/Documents/PRG/parent/mslWebApp/target/mslWebApp-1.0.0">-->
+    <!--<servlet:connections>
+        <entry key="ems" value-ref="ru.strela.ems.core.service"/>
+    </servlet:connections>-->
+    <!--</servlet:context>-->
+    <!--</bean>-->
+
+
+    <!--Spring-->
+
+    <!-- <bean id="jdbcUserService" class="org.springframework.security.provisioning.JdbcUserDetailsManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="authenticationManager"
+                  ref="authenticationManager"/>
+    </bean>
+
+    <bean id="authenticationManager"
+          class="org.springframework.security.authentication.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref local="daoAuthenticationProvider"/>
+                <ref local="anonymousAuthenticationProvider"/>
+                <ref local="ldapAuthenticationProvider"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="daoAuthenticationProvider"
+          class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="jdbcUserService"/>
+        <property name="saltSource" ref="saltSource"/>
+        <property name="passwordEncoder" ref="passwordEncoder"/>
+    </bean>-->
+
+
+    <!--<bean class="ru.strela.ems.security.IPTokenBasedRememberMeServices"
+          id="ipTokenBasedRememberMeServicesBean">
+        <property name="key"><value>jbcpPetStore</value>    </property>
+        <property name="userDetailsService" ref="userService"/>
+        <property name="parameter" value="_remember_me"/>
+        <property name="cookieName" value="REMEMBER_ME"/>
+    </bean>-->
+
+    <!--<bean id="rememberMeFilter" class=
+            "org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+        <property name="rememberMeServices" ref="rememberMeServices"/>
+        <property name="authenticationManager" ref="theAuthenticationManager"/>
+    </bean>
+
+    <bean id="rememberMeServices" class=
+            "org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+        <property name="userDetailsService" ref="myUserDetailsService"/>
+        <property name="key" value="springRocks"/>
+    </bean>
+
+    <bean id="rememberMeAuthenticationProvider" class=
+            "org.springframework.security.authentication.rememberme.RememberMeAuthenticationProvider">
+        <property name="key" value="springRocks"/>
+    </bean>-->
+
+    <!--<bean id="userDetailsManager"
+          class="org.springframework.security.provisioning.JdbcUserDetailsManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="enableAuthorities" value="true"/>
+        <property name="enab
+        leGroups" value="false"/>
+    </bean>-->
+
+    <!--<bean id="jdbcUserService" class="ru.strela.ems.security.CustomJdbcDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="enableGroups" value="true"/>
+        <property name="enableAuthorities" value="false"/>
+
+    </bean>-->
+
+
+
+    <!--** uncomment to secure database at startup-->
+
+    <!--<bean class="ru.strela.ems.security.DatabasePasswordSecurerBean"
+          init-method="secureDatabase" depends-on="dataSource">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>-->
+
+
+    <bean id="userService" class="ru.strela.ems.security.service.UserServiceImpl">
+        <security:intercept-methods>
+            <security:protect access="ROLE_USER" method="changePassword"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" id="passwordEncoder"/>
+    <bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" id="saltSource">
+        <property name="userPropertyToUse" value="username"/>
+    </bean>
+
+
+    <bean id="loginUrlAuthenticationEntryPoint"
+          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <property name="loginFormUrl" value="/ems/security/login"/>
+    </bean>
+
+    <bean id="emsLoginFilter" class="ru.strela.ems.security.filter.EmsLoginFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationFailureHandler" ref="failureHandler"/>
+        <property name="authenticationSuccessHandler" ref="successHandler"/>
+    </bean>
+
+    <bean id="successHandler"
+          class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <!--<property name="defaultTargetUrl" value="/ems/core/Content-list"/>-->
+        <property name="defaultTargetUrl" value="/ems/core/desktop"/>
+    </bean>
+
+    <bean id="failureHandler"
+          class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/ems/security/login"/>
+    </bean>
+
+
+    <!--<bean id="authenticationManager"
+          class="org.springframework.security.authentication.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref local="daoAuthenticationProvider"/>
+                <ref local="anonymousAuthenticationProvider"/>
+                <ref local="ldapAuthenticationProvider"/>
+            </list>
+        </property>
+    </bean>-->
+
+    <!-- <bean id="userService" class="ru.strela.ems.security.InMemoryChangePasswordDaoImpl">
+        <property name="userProperties">
+            <props>
+                <prop key="guest">guest,ROLE_USER</prop>
+            </props>
+        </property>
+    </bean>-->
+    <!--<bean id="aclCache" class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
+        <constructor-arg>
+            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" p:cacheName="aclCache">
+                <property name="cacheManager">
+                    <bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="adminRole" class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+        <constructor-arg value="admin"/>
+    </bean>
+    <bean id="aclLookupStrategy" class="org.springframework.security.acls.jdbc.BasicLookupStrategy">
+        <constructor-arg ref="dataSource"/>
+        <constructor-arg ref="aclCache"/>
+        <constructor-arg>
+            <bean class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl">
+                <constructor-arg>
+                    <list>
+                        <ref local="adminRole"/>
+                        <ref local="adminRole"/>
+                        <ref local="adminRole"/>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.springframework.security.acls.domain.ConsoleAuditLogger"/>
+        </constructor-arg>
+    </bean>
+    <bean id="aclService" class="org.springframework.security.acls.jdbc.JdbcMutableAclService">
+        <constructor-arg ref="dataSource"/>
+        <constructor-arg ref="aclLookupStrategy"/>
+        <constructor-arg ref="aclCache"/>
+    </bean>
+    <bean id="permissionEvaluator" class="org.springframework.security.acls.AclPermissionEvaluator">
+        <constructor-arg ref="aclService"/>
+    </bean>
+    <bean id="expressionHandler"
+          class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"
+          p:permissionEvaluator-ref="permissionEvaluator"/>
+-->
+
+    <!-- ======================== SESSION CONTEXT INTEGRATION ======================= -->
+
+    <!--<bean id="httpSessionContextIntegrationFilter"
+    class="org.springframework.security.context.HttpSessionContextIntegrationFilter"/>-->
+
+    <!-- ======================== LOGOUT ======================= -->
+
+    <!--<bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
+        <constructor-arg value="/cocoon-acegisecurity-sample/welcome"/>
+        &lt;!&ndash; URL redirected to after logout &ndash;&gt;
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler"/>
+            </list>
+        </constructor-arg>
+    </bean>-->
+
+    <!-- ===================== HTTP REQUEST SECURITY ==================== -->
+
+    <!-- <bean id="authenticationProcessingFilter"
+          class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationFailureUrl" value="/cocoon-acegisecurity-sample/login?login_error=1"/>
+        <property name="defaultTargetUrl" value="/cocoon-acegisecurity-sample/welcome"/>
+        <property name="filterProcessesUrl" value="/cocoon-acegisecurity-sample/security_check"/>
+    </bean>
+
+    <bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref local="daoAuthenticationProvider"/>
+                <ref local="anonymousAuthenticationProvider"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="daoAuthenticationProvider"
+          class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="inMemoryDaoImpl"/>
+        <property name="forcePrincipalAsString">
+            <value>true</value>
+        </property>
+    </bean>
+
+    <bean id="inMemoryDaoImpl" class="org.springframework.security.userdetails.memory.InMemoryDaoImpl">
+        <property name="userMap">
+            <value>
+                cocoon=cocoon,ROLE_USER,ROLE_SUPERVISOR
+                guest=guest,ROLE_USER
+                other=other,ROLE_OTHER
+            </value>
+        </property>
+    </bean>
+
+    <bean id="anonymousAuthenticationProvider"
+          class="org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider">
+        <property name="key" value="foobar"/>
+    </bean>-->
+
+    <!-- ===================== SECURITY CONTEXT HOLDER AWARE REQUEST ==================== -->
+
+    <!-- <bean id="securityContextHolderAwareRequestFilter"
+              class="org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter"/>
+    -->
+    <!-- ===================== ANONYMOUS USER PROCESSING ==================== -->
+
+    <!--<bean id="anonymousProcessingFilter"
+          class="org.springframework.security.authentication.anonymous.AnonymousProcessingFilter">
+        <property name="key" value="foobar"/>
+        <property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
+    </bean>-->
+    <!-- ===================== EXCEPTION TRANSLATION ==================== -->
+
+    <!--<bean id="exceptionTranslationFilter" class="org.springframework.security.ui.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint" ref="authenticationProcessingFilterEntryPoint"/>
+        <property name="accessDeniedHandler">
+            <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl">
+                <property name="errorPage" value="/cocoon-acegisecurity-sample/accessDenied"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="authenticationProcessingFilterEntryPoint"
+          class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+        <property name="loginFormUrl" value="/cocoon-acegisecurity-sample/login"/>
+        <property name="forceHttps" value="false"/>
+    </bean>-->
+
+    <!-- ===================== INVOCATION INTERCEPTOR ==================== -->
+
+    <!-- Note the order that entries are placed against the objectDefinitionSource is critical.
+The FilterSecurityInterceptor will work from the top of the list down to the FIRST pattern that matches the request URL.
+Accordingly, you should place MOST SPECIFIC (ie a/b/c/d.*) expressions first, with LEAST SPECIFIC (ie a/.*) expressions last -->
+
+
+    <!--<bean id="filterInvocationInterceptor"
+              class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+            <property name="authenticationManager" ref="authenticationManager"/>
+            <property name="accessDecisionManager" ref="httpRequestAccessDecisionManager"/>
+            <property name="objectDefinitionSource">
+                <value>
+                    CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+                    PATTERN_TYPE_APACHE_ANT
+                    /cocoon-acegisecurity-sample/welcome=ROLE_ANONYMOUS,ROLE_USER
+                    /cocoon-acegisecurity-sample/login=ROLE_ANONYMOUS,ROLE_USER
+                    /cocoon-acegisecurity-sample/accessdenied=ROLE_ANONYMOUS,ROLE_USER
+                    /cocoon-acegisecurity-sample/supervisor=ROLE_SUPERVISOR
+                    /cocoon-acegisecurity-sample/**=ROLE_USER
+                </value>
+            </property>
+        </bean>
+
+        <bean id="httpRequestAccessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+            <property name="allowIfAllAbstainDecisions" value="false"/>
+            <property name="decisionVoters">
+                <list>
+                    <ref bean="roleVoter"/>
+                </list>
+            </property>
+        </bean>
+    -->
+    <!-- An access decision voter that reads ROLE_* configuration settings -->
+
+    <!--<bean id="roleVoter" class="org.springframework.security.vote.RoleVoter"/>-->
+
+    <!-- Activate Avalon Bridge -->
+    <avalon:bridge/>
+
+</beans>

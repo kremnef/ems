@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+
+    <class name="ru.strela.ems.security.model.TransactionHistory" table="transaction_history" lazy="false">
+        <id name="id" column="id" type="int">
+            <generator class="identity" />
+        </id>
+        <property name="objectId" column="object_id" type="int" not-null="true" insert="false" update="false"/>
+        <property name="userId" column="user_id" type="int" not-null="true" insert="false" update="false"/>
+
+        <property name="userAction" column="user_action" type="string" not-null="true"/>
+        <property name="date" column="date" type="timestamp" not-null="true"/>
+        <property name="ipAddress" column="ip_address" type="string" not-null="true"/>
+
+        <many-to-one name="customer" class="ru.strela.ems.security.model.Customer" cascade="none" column="user_id" lazy="false" not-null="true"/>
+        <many-to-one name="object" class="ru.strela.ems.core.model.TypifiedObject" cascade="none" column="object_id" lazy="false" not-null="true"/>
+    </class>
+</hibernate-mapping>
+

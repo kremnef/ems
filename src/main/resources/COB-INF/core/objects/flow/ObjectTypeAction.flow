@@ -1,0 +1,178 @@
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+/*
+ function listObjectTypeAction() {
+ var list = listCommon("objectTypeAction", "name", "desc", "");
+ cocoon.sendPage(list.displayURI, list);
+ }
+
+ */
+
+function listObjectTypeAction() {
+
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+
+
+    var objectTypeService = cocoon.getComponent("objectTypeService");
+    var objectTypeList = null;
+    objectTypeList = objectTypeService.getObjectTypes();
+
+    var list = listCommon("objectTypeAction", "name", "desc", "");
+    list.objectType = objectTypeList;
+//    print(listData.objectType);
+    cocoon.sendPage(list.displayURI, list);
+}
+
+
+function createObjectTypeAction(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var objectTypeActionService = cocoon.getComponent("objectTypeActionService");
+//    var objectTypeAction = createEmsObject(objectTypeActionService);
+    var objectTypeAction = cocoon.createObject("ru.strela.ems.core.model.ObjectTypeAction");
+
+
+    /*var parentId = 0;
+     var parentName = "";
+     var parentObject = objectTypeAction.getParent();
+     if (parentObject != null) {
+     parentId = parentObject.getId();
+     parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+     }
+     */
+    var actionState = "create";
+    /*  var viewData = {
+     "actionState": actionState
+     }*/
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+//    objectTypeAction = showEmsObjectForm(form, objectTypeAction, showFormURI, {    
+    form.showForm(showFormURI, {
+//        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData": getLoggedInUser(),
+        "actionState": actionState
+    });
+
+    form.save(objectTypeAction);
+    objectTypeActionService.saveObjectTypeAction(objectTypeAction);
+    cocoon.releaseComponent(objectTypeActionService);
+
+    var id = objectTypeAction.getId();
+    cocoon.disposeObject(objectTypeAction);
+
+    cocoon.redirectTo("ObjectTypeAction-edit?id=" + id);
+}
+
+
+function editObjectTypeActionById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("ObjectTypeAction-create");
+    }
+
+    var objectTypeActionService = cocoon.getComponent("objectTypeActionService");
+    var objectTypeAction = objectTypeActionService.getObjectTypeAction(id);
+    print("objectTypeAction"+objectTypeAction);
+    var objectTypeActionName = objectTypeAction.getName();
+//    var entityId = objectTypeAction.getObjectTypeId();
+    var entityId = 3;
+    if (objectTypeAction == null) {
+
+        cocoon.releaseComponent(objectTypeActionService);
+        cocoon.redirectTo("ObjectTypeAction-create");
+    }
+
+    /*var parentId = objectTypeAction.getParentId();
+     var parentName = "";
+     if (parentId > 0) {
+     var parent = objectTypeAction.getParent();
+     parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+     }*/
+
+    var actionState = "edit";
+    /*var viewData = {
+     "actionState": actionState
+     }*/
+    var xslEditor = form.getChild("xslEditor");
+    var cssEditor = form.getChild("cssEditor");
+
+    var fileObjectService = cocoon.getComponent("fileObjectService");
+    var contextRealPath = fileObjectService.getContextRealPath();
+
+
+    var objectTypeService = cocoon.getComponent("objectTypeService");
+//    importClass(Packages.ru.strela.ems.core.dao.hibernate.ObjectTypeDaoImpl);
+//    var objectTypeService = new Packages.ru.strela.ems.core.dao.hibernate.ObjectTypeDaoImpl();
+
+//    print("entityId"+entityId);
+    var objectType = objectTypeService.getObjectType(entityId);
+    var objectTypeName = objectType.getName();
+//    print("objectTypeName"+objectTypeName);
+
+    var xslURI = contextRealPath + "/WEB-INF/xslt/types/" + objectTypeName + "/" + objectTypeName + "-" + objectTypeActionName + ".xsl";
+    var cssURI = contextRealPath + "/css/objectTypeActions/" + objectTypeActionName + ".css";
+    importClass(Packages.ru.tastika.tools.file.FileAddition);
+    var FileAdditional = new Packages.ru.tastika.tools.file.FileAddition();
+
+    var fileXSL = FileAdditional.getFile(xslURI);
+    var fileXSL_str;
+    if (fileXSL != null) {
+        fileXSL_str = FileAdditional.getFileStringContent(fileXSL, true);
+        xslEditor.value = fileXSL_str;
+    }
+    var fileCSS = FileAdditional.getFile(cssURI);
+    var fileCSS_str;
+    if (fileCSS != null) {
+        fileCSS_str = FileAdditional.getFileStringContent(fileCSS, true);
+        cssEditor.value = fileCSS_str;
+    }
+
+
+    form.load(objectTypeAction);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+    form.showForm(showFormURI, {
+
+        "objectTypeActionId": id,
+//        "parentId" : parentId,
+//        "parentName" : parentName,
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath,
+        "actionState": actionState
+    });
+    form.save(objectTypeAction);
+    var resultXSL = form.getChild("xslEditor").value;
+    var resultCSS = form.getChild("cssEditor").value;
+//    print(resultXSL);
+    FileAdditional.createFile(xslURI, resultXSL);
+    FileAdditional.createFile(cssURI, resultCSS);
+    objectTypeActionService.saveObjectTypeAction(objectTypeAction);
+    cocoon.releaseComponent(objectTypeActionService);
+    cocoon.disposeObject(fileXSL);
+    cocoon.disposeObject(fileCSS);
+    cocoon.disposeObject(objectTypeAction);
+    cocoon.redirectTo("ObjectTypeAction-edit?id=" + objectTypeAction.getId());
+}
+
+
+function deleteObjectTypeActionById(id) {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = null;
+    id = parseInt(cocoon.request.getParameter("id"));
+    var objectTypeActionService = cocoon.getComponent("objectTypeActionService");
+    var objectTypeAction = objectTypeActionService.getObjectTypeAction(id);
+    objectTypeActionService.deleteObjectTypeAction(objectTypeAction);
+    cocoon.releaseComponent(objectTypeActionService);
+    cocoon.redirectTo("ObjectTypeAction-list");
+}
+

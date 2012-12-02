@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0" xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+
+    <div i18n:attr="title" title="core:FileObject.choose" id="folderTreeContainer"
+         class="dialogContent">
+
+        <!-- <div id="ftabs" class="panes">
+                    <ul>
+                        <li>
+                            <a href="#ftabs-1">Выбрать</a>
+                        </li>
+                        <li>
+                            <a href="#ftabs-2">загрузить</a>
+                        </li>
+                    </ul>
+        -->
+        <!-- <select name="filter" width="150px" class="select" id="filterSelector"
+                onсhange="filterTree(this.value)">
+            <option id="images" selected="true" value="images">Картинки</option>
+            <option id="sound" value="sound">Звук</option>
+            <option id="video" value="video">Видео</option>
+            <option id="files" value="files">Файлы</option>
+        </select>-->
+        <!--<div class="panel" style="display:block-inline;width:80%; float:left;">-->
+        <!--<div id="ftabs-1">-->
+
+        <!--<div class="ui-layout-west" style="display:block-inline;width:80%; float:left;">-->
+        <!--  <label for="treeSearch">Поиск</label>
+     <input type="text" id="treeSearch" value=""/>
+     <input type="submit" id="treeSearchBtn" value="Search"/>-->
+
+        <div id="folderTree"></div>
+        <!--<a id="reset" divTree="folderTree" href="#" class="ui-button">Сбросить</a>-->
+        <!--</div>-->
+
+        <!-- <div class="ui-layout-east" style="display:block-inline;width:20%; float:right;">
+            <img class="ui-button" id="thisThumbnail" style="cursor: pointer;"
+                 src="/ems/resource/img/thumbnail.png" width="150px" height="150px"
+                 alt="миниатюра"/>
+            <span id="thisThumbnailInfo"/>
+        </div>-->
+
+        <!--</div>-->
+
+
+        <!--<div id="ftabs-2">
+            <form id="sendForm" method="post" action="/sendletter">
+                <a href="Folder-edit?id=${systemNodeId}" title="${systemNodeName}" id="folderForUpload" class="">
+                сюда</a>
+                <input type="hidden" id="folderForUploadId" value=""/>
+                <div id="file-uploader" class='ui-button' width="200px">
+                    <noscript>
+                        <p>Please enable JavaScript to use file uploader.</p>
+                        &lt;!&ndash; or put a simple form for upload here &ndash;&gt;
+                    </noscript>
+                </div>
+                <script language="javascript" type="text/javascript" charset="utf-8">
+                    <![CDATA[
+                                                      var th_id;
+var th_name;
+var th_contentType;
+
+jQuery('#folderTree').click(function (e) {
+f = "";
+
+var t = jQuery.jstree._focused();
+th_id = t.data.ui.selected.attr("id");
+th_name = t.data.ui.selected.attr("name");
+th_contentType = t.data.ui.selected.attr("contentType");
+
+if ($(":contains('image')")) {
+    var th_imagePath = t.data.ui.selected.attr("path");
+
+    var th_fileSize = t.data.ui.selected.attr("fileSize");
+    $("#thisThumbnail").attr('src', '/' + th_imagePath);
+    $("#thisThumbnail").attr('alt', th_name);
+    var info = "FILE:" + th_contentType + th_fileSize + th_imagePath + th_name;
+    document.getElementById('thisThumbnailInfo').innerHTML = info;
+
+    var obj = jQuery('#folderTree').jstree("get_path", f.data.ui.selected);
+    var path = '';
+    for (var key in obj) {
+        path += ' / ' + obj[key];
+    }
+    if (path.length > 0) {
+        path = path.substr(3);
+    }
+    $("#folderForUploadId").val(th_id);
+    var systemNodeNameElement = document.getElementById('folderForUpload');
+    systemNodeNameElement.innerHTML = path;
+
+}
+
+
+});
+
+
+$(function() {
+if (th_contentType == null) {
+    var uploader = new qq.FileUploader({
+        // pass the dom node (ex. $(selector)[0] for jQuery users)
+        element: $('#file-uploader')[0],
+        // url of the server-side upload script, should be on the same domain
+        action: 'uploadFile?folderId=' + th_id,
+        // additional data to send, name-value pairs
+        params: {},
+        // ex. ['jpg', 'jpeg', 'png', 'gif'] or []
+        //allowedExtensions: [${fileTypes}],
+        allowedExtensions: [${images}, ${sound}, ${video}, ${files}],
+        // size limit in bytes, 0 - no limit
+        // this option isn't supported in all browsers
+        sizeLimit: 0,
+        onSubmit: function(id, fileName) {
+        },
+        onComplete: function(id, fileName, responseJSON) {
+
+            apprise("success loading");
+            updateTable();
+        },
+        showMessage: function(message) {
+            apprise(message);
+        }
+    });
+
+
+}
+});
+function updateTree() {
+var time = new Date().getTime();
+var url = "Folder-list";
+//$('#listTableContainer').load(url+'?time=' + time + '&parentId=${cocoon.request.getParameter("parentId")} #listTable');
+}
+        ]]>
+                </script>
+            </form>
+        </div>-->
+
+        <!--</div>-->
+
+
+    </div>
+</jx:template>

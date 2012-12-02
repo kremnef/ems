@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+
+
+    <jx:macro name="form-template" targetNamespace="http://apache.org/cocoon/forms/1.0#template">
+        <jx:parameter name="location"/>
+        <jx:set var="localeSitemapParameter" value="${cocoon.parameters.getParameter('locale', '')}"/>
+        <jx:set var="cformsHelper"
+                value="#{org.apache.cocoon.forms.generation.JXMacrosHelper.createHelper($cocoon/consumer,$cocoon/request,$localeSitemapParameter)}"/>
+        <jx:set var="attributeName" value="${cocoon.parameters['attribute-name']}"/>
+        <jx:choose>
+            <jx:when test="${attributeName and attributeName.length() > 0}">
+                <jx:set var="form" value="${cformsHelper.getForm(null, attributeName)}"/>
+            </jx:when>
+            <jx:when test="${location != null}">
+                <jx:set var="var" value="${macro.arguments.remove('location')}"/>
+                <jx:set var="form" value="${cformsHelper.getForm(location, attributeName)}"/>
+            </jx:when>
+            <jx:otherwise>
+                <jx:set var="form" value="${cformsHelper.getForm(CocoonFormsInstance, attributeName)}"/>
+            </jx:otherwise>
+        </jx:choose>
+
+        <jx:if test="${form != null and cformsHelper.isVisible(form)}">
+            <jx:set var="cformsDummy" value="${cformsHelper.startForm(form, macro.arguments)}"/>
+            <!--  the form is also the current widget
+            -->
+            <jx:set var="widget" value="${form}"/>
+            <jx:evalBody/>
+            <jx:set var="cformsDummy" value="${cformsHelper.endForm()}"/>
+        </jx:if>
+    </jx:macro>
+
+    <jx:macro name="userDataMacro">
+        <userData name="${userData.name}" id="${userData.id}" />
+    </jx:macro>
+
+    <jx:macro name="parentObjects">
+        <parents>
+            <jx:forEach items="${parents}" var="parent" varStatus="status">
+                <parent id="${parent.id}">
+                    <name>${parent.name}</name>
+                </parent>
+            </jx:forEach>
+            <document id="${viewData.id}" documentTypeId="${viewData.documentTypeId}"/>
+        </parents>
+    </jx:macro>
+
+    <jx:macro name="DocTypeObject">
+        <jx:parameter name="docTypeEntity" default="Event"/>
+        <jx:parameter name="layout" default="columns"/>
+        <!--<h3><a href="editDocument?id=#{viewData/document/@id}&amp;documentTypeId=#{viewData/documentTypeId}"><i18n:text key="Document"/> ID #{viewData/document/@id}</a></h3>-->
+        <ft:group id="${docTypeEntity}">
+            <fi:group>
+                <fi:styling layout="${layout}"/>
+
+                <fi:items>
+                    <ft:widget id="image">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                    <script language="javascript">
+                        function setImagePath(imagePath, functionNumber) {
+                            CKEDITOR.tools.callFunction(functionNumber, imagePath);
+                        }
+                    </script>
+                    <ft:widget id="issue">
+                        <fi:styling size="100" type="ckeditor"/>
+                    </ft:widget>
+                    <ft:widget id="datetime">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                </fi:items>
+            </fi:group>
+        </ft:group>
+    </jx:macro>
+
+</jx:template>

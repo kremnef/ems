@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}" position="${item.position}">
+                    <name>${item.name}</name>
+                    <totalPrice>${item.totalPrice}</totalPrice>
+                    <orderStatus>${item.orderStatus}</orderStatus>
+                    <submittedDate>${item.submittedDate}</submittedDate>
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="ecommerce">totalPrice</header>
+            <header i18nCatalogueName="ecommerce">orderStatus</header>
+            <header i18nCatalogueName="ecommerce">submittedDate</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

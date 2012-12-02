@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<fd:form 
+         xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+         xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+         xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+    <fd:widgets>
+        <fd:group id="Product">
+
+            <fd:widgets>
+                <fd:field id="description">
+                    <fd:label><i18n:text i18n:catalogue="documenttypes" key="Product.description"/></fd:label>
+                    <fd:datatype base="string" />
+                </fd:field>
+                <fd:field id="price">
+                    <fd:label><i18n:text i18n:catalogue="documenttypes" key="Product.price"/></fd:label>
+                    <fd:datatype base="double"/>
+                </fd:field>
+                <fd:field id="unit">
+                    <fd:label><i18n:text i18n:catalogue="documenttypes" key="Product.unit"/></fd:label>
+                    <fd:datatype base="string" />
+                </fd:field>
+            </fd:widgets>
+        </fd:group>
+        <fd:submit id="saveDocumentType">
+            <fd:label><i18n:text key="Save"/></fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

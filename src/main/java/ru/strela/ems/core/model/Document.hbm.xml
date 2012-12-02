@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <!--<class name="Document" table="document" entity-name="Document" proxy="Document" discriminator-value="D" >-->
+    <class name="Document" table="document">
+        <id name="id" column="id" type="int">
+            <generator class="identity"/>
+        </id>
+
+        <natural-id>
+            <property name="contentId" column="content_id" type="int" not-null="true"/>
+            <property name="isLastVersion" column="is_last_version" type="boolean" not-null="true"/>
+            <property name="languageCode" column="language_code" type="string" not-null="true"/>
+        </natural-id>
+        <property name="state" column="state" type="string" lazy="true"/>
+        <property name="xmlSource" column="xml_source" type="string" lazy="true"/>
+
+
+        <!--<bag name="fileObjects" table="document_file_object" lazy="false" cascade="save-update">
+            <key column="document_id"/>
+            <many-to-many class="FileObject" lazy="false" column="file_object_id"/>
+        </bag>
+        <bag name="folders" table="document_folder" lazy="false" cascade="save-update">
+            <key column="document_id"/>
+            <many-to-many class="Folder" lazy="false" column="folder_id"/>
+        </bag>-->
+
+        <!--     <set name="fileObjects" table="document_file_object" lazy="false" cascade="save-update">
+            <key column="document_id"/>
+            <many-to-many class="FileObject" lazy="false" column="file_object_id"/>
+        </set>
+        <set name="folders" table="document_folder" lazy="false" cascade="save-update">
+            <key column="document_id"/>
+            <many-to-many class="Folder" lazy="false" column="folder_id"/>
+        </set>-->
+        <bag name="fileObjects" table="document_file_object" lazy="false" cascade="all">
+            <key column="document_id"/>
+            <many-to-many column="file_object_id" class="FileObject" lazy="false"/>
+        </bag>
+        <bag name="folders" table="document_folder" lazy="false" cascade="all">
+            <key column="document_id"/>
+            <many-to-many column="folder_id" class="Folder" lazy="false"/>
+        </bag>
+
+
+    </class>
+
+
+</hibernate-mapping>
+

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+   <!-- <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      systemName="${item.systemName}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      class="${item.class.name}"
+                      position="${item.position}">
+
+                    &lt;!&ndash;<name>${item.name}</name>&ndash;&gt;
+                    <path>${item.path}</path>
+                    <contentType>${item.contentType}</contentType>
+
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+-->
+    <!--<jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      systemName="${item.systemName}"
+                      position="${item.position}">
+                    <name>${item.name}</name>
+                    <format>${item.format}</format>
+                    <season>${item.season}</season>
+                    <date>${item.date}</date>
+                    <product>${item.product.id}</product>
+                    &lt;!&ndash;<name>${item.name.name}</name>&ndash;&gt;
+                    &lt;!&ndash;<jx:forEach items="${item.product}" var="product" varStatus="status">
+                        <product id="${product.id}">
+                            <basePrice>${product.basePrice}</basePrice>
+                            <specialPrice>${product.specialPrice}</specialPrice>
+                        </product>
+                    </jx:forEach>&ndash;&gt;
+                </item>
+            </jx:forEach>
+
+        </items>
+        <countryList>
+        <jx:forEach items="${viewData.countryList}" var="c" varStatus="status">
+            <country>${c.id}</country>
+        </jx:forEach>
+        </countryList>
+    </jx:macro>-->
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      objectType="${item.objectType}"
+                      parentId="${item.parentId}"
+                       class="${item.class.name}"
+                      position="${item.position}">
+                    <name>${item.name}</name>
+                    <format>${item.format}</format>
+                    <season>${item.season}</season>
+                    <date>${item.date}</date>
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="ecommerce">format</header>
+            <header i18nCatalogueName="ecommerce">season</header>
+            <!--<header i18nCatalogueName="ecommerce">daytime</header>-->
+            <header i18nCatalogueName="ecommerce">date</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+
+</jx:template>

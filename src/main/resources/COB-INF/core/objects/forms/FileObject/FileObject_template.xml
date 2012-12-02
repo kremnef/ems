@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <jx:macro name="objectRows">
+        <li>
+            <label for="path" class="label">
+                <ft:widget-label id="path"/>
+            </label>
+            <ft:widget id="path">
+                <fi:styling size="60"/>
+            </ft:widget>
+        </li>
+
+        <li>
+            <ft:widget id="size">
+                <fi:styling size="60"/>
+            </ft:widget>
+            <ft:widget id="contentType">
+                <fi:styling size="60"/>
+            </ft:widget>
+        </li>
+    </jx:macro>
+
+    <content>
+        <userDataMacro/>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                          ajax="true">
+            <script type="text/javascript">
+                $(function() {
+                $("#fileObject-tabs").tabs();
+                $("#ftabs").tabs();
+                });
+            </script>
+            <translate/>
+            <div id="fileObject-tabs" class="panel">
+                <ul>
+                    <li>
+                        <a href="#fileObject-tabs-1">
+                            <i18n:text catalogue="core" key="SystemNode.settings"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#fileObject-tabs-2">
+                            <!--<i18n:text catalogue="core" key="Content.SEO"/>-->
+                            <i18n:text catalogue="core" key="Document.metaData"/>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="#fileObject-tabs-3">
+                            <i18n:text catalogue="core" key="Content.linked"/>
+                        </a>
+                    </li>-->
+
+
+                </ul>
+                <div id="fileObject-tabs-1">
+                    <emsFields entity="FileObject" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                </div>
+                <div id="fileObject-tabs-2">
+                    <metaInfo/>
+                </div>
+                <!--<div id="fileObject-tabs-3">
+
+                </div>-->
+            </div>
+            <div class="reupload">
+                <a href="#">Перезалить файл</a>
+            </div>
+            <h3>Миниатюры</h3>
+            <div class="fileObject">
+                <jx:set var="fileType" value="${widget.lookupWidget('contentType').value}"/>
+                <jx:set var="filePath" value="${widget.lookupWidget('path').value}"/>
+                <jx:set var="fileName" value="${widget.lookupWidget('systemURL').lookupWidget('name').value}"/>
+                <!--<h1>fileName: ${fileName}</h1>-->
+                <jx:set var="fileId" value="${widget.lookupWidget('id').value}"/>
+                <!--<h1>fileId: ${fileId}</h1>-->
+
+                <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
+
+                <!--<jx:set var="simpleName" value="${fileName.substring(0, fileName.lastIndexOf('.'))}"/>-->
+                <!--<h1>${simpleName}</h1>-->
+                <jx:set var="medium-thumbnail" value="${prepath}/thumbnails/${fileId}-${fileName}-medium.png"/>
+                <!--<jx:out  >-->
+                <jx:choose>
+                    <jx:when test="${fileType.contains('image')}">
+                        <script>
+                            $(function() {
+                            $( "#tabs" ).tabs();
+                            });
+                        </script>
+
+                        <div id="tabs">
+                            <ul>
+                                <li>
+                                    <a href="#tabs-1">Square</a>
+                                </li>
+                                <li>
+                                    <a href="#tabs-2">Small</a>
+                                </li>
+                                <li>
+                                    <a href="#tabs-3">Medium</a>
+                                </li>
+                                <li>
+                                    <a href="#tabs-4">Large</a>
+                                </li>
+                                <li>
+                                    <a href="#tabs-5">Original</a>
+                                </li>
+                            </ul>
+                            <div id="tabs-1">
+                                <img src="${blockPrefix}/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg"
+                                     border="1" width="100px"/>
+                            </div>
+                            <div id="tabs-2">
+                                <img src="${blockPrefix}/${prepath}/thumbnails/${fileId}-${fileName}-small.jpg"
+                                     border="1" width="200px"/>
+                            </div>
+                            <div id="tabs-3">
+                                <img src="${blockPrefix}/${prepath}/thumbnails/${fileId}-${fileName}-medium.jpg"
+                                     border="1" width="350px"/>
+                            </div>
+                            <div id="tabs-4">
+                                <img src="${blockPrefix}/${prepath}/thumbnails/${fileId}-${fileName}-large.jpg"
+                                     border="1" width="600px"/>
+                            </div>
+                            <div id="tabs-5">
+                                <img src="${blockPrefix}/${filePath}" border="0"/>
+                            </div>
+                        </div>
+
+                    </jx:when>
+                    <jx:otherwise>
+                        <h1>No preview!</h1>
+                    </jx:otherwise>
+                </jx:choose>
+            </div>
+
+
+            <ft:widget id="saveFileObject" class="ui-button"/>
+        </ft:form-template>
+    </content>
+
+
+</jx:template>

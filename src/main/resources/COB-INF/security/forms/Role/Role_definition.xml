@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<fd:form
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+    <fd:widgets>
+        <fd:group id="role">
+            <fd:widgets>
+
+                <!--<fd:field id="code" required="true">
+                    <fd:label>
+                        <i18n:text key="Language.code"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                    <fd:validation>
+                        <fd:length max="4" min="2"/>
+                    </fd:validation>
+                </fd:field>-->
+                <fd:field id="name" required="true">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Role.name"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length min="2" max="50"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="description" required="true">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Role.description"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="30"/>
+                    </fd:validation>
+                </fd:field>
+                <!--<fd:booleanfield id="visible">
+                    <fd:initial-value>false</fd:initial-value>
+                    <fd:label>
+                        <i18n:text key="Role.visible"/>
+                    </fd:label>
+                </fd:booleanfield>-->
+                <!--<fd:booleanfield id="isPublished">
+                    <fd:initial-value>true</fd:initial-value>
+                    <fd:label>
+                        <i18n:text key="EmsObject.isPublished"/>
+                    </fd:label>
+                </fd:booleanfield>
+
+                <fd:booleanfield id="isDefaultLang">
+                    <fd:initial-value>false</fd:initial-value>
+                    <fd:label>
+                        <i18n:text key="Role.default"/>
+                    </fd:label>
+                </fd:booleanfield>-->
+
+            </fd:widgets>
+        </fd:group>
+        <fd:submit id="saveRole">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+</fd:form>

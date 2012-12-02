@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{systemNode}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <systemNode systemNodeId="#{id}"
+                expireDateTime="#{expireDateTime}"
+                isBranch="#{isBranch}" nodeTypeId="#{nodeTypeId}"
+                repositoryId="#{repositoryId}">
+        <!--parentNodeId="#{parentNodeId}"-->
+        <!--publishDateTime="#{publishDateTime}"-->
+        <bindingContent>
+            <!--<jx:import uri="blockcontext:/ems/core/objects/view/Content/Content_template.jx"/>-->
+            <jx:forEach select="#{objects/emsObject[@xsi:type='content']}">
+                          
+                 <content id="#{id}" publishDateTime="#{publishDateTime}"
+                         expireDateTime="#{expireDateTime}"
+                          isProtected="#{isProtected}"
+                         documentTypeId="#{documentTypeId}">
+                    <name>#{name}</name>
+                    <creator>#{creator/name}</creator>
+                    <jx:import uri="view/Document/Document_template.jx"/>
+
+                </content>
+
+            </jx:forEach>
+        </bindingContent>
+        <bindingNavigation>
+            <jx:import uri="view/Navigation/Navigation_template.jx"/>
+        </bindingNavigation>
+
+    </systemNode>
+</jx:forEach>
+        <!--<jx:template >-->
+        <!--<jx:forEach items="${systemNode}" var="sn" varStatus="status" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">-->
+        <!--<jx:forEach items="${systemNode}"  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">-->
+
+        <!--<h1>s</h1>-->
+        <!--<systemNode systemNodeId="${sn.id}" publishDateTime="${sn.publishDateTime}"
+                    expireDateTime="${sn.expireDateTime}"
+                    isBranch="${sn.isBranch}" nodeTypeId="${sn.nodeTypeId}" parentNodeId="${sn.parentNodeId}"
+                    repositoryId="${sn.repositoryId}">
+            <nodeName>${sn.nodeName}</nodeName>
+            <nodeURI>${sn.nodeURI}</nodeURI>
+            <bindingContent>
+            </bindingContent>
+            <bindingNavigation>
+            </bindingNavigation>
+        </systemNode>-->
+        <!--</jx:forEach>-->
+        <!--</jx:template>-->
+
+
+

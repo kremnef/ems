@@ -1,0 +1,100 @@
+
+
+//cocoon.load("servlet:flow/Form.js");
+////chenged
+function login() {
+            print( "!!!!LOGIN FORM"+userLocale);
+    var redirectURI = cocoon.request.getParameter("redirectURI");
+    var queryString = "";
+    for (var enumeration = cocoon.request.getParameterNames(); enumeration.hasMoreElements();) {
+        var parameterName = enumeration.nextElement();
+        if (parameterName != "redirectURI" && parameterName != "name") {
+            queryString += "&" + parameterName + "=" + cocoon.request.getParameter(parameterName);
+        }
+    }
+    if (queryString.length > 0) {
+        redirectURI += "?" + queryString.substring(1);
+    }
+    var login = cocoon.request.getParameter("name");
+
+    var definitionURI = cocoon.parameters.definitionURI;
+    var showFormURI = cocoon.parameters.showFormURI;
+    var loginPipeline = cocoon.parameters.loginPipeline;
+    var failPipeline = cocoon.parameters.failPipeline;
+
+    var locale;
+    var form = new Form(definitionURI);
+
+
+    var userLocale = form.getChild("locale").getValue().trim();
+    if (userLocale != null) {
+//        print( "userLocale"+userLocale);
+        locale = userLocale;
+        cocoon.session.setAttribute("locale", locale);
+    } else {
+//        print( "getLocale"+getLocale);
+        locale = getLocale();
+    }
+
+
+    form.locale = new java.util.Locale(locale);
+    importClass(org.apache.cocoon.forms.formmodel.WidgetState);
+
+    /*var userData = getLoggedInUser();
+    if (userData.login) {
+        form.lookupWidget("loggedInMessage").setState(WidgetState.OUTPUT);
+        form.lookupWidget("login").setValue(userData.name);
+        form.lookupWidget("login").setState(WidgetState.DISABLED);
+        form.lookupWidget("password").setState(WidgetState.DISABLED);
+        form.lookupWidget("password").setValue(Packages.ru.strela.ems.core.model.User.PASSWORD_PLACEHOLDER);
+        form.lookupWidget("changeAccount").setState(WidgetState.ACTIVE);
+    }
+    else {
+        form.lookupWidget("loggedInMessage").setState(WidgetState.INVISIBLE);
+        form.lookupWidget("password").setState(WidgetState.ACTIVE);
+        form.lookupWidget("changeAccount").setState(WidgetState.INVISIBLE);
+    }
+     */
+    if (login) {
+        form.lookupWidget("errorMessage").setState(WidgetState.OUTPUT);
+        form.lookupWidget("login").setValue(login);
+    }
+
+    form.showForm(showFormURI);
+//    importClass(Packages.ru.tastika.tools.string.MD5Crypt);
+
+    var inputName = form.getChild("login").getValue().trim();
+    var inputPassword = form.getChild("password").getValue().trim();
+//    inputPassword = MD5Crypt.md5ToString16(inputPassword);
+//    print("inputPassword = " + inputPassword);
+    /*if (!redirectURI) {
+        redirectURI = "../core/Content-list";
+    }*/
+//    cocoon.redirectTo("../../j_spring_security_check?j_username="+inputName+"&j_password="+inputPassword);
+//    cocoon.redirectTo("checklogin?j_username="+inputName+"&j_password="+inputPassword);
+//    cocoon.redirectTo("/ems/service/checklogin", {"loginform.login": inputName, "loginform.password": inputPassword});
+//    cocoon.sendPage("checklogin", {"loginform.login": inputName, "loginform.password": inputPassword});
+    cocoon.redirectTo("checklogin?loginform.login"+inputName+"loginform.password"+inputPassword);
+//    cocoon.sendPage(loginPipeline, {"j_username": inputName, "j_password": inputPassword, "redirectURI" : redirectURI});
+//    var userService = cocoon.getComponent("userService");
+//    var user = userService.getUser(inputUsername);
+//    if (user != null) {
+//        var username = user.getUserName();
+//        var password = user.getPassword();
+//
+//        if (password.equals(inputPassword)) {
+//            if (!redirectURI) {
+//                redirectURI = "core/listSystemNode";
+//            }
+//            cocoon.sendPage(
+//                    successPipeline, {"username": username, "password": password, "redirectURI" : redirectURI});
+//        }
+//        else {
+//            cocoon.sendPage(failPipeline, {"fail": true, "username": inputUsername, "redirectURI" : redirectURI});
+//        }
+//    }
+//    else {
+//        cocoon.sendPage(failPipeline, {"fail": true, "username": inputUsername, "redirectURI" : redirectURI});
+//    }
+
+}

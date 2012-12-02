@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <!--<component name="content">-->
+    <module name="Contents" i18nCatalogue="core" corePrefix="core">
+        <section name="content" i18nCatalogue="ems">
+            <item name="documents" entity="Content" action="list"/>
+             <item name="files" entity="Folder" action="list"/>
+            <!--<item name="events" entity="Event-list"/>-->
+
+        </section>
+        <section name="mediateka" i18nCatalogue="ems">
+            <item name="pictures" entity="Folder" action="list?filter=images"/>
+            <item name="sound" entity="Folder" action="list?filter=sound"/>
+            <item name="video" entity="Folder" action="list?filter=video"/>
+            <item name="files" entity="Folder" action="list?filter=files"/>
+            <item name="files" entity="Folder" action="list"/>
+        </section>
+    </module>
+
+    <!--</component>-->
+    <!--<component name="structure">-->
+    <module name="Structure" i18nCatalogue="ems" corePrefix="core">
+        <section name="structure" i18nCatalogue="ems">
+            <item name="menu" entity="Navigation" action="list"/>
+            <item name="pages" entity="SystemNode" action="list"/>
+        </section>
+        <section name="appearance" i18nCatalogue="ems">
+            <item name="templates" entity="Template" action="list"/>
+            <item name="objectTypeAction" entity="ObjectTypeAction" action="list"/>
+            <!--<item name="css" entity="#"/>-->
+            <!--<item name="js" entity="#"/>-->
+            <item name="i18n" entity="I18n" action="edit"/>
+            <!--<item name="css" entity="CSS" action="list"/>-->
+        </section>
+    </module>
+    <module name="Ecommerce" i18nCatalogue="ecommerce" corePrefix="ecommerce">
+            <section name="catalogues" i18nCatalogue="ems">
+                <item name="catalogues" entity="Catalogue" action="list"/>
+                <!--<item name="projects" entity="Project" action="list"/>-->
+                <item name="products" entity="Product" action="list"/>
+            </section>
+            <section name="ecommerce" i18nCatalogue="ecommerce">
+                <item name="orders" entity="Order" action="list"/>
+                <item name="customers" entity="Customer" action="list"/>
+                <item name="photos" entity="Photo" action="list"/>
+            </section>
+        </module>
+
+    <!--</component>-->
+    <!--<component name="administration">-->
+    <module name="Administration" i18nCatalogue="ems" corePrefix="core">
+        <section name="settings" i18nCatalogue="ems">
+            <item name="languages" entity="Language" action="list"/>
+            <item name="documentTypes" entity="DocumentType" action="list"/>
+            <item name="dataFormat" entity="#"/>
+            <item name="site" entity="#"/>
+        </section>
+        <!--<section name="settings" i18nCatalogue="ems">
+            <item name="site" entity="#"/>
+            <item name="languages" entity="listLanguage"/>
+            <item name="dataFormat" entity="#"/>
+            <item name="DocumentTypes" i18nCatalogue="core" entity="listDocumentType"/>
+        </section>
+        <section name="settings" i18nCatalogue="ems">
+            <item name="site" entity="#"/>
+            <item name="languages" entity="listLanguage"/>
+            <item name="dataFormat" entity="#"/>
+            <item name="DocumentTypes" i18nCatalogue="core" entity="listDocumentType"/>
+        </section>-->
+    </module>
+    <module name="Security" i18nCatalogue="ems" corePrefix="security">
+        <section name="access" i18nCatalogue="ems">
+            <item name="users" entity="User" action="list"/>
+            <item name="groups" entity="Group" action="list"/>
+            <item name="roles" entity="Role" action="list"/>
+        </section>
+
+    </module>
+        <!--</component>-->
+
+</interface>

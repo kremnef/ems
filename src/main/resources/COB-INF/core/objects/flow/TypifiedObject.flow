@@ -1,0 +1,633 @@
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+
+function checkSystemNameUniqueness(systemNameWidget, systemName, id, parentId, entity) {
+    var correctedSystemName = new java.lang.String("");
+    if (systemName != null) {
+        correctedSystemName = systemName;
+    }
+    else {
+        return false;
+    }
+    if (id == null) {
+        id = 0;
+    }
+    else {
+        id = java.lang.Integer.parseInt(id);
+    }
+    if (parentId == null) {
+        parentId = 0;
+    }
+    else {
+        parentId = java.lang.Integer.parseInt(parentId);
+    }
+    importClass(Packages.ru.tastika.tools.string.Translit);
+
+    correctedSystemName = Translit.toTranslit(correctedSystemName).toLowerCase();
+    //print(correctedSystemName);
+//    correctedSystemName = correctedSystemName.replaceAll("\\s", "_");
+    correctedSystemName = correctedSystemName.replaceAll("[\\s_]", "-");
+//    correctedSystemName = correctedSystemName.replaceAll("\\W", "");
+    correctedSystemName = correctedSystemName.replaceAll("[^\\w-]", "");
+//    correctedSystemName = correctedSystemName.replaceAll("_", "-");
+
+    if (systemNameWidget != null && !correctedSystemName.equals(systemName)) {
+        systemNameWidget.setValue(correctedSystemName);
+
+    }
+    var systemObjectDao = cocoon.getComponent("systemObjectDao");
+    var objectId = systemObjectDao.getIdBySystemName(systemName, parentId, entity);
+    cocoon.disposeObject(systemObjectDao);
+    return objectId == 0 || objectId == id;
+//    cocoon.releaseComponent(systemObjectDao);
+
+}
+
+
+function getParentPath(entity, parentId) {
+    var ent = "" + entity;
+    var typifiedObjectService = getServiceByEntity(ent);
+    var parentPath = typifiedObjectService.getParentPath(parentId, true);
+    cocoon.releaseComponent(typifiedObjectService);
+    cocoon.disposeObject(parentPath);
+    return parentPath;
+}
+
+function listTypifiedObjects(parentId) {
+
+    var listData = prepareListData(parentId);
+    sendListPage(listData.displayURI, listData);
+}
+
+
+function changePositions(previousChild, child, typifiedObjectService) {
+    var childPosition = child.getPosition();
+    child.setPosition(previousChild.getPosition());
+    previousChild.setPosition(childPosition);
+    typifiedObjectService.save(previousChild);
+    typifiedObjectService.save(child);
+}
+
+
+function prepareListData(parentId, filter) {
+//    print("prepareListData parentId"+parentId+" filter"+filter);
+    if (!filter) {
+        filter = null;
+    }
+    var displayURI = cocoon.parameters.displayURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var json = cocoon.request.getParameter("json") == 'true';
+
+    var entity;
+    if (cocoon.parameters.entity != "") {
+        entity = cocoon.parameters.entity;
+//        print("YES cocoon.parameters.entity" + entity);
+        /*} else if (cocoon.request.getParameter("entity") != "") {
+         entity = cocoon.request.getParameter("entity");*/
+//        print("YES cocoon.request.getParameter" + entity);
+    } else {
+        print("!!!!!ERORR NOT defined entity " + entity)
+    }
+
+
+    //print ("FloWdisplayURI"+displayURI);
+
+    //    var entityName = cocoon.parameters.entityName;
+    //    if (entityName != null && entityName.length > 0) {
+    //        entityName = entityName.substring(0, 1).toLowerCase() + entityName.substring(1)
+    //    }
+    //    else {
+    //        entityName = "";
+    //    }
+
+
+
+    if (!parentId || parentId == 0) {
+        parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+    }
+    var itemsOnPage = json ? Utilities.parseStringToInteger(cocoon.request.getParameter("rp")) : Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
+    if (itemsOnPage < 0) {
+        itemsOnPage = 0;
+    }
+    var page = Utilities.parseStringToInteger(cocoon.request.getParameter("page"));
+    if (page <= 1) {
+        page = new java.lang.Integer(1);
+    }
+    var sortName = cocoon.request.getParameter("sortname");
+    if (sortName != 'name' && sortName != 'systemName' && sortName != 'position') {
+        sortName = '';
+    }
+    var sortDesc = cocoon.request.getParameter("sortorder") == 'desc';
+
+    var typifiedObjectService = getServiceByEntity(entity);
+    var total = typifiedObjectService.getChildrenCount(parentId);
+
+//    print("parentId:" + parentId);
+if (filter != null){
+    var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc, filter);
+}else{
+/*print("1"+parentId);
+print("2"+(page - 1) * itemsOnPage);
+print("3"+itemsOnPage);
+print("4"+sortName);
+print("5"+sortDesc);*/
+    var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc);
+}
+
+//    print("children -:"+children);
+
+//    at prepareListData - file:///Users/andrejkremnev/Documents/PRG/svn/ems/src/main/resources/COB-INF/core/objects/flow/TypifiedObject.flow:140
+
+    var parents = typifiedObjectService.getTypifiedObjectParents(parentId, true);
+//    var parents;
+
+    var idToMove = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    var act = cocoon.request.getParameter("act");
+    if (idToMove > 0) {
+        var previousChild = null;
+        var childrenMap = new java.util.TreeMap();
+        for (var i = 0; i < children.size(); i++) {
+            var child = children.get(i);
+            childrenMap.put(child.getPosition(), child);
+        }
+
+        for (var iterator = childrenMap.values().iterator(); iterator.hasNext();) {
+            var child = iterator.next();
+            if (child.getId() == idToMove && act == 'up' && previousChild != null) {
+                changePositions(previousChild, child, typifiedObjectService);
+            }
+            else if (previousChild != null && previousChild.getId() == idToMove && act == 'down') {
+                changePositions(previousChild, child, typifiedObjectService);
+            }
+            previousChild = child;
+        }
+    }
+//    todo:Проверить SiteMap !!!
+    var viewData = {
+        "parentId": parentId,
+        "itemsOnPage": itemsOnPage,
+        "filter":filter
+//                "content": content
+    }
+//    cocoon.releaseComponent(typifiedObjectService);
+//    cocoon.disposeObject(parents);
+    cocoon.releaseComponent(typifiedObjectService);
+
+    if (json) {
+        displayURI += "-json";
+    }
+
+    return {
+        "displayURI" : displayURI,
+        "children": children,
+        "page": page,
+        "total": total,
+        "parents" : parents,
+        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData" : getLoggedInUser(),
+        "parentId": parentId,
+        "itemsOnPage": itemsOnPage,
+        "filter":filter
+    };
+
+}
+/*
+ function checkObjectLabelList(form, languageCode){
+ var isNull = true;
+ var obl_label = form.getChild("labels")
+ }
+ */
+
+function saveObjectLabelList(typifiedObject) {
+    var objectLabelService = cocoon.getComponent("objectLabelService");
+    objectLabelService.saveObjectLabelList(typifiedObject.getObjectLabelList());
+    cocoon.releaseComponent(objectLabelService);
+//    cocoon.dispose()
+}
+function saveMetaInfoList(typifiedObject) {
+    var metaInfoService = cocoon.getComponent("metaInfoService");
+    metaInfoService.saveMetaInfoList(typifiedObject.getMetaInfoList());
+    cocoon.releaseComponent(metaInfoService);
+}
+function sendListPage(displayURI, listData) {
+//    print("listTypifiedObjects:"+listData.displayURI);
+    cocoon.sendPage(displayURI, listData);
+}
+
+
+function getServiceByEntity(entityName) {
+    //print("getServiceByEntity: entityName" + entityName);
+    if (entityName != null && entityName.length > 0) {
+//    if (entityName != null) {
+        entityName = entityName.substring(0, 1).toLowerCase() + entityName.substring(1)
+    }
+    else {
+        entityName = "";
+    }
+    //print("getServiceByEntity: entityName" + entityName);
+    return cocoon.getComponent(entityName + "Service");
+}
+
+
+function createTypifiedObject(typifiedObjectService) {
+    var parentObject = null;
+    if (cocoon.request.getParameter("parentId") != null) {
+        var parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+        if (parentId > 0) {
+            parentObject = typifiedObjectService.getTypifiedObject(parentId);
+        }
+    }
+
+    var className = "" + typifiedObjectService.getEntityClassName();
+    print("typifiedObjectService" + typifiedObjectService);
+    print("className" + className);
+    var typifiedObject = cocoon.createObject(className);
+    print("typifiedObject.getName()" + typifiedObject.getName());
+    print("typifiedObject.getClass().getName()" + typifiedObject.getClass().getName());
+    var objectsCount = 0;
+    if (parentObject != null && parentObject instanceof Packages.ru.strela.ems.core.model.SystemObject && typifiedObject instanceof Packages.ru.strela.ems.core.model.SystemObject) {
+        objectsCount = parentObject.getEmsObject().getChildrenCount();
+    }
+    else {
+        var objectTypeDao = cocoon.getComponent("objectTypeDao");
+        var objectType = objectTypeDao.getObjectType(typifiedObject.getClass().getName());
+
+        print("objectType " + objectType);
+//        print("objectsCount1 " + objectsCount);
+//        todo: переписать этот кусок, при переносе сбивается нуерация.
+//        objectsCount = objectTypeDao.getRootObjectsForTypeCount(objectType);
+//        print("objectsCount " + objectsCount);
+        cocoon.releaseComponent(objectTypeDao);
+    }
+    typifiedObject.setPosition(objectsCount + 1);
+    typifiedObject.setParent(parentObject);
+
+    var freeSystemName = typifiedObjectService.getFreeSystemName();
+    typifiedObject.setSystemName(freeSystemName);
+
+    var userData = getLoggedInUser();
+    typifiedObject.setOwner(userData.customer);
+    return typifiedObject;
+}
+
+
+function getLabel(typifiedObject, languageCode) {
+    var label = "";
+    importClass(Packages.java.util.Iterator);
+    for (var iterator = typifiedObject.labels.iterator(); iterator.hasNext();) {
+        var objectLabel = iterator.next();
+        if (objectLabel.languageCode.equals(languageCode)) {
+            label = objectLabel.label;
+            break;
+        }
+    }
+    return label;
+}
+
+
+function loadTranslations(typifiedObject, availableLanguages) {
+    var objectLabelService = cocoon.getComponent("objectLabelService");
+    var metaInfoService = cocoon.getComponent("metaInfoService");
+
+    var metaInfoObj = null;
+    var objectLabel = null;
+    print("objectLabel " + objectLabel);
+    var objId = typifiedObject.getEmsObject().getId();
+    if (objId > 0) {
+        print("EmsObjId" + objId);
+    } else {
+        print("EmsObjId " + objId + "mayBe New Object??");
+    }
+    if (objId > 0) {
+        importClass(Packages.ru.strela.ems.core.model.MetaInfo);
+        importClass(Packages.ru.strela.ems.core.model.ObjectLabel);
+        for (var u = 0; u < availableLanguages.size(); u++) {
+            var language = availableLanguages.get(u);
+            var languageCode = language.getCode();
+
+
+            objectLabel = objectLabelService.getObjectLabelNaturalId(objId, languageCode);
+            if (objectLabel == null) {
+                objectLabel = new ObjectLabel("", languageCode, objId);
+            }
+            typifiedObject.addObjectLabel(objectLabel);
+
+
+            metaInfoObj = metaInfoService.getMetaInfoNaturalId(objId, languageCode);
+            if (metaInfoObj != null) {
+                typifiedObject.addMetaInfo(metaInfoObj);
+            } else {
+                metaInfoObj = new MetaInfo("", "", "", languageCode, objId);
+                typifiedObject.addMetaInfo(metaInfoObj);
+
+            }
+        }
+    }
+//         Todo: метод add - http://127.0.0.1:8880/ems/core/editDocumentType?id=1 - TypeError: Cannot call method "add" of unde
+    cocoon.releaseComponent(metaInfoService);
+    cocoon.releaseComponent(objectLabelService);
+    cocoon.disposeObject(objectLabel);
+    cocoon.disposeObject(metaInfoObj);
+    return typifiedObject;
+}
+
+function getAvailableLanguages() {
+    var languageService = cocoon.getComponent("languageService");
+    var availableLanguages = languageService.getVisibleLanguages();
+    cocoon.releaseComponent(languageService);
+    return availableLanguages;
+}
+
+
+function showObjectForm(form, service, typifiedObject, showFormURI, formData) {
+    var locale;
+
+    if (formData.parentId != null) {
+        formData.parents = service.getTypifiedObjectParents(formData.parentId, true);
+    }
+
+    formData.userData = getLoggedInUser();
+
+    if (!formData.locale) {
+        locale = getLocale();
+        form.locale = new java.util.Locale(locale);
+    } else {
+        locale = formData.locale;
+    }
+
+    form.load(typifiedObject);
+    // show the form to the user until it is validated successfully
+    //cocoon.sendPageAndWait(showFormURI, formData);
+    form.showForm(showFormURI, formData);
+    form.save(typifiedObject);
+    typifiedObject.printList(typifiedObject.getObjectLabelList());
+    return typifiedObject;
+}
+
+
+function showEmsObjectForm(form, service, typifiedObject, showFormURI, formData) {
+    var availableLanguages;
+    var locale;
+    if (!formData.availableLanguages) {
+        availableLanguages = getAvailableLanguages();
+    } else {
+        availableLanguages = formData.availableLanguages;
+    }
+/*    var objId = typifiedObject.getEmsObject().getId();
+    if (objId > 0) {*/
+        loadTranslations(typifiedObject, availableLanguages);
+//    }
+    if (formData.parentId != null) {
+        formData.parents = service.getTypifiedObjectParents(formData.parentId, true);
+    }
+
+    formData.userData = getLoggedInUser();
+
+    if (!formData.locale) {
+        locale = getLocale();
+        form.locale = new java.util.Locale(locale);
+    } else {
+        locale = formData.locale;
+    }
+
+    form.load(typifiedObject);
+    // show the form to the user until it is validated successfully
+    //cocoon.sendPageAndWait(showFormURI, formData);
+    form.showForm(showFormURI, formData);
+
+
+    form.save(typifiedObject);
+    print("form: " + form);
+    print("contentc4: " + typifiedObject.getEmsObject().getId());
+
+    typifiedObject.printList(typifiedObject.getObjectLabelList());
+//    saveObjectLabelList(typifiedObject);
+
+//}
+    /* if (formData.parentId != null) {
+     formData.parents = service.getTypifiedObjectParents(formData.parentId, true);
+     }
+     formData.userData = getLoggedInUser();
+     var locale = getLocale();
+     form.locale = new java.util.Locale(locale);
+     form.load(typifiedObject);
+
+     // show the form to the user until it is validated successfully
+     form.showForm(showFormURI, formData);
+     form.save(typifiedObject);
+
+     return typifiedObject;*/
+    return typifiedObject;
+}
+function getTypeActions() {
+    var displayURI = cocoon.parameters.displayURI;
+    var typeId = Utilities.parseStringToInteger(cocoon.parameters.typeId);
+//    print("typeId--"+typeId);
+    var items = new Array(0);
+    if (typeId > 0) {
+        var objectTypeDao = cocoon.getComponent("objectTypeDao");
+        var typeActions = objectTypeDao.getObjectTypeActions(typeId);
+        items = new Array(typeActions.size());
+        for (var i = 0; i < typeActions.size(); i++) {
+            var action = typeActions.get(i);
+            items[i] = {value : action.id, label : action.name};
+        }
+    }
+    //    cocoon.releaseComponent(typifiedObjectService);
+    cocoon.disposeObject(objectTypeDao);
+    cocoon.sendPage(displayURI, {"items" : items});
+}
+/*function getTypeNameById(id) {
+ var objectTypeDao = cocoon.getComponent("objectTypeDao");
+ var objectType = objectTypeDao.getObjectType(typifiedObject.getClass().getName());
+ print("objectType "+objectType);
+ print("objectsCount1 "+objectsCount);
+ objectsCount = objectTypeDao.getRootObjectsForTypeCount(objectType);
+ print("objectsCount "+objectsCount);
+ cocoon.releaseComponent(objectTypeDao);
+ var displayURI = cocoon.parameters.displayURI;
+ var typeId = Utilities.parseStringToInteger(cocoon.parameters.typeId);
+ var items = new Array(0);
+ if (typeId > 0) {
+ var objectTypeDao = cocoon.getComponent("objectTypeDao");
+ var typeActions = objectTypeDao.getObjectTypeActions(typeId);
+ items = new Array(typeActions.size());
+ for (var i = 0; i < typeActions.size(); i++) {
+ var action = typeActions.get(i);
+ items[i] = {value : action.id, label : action.name};
+ }
+ }
+ cocoon.sendPage(displayURI, {"items" : items});
+ }*/
+
+//cocoon Auth
+/*function getLoggedInUser() {
+ importClass(Packages.org.apache.cocoon.auth.ApplicationManager);
+
+ var systemUser = cocoon.session.getAttribute(ApplicationManager.USER + "-ems");
+ if (systemUser) {
+ var name = systemUser.getId();
+ var id = systemUser.getAttribute("id");
+ return {
+ "name" : name,
+ "id" : id
+ };
+ }
+ else {
+ return {};
+ }
+ }*/
+
+//Sprig Security Auth
+function getLoggedInUser() {
+    var authUser = cocoon.session.getAttribute("authUser");
+    if (authUser == null) {
+//        print("authUserNull"+authUser);
+        importClass(Packages.org.springframework.security.core.Authentication);
+        importClass(Packages.org.springframework.security.core.context.SecurityContextHolder);
+
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth) {
+            var login = auth.getName();
+            var customerService = cocoon.getComponent("customerService");
+            var customer = customerService.getCustomerByLogin(login);
+            cocoon.releaseComponent(customerService);
+//
+//            return {"login" : login, "customer": customer};
+            authUser = {"login" : login, "customer": customer};
+            cocoon.session.setAttribute("authUser", authUser);
+        }
+        /*else {
+         return {};
+         }*/
+    }
+//    print("authUser"+authUser);
+    return authUser;
+
+}
+
+
+function deleteObjectById(entity) {
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo(entity + "-list");
+    }
+    var objectService = cocoon.getComponent(entity.substring(0, 1).toLowerCase() + entity.substring(1) + "Service");
+    var object = objectService.getTypifiedObject(id);
+    if (object == null) {
+        cocoon.releaseComponent(objectService);
+        cocoon.redirectTo(entity + "-list");
+    }
+
+    var parentId = object.getParentId();
+
+    objectService.deleteObject(object);
+
+    cocoon.releaseComponent(objectService);
+
+    cocoon.redirectTo(entity + "-list" + "?parentId=" + parentId);
+}
+
+
+function getLocale() {
+    var locale = cocoon.session.getAttribute("locale");
+    if (!locale) {
+        locale = cocoon.request.getLocale().getLanguage();
+        cocoon.session.setAttribute("locale", locale);
+    }
+//    print('locale = ' + locale);
+    return locale;
+}
+
+function getGlobal(name) {
+    importClass(Packages.org.apache.cocoon.components.modules.input.InputModule);
+    var global = cocoon.getComponent(InputModule.ROLE + "Selector").select("global");
+    return global.getAttribute(name, null, null);
+}
+
+
+function isSystemObject(cl) {
+    var interfaces = cl.getInterfaces();
+    for (var i = 0; i < interfaces.length; i++) {
+        if (interfaces[i].getSimpleName().equals('SystemObject')) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function treeObjects(parentId) {
+
+
+    var filterParam = cocoon.request.getParameter("filter");
+    if (filterParam != null) {
+        var filterFieldValue = 0;
+        var filter = new Packages.ru.strela.ems.core.model.Filter();
+        filter.setEntity("FileObject");
+        filter.setField("fileTypeGroupId");
+
+        var filters = {'images':1, 'sound' : 2, 'video' : 3, 'files': 4};
+        filterFieldValue = filters[filterParam];
+        if (!filterFieldValue) {
+            filterFieldValue = 0;
+        }
+        filter.setFieldValue(filterFieldValue.toString());
+    }
+
+    var excludedId;
+    if (cocoon.request.getParameter("excludedId") != null) {
+        excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
+//        print("treeObjects: excludedId: "+excludedId);
+    }
+    else {
+        //print("ERROR Not Defined excludedId: " + excludedId);
+    }
+    /*if (cocoon.request.getParameter("excludedIds") != null) {
+     var excludedIds = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedIds"));
+     print("treeObjects: excludedIds: "+excludedIds);
+     }
+     else {
+     print("ERROR Not Defined excludedId: "+excludedIds);
+     }*/
+    if (cocoon.request.getParameter("entity") != null) {
+
+        var entity = cocoon.request.getParameter("entity");
+//        print("treeObjects: entity: "+entity);
+    } else {
+        print("ERROR Not Defined entity: " + entity);
+    }
+
+    var displayXMLURI = cocoon.parameters.displayXMLURI;
+    var excludedIds = cocoon.session.getAttribute("excludedIds");
+    cocoon.session.setAttribute("excludedIds", "");
+
+    /*if (entity == 'SystemNode' & excludedIds != '') {
+     var navigationService = cocoon.getComponent("navigationService");
+     var usedPages = navigationService.getUsedPages();
+     cocoon.session.setAttribute("excludedIds", usedPages);
+     }*/
+
+
+//    print("parentId" + parentId + " filter " + filter);
+
+    var listData = prepareListData(parentId, filter);
+    listData["entity"] = entity;
+    listData["excludedId"] = excludedId;
+    cocoon.sendPage(displayXMLURI, listData);
+}
+
+function navigationPath(id) {
+//    print("navigationPath: " + id);
+    var navigationService = cocoon.getComponent("navigationService");
+    var path = navigationService.getParentPath(id);
+//    print("navigationService"+path);
+    cocoon.releaseComponent(navigationService);
+    cocoon.sendPage(displayXMLURI, path);
+}

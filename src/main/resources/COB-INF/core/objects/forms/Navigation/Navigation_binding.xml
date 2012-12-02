@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+    <!--<fb:expand id="core:emsObject"/>-->
+    <!--<fb:value id="emsObjectId" path="emsObject/id"/>-->
+    <fb:value id="parentId" path="emsObject/parentId"/>
+    <!--<fb:value id="urlRelativity" path="urlRelativity"/>-->
+    <!--<fb:value id="relativeURL" path="relativeURL"/>-->
+
+    <fb:value id="rootId" path="rootId"/>
+    <fb:value id="systemNodeId" path="systemNodeId"/>
+    <!--<fb:value id="systemNodeName" path="systemNode/name"/>-->
+    <!--<fb:value id="redirectTo" path="redirectTo"/>-->
+    <fb:value id="outerURL" path="outerURL"/>
+
+
+    <fb:expand id="core:labels"/>
+    <fb:expand id="core:systemURL"/>
+
+
+</fb:context>

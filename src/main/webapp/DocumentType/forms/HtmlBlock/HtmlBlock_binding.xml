@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+
+    <!--<fb:value  path="event"/>-->
+    <fb:group id="HtmlBlock" path="HtmlBlock">
+        <fb:value id="html" path="html"/>
+    </fb:group>
+        <!--<fb:value id="place" path="place"/>-->
+        <!--<fb:value id="idea" path="idea"/>-->
+        <!--<fb:value id="description" path="description"/>-->
+        <!--<fb:value id="placephoto" path="placephoto"/>-->
+        <!--<fb:value id="participment" path="participment"/>-->
+        <!--<fb:value id="org" path="org"/>-->
+
+        <!--<fb:repeater id="persons" parent-path="persons" row-path="person" extends="common:genericRepeater">-->
+        <!--<fb:repeater id="partnerlogos" parent-path="partnerlogos" row-path="partnerlogo">
+            <fb:on-bind>
+                --><!--<fb:group id="partnerlogo" path="." extends="common:person"/>--><!--
+                <fb:value id="url" path="url"/>
+            </fb:on-bind>
+            <fb:on-insert-row>
+                <fb:insert-node>
+                    <person/>
+                </fb:insert-node>
+            </fb:on-insert-row>
+            <fb:on-delete-row>
+                <fb:delete-node/>
+            </fb:on-delete-row>
+        </fb:repeater>-->
+
+        <!--<fb:group id="partnerlogos">
+            <fb:value id="partnerlogo" path="partnerlogo"/>
+        </fb:group>-->
+        <!--<fb:repeater id="partnerlogos" >
+                <fb:identity>
+                    <fb:value id="partnerlogo" path="partnerlogo" direction="load"/>
+                </fb:identity>
+
+        </fb:repeater>-->
+        <!--<fb:repeater id="keywords" parent-path="keywords" row-path="keyword">
+            <fb:identity>
+                <fb:value id="id" path="@id"/>
+            </fb:identity>
+            <fb:on-bind>
+                <fb:value id="category" path="category"/>
+            </fb:on-bind>
+            <fb:on-delete-row>
+                <fb:delete-node/>
+            </fb:on-delete-row>
+            <fb:on-insert-row>
+                <fb:insert-bean classname="Keyword" addmethod="addKeyword"/>
+            </fb:on-insert-row>
+        </fb:repeater>-->
+        <!--<fb:value id="class-text" path="class-text"/>
+        <fb:value id="class-description" path="class-description"/>
+        <fb:repeater row-path="description" parent-path="." id="class-repeater">
+            <fb:on-bind>
+                <fb:new id="basic-class-text"/>
+            </fb:on-bind>
+            <fb:on-delete-row>
+                <fb:delete-node/>
+            </fb:on-delete-row>
+            <fb:on-insert-row>
+                <fb:insert-node>
+                    <description/>
+                </fb:insert-node>
+            </fb:on-insert-row>
+        </fb:repeater>-->
+        <!--<fb:value id="partnertext" path="partnertext"/>-->
+
+</fb:context>
+<!--</fb:library>-->

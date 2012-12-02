@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.ecommerce.model">
+
+    <class name="ru.strela.ems.ecommerce.model.OrderItem" table="ecommerce_order_item">
+        <id name="id" column="id" type="int">
+            <generator class="identity" />
+        </id>
+        <!--<property name="orderStatus" column="orderStatus" type="string" not-null="true"/>-->
+        <!--<property name="submittedDate" column="submittedDate" type="timestamp" not-null="true"/>-->
+        <property name="unitPrice" column="unit_price" type="double" not-null="true"/>
+        <property name="extendedPrice" column="extended_price" type="double" not-null="true"/>
+        <property name="quantity" column="quantity" type="int" not-null="true"/>
+        <!--<property name="productId" column="product_id" type="int" not-null="true"/>-->
+        <property name="orderId" column="order_id" type="int" not-null="true"/>
+        <property name="OrderItemNumber" column="order_item_number" type="int" not-null="true"/>
+        <many-to-one name="product" class="ru.strela.ems.ecommerce.model.Product" column="product_id" not-null="true" cascade="all" unique="true"/>
+
+        <!--<property name="totalPrice" column="totalPrice" type="double" not-null="true"/>-->
+    </class>
+</hibernate-mapping>
+

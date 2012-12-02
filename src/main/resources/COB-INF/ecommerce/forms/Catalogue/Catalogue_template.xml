@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_template.xml"/>
+
+
+    <jx:macro name="objectRows">
+
+        <!--<tr>
+            <td class="forms label"><label for="outerURL:input" class="forms field"><ft:widget-label id="outerURL" /></label></td>
+            <td  class="forms content">
+                <ft:widget id="outerURL">
+                    <fi:styling size="30"/>
+                </ft:widget>
+            </td>
+        </tr>-->
+        <!--<tr class="odd">
+            <td class="forms label"><label for="systemNodeName:input" class="forms field"><ft:widget-label id="systemNodeName" /></label></td>
+            <td  class="forms content">
+
+
+            </td>
+        </tr>-->
+
+    </jx:macro>
+
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <style type="text/css">
+            /* Additional styles for alternating row colors */
+            .forms-row-0 td {
+            padding: 5px;
+            background-color: #E0E0E0;
+            }
+
+            .forms-row-1 td {
+            padding: 5px;
+            }
+        </style>
+
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                          ajax="true">
+            <translate/>
+            <emsFields entity="Catalogue" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <fi:label>
+                    <i18n:text catalogue="ecommerce" key="Catalogue.attachedProducts"/>
+                </fi:label>
+                <fi:items>
+                    <fi:group>
+                        <fi:styling layout="columns"/>
+                        <fi:items>
+
+                            <fi:group>
+                                <fi:styling layout=""/>
+                                <fi:items>
+
+                                    <script language="javascript">
+                                        function togglePagesButton(button) {
+                                        if (document.getElementById('treeContainer').style.display == 'none') {
+                                        document.getElementById('treeContainer').style.display = 'block';
+                                        button.value="<i18n:text catalogue="ecommerce" key="Product.hide"/>";
+                                        }
+                                        else {
+                                        document.getElementById('treeContainer').style.display = 'none';
+                                        button.value="<i18n:text catalogue="ecommerce" key="Product.choose"/>";
+                                        }
+                                        }
+
+
+                                    </script>
+                                    <input type="button" i18n:attr="value" value="Product.choose"
+                                           onclick="togglePagesButton(this)"/>
+                                    <br/>
+                                </fi:items>
+                            </fi:group>
+                        </fi:items>
+                    </fi:group>
+
+                    <ft:repeater id="items">
+                        <table border="0" class="order">
+                            <thead>
+                                <tr>
+
+                                    <th width="10" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="id"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="name"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="model"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="basePrice"/>
+                                    </th>
+
+                                    <th width="10" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="delete"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ft:repeater-rows>
+                                    <tr class="forms-row">
+                                        <td>
+                                            <ft:widget id="id"/>
+                                        </td>
+                                        <td>
+                                            <jx:set var="type" value="Photo"/>
+                                            <ft:widget id="name">
+                                                <jx:if test="${repeater.getRow(repeaterLoop.index).getChild('id').value > 0}">
+                                                    <fi:styling type="link"
+                                                                src="edit${type}?id=${repeater.getRow(repeaterLoop.index).getChild('subjectId').value}"/>
+                                                </jx:if>
+                                            </ft:widget>
+                                        </td>
+                                        <td>
+                                            <ft:widget id="model"/>
+                                        </td>
+
+                                        <td>
+                                            <ft:widget id="basePrice"/>
+                                        </td>
+
+
+                                        <td>
+                                            <ft:widget id="delete">
+                                                <fi:styling type="image"
+                                                            src="${servletPath}/resource/img/forms/delete.gif"/>
+                                            </ft:widget>
+                                        </td>
+                                    </tr>
+                                </ft:repeater-rows>
+
+
+                            </tbody>
+                        </table>
+                    </ft:repeater>
+                </fi:items>
+            </fi:group>
+
+
+            <ft:widget id="saveCatalogue" class="ui-button"/>
+        </ft:form-template>
+    </content>
+</jx:template>

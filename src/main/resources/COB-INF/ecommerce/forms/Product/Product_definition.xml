@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. вв
+-->
+<fd:library
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+
+    <fd:widgets>
+        <fd:group id="product">
+            <fd:widgets>
+                <!--<fd:field id="id" state="output">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:field>-->
+
+
+                <fd:field id="model" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.model"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                  <!--  <fd:validation>
+                        <fd:length max="20" min="2"/>
+                    </fd:validation>-->
+                </fd:field>
+
+
+                <!--<fd:field id="vendor" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.vendor"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="30"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="sku" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.sku"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="30"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="upc" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.upc"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="30"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="sellingUOM" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.sellingUOM"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="30"/>
+                    </fd:validation>
+                </fd:field>-->
+                <!--<fd:field id="basePrice" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.basePrice"/>
+                    </fd:label>
+                    <fd:datatype base="double"/>
+                    &lt;!&ndash;<fd:validation>
+                        <fd:length max="12"/>
+                    </fd:validation>&ndash;&gt;
+                </fd:field>-->
+                <!--<fd:field id="specialPrice" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.specialPrice"/>
+                    </fd:label>
+                    <fd:datatype base="double">
+                        &lt;!&ndash;<fd:convertor type="formatting" variant="currency"/>&ndash;&gt;
+                    </fd:datatype>
+                    &lt;!&ndash;<fd:validation>
+                        <fd:length max="12"/>
+                    </fd:validation>&ndash;&gt;
+                </fd:field>-->
+                <!--<fd:field id="discount" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.discount"/>
+                    </fd:label>
+                    <fd:datatype base="integer">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="3"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="minimumSellingUnits" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.minimumSellingUnits"/>
+                    </fd:label>
+                    <fd:datatype base="integer">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="4"/>
+                    </fd:validation>
+                </fd:field>
+                -->
+                <fd:field id="onHandQuantity" required="false">
+                    <fd:label>
+                        <i18n:text catalogue="ecommerce" key="Product.onHandQuantity"/>
+                    </fd:label>
+                    <fd:datatype base="integer">
+                    </fd:datatype>
+               <!--     <fd:validation>
+                        <fd:length max="4"/>
+                    </fd:validation>-->
+                </fd:field>
+
+            </fd:widgets>
+        </fd:group>
+
+
+    </fd:widgets>
+</fd:library>

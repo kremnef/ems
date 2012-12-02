@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<fd:form 
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+       <!--//chenged-->
+    <fd:widgets>
+         <!--<fd:field id="name" required="true">
+                    <fd:label>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:label>
+                    <fd:initial-value>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:initial-value>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length min="1" max="255"/>
+                    </fd:validation>
+                </fd:field>-->
+        <!--<fd:field id="emsObjectId">
+            <fd:datatype base="integer" />
+        </fd:field>-->
+        <fd:field id="parentId">
+            <fd:datatype base="integer" />
+        </fd:field>
+        <fd:field id="homeId">
+            <fd:datatype base="integer" />
+        </fd:field>
+        <fd:field id="entity" state="invisible">
+            <fd:datatype base="string"/>
+            <fd:initial-value>Content</fd:initial-value>
+        </fd:field>
+        <!--<fd:tree id="parentsTree">-->
+            <!--<fd:tree-model type="java" ref="parentsTreeModel" />-->
+            <!--<fd:on-create>-->
+                <!--<javascript>-->
+                    <!--this.getModel().setEntity("content");-->
+                <!--</javascript>-->
+            <!--</fd:on-create>-->
+        <!--</fd:tree>-->
+
+
+
+
+
+        <fd:field id="thumbnailId">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.thumbnail"/>
+            </fd:label>
+            <fd:datatype base="integer"/>
+        </fd:field>
+       <!-- <fd:field id="urlRelativity" required="true">
+            <fd:label>
+                <i18n:text key="EmsObject.urlRelativity"/>
+            </fd:label>
+            <fd:initial-value>1</fd:initial-value>
+            <fd:datatype base="integer"/>
+            <fd:selection-list>
+                <fd:item value="0">
+                    <fd:label>
+                        <i18n:text key="EmsObject.urlRelativityAbsolute"/>
+                    </fd:label>
+                </fd:item>
+                <fd:item value="1">
+                    <fd:label>
+                        <i18n:text key="EmsObject.urlRelativityRelative"/>
+                    </fd:label>
+                </fd:item>
+            </fd:selection-list>
+        </fd:field>
+
+        <fd:field id="relativeURL">
+            <fd:label>
+                <i18n:text key="EmsObject.relativeURL"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+            <fd:validation>
+                <fd:length max="255"/>
+            </fd:validation>
+        </fd:field>-->
+
+        <fd:field id="publishDateTime">
+            <fd:label>
+                <i18n:text catalogue="core" key="Content.publishDateTime"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor variant="date">
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+        </fd:field>
+
+        <fd:field id="expireDateTime" state="invisible">
+            <fd:label>
+                <i18n:text catalogue="core" key="Content.expireDateTime"/>
+            </fd:label>
+            <fd:datatype base="date">
+                <fd:convertor variant="date">
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+        </fd:field>
+
+
+
+        <!--<fd:field id="dtId">
+            <fd:datatype base="integer"/>
+            <fd:initial-value>1</fd:initial-value>
+
+            &lt;!&ndash;<fd:selection-list type="flow-jxpath" list-path="documentTypeList"
+                               value-path="value" label-path="label" />&ndash;&gt;
+            <fd:validation>
+                <fd:assert test="documentTypeId &gt; 0">
+                    <fd:failmessage><i18n:text catalogue="core" key="Content.docTypeSetError"/></fd:failmessage>
+                </fd:assert>
+            </fd:validation>
+        </fd:field>-->
+        <fd:field id="documentTypeList">
+            <fd:label>
+                <i18n:text catalogue="core" key="Content.documentType"/>
+            </fd:label>
+            <fd:hint>
+                <i18n:text catalogue="core" key="Content.documentType"/>
+            </fd:hint>
+            <fd:datatype base="string"/>
+            <!--<fd:on-value-changed>
+                <javascript>
+                    cocoon.session.setAttribute("documentTypeId", event.newValue);
+                </javascript>
+            </fd:on-value-changed>-->
+
+        </fd:field>
+        <fd:field id="documentTypeId" required="true">
+
+            <fd:datatype base="integer"/>
+            <!--<fd:selection-list type="flow-jxpath" list-path="documentTypeList"
+                               value-path="value" label-path="label" />-->
+            <fd:initial-value>1</fd:initial-value>
+            <fd:validation>
+                <fd:assert test="documentTypeId &gt; 0">
+                    <fd:failmessage><i18n:text catalogue="core" key="Content.docTypeSetError"/></fd:failmessage>
+                </fd:assert>
+            </fd:validation>
+            <!--<fd:on-value-changed>
+                <fd:javascript>
+                    print("dtID:" +this.value);
+                    print ("newDT: " +cocoon.session.getAttribute("documentTypeId"));
+                </fd:javascript>
+            </fd:on-value-changed>-->
+        </fd:field>
+        <fd:booleanfield id="isProtected" state="invisible">
+            <fd:initial-value>false</fd:initial-value>
+            <fd:label>
+                <i18n:text key="EmsObject.isProtected"/>
+            </fd:label>
+        </fd:booleanfield>
+        <fd:booleanfield id="isPublished" state="invisible">
+            <fd:initial-value>true</fd:initial-value>
+            <fd:label>
+                <i18n:text key="EmsObject.isPublished"/>
+            </fd:label>
+        </fd:booleanfield>
+
+        <fd:field id="addLink">
+            <fd:datatype base="integer"/>
+            <fd:on-value-changed>
+                <fd:javascript>
+                    <!--//print(" AddCHANGE VALUE linked");-->
+                    var repeater = widget.lookupWidget("../linked");
+                    <!--//print(" 1");-->
+                    var lastPosition = repeater.getSize();
+                    <!--//print(" 2");-->
+                    var newRow = repeater.addRow();
+                    <!--//print(" 3");-->
+                    newRow.getChild("id").value = new java.lang.Integer (this.value);
+                    <!--//print(" 4");-->
+                    var addlinkName = widget.lookupWidget("../addlinkName");
+                    newRow.getChild("name").value = addlinkName.value;
+                    <!--//print(" 5"+addlinkName.value);-->
+
+                </fd:javascript>
+            </fd:on-value-changed>
+        </fd:field>
+        <fd:field id="addLinkName">
+            <fd:datatype base="string"/>
+        </fd:field>
+
+
+
+        <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+        <fd:expand id="core:translate"/>
+        <fd:expand id="core:formLocale"/>
+        <fd:expand id="core:labels"/>
+        <fd:expand id="core:linked"/>
+        <fd:expand id="core:metaInfo"/>
+        <fd:expand id="core:systemURL"/>
+
+        <fd:submit id="saveContent">
+            <fd:label><i18n:text key="Save"/></fd:label>
+        </fd:submit>
+        <!--<fd:action id="saveContent">
+            <fd:label><i18n:text key="Save"/></fd:label>
+        </fd:action>-->
+
+    </fd:widgets>
+
+</fd:form>

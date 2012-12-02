@@ -1,0 +1,9 @@
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+
+function desktop() {
+    var list = listCommon("transactionHistory", "date", "desc","");
+    cocoon.sendPage(list.displayURI, list);
+}
+

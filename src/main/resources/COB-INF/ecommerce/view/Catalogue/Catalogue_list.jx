@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      childrenCount="${item.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      position="${item.position}">
+                    <name>${item.name}</name>
+                    <!--<jx:forEach items="${item.items}" var="product" varStatus="status">
+                        <product id="${product.id}">
+                            <name>${product.name}</name>
+                            &lt;!&ndash;<subject id="${product.subject.id}" type="${product.subject.type}">&ndash;&gt;
+                            <subject id="${product.subject.id}" type="${product.subject.getClass().getSimpleName()}">
+                                &lt;!&ndash;<name>${product.subject.name}</name>&ndash;&gt;
+                                <format>${product.subject.format}</format>
+                                <file>${product.subject.file.path}</file>
+                            </subject>
+                        </product>
+                    </jx:forEach>-->
+
+                </item>
+            </jx:forEach>
+
+
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <!--<header>basePrice</header>-->
+            <!--<header>discount</header>-->
+            <!--<header>model</header>-->
+            <!--<header>manufacturer</header>-->
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="view/Library/list.jx"/>
+</jx:template>

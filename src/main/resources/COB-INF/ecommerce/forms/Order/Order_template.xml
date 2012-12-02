@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+
+    <!--<jx:import uri="blockcontext:/ems/ecommerce/forms/Product/Product_template.xml"/>-->
+    <jx:import uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_template.xml"/>
+
+    <jx:macro name="Order">
+        <tr>
+            <td class="forms label">
+                <label for="name:input" class="forms field">
+                    <ft:widget-label id="totalPrice"/>
+                </label>
+            </td>
+            <td class="forms content">
+                <ft:widget id="totalPrice">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+        <tr>
+            <td class="forms label">
+                <label for="name:input" class="forms field">
+                    <ft:widget-label id="orderStatus"/>
+                </label>
+            </td>
+            <td class="forms content">
+                <ft:widget id="orderStatus">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+        <tr>
+            <td class="forms label">
+                <label for="name:input" class="forms field">
+                    <ft:widget-label id="orderNumber"/>
+                </label>
+            </td>
+            <td class="forms content">
+                <ft:widget id="orderNumber">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+        <tr>
+            <td class="forms label">
+                <label for="name:input" class="forms field">
+                    <ft:widget-label id="orderType"/>
+                </label>
+            </td>
+            <td class="forms content">
+                <ft:widget id="orderType">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+        <tr>
+            <td class="forms label">
+                <label for="name:input" class="forms field">
+                    <ft:widget-label id="submittedDate"/>
+                </label>
+            </td>
+            <td class="forms content">
+                <ft:widget id="submittedDate">
+                    <fi:styling size="10"/>
+                </ft:widget>
+            </td>
+        </tr>
+
+
+    </jx:macro>
+
+    <content>
+
+        <userDataMacro/>
+        <parentObjects/>
+
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST">
+
+            <!--<fi:group>-->
+            <!--<fi:styling type="tabs"/>-->
+
+            <!--<fi:label>Choose a panel:</fi:label>-->
+            <!--<fi:state>-->
+            <!--<ft:widget id="tab-state"/>-->
+            <!--</fi:state>-->
+            <!--<fi:items>-->
+            <emsFields entity="Order" parentId="0" parentName="" showParents="0"/>
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <!--<fi:label>-->
+                <!--<i18n:text catalogue="ecommerce" key="Order"/>-->
+                <!--</fi:label>-->
+                <fi:items>
+                    <Order/>
+                    <!--<fileSystemObjects/>-->
+                </fi:items>
+            </fi:group>
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <fi:label>
+                    <i18n:text catalogue="ecommerce" key="Order.orderItems"/>
+                </fi:label>
+                <fi:items>
+                    <!--<jx:forEach select="#{viewdata/types}">
+                        #name
+                    </jx:forEach>-->
+
+                    <ft:repeater id="orderItems">
+                        <table border="1" class="order">
+                            <thead>
+                                <tr>
+
+                                    <th width="10" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="id"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="name"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="unitPrice"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="extendedPrice"/>
+                                    </th>
+                                    <th width="20" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="quantity"/>
+
+                                    </th>
+
+                                    <th width="10" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="delete"/>
+                                    </th>
+                                </tr>
+                            </thead>
+
+
+
+                            <tbody>
+                                <ft:repeater-rows>
+                                    <tr class="forms-row">
+                                        <td>
+                                            <ft:widget id="id"/>
+                                        </td>
+                                        <td>
+                                            <jx:set var="type" value="ptype"/>
+                                            <ft:widget id="name">
+                                                <jx:if test="${repeater.getRow(repeaterLoop.index).getChild('id').value > 0}">
+                                                    <fi:styling type="link"
+                                                                src="edit${type}?id=${repeater.getRow(repeaterLoop.index).getChild('pid').value}"/>
+                                                </jx:if>
+                                            </ft:widget>
+                                        </td>
+
+                                        <td>
+                                            <ft:widget id="unitPrice"/>
+                                        </td>
+
+                                        <td>
+                                            <ft:widget id="extendedPrice"/>
+                                        </td>
+                                        <td>
+                                            <ft:widget id="quantity"/>
+                                        </td>
+                                         <!--<td>
+                                            <ft:widget id="ptypeName"/>
+                                        </td>-->
+
+                                        <td>
+                                            <ft:widget id="delete">
+                                                <fi:styling type="image"
+                                                            src="${servletPath}/resource/img/forms/delete.gif"/>
+                                            </ft:widget>
+                                        </td>
+                                    </tr>
+                                </ft:repeater-rows>
+
+
+                            </tbody>
+                        </table>
+                    </ft:repeater>
+                </fi:items>
+            </fi:group>
+            <!--<fi:group>-->
+            <!--<fi:styling layout="columns"/>-->
+            <!--<fi:label>-->
+            <!--<i18n:text catalogue="ecommerce" key="Order"/>-->
+            <!--</fi:label>-->
+            <!--<fi:items>-->
+
+            <!--</fi:items>-->
+            <!--</fi:group>-->
+            <!--</fi:items>-->
+            <!--</fi:group>-->
+
+            <ft:widget id="saveOrder" class="dsscdcdc"/>
+        </ft:form-template>
+    </content>
+</jx:template>

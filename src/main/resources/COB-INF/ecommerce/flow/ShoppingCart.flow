@@ -1,0 +1,70 @@
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function CheckoutAction() {
+    var displayURI = cocoon.parameters.displayURI;
+    var itemsOnPage = Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
+
+    var viewData = {
+//    "parentContentId": parentContentId,
+        "itemsOnPage": itemsOnPage
+//        "documentTypeId": documentTypeId
+    }
+    var orderService = cocoon.getComponent("orderService");
+    var order = null;
+    //    var itemsOnPage = 30;
+//    if (documentTypeId != null) {
+        order = orderService.getOrders();
+    
+
+
+    cocoon.sendPage(displayURI, {"order": order, "viewData":viewData, "userData" : getLoggedInUser()});
+}
+
+//function listOrder(parentId) {
+//    listEmsObjects(parentId);
+//}
+
+
+function CheckoutComplete(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var orderService = cocoon.getComponent("orderService");
+//    var order = createEmsObject(orderService);
+    var order = cocoon.createObject("ru.strela.ems.ecommerce.model.ShoppingCart");
+
+
+    /*var parentId = 0;
+    var parentName = "";
+    var parentObject = order.getParent();
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+    }
+*/
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+//    order = showEmsObjectForm(form, order, showFormURI, {    
+    form.showForm(showFormURI, {
+        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData": getLoggedInUser()
+    });
+
+    form.save(order);
+    orderService.saveOrder(order);
+    cocoon.releaseComponent(orderService);
+
+    var id = order.getId();
+    cocoon.disposeObject(order);
+
+    cocoon.redirectTo("Order-edit?id=" + id);
+}
+
+

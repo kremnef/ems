@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                          ajax="true">
+            <!--ajax="true">-->
+
+            <translate/>
+            <script src="/ems/resource/js/jquery-plugin/codemirror/lib/codemirror.js"></script>
+            <link rel="stylesheet" href="/ems/resource/js/jquery-plugin/codemirror/lib/codemirror.css"/>
+            <script src="/ems/resource/js/jquery-plugin/codemirror/mode/xml/xml.js"></script>
+            <script src="/ems/resource/js/jquery-plugin/codemirror/theme/cobalt.css"></script>
+
+            <script src="ems/resource/js/jquery-plugin/codemirror-ui/js/codemirror-ui.js"
+                    type="text/javascript"></script>
+            <link rel="stylesheet" href="ems/resource/js/jquery-plugin/codemirror-ui/css/codemirror-ui.css"
+                  type="text/css" media="screen"/>
+
+             <script type="text/javascript">
+                                    <!--function codeMirror(this, code){-->
+                                    var codeMirrorOptions = { mode: 'xml', theme: 'cobalt'};
+                                    var uiOptions = { path : 'js/', searchMode : 'popup' };
+                                    <!--//var thisXMl = "xml"+code;-->
+                                    <!--if (thisXMl){-->
+                                    <!--var editor = new CodeMirrorUI(this,uiOptions,codeMirrorOptions);-->
+                                    <!--var thisXMl = CodeMirror.fromTextArea(this, codeMirrorOptions);-->
+                                    <!--}-->
+                                    <!--}-->
+                                </script>
+            <ft:repeater id="messages">
+
+                <jx:choose>
+                    <jx:when test="${repeater.getSize() == 0}">
+                        <br/>
+                        <em>messages: There is no data to display</em>
+                    </jx:when>
+                    <jx:otherwise>
+                        <ft:repeater-rows>
+                            <jx:set var="rowLanguageCode"
+                                    value="${repeater.getRow(repeaterLoop.index).getChild('languageCode').value}"/>
+
+                            <div class="meta-info" name="translate_${rowLanguageCode}">
+                                <jx:attribute name="style">
+                                    <jx:choose>
+                                        <jx:when test="${rowLanguageCode == formLocale}">
+                                            display:block;
+                                        </jx:when>
+                                        <jx:otherwise>
+                                            display:none;
+                                        </jx:otherwise>
+                                    </jx:choose>
+                                </jx:attribute>
+
+                                <!--<ft:widget id="id">
+                                    <fi:styling type="hidden"/>
+                                </ft:widget>-->
+                                <ft:widget id="languageCode">
+                                    <fi:styling type="hidden"/>
+                                </ft:widget>
+
+                                <!--<label for="xmlEditor" class="label">
+                                    <ft:widget-label id="xmlEditor"/>
+
+                                </label>-->
+<!--sdsds-->
+                                <ft:widget id="xmlEditor">
+                                    <fi:styling type="textarea" onClick="CodeMirror.fromTextArea(this)"/>
+                                </ft:widget>
+
+                            </div>
+                        </ft:repeater-rows>
+
+                    </jx:otherwise>
+                </jx:choose>
+                <!--</div>-->
+            </ft:repeater>
+
+
+            <ft:widget id="saveNavigation" class="ui-button"/>
+        </ft:form-template>
+    </content>
+</jx:template>

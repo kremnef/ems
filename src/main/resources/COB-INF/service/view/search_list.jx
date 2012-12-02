@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<search-results xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <!--<head>
+        <title>Contents successful</title>
+    </head>
+    <body>
+        <list>
+            <jx:import uri="view/document/Document_template.jx"/>
+        </list>
+    </body>-->
+    <query>${query}</query>
+    <jx:choose>
+        <jx:when test="${results!=null}">
+            <!--<h1>111</h1>-->
+            <jx:forEach items="${results}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      systemName="${item.systemName}"
+                      childrenCount="${item.emsObject.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      position="${item.position}">
+                    <!--<name>${item.name}</name>-->
+                    <title>${item.title}</title>
+                    <publishDateTime>${item.publishDateTime}</publishDateTime>
+                    <expireDateTime type="hidden">${item.expireDateTime}</expireDateTime>
+                    <!--<isProtected>${item.isProtected}</isProtected>-->
+                    <documentTypeId type="hidden">${item.documentTypeId}</documentTypeId>
+                    <content>
+                        <jx:choose>
+                            <jx:when test="${item.xmlSource.indexOf('&lt;Article&gt;') == 0}">
+                                <jx:set var="textPosition" value="${java.lang.Integer(item.xmlSource.indexOf('&lt;text&gt;') + 6)}"/>
+                                <jx:set var="textEndPosition" value="${item.xmlSource.indexOf('&lt;/text&gt;')}"/>
+                                <jx:out value="${Packages.org.apache.commons.lang.StringEscapeUtils.unescapeXml(item.xmlSource.substring(textPosition, textEndPosition))}"/>
+                            </jx:when>
+                            <jx:otherwise>
+                            </jx:otherwise>
+                        </jx:choose>
+                    </content>
+                </item>
+            </jx:forEach>
+        </jx:when>
+        <jx:otherwise>
+            <h1>NOT RESULT</h1>
+        </jx:otherwise>
+    </jx:choose>
+
+
+    <!--</items>-->
+</search-results>

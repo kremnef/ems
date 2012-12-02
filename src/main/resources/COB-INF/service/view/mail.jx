@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <document xmlns:email="http://apache.org/cocoon/transformation/sendmail">
+        <email:sendmail>
+            <email:smtphost>localhost</email:smtphost>
+            <email:smtpport>25</email:smtpport>
+            <email:from>${from}</email:from>
+            <email:to>${to}</email:to>
+            <email:subject>${subject}</email:subject>
+            <email:body mime-type="text/plain; charset=UTF-8;">${content}</email:body>
+            <jx:if test="${attachment.length() > 0 and fileName.length() > 0 and mimeType.length() > 0}">
+                <email:attachment name="${fileName}" mime-type="${mimeType}" url="${attachment}"/>
+            </jx:if>
+        </email:sendmail>
+    </document>
+</jx:template>

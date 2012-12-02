@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+/*border-top: 30px solid #0073EA;*/
+    font: 11px "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
+    background-color: #efefef;
+}
+
+form {
+    margin-left: 8px;
+    padding: 16px 16px 40px 25px;
+    font-weight: normal;
+    -moz-border-radius: 11px;
+    -khtml-border-radius: 11px;
+    -webkit-border-radius: 11px;
+    border-radius: 5px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    -moz-box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+    -webkit-box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+    -khtml-box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+    box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+}
+
+#login form .submit input{
+	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
+	padding: 3px 10px;
+    border: 1px solid;
+    font-size: 12px;
+    -moz-border-radius: 11px;
+	-khtml-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 11px;
+	cursor: pointer;
+	text-decoration: none;
+	margin-top: -3px;
+	text-shadow: rgba(0,0,0,0.3) 0 -1px 0;
+}
+label {
+    color: #777;
+    font-size: 13px;
+}
+
+#login {
+    width: 380px;
+    margin: 15em auto;
+}
+
+#login form input {
+    font-size: 20px;
+    padding: 3px;
+
+    margin: 2px 6px 10px 0px;
+    width: 90%;
+}
+
+#login form select {
+    padding: 3px;
+    margin-top: 2px;
+    margin-right: 6px;
+    margin-bottom: 15px;
+    width: 90%;
+
+}
+
+#login form input.text {
+    font-size: 24px;
+}
+
+#login form input.password {
+    font-size: 24px;
+
+}
+
+/*#login form .submit input{
+
+    font-size: 30px;
+
+}*/

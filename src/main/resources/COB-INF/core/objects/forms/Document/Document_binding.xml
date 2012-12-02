@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <!--<fb:value id="id" path="id"/>-->
+    <fb:value id="contentId" path="contentId"/>
+    <!--<fb:value id="languageId" path="languageId"/>-->
+    <fb:value id="state" path="state"/>
+    <fb:value id="createdDateTime" path="createdDateTime"/>
+    <fb:value id="modifiedDateTime" path="modifiedDateTime"/>
+
+    <fb:value id="version" path="version"/>
+    <!--<fb:value id="versionComment" path="versionComment"/>-->
+    <!--<fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>-->
+    <!--<fb:expand id="core:fileSystemObjects"/>-->
+    <!--<fb:expand id="core:linked"/>-->
+    <!--<fb:repeater id="fileSystemObjects" parent-path="." row-path="fileObjects">-->
+    <fb:repeater id="fileSystemObjects" parent-path="." row-path="fileSystemObjects">
+            <fb:identity>
+                <fb:value id="id" path="id"/>
+            </fb:identity>
+            <fb:on-bind>
+                <fb:value id="id" path="id"/>
+                <fb:value id="name" path="name"/>
+                <fb:value id="systemName" path="systemName"/>
+                <fb:value id="contentType" path="fileType"/>
+                <fb:value id="size" path="size"/>
+                <fb:value id="path" path="path"/>
+                <!--<fb:value id="position" path="position"/>-->
+                <!--<fb:value id="used" path="used"/>-->
+
+
+                <!--<fb:value id="objectType" path="objectType"/>
+                <fb:value id="folder" path="folder"/>-->
+
+            </fb:on-bind>
+            <!--todo: ???? не существующий метод -> hobal-->
+            <!--<fb:on-insert-row>-->
+                <!--<fb:insert-bean classname="ru.strela.ems.core.model.FileSystemObject" addmethod="addFileSystemObject"/>-->
+            <!--</fb:on-insert-row>-->
+        </fb:repeater>
+
+</fb:context>

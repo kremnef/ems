@@ -1,0 +1,233 @@
+
+
+
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+
+function checkLoginUniqueness(loginWidget, login, id) {
+    print ("login:"+login+" id:"+id);
+    if (login == null) {
+        login = new java.lang.String("");
+    }
+    if (id == null) {
+        id = 0;
+    }
+    else {
+        id = java.lang.Integer.parseInt(id);
+    }
+    importClass(Packages.ru.tastika.tools.string.Translit);
+
+    login = Translit.toTranslit(login);
+    login = login.replaceAll("\\s", "_");
+    login = login.replaceAll("\\W", "");
+    if (loginWidget != null) {
+        loginWidget.setValue(login);
+    }
+    var customerDao = cocoon.getComponent("customerDao");
+    var customer = customerDao.getCustomerByLogin(login);
+    var objectId = customer.getId();
+    return objectId == 0 || objectId == id;
+}
+
+/*function listUser(parentId) {
+    listTypifiedObjects(parentId);
+}*/
+
+/*
+
+function createUser(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var userService = cocoon.getComponent("userService");
+    var user = createTypifiedObject(userService);
+
+    var parentId = 0;
+    var parentName = "";
+
+
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+
+    user = showEmsObjectForm(form, userService, user, showFormURI, {
+        "viewData": viewData,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+    var inputPassword = form.getChild("password").getValue().trim();
+
+    importClass(Packages.ru.tastika.tools.string.MD5Crypt);
+    inputPassword = MD5Crypt.md5ToString16(inputPassword);
+
+    user.setPassword(inputPassword)
+
+    userService.save(user);
+    cocoon.releaseComponent(userService);
+
+    var id = user.getId();
+    cocoon.disposeObject(user);
+
+    cocoon.redirectTo("User-edit?id=" + id);
+}
+
+
+function editUserById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("User-create");
+    }
+    var userService = cocoon.getComponent("userService");
+    var user = userService.getTypifiedObject(id);
+    if (user == null) {
+        cocoon.releaseComponent(userService);
+        cocoon.redirectTo("User-create");
+    }
+
+    var parentId = user.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = user.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+    var actionState = "edit";
+    var viewData = {
+        "actionState": actionState
+    }
+
+    form.lookupWidget('password').setValue(Packages.ru.strela.ems.core.model.User.PASSWORD_PLACEHOLDER);
+    form.lookupWidget('confirmPassword').setValue(Packages.ru.strela.ems.core.model.User.PASSWORD_PLACEHOLDER);
+
+    user = showEmsObjectForm(form, userService, user, showFormURI, {
+        "viewData": viewData,
+        "userId": id,
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath
+    });
+
+    var inputPassword = form.getChild("password").getValue().trim();
+    if (inputPassword != Packages.ru.strela.ems.core.model.User.PASSWORD_PLACEHOLDER) {
+
+        importClass(Packages.ru.tastika.tools.string.MD5Crypt);
+        inputPassword = MD5Crypt.md5ToString16(inputPassword);
+
+        user.setPassword(inputPassword)
+    }
+
+    userService.save(user);
+    cocoon.releaseComponent(userService);
+
+    cocoon.redirectTo("User-edit?id=" + user.getId());
+}
+
+function deleteUserById() {
+    deleteObjectById("User");
+}*/
+
+
+
+
+
+function listUser() {
+
+    var list = listCommon("customer", "login", "desc","")
+    cocoon.sendPage(list.displayURI,list);
+}
+
+//function listUser(parentId) {
+//    listEmsObjects(parentId);
+//}
+
+
+function createUser(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var userService = cocoon.getComponent("userService");
+//    var user = createEmsObject(userService);
+    var user = cocoon.createObject("ru.strela.ems.security.model.User");
+
+    var actionState = "create";
+    var viewData = {
+        "actionState": actionState
+    }
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+//    user = showEmsObjectForm(form, user, showFormURI, {    
+    form.showForm(showFormURI, {
+        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData": getLoggedInUser()
+    });
+
+    form.save(user);
+    userService.saveUser(user);
+    cocoon.releaseComponent(userService);
+
+    var id = user.getId();
+    cocoon.disposeObject(user);
+
+    cocoon.redirectTo("User-edit?id=" + id);
+}
+
+
+function editUserById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var actionState = "edit";
+    var id = 0;
+
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("User-create");
+    }
+    print(id);
+    var userService = cocoon.getComponent("customerService");
+
+//    var user = userService.getCustomer(id);
+    var user = userService.getCustomerByLogin("admin");
+    print(2);
+    if (user == null) {
+        cocoon.releaseComponent(userService);
+        cocoon.redirectTo("User-create");
+    }
+
+    form.load(user);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+    form.showForm(showFormURI, {
+        "actionState": actionState,
+        "userId": id,
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath
+    }) ;
+
+    form.save(user);
+    userService.saveCustomer(user);
+    cocoon.releaseComponent(userService);
+
+    cocoon.redirectTo("User-edit?id=" + user.getId());
+}
+function changePassword(login){
+
+    var userService = cocoon.getComponent("userService");
+    var user = userService.getUser(login);
+    print (user);
+
+}

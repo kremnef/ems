@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://apache.org/cocoon/sitemap/1.0 http://cocoon.apache.org/schema/sitemap/cocoon-sitemap-1.0.xsd"
+             xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+    <map:components>
+        <!--map:include dir="../../conf" pattern="*.xconf"/-->
+          <!--fff-->
+        <map:transformers default="xslt">
+            <map:transformer name="browser-update" src="org.apache.cocoon.ajax.BrowserUpdateTransformer"/>
+            <map:transformer name="i18n"
+                             src="org.apache.cocoon.transformation.I18nTransformer">
+                <use-store>true</use-store>
+                <!--<use-request-parameters>true</use-request-parameters>-->
+                <!--<use-session-parameters>true</use-session-parameters>-->
+                <!--<use-cookie-parameters>true</use-cookie-parameters>-->
+                <!--<xslt-processor-role>xalan</xslt-processor-role>-->
+                <check-includes>true</check-includes>
+                <use-request-parameters>true</use-request-parameters>
+                <catalogues default="ems">
+                    <catalogue id="ems" name="ems" location="blockcontext:/ems/i18n"/>
+                    <catalogue id="security" name="security" location="blockcontext:/ems/security/i18n"/>
+                    <catalogue id="core" name="core" location="blockcontext:/ems/core/objects/i18n"/>
+                    <catalogue id="ecommerce" name="ecommerce" location="blockcontext:/ems/ecommerce/i18n"/>
+
+                    <catalogue id="documenttypes" name="messages" location="context://i18n"/>
+
+                    <catalogue id="forms" name="messages"
+                               location="resource://org/apache/cocoon/forms/system/i18n"/>
+                </catalogues>
+                <cache-at-startup>true</cache-at-startup>
+                <encoding>UTF-8</encoding>
+            </map:transformer>
+        </map:transformers>
+        <!-- Serializers -->
+
+        <map:serializers default="html">
+
+            <!-- CMS (changes begin): setting encoding UTF-8 -->
+            <map:serializer logger="sitemap.serializer.xml" mime-type="text/xml" name="xml"
+                            src="org.apache.cocoon.serialization.XMLSerializer">
+                <encoding>UTF-8</encoding>
+            </map:serializer>
+
+            <map:serializer logger="sitemap.serializer.html" mime-type="text/html" name="html"
+                            pool-max="32" src="org.apache.cocoon.serialization.HTMLSerializer">
+                <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+                <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
+                <encoding>UTF-8</encoding>
+            </map:serializer>
+
+            <!-- CMS (changes end) -->
+        </map:serializers>
+        <map:selectors>
+            <map:selector name="ajax-request" src="org.apache.cocoon.ajax.AjaxRequestSelector"/>
+        </map:selectors>
+
+        <!--<map:actions>
+            <map:action name="uploadFile" src="ru.strela.ems.actions.UploadFileAction"/>
+        </map:actions>-->
+
+    </map:components>
+
+    <map:flow language="javascript">
+        <map:script src="flow/login.flow"/>
+        <map:script src="blockcontext:/ems/core/objects/flow/TypifiedObject.flow"/>
+        <map:script src="blockcontext:/ems/flow/Form.js"/>
+        <map:script src="blockcontext:/ems/flow/CommonObject.flow"/>
+        <!--security-->
+        <map:script src="flow/Group.flow"/>
+        <map:script src="flow/Role.flow"/>
+        <map:script src="flow/User.flow"/>
+        <!--<map:script src="flow/Transaction.flow"/>-->
+    </map:flow>
+
+
+    <!--+
+    | Definition of the control flow implementation.
+    +-->
+
+   <map:resources>
+
+        <map:resource name="login">
+            <!--<map:select type="request-parameter">
+                <map:parameter name="parameter-name" value="xml" />
+                <map:when test="true">
+                    <map:call resource="xml"/>
+                </map:when>
+                <map:otherwise>-->
+
+                    <map:transform type="i18n" label="messages">
+                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                    </map:transform>
+
+                    <map:transform src="transformer/login/login.xsl">
+                        <map:parameter name="servletPath" value="{request:servletPath}"/>
+                    </map:transform>
+                    <map:call resource="forms-styling"/>
+
+                    <map:serialize type="html" />
+                <!--</map:otherwise>
+            </map:select>-->
+        </map:resource>
+
+
+        <map:resource name="xml">
+            <map:transform src="blockcontext:/ems/stylesheets/system/xml2html.xslt">
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+            </map:transform>
+            <map:serialize type="html"/>
+        </map:resource>
+
+
+        <map:resource name="list-json">
+            <map:transform src="blockcontext:/ems/stylesheets/admin/list_template_json.xsl">
+                <map:parameter name="module" value="core"/>
+                <map:parameter name="entity" value="{entity}"/>
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                <map:parameter name="requestURI" value="{request:requestURI}"/>
+                <map:parameter name="requestParam" value="{request-param:param}"/>
+                <map:parameter name="parentId" value="{flow-attr:viewData/parentId}"/>
+                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                <map:parameter name="servletPath" value="{request:servletPath}"/>
+            </map:transform>
+            <map:serialize type="xml"/>
+        </map:resource>
+
+        <map:resource name="ems-styling">
+            <map:transform src="blockcontext:/ems/stylesheets/admin/admin-main.xsl">
+                <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                <map:parameter name="ajax-resources" value="{servlet:ajax:/resource}"/>
+                <map:parameter name="forms-resources" value="{servlet:forms:/resource}"/>
+
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                <map:parameter name="requestURI" value="{request:requestURI}"/>
+                <map:parameter name="requestParam" value="{request-param:param}"/>
+                <map:parameter name="parentId" value="{flow-attr:viewData/parentId}"/>
+                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+            </map:transform>
+
+        </map:resource>
+        <map:resource name="forms-styling">
+            <map:transform src="blockcontext:/ems/stylesheets/forms/forms-styling.xsl">
+                <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                <map:parameter name="ckeditor-lang" value="{flow-attr:locale}"/>
+                <map:parameter name="dojo-debug" value="false"/>
+                <!--  set to true to turn on dojo debugging in the Browser -->
+                <map:parameter name="dojo-locale" value="{flow-attr:locale}"/>
+            </map:transform>
+        </map:resource>
+
+        <map:resource name="cocoon-ajax">
+            <!--<map:select type="ajax-request">
+                <map:when test="true">
+                    <map:call resource="forms-styling"/>
+                    <map:transform type="i18n">
+                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                    </map:transform>
+                    &lt;!&ndash;  sending a partial Browser Update &ndash;&gt;
+                    <map:select type="request-parameter">
+                        <map:parameter name="parameter-name" value="dojo.transport"/>
+                        <map:when test="iframe">
+                            &lt;!&ndash;  sending BU via iFrameIO &ndash;&gt;
+                            <map:transform
+                                    src="servlet:forms:/resource/internal/xsl/IframeTransport-bu-styling.xsl"/>
+                            <map:serialize type="xhtml"/>
+                            &lt;!&ndash;  this is REALLY important &ndash;&gt;
+                        </map:when>
+                        <map:otherwise>
+                            &lt;!&ndash;  sending BU via XHR &ndash;&gt;
+                            <map:serialize type="xml"/>
+                        </map:otherwise>
+                    </map:select>
+                </map:when>
+                <map:otherwise>
+                    &lt;!&ndash;  sending a complete page &ndash;&gt;
+                    <map:serialize type="xml"/>
+                </map:otherwise>
+            </map:select>-->
+            <map:select type="ajax-request">
+                <map:when test="true">
+                    <!--  sending a partial Browser Update -->
+                    <map:select type="request-parameter">
+                        <map:parameter name="parameter-name" value="dojo.transport"/>
+                        <map:when test="iframe">
+                            <!--  sending BU via iFrameIO -->
+                            <map:transform
+                                    src="servlet:forms:/resource/internal/xsl/IframeTransport-bu-styling.xsl"/>
+                            <map:serialize type="xhtml"/>
+                            <!--  this is REALLY important -->
+                        </map:when>
+                        <map:otherwise>
+                            <!--  sending BU via XHR -->
+                            <map:serialize type="xml"/>
+                        </map:otherwise>
+                    </map:select>
+                </map:when>
+                <map:otherwise>
+                    <!--  sending a complete page -->
+                    <map:serialize type="html"/>
+                </map:otherwise>
+            </map:select>
+        </map:resource>
+
+
+        <map:resource name="ems-global">
+            <map:call resource="ems-styling"/>
+            <map:transform type="i18n" label="messages">
+                <map:parameter name="locale" value="{session-attr:locale}"/>
+            </map:transform>
+            <map:call resource="forms-styling"/>
+
+            <!--<map:transform type="i18n">
+                <map:parameter name="locale" value="{session-attr:locale}"/>
+            </map:transform>-->
+
+            <!--<map:transform type="servletLinkRewriter"/>-->
+            <!-- here is the transformation step you will need to add -->
+            <map:transform type="browser-update"/>
+
+            <map:call resource="cocoon-ajax"/>
+        </map:resource>
+
+
+        <map:resource name="list">
+            <!--<map:select type="parameter">
+                <map:parameter name="parameter-selector-test" value="{inner-filter}"/>
+                <map:when test="true">
+                    <map:transform type="browser-update"/>
+                    <map:call resource="cocoon-ajax"/>
+                </map:when>
+                <map:otherwise>-->
+                    <map:select type="request-parameter">
+                        <map:parameter name="parameter-name" value="xml"/>
+                        <map:when test="true">
+                            <map:call resource="xml"/>
+                        </map:when>
+                        <map:otherwise>
+                            <map:transform src="transformer/{entity}/{entity}_list_template.xsl">
+                                <map:parameter name="module" value="core"/>
+                                <map:parameter name="entity" value="{entity}"/>
+                                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                                <map:parameter name="requestURI" value="{request:requestURI}"/>
+                                <map:parameter name="requestParam" value="{request-param:param}"/>
+                                <map:parameter name="parentId" value="{flow-attr:viewData/parentId}"/>
+                                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                                <map:parameter name="servletPath" value="{request:servletPath}"/>
+                            </map:transform>
+
+                            <map:call resource="ems-global"/>
+                            <map:serialize type="html"/>
+
+                        </map:otherwise>
+                    </map:select>
+                <!--</map:otherwise>-->
+            <!--</map:select>-->
+
+        </map:resource>
+        <!--<map:resource name="listDir">
+            <map:select type="request-parameter">
+                <map:parameter name="parameter-name" value="xml"/>
+                <map:when test="true">
+                    <map:call resource="xml"/>
+                </map:when>
+                <map:otherwise>
+                    <map:transform src="blockcontext:/ems/stylesheets/admin/list_template_dir.xsl">
+                        <map:parameter name="entity" value="{entity}"/>
+                    </map:transform>
+                    <map:call resource="ems-styling"/>
+                    <map:transform type="i18n" label="messages">
+                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                    </map:transform>
+                    <map:serialize type="html"/>
+                </map:otherwise>
+            </map:select>
+        </map:resource>
+-->
+
+        <map:resource name="edit">
+            <map:select type="parameter">
+                <map:parameter name="parameter-selector-test" value="{inner}"/>
+                <map:when test="true">
+                    <!--<map:transform type="browser-update"/>-->
+                    <!--<map:call resource="cocoon-ajax"/>-->
+                    <map:select type="ajax-request">
+                        <map:when test="true">
+                            <map:call resource="forms-styling"/>
+                            <map:transform type="i18n">
+                                <map:parameter name="locale" value="{session-attr:locale}"/>
+                            </map:transform>
+                            <map:transform type="browser-update"/>
+                            <!--  sending a partial Browser Update -->
+                            <map:select type="request-parameter">
+                                <map:parameter name="parameter-name" value="dojo.transport"/>
+                                <map:when test="iframe">
+                                    <!--  sending BU via iFrameIO -->
+                                    <map:transform
+                                            src="servlet:forms:/resource/internal/xsl/IframeTransport-bu-styling.xsl"/>
+                                    <map:serialize type="xhtml"/>
+                                    <!--  this is REALLY important -->
+                                </map:when>
+                                <map:otherwise>
+                                    <!--  sending BU via XHR -->
+                                    <map:serialize type="xml"/>
+                                </map:otherwise>
+                            </map:select>
+                        </map:when>
+                        <map:otherwise>
+                            <!--  sending a complete page -->
+                            <map:serialize type="xml"/>
+                        </map:otherwise>
+                    </map:select>
+                </map:when>
+                <map:otherwise>
+                    <map:select type="request-parameter">
+                        <map:parameter name="parameter-name" value="xml"/>
+                        <map:when test="true">
+                            <map:call resource="xml"/>
+                        </map:when>
+                        <map:otherwise>
+                            <map:call resource="editObject">
+                                <map:parameter name="entity" value="{entity}"/>
+                                <map:parameter name="actionState" value="{actionState}"/>
+                                <map:parameter name="id" value="{id}"/>
+                                <map:parameter name="inner" value="{inner}"/>
+                            </map:call>
+                        </map:otherwise>
+                    </map:select>
+                </map:otherwise>
+            </map:select>
+        </map:resource>
+
+
+        <map:resource name="editObject">
+
+            <map:transform src="transformer/{entity}/{entity}_edit_template.xsl">
+                <!--<map:transform src="blockcontext:/ems/stylesheets/admin/edit_template.xsl">-->
+                <map:parameter name="module" value="core"/>
+                <map:parameter name="entity" value="{entity}"/>
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                <map:parameter name="requestURI" value="{request:requestURI}"/>
+                <map:parameter name="requestParam" value="{request-param:param}"/>
+                <map:parameter name="parentId" value="{flow-attr:parentId}"/>
+                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                <map:parameter name="actionState" value="{actionState}"/>
+            </map:transform>
+            <map:call resource="ems-global"/>
+            <!--<map:transform type="browser-update"/>-->
+
+            <!--<map:call resource="cocoon-ajax"/>-->
+        </map:resource>
+
+
+
+
+
+        <map:resource name="simpleForm">
+           <!-- <map:select type="request-parameter">
+                <map:parameter name="parameter-name" value="xml"/>
+                <map:when test="true">
+                    <map:call resource="xml"/>
+                </map:when>
+                <map:otherwise>-->
+                    <map:call resource="ems-global"/>
+<!--
+
+                </map:otherwise>
+            </map:select>
+-->
+        </map:resource>
+
+    </map:resources>
+
+
+    <map:pipelines id="static">
+
+        <map:pipeline type="caching" id="loginLogout">
+
+            <map:match pattern="*.continue">
+                <map:call continuation="{1}"/>
+            </map:match>
+
+
+            <map:match pattern="login-template-pipeline">
+                <map:generate type="jx" src="forms/login/login_template.xml" />
+                <map:call resource="login"/>
+            </map:match>
+
+            <map:match pattern="login">
+                <map:call function="login">
+                    <map:parameter name="showFormURI" value="login-template-pipeline"/>
+                    <map:parameter name="definitionURI" value="forms/login/login_definition.xml"/>
+                    <!--<map:parameter name="loginPipeline" value="context://j_spring_security_check"/>-->
+                    <map:parameter name="loginPipeline" value="login-pipeline"/>
+                </map:call>
+            </map:match>
+
+            <map:match pattern="login-pipeline">
+               <!-- <map:act type="cauth-login">
+                    <map:parameter name="application" value="ems"/>
+                    <map:parameter name="name" value="{flow-attr:name}"/>
+                    <map:parameter name="password" value="{flow-attr:password}"/>
+                    <map:redirect-to uri="{flow-attr:redirectURI}"/>
+                </map:act>-->
+                <map:redirect-to uri="/j_spring_security_check?name={flow-attr:name}&amp;redirectURI={flow-attr:redirectURI}"/>
+                <!--<map:redirect-to uri="login?name={flow-attr:name}&amp;redirectURI={flow-attr:redirectURI}"/>-->
+                <!--map:call function="login">
+                    <map:parameter name="showFormURI" value="login-template-pipeline"/>
+                    <map:parameter name="definitionURI" value="forms/login/login_definition.xml"/>
+                    <map:parameter name="loginPipeline" value="login-pipeline"/>
+                    <map:parameter name="name" value="{flow-attr:name}"/>
+                    <map:parameter name="redirectURI" value="{flow-attr:redirectURI}"/>
+                </map:call-->
+            </map:match>
+            <map:match pattern="login-fail-pipeline">
+                <map:call function="login">
+                    <map:parameter name="showFormURI" value="login-template-pipeline"/>
+                    <map:parameter name="definitionURI" value="forms/login/login_definition.xml"/>
+                    <map:parameter name="loginPipeline" value="login-pipeline"/>
+                    <map:parameter name="name" value="{flow-attr:name}"/>
+                    <map:parameter name="redirectURI" value="{flow-attr:redirectURI}"/>
+                </map:call>
+            </map:match>
+
+            <map:match pattern="logout">
+                <map:act type="cauth-logout">
+                    <map:parameter name="application" value="ems"/>
+                    <map:redirect-to uri="login"/>
+                </map:act>
+            </map:match>
+
+
+        </map:pipeline>
+
+
+
+        <map:pipeline type="caching" id="listAction">
+            <map:match pattern="*-list-pipeline-generate">
+                <map:generate type="jx" src="view/{1}/{1}_list.jx">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+                <map:serialize type="xml"/>
+            </map:match>
+            <map:match pattern="*-list-pipeline">
+                <map:aggregate element="root">
+                    <map:part src="cocoon:/{1}-list-pipeline-generate"/>
+                    <map:part src="cocoon:/generateInterface/"/>
+                </map:aggregate>
+
+                <map:call resource="list">
+                    <map:parameter name="entity" value="{1}"/>
+                </map:call>
+            </map:match>
+            <map:match pattern="*-list">
+                <map:call function="list{1}">
+                    <map:parameter name="displayURI" value="{1}-list-pipeline"/>
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="servletPath" value="{request:servletPath}"/>
+                </map:call>
+            </map:match>
+
+            <!--<map:match pattern="*-list-pipeline">
+            <map:generate type="jx" src="view/{1}/{1}_list.jx">
+            <map:parameter name="locale" value="{flow-attribute:locale}"/>
+            </map:generate>
+
+            <map:call resource="list">
+            <map:parameter name="entity" value="{1}"/>
+            </map:call>
+            </map:match>-->
+        </map:pipeline>
+
+        <map:pipeline type="caching" id="deleteAction">
+            <map:match pattern="*-delete">
+                <map:call function="delete{1}ById">
+                    <map:parameter name="displayURI" value="{1}-list-pipeline"/>
+                    <map:parameter name="entity" value="{1}"/>
+                </map:call>
+            </map:match>
+        </map:pipeline>
+
+
+
+
+
+        <map:pipeline type="caching" id="editAction">
+
+            <map:match pattern="*-template-generate">
+                <map:generate type="jx" src="forms/{1}/{1}_template.xml">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+                <map:serialize type="xml"/>
+            </map:match>
+
+            <map:match pattern="*-aggregate-pipeline">
+                <map:aggregate element="root">
+                    <map:part src="cocoon:/{1}-template-generate"/>
+                    <map:part src="cocoon:/generateInterface/"/>
+                </map:aggregate>
+
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="edit"/>
+                    <map:parameter name="id" value="{flow-attribute:id}"/>
+                    <map:parameter name="inner" value="{flow-attribute:inner}"/>
+                </map:call>
+            </map:match>
+
+
+            <map:match pattern="*-edit">
+                <map:call function="handleForm">
+                    <map:parameter name="function" value="edit{1}ById"/>
+                    <map:parameter name="showFormURI" value="{1}-aggregate-pipeline"/>
+                    <map:parameter name="displayURI" value="{1}-success-pipeline"/>
+                    <map:parameter name="definitionURI" value="forms/{1}/{1}_definition.xml"/>
+                    <map:parameter name="bindingURI" value="forms/{1}/{1}_binding.xml"/>
+                    <map:parameter name="servletPath" value="{request:servletPath}"/>
+                    <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                    <map:parameter name="inner" value="false"/>
+                </map:call>
+            </map:match>
+
+        </map:pipeline>
+          <map:pipeline type="caching" id="crateAction">
+
+
+            <!--** create ***-->
+            <map:match pattern="*-create">
+                <map:call function="handleForm">
+                    <map:parameter name="function" value="create{1}"/>
+                    <map:parameter name="showFormURI" value="{1}-aggregate-pipeline"/>
+                    <map:parameter name="displayURI" value="{1}-success-pipeline"/>
+                    <map:parameter name="definitionURI" value="forms/{1}/{1}_definition.xml"/>
+                    <map:parameter name="bindingURI" value="forms/{1}/{1}_binding.xml"/>
+                    <map:parameter name="servletPath" value="{request:servletPath}"/>
+                    <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                    <map:parameter name="inner" value="false"/>
+                </map:call>
+            </map:match>
+
+
+        </map:pipeline>
+
+
+
+
+
+
+       <!--set cache-->
+        <map:pipeline type="caching" id="interface">
+            <map:match pattern="generateInterface/">
+                <map:generate type="file" src="blockcontext:/ems/view/ems_interface_menu.xml"/>
+                <map:serialize type="xml"/>
+            </map:match>
+        </map:pipeline>
+
+
+
+
+        <map:pipeline type="caching" id="json">
+            <map:match pattern="*-list-pipeline-json">
+                <map:generate type="jx" src="view/{1}/{1}_list.jx">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+
+                <map:call resource="list-json">
+                    <map:parameter name="entity" value="{1}"/>
+                </map:call>
+            </map:match>
+        </map:pipeline>
+
+         <!--set cache-->
+        <map:pipeline type="caching" id="viewAction">
+            <map:match pattern="*-view">
+                <map:call function="view{1}ById">
+                    <map:parameter name="displayURI" value="{1}-xml-pipeline"/>
+                </map:call>
+            </map:match>
+        </map:pipeline>
+
+
+
+
+        <map:pipeline type="caching" id="common">
+
+
+            <map:match pattern="*-success-pipeline">
+                <map:generate type="jx" src="view/{1}/{1}_template.jx">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+                <map:transform type="i18n">
+                    <map:parameter name="locale" value="{session-attr:locale}"/>
+                </map:transform>
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="create"/>
+                </map:call>
+            </map:match>
+
+            <map:match pattern="*-xml-pipeline">
+                <map:generate type="jx" src="view/{1}/{1}_template.jx"/>
+                <map:transform type="i18n">
+                    <map:parameter name="locale" value="{session-attr:locale}"/>
+                </map:transform>
+                <map:serialize type="xml"/>
+            </map:match>
+
+
+        </map:pipeline>
+
+    </map:pipelines>
+
+</map:sitemap>

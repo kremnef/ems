@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<catalogue xml:lang="ru">
+
+    <!--error-->
+    <message key="error.notUnique">Значение поля не уникально</message>
+    <!--common-->
+    <message key="common.createdDateTime">Создан</message>
+    <message key="common.modifiedDateTime">Изменен</message>
+    <message key="common.publishDateTime">Время публикации</message>
+    <message key="common.expiredDateTime">Срок годности</message>
+    <message key="common.isProtected">Защищенный</message>
+    <message key="common.settings">Настройки</message>
+    <message key="common.tools">Инструменты</message>
+    <message key="common.add">Добавить</message>
+    <message key="common.create">Создать</message>
+    <message key="common.remove">Удалить</message>
+    <message key="common.labels">Названия на других языках</message>
+
+
+    <!--interface -->
+    <message key="interface.goSite">Перейти на сайт</message>
+    <message key="interface.reindex">Переиндексировать</message>
+    <message key="interface.hallo">Привет</message>
+    <message key="interface.help">Помощь</message>
+    <message key="interface.language">Русский</message>
+    <message key="interface.logout">Выйти</message>
+    <message key="interface.search">Поиск</message>
+    <!--Content -->
+    <message key="interface.content">Контент</message>
+    <message key="interface.documents">Документы</message>
+    <message key="interface.events">События</message>
+    <message key="interface.galleries">Галереи</message>
+
+    <message key="interface.catalogues">Каталоги</message>
+    <message key="interface.projects">Проекты</message>
+    <message key="interface.products">Продукты</message>
+
+    <message key="interface.mediateka">Медиатека</message>
+    <message key="interface.pictures">Картинки</message>
+    <message key="interface.sound">Звук</message>
+    <message key="interface.video">Видео</message>
+    <message key="interface.files">Файлы</message>
+
+    <message key="interface.modules">Модули</message>
+    <message key="interface.portfolio">Портфолио</message>
+
+    <message key="interface.interactive">Интерактив</message>
+    <message key="interface.blog">Блог</message>
+    <message key="interface.comments">Комментарии</message>
+    <message key="interface.voiting">Голосование</message>
+    <message key="interface.forms">Формы</message>
+
+    <!--Structure -->
+
+    <message key="Structure">Структура</message>
+    <message key="interface.structure">Элементы Структуры</message>
+    <message key="interface.menu">Меню</message>
+    <message key="interface.pages">Страницы</message>
+
+    <message key="interface.appearance">Внешний вид</message>
+    <message key="interface.templates">Шаблоны</message>
+    <message key="interface.css">CSS</message>
+    <!--administration -->
+    <message key="interface.administration">Администрирование</message>
+    <message key="interface.settings">Настройки</message>
+    <message key="interface.site">Сайт</message>
+    <message key="interface.languages">Языки</message>
+    <message key="interface.dataFormat">Формат данных</message>
+    <message key="interface.documentTypes">Типы документов</message>
+
+    <message key="interface.journals">Журналы</message>
+    <message key="interface.eventJournal">commerce ML</message>
+    <message key="interface.report">Отчёты</message>
+    <message key="interface.stats">Статисика</message>
+
+    <message key="interface.importExport">Импорт/Экспорт</message>
+    <message key="interface.commerceML">commerce ML</message>
+    <message key="interface.yandexMarket">Яндекс.Маркет</message>
+    <message key="interface.1c">1с бухгалтерия</message>
+
+    <message key="interface.useful">Полезное</message>
+    <message key="interface.backup">Резервные копии</message>
+    <message key="interface.update">Обновления</message>
+
+    <!--Security-->
+    <message key="Security">Безопасность</message>
+    <message key="interface.access">Права доступа</message>
+    <message key="interface.users">Пользователи</message>
+    <message key="interface.groups">Группы</message>
+    <message key="interface.roles">Роли</message>
+    <!--emsObject-->
+    <message key="EmsObject.parentElement">Родительский элемент</message>
+    <message key="EmsObject.noParentElement">Нет родительского элемента</message>
+    <message key="EmsObject.systemName">URL</message>
+    <message key="EmsObject.name">Название</message>
+    <message key="EmsObject.langLabels">Название на других языках</message>
+    <message key="EmsObject.children">Дочерние элементы</message>
+    <message key="EmsObject.addedObjects">Добавленные объекты</message>
+    <message key="EmsObject.position">Позиция</message>
+    <message key="EmsObject.noObjectsToDisplay">Нет объектов для отображения</message>
+    <message key="EmsObject.addObject">Добавить объект</message>
+    <message key="EmsObject.removeObjects">Удалить выбранные объекты</message>
+    <message key="EmsObject.typeName">Название типа</message>
+    <message key="EmsObject.typeAction">Действие</message>
+    <message key="EmsObject.localizedName">Локализованное имя</message>
+    <message key="EmsObject.addLocalizedName">Добавить локализованное имя</message>
+    <message key="EmsObject.removeLocalizedName">Удалить локализованное имя</message>
+    <message key="EmsObject.urlRelativity">Относительность пути</message>
+    <message key="EmsObject.relativeURL">Конкретный путь</message>
+    <message key="EmsObject.urlRelativityAbsolute">Абсолютный (конкретный путь)</message>
+    <message key="EmsObject.urlRelativityRelative">Относительный (от родительского элемента)</message>
+    <message key="EmsObject.position">Номер позиции</message>
+    <message key="EmsObject.isProtected">Защищенный</message>
+    <message key="EmsObject.isPublished">Опубликованный</message>
+
+
+    <!-- common used words -->
+
+
+    <message key="go">Перейти</message>
+    <message key="root">Корень</message>
+    <message key="toList">К списку элементов</message>
+    <message key="goToChildren">Перейти к дочерним элементам</message>
+    <message key="CreateChild">Создать дочерний элемент</message>
+    <message key="CreateSUB">Создать SUB</message>
+    <message key="buy">купить</message>
+    <message key="View">Просмотр</message>
+
+    <message key="AreYouSure">Вы уверены?</message>
+
+    <message key="Width">Ширина</message>
+    <message key="Height">Высота</message>
+    <message key="Choose">Выбрать</message>
+    <message key="NotSet">Не задано</message>
+    <message key="Close">Закрыть</message>
+    <message key="Save">Сохранить</message>
+    <message key="Submit">Отправить</message>
+    <message key="Cancel">Отмена</message>
+    <message key="Delete">Удалить</message>
+    <message key="NOTE">ЗАМЕТКА</message>
+    <message key="No referer">Нет сссылок</message>
+    <message key="Referer">Ссылка</message>
+    <message key="EXCEPTION">ИСКЛЮЧЕНИЕ</message>
+    <message key="User">Пользователь</message>
+    <message key="live">live</message>
+    <message key="not">не</message>
+    <message key="authoring">Authoring</message>
+    <message key="review">отзыв</message>
+    <message key="user">пользователь</message>
+    <message key="Users">Пользователи</message>
+    <message key="group">группа</message>
+    <message key="Group">Группа</message>
+    <message key="Groups">Группы</message>
+    <message key="Group ID">Идентификатор группы</message>
+    <message key="Yes">Да</message>
+    <message key="No">Нет</message>
+    <message key="Description">Описание</message>
+    <message key="Name">Имя</message>
+    <message key="Full Name">Полное имя</message>
+    <message key="required fields">обязательные поля</message>
+    <message key="Search">Поиск</message>
+    <message key="Home">Home</message>
+    <message key="Title">Заголовок</message>
+    <message key="Last modified">Последнее&#160;изменение</message>
+    <message key="Overview">Беглый обзор</message>
+    <message key="Role">Роль</message>
+    <message key="Assets">Assets</message>
+    <message key="true">да</message>
+    <message key="false">нет</message>
+    <message key="Rename">Переименовать</message>
+    <message key="Modify">Изменить</message>
+    <message key="Date">Дата</message>
+    <message key="Back">Назад</message>
+    <message key="Add">Добавить</message>
+    <message key="Create">Создать</message>
+    <message key="The Archive">Архив</message>
+    <message key="Trash">Корзина</message>
+    <message key="Publisher">Издатель</message>
+    <message key="Navigation Title">Навигационный заголовок</message>
+    <message key="Creator">Создатель</message>
+    <message key="Language">Язык</message>
+    <message key="Subject">Тема</message>
+    <message key="Rights">Права</message>
+    <message key="Select File">Выберите файл</message>
+    <message key="select-object">Выберите {0}</message>
+    <message key="Insert">Вставить</message>
+    <message key="Insert File">Вставить файл</message>
+    <message key="upload-with-invalid-extension">У загружаемого файла неправильное расширение. Правильные расширения{0}.
+        Расширение должно быть в нижнем регистре (маленькими буквами).
+    </message>
+    <message key="upload-with-missing-title">Загружамый файл без названия.</message>
+    <message key="filename-format-exception">У загружаемого файла не указано расширение или его имя содержит
+        недопустимые символы, например, пробелы или умляуты.
+    </message>
+    <message key="Creation Date">Дата создания</message>
+    <message key="File Size">Размер файла</message>
+    <message key="Image">Изображение</message>
+    <message key="Link">Ссылка</message>
+    <message key="Caption">Всплывающая подсказка</message>
+    <message key="All rights reserved">Все права защищены.</message>
+
+    <!-- submit screen -->
+    <message key="submit-for-approval">Отправить {0} на утверждение</message>
+    <message key="submit-for-approval?">Хотите отправить {0} на утверждение?</message>
+
+    <!-- publish screen -->
+    <message key="Publish">Опубликовать</message>
+    <message key="Source File(s)">Исходный файл (или файлы исходные)</message>
+
+    <!-- login screen -->
+    <message key="Login">Логин</message>
+    <message key="Password">Пароль</message>
+    <message key="Username">Имя пользователя</message>
+    <message key="Authentication failed">Авторизация провалилась</message>
+
+    <!-- logout screen -->
+    <message key="Your History">Ваша история</message>
+
+    <!-- reject screen -->
+    <message key="Reject">Отклонить</message>
+    <message key="reject-doc?">Хотите отклонить документ {0}?</message>
+
+    <!-- cms menu -->
+    <message key="New Document">Новый документ</message>
+    <message key="New Language Version">Версия на другом языке</message>
+    <message key="Remove Language Version">Удалить версию на другом языке</message>
+    <message key="File">Файл</message>
+    <message key="Edit">Редактировать</message>
+    <message key="Workflow">Техпроцесс</message>
+    <message key="Deactivate">Отключить</message>
+    <message key="Schedule">График</message>
+    <message key="Copy">Копировать</message>
+    <message key="Paste">Вставить</message>
+    <message key="Cut">Вырезать</message>
+    <message key="Help">Помощь</message>
+    <message key="Debug">Отладить</message>
+    <message key="Delete">Удалить</message>
+    <message key="Archive">Архивировать</message>
+    <message key="Restore">Восстановить</message>
+    <message key="Move Up">Двинуть вверх</message>
+    <message key="Move Down">Двинуть вниз</message>
+    <message key="Logout">Выход</message>
+    <message key="View Task Logs">Посмотреть журналы задач</message>
+    <message key="Support">Техподдержка</message>
+    <message key="System Documentation">Системная&#160;Документация</message>
+    <message key="User Documentation">Пользовательская документация</message>
+
+    <message key="Edit with one Form">Редактор&#160;исходных текстов</message>
+    <message key="Edit with Forms">Редактор&#160;форм</message>
+    <message key="Edit Metadata">Редактировать&#160;метаданные</message>
+    <message key="Edit Navigation Title">Редактировать&#160;навигационный заголовок</message>
+    <message key="Rename URL">Переименовать&#160;URL</message>
+
+    <!-- cms tabs -->
+    <message key="Server Time">Время на сервере</message>
+    <message key="Workflow State">Состояние техпроцесса</message>
+
+    <!-- Administration tab -->
+    <message key="Administration">Администрирование</message>
+
+
+    <!-- Site tab (info screens) -->
+    <message key="Available Languages">Доступные языки</message>
+    <message key="This document is not available in this language.">На этом языке документ не доступен.</message>
+    <message key="Document ID">Идентификатор документа</message>
+    <message key="Versions">Версии</message>
+    <message key="SSL Encryption">SSL&#160;шифрование</message>
+    <message key="Rollback to this version">Откатиться к этой версии</message>
+    <message key="AC Archive">AC&#160;Архив</message>
+    <message key="AC Trash">AC&#160;Корзина</message>
+    <message key="AC Auth">AC&#160;Авторизация</message>
+    <message key="AC Live">AC&#160;Внешний вид сайта</message>
+    <message key="Scheduler">Планировщик</message>
+
+    <!-- Info screen actions-->
+    <message key="New Navigation Title">Новый заголовок навигации</message>
+    <message key="Rename Document">Переименовать документ</message>
+    <message key="New Document ID">Новый идентификатор документа</message>
+    <message key="No whitespace, no special characters">Нет пробелов, нет спецсимволов</message>
+    <!-- Scheduler -->
+    <message key="No active jobs">Нет активных заданий.</message>
+    <message key="The job date has expired">Задание просрочено.</message>
+    <message key="check the log files">проверить файлы журналов</message>
+    <message key="Task">Задание</message>
+    <message key="Day">День</message>
+    <message key="Time">Время</message>
+    <!-- Deactivate and delete -->
+    <message key="docs-have-links-to-doc">Следующие документы ссылаются на этот документ</message>
+    <message key="Deactivate Document">Отключить документ</message>
+    <message key="deactivate-doc">Отключить документ {0}</message>
+    <message key="deactivate-doc?">Вы действительно хотите отключить документ {0}?</message>
+    <message key="Delete Document">Удалить документ</message>
+    <message key="delete-doc">Удалить документ {0}</message>
+    <message key="cannot-deactivate-unless-children-deactivated">Этот документ не может быть отклчен пока следующие
+        дочерние документы не отключены
+    </message>
+    <message key="delete-language-versions?">Вы действительно хотите удалить версии документа {0} на всех языках?
+    </message>
+    <!-- Archive document -->
+    <message key="Archive Document">Архивировать документ</message>
+    <message key="archive-doc">Архивировать документ {0}</message>
+    <message key="archive-doc?">Вы действительно хотите заархивировать документ {0}?</message>
+    <!-- Rename document -->
+    <message key="Rename Document">Переименовать документ</message>
+    <message key="rename-doc">Переименовать документ {0}</message>
+    <!-- Copy document -->
+    <message key="Copy Document">Копировать документ</message>
+    <message key="copy-doc">Копировать документ {0}</message>
+    <message key="copy-doc-to-clip?">Хотите скопировать документ {0} В буфер обмена? Скопированный документ можно будет
+        вставить после в выбранное место.
+    </message>
+    <!-- Paste document -->
+    <message key="Paste Document">Вставить документ</message>
+    <message key="paste-doc">Вставить документ {0}</message>
+    <message key="paste-doc-from-clip?">Хотите вставить документ {0} из буфера обмена?</message>
+    <!-- Cut document -->
+    <message key="Cut Document">Вырезать документ</message>
+    <message key="cut-doc">Вырезать документ {0}</message>
+    <message key="cut-doc-to-clip?">Хотите вырезать документ {0} и переместить его в буфер обмена? Вырезанный документ
+        можно будет вставить после в выбранное место.
+    </message>
+    <!--Change visibility in navigation -->
+    <message key="Change">Изменить</message>
+    <message key="Change Document visiblity in navigation">Выберите видимость документа в навигации</message>
+    <message key="Visibility in navigation">Видимость в навигации</message>
+    <message key="visible">видимый</message>
+    <message key="hidden">скрытый</message>
+
+    <!-- Info Asset -->
+    <message key="Insert Image">Вставить изображение</message>
+    <message key="Insert Asset">Вставить ресурс</message>
+    <message key="Asset Upload">Загрузка ресурса</message>
+    <message key="Insert a new Image">Вставить новое изображение</message>
+    <message key="Upload an Asset">Загрузить ресурс</message>
+
+    <!-- Info workflow -->
+    <message key="Value">Значение</message>
+    <message key="Event">Событие</message>
+    <message key="Variables">Переменные</message>
+    <message key="History">История</message>
+    <message key="State">Состояние</message>
+    <message key="IP Address">IP Адрес</message>
+    <message key="edit">редактировать</message>
+    <message key="submit">отправить</message>
+    <message key="reject">отклонить</message>
+    <message key="publish">опубликовать</message>
+
+    <!-- Info asset -->
+    <message key="New Asset">Новый ресурс</message>
+
+    <!-- Info RC -->
+    <message key="Current Version">Текущая версия</message>
+    <message key="Rollback to this revision">Откатиться к этой версии</message>
+
+    <!-- Info AC -->
+    <message key="SSL Encryption">SSL&#160;шифрование</message>
+    <message key="Access Object">Объект&#160;доступа</message>
+    <message key="visit">посещение</message>
+    <message key="reviewer">обозреватель</message>
+    <message key="editor">редактор</message>
+    <message key="admin">администратор</message>
+    <message key="world">world</message>
+    <message key="the world">the world</message>
+
+    <!-- Scheduler -->
+    <message key="New job">Новое&#160;задание</message>
+    <message key="Active jobs">Текущие&#160;задания</message>
+    <message key="Publish and Export">Опубликовать и&#160;экспортировать</message>
+    <message key="doc-has-links-to-unpublished">Документ ссылается на следующие неопубликованные документы:</message>
+
+    <!-- New Document -->
+    <message key="Please check the following possible causes of the exception">Провертье следующие причины исключения,
+        пожалуйста.
+    </message>
+    <message key="exception.cause.createdoc.whitespace-in-id">Идентификатор не может содержать пробелов</message>
+    <message key="exception.cause.createdoc.id-in-use">Идентификатор уже используется</message>
+    <message key="failmessage.createdoc.invalidformat">Введите пожалуйста допустимое значение в поле ID. A-Z, a-z, 0-9
+        или - составляют допустимое значение.
+    </message>
+    <message key="failmessage.createdoc.required">Заполните все обязательные (*) поля пожалуйста.</message>
+
+    <!-- Asset Upload/Insert Dialog -->
+    <message key="lenya.assetupload.subtitle">Пополнить библиотеку ресурсов</message>
+    <message key="Asset Library">Библиотека ресурсов</message>
+    <message key="No assets available">Нет доступных ресурсов</message>
+    <message key="Insert Asset">Вставить ресурс</message>
+
+    <!-- Image Upload/Insert Dialog -->
+    <message key="lenya.imageupload.title">Вставить изображение</message>
+    <message key="lenya.imageupload.selectimage.label">Выберите изображение</message>
+    <message key="lenya.imageupload.info.noimages">Нет доступных изображений.</message>
+    <message key="lenya.imageupload.links.hint">Внешние ссылки должны начинаться с 'http://', а внутренние &#151; с '/'
+    </message>
+
+    <!-- Revision Controller -->
+    <message key="Reason">Причина</message>
+    <message key="Filename">Файл</message>
+    <message key="lenya.rc.nocheckout">Ресурс не может быть извлечён</message>
+    <message key="lenya.rc.checkedoutalready">Ресурс был уже излвечён другим пользователем</message>
+    <message key="lenya.rc.nocheckin">Реурс не может быть записан</message>
+    <message key="Generic Exception">Общее исключение</message>
+    <message key="Check the log files.">Проверьте файлы журналов.</message>
+    <message key="page.title">Заголовое</message>
+    <message key="page.navigation.title">ккк</message>
+    <message key="page.navigation.logo">Логотип</message>
+    <message key="product.code">Артикул</message>
+    <message key="product.description">Описание</message>
+    <message key="product.productGroup">Категория</message>
+    <message key="product.unit">Единица измерения</message>
+    <message key="product.notes">Примечание</message>
+    <message key="product.price">Цена</message>
+    <message key="registration.name">Имя</message>
+    <message key="registration.email">Email@</message>
+    <message key="registration.password">Пароль</message>
+    <message key="registration.confirmPassword">Повторите</message>
+    <message key="registration.role">Роль</message>
+
+    <message key="download">Скачать</message>
+</catalogue>

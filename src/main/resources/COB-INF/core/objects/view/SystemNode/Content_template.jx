@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{content}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <content id="#{id}" parentContentId="#{parentContentId}" 
+             expireDateTime="#{expireDateTime}"
+             isBranch="#{isBranch}" isProtected="#{isProtected}"
+             documentTypeId="#{documentTypeId}">
+        <name>#{name}</name>
+        <creator>#{userName}</creator>
+        <!--<jx:import uri="view/DocumentType/DocumentType_template.jx"/>-->
+        <!--<jx:import uri="view/Document/Document_template.jx"/>-->
+    </content>
+</jx:forEach>
+        <!--
+        <jx:forEach items="${content}" var="c" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+            <content id="#{id}" parentContentId="#{parentContentId}" publishDateTime="#{publishDateTime}"
+                     expireDateTime="#{expireDateTime}"
+                     isBranch="#{isBranch}" isProtected="#{isProtected}"
+                     documentTypeId="#{documentTypeId}">
+                <name>#{name}</name>
+                <creator>#{creator.userName}</creator>
+
+            </content>
+
+        </jx:forEach>
+        -->
+
+        <!--
+        <jx:forEach select="#{content}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    dcdc
+    <content id="#{id}" parentContentId="#{parentContentId}" publishDateTime="#{publishDateTime}"
+             expireDateTime="#{expireDateTime}"
+             isBranch="#{isBranch}" isProtected="#{isProtected}"
+             documentTypeId="#{documentTypeId}">
+        <name>#{name}</name>
+        <creator>#{creator/userName}</creator>
+        <jx:import uri="view/Document/Document_template.jx"/>
+
+    </content>
+
+</jx:forEach>-->
+        <!--repositoryId="#{repositoryId}"-->
+        <!--
+<jx:forEach select="#{content}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <content id="#{contentId}" parentContentId="#{parentContentId}" publishDateTime="#{publishDateTime}"
+             expireDateTime="#{expireDateTime}"
+             repositoryId="#{repositoryId}" isBranch="#{isBranch}">
+        <name>#{name}</name>
+        <owner>#{owner}</owner>
+        -->
+        <!--<jx:if test="#{DocumentType}">-->
+        <!--
+        <jx:import uri="view/model/DocumentType_template.jx"/>
+        -->
+        <!--</jx:if>-->
+        <!--
+        -->
+        <!--<jx:if test="#{Document != null}">-->
+        <!--
+        <jx:import uri="view/model/Document_template.jx"/>
+        -->
+        <!--</jx:if>-->
+        <!--
+
+            </content>
+
+        </jx:forEach>
+        -->
+

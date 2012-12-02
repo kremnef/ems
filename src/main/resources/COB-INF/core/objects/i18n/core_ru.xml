@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<catalogue xml:lang="ru">
+
+    <!--repository-->
+    <message key="Repository.name">Имя</message>
+    <message key="Repository.DNS">DNS имя</message>
+    <message key="Repository.description">Описание</message>
+
+
+    <!--mateInfo-->
+    <message key="MetaInfo.title">Заголовок для страницы</message>
+    <message key="MetaInfo.description">Описание для страницы</message>
+    <message key="MetaInfo.keywords">Ключевые слова для страницы</message>
+    <!--label-->
+    <message key="Label.translate">Перевод</message>
+    <message key="Label.alt">Альтернативный текст</message>
+    <message key="Label.copyright">Копирайт</message>
+
+    <!--language-->
+    <message key="Languages">Системные Языки</message>
+    <message key="Language.name">Язык</message>
+    <message key="Language.code">Код</message>
+    <message key="Language.charset">Кодировка</message>
+    <message key="Language.isPublished">Видимый</message>
+    <message key="Language.isDefaultLang">По умолчанию</message>
+    <message key="Language.addNew">Добавить язык</message>
+    <message key="Language.list">Добавить язык</message>
+    <message key="Language.edit">Редактировать язык</message>
+
+    <!--templates-->
+    <message key="Templates">Шаблоны</message>
+    <message key="Template.name">Имя</message>
+    <message key="Template.URI">URI(путь)</message>
+    <message key="Template.positionsAmount">Количество блоков</message>
+    <message key="Template.list">Список Шаблонов</message>
+    <message key="Template.addNew">Добавить новый</message>
+    <message key="Template.edit">Редактировать шаблон</message>
+    <message key="Template.xsl">XSL</message>
+    <message key="Template.css">CSS</message>
+
+
+    <!--ObjectType-->
+    <message key="ObjectType">Сущность</message>
+    <message key="ObjectType.Content">Документ</message>
+    <message key="ObjectType.Page">Страница</message>
+    <message key="ObjectType.Navigation">Меню</message>
+    <message key="ObjectType.Language">Язык</message>
+    <message key="ObjectType.Folder">Пака</message>
+    <message key="ObjectType.FileObject">Файл</message>
+    <message key="ObjectType.User">Пользователь</message>
+
+    <!--ObjectTypeAction-->
+    <message key="ObjectTypeAction">Cниппеты</message>
+    <message key="ObjectTypeAction.name">Имя</message>
+    <message key="ObjectTypeAction.URI">URI(путь)</message>
+    <message key="ObjectTypeAction.objectTypeId">id Типа</message>
+    <message key="ObjectTypeAction.list">Список Cниппетов</message>
+    <message key="ObjectTypeAction.addNew">Добавить новый</message>
+    <message key="ObjectTypeAction.edit">Редактировать шаблон</message>
+    <message key="ObjectTypeAction.xsl">XSL</message>
+    <message key="ObjectTypeAction.css">CSS</message>
+
+
+    <!--systemNode-->
+    <message key="SystemNodes">Страницы</message>
+    <message key="SystemNode.template">Шаблон</message>
+    <message key="SystemNode.settings">Параметры</message>
+    <message key="SystemNode.widgets">Виджеты</message>
+    <message key="SystemNode.name">Название страницы</message>
+    <message key="SystemNode.list">Список страниц</message>
+    <message key="SystemNode.addNew">Создать Новую</message>
+    <message key="SystemNode.create">Создать страницу</message>
+    <message key="SystemNode.edit">Редактировать страницу</message>
+    <message key="SystemNode.publishDateTime">Последнее изменение</message>
+    <message key="SystemNode.choose">Выбрать страницу</message>
+    <message key="SystemNode.hide">Скрыть</message>
+    <message key="SystemNode.redirectTo">Перенаправить</message>
+
+
+    <message key="SystemNodeObject.objectTypeSelect">Объекты для страницы</message>
+    <message key="SystemNodeObject.levels">Кол-во уровней</message>
+    <message key="SystemNodeObject.itemsOnPage">Кол-во на странице</message>
+    <message key="SystemNodeObject.position">Позиция</message>
+    <message key="SystemNodeObject.sort">Сортировать</message>
+    <message key="SystemNodeObject.direction">Направление</message>
+    <message key="SystemNodeObject.sortByAsc">по возростанию</message>
+    <message key="SystemNodeObject.sortByDesc">по убыванию</message>
+    <message key="SystemNodeObject.renderLike">показывать как</message>
+
+
+    <!--navigation-->
+    <message key="Navigation">Меню</message>
+    <message key="Navigation.systemNodeName">Название страницы</message>
+    <message key="Navigation.list">Список меню</message>
+    <message key="Navigation.addNew">Добавить новый</message>
+    <message key="Navigation.create">Создать меню</message>
+    <message key="Navigation.edit">Редактировать меню</message>
+    <message key="Navigation.outerURL">Внешняя ссылка</message>
+    <message key="Navigation.choose">Выбрать пункт меню</message>
+    <message key="Navigation.clear">Очистить</message>
+
+
+    <!--content-->
+    <message key="Content">Документ</message>
+    <message key="Contents">Документы</message>
+    <message key="Content.linked">Связанные документы</message>
+    <message key="Content.isFolder">Папка?</message>
+    <message key="Content.choose">Указать документ</message>
+    <message key="Content.chooseLinks">Укажите документы для связи</message>
+    <message key="Content.publishing">Управление публикациями</message>
+    <message key="Content.creatorName">Создатель</message>
+    <message key="Content.isProtected">Защищенный</message>
+    <message key="Content.publishDateTime">Дата и время публикации</message>
+    <message key="Content.expireDateTime">Срок годности</message>
+    <message key="Content.documentType">Тип документа</message>
+    <message key="Content.documentTypeId">ID типа документа</message>
+    <message key="Content.list">Список документов</message>
+    <message key="Content.create">Создать новый</message>
+    <message key="Content.addNew">Добавить новый</message>
+    <message key="Content.addNewFolder">Добавить Папку</message>
+    <message key="Content.edit">Редактировать документ</message>
+    <message key="Content.features">Свойства документа</message>
+    <message key="Content.additional">Дополнительные данные</message>
+    <message key="Content.attachedFiles">Файлы</message>
+    <message key="Content.versions">Версии</message>
+    <message key="Content.systemNameUseDate">Использовать дату в URL</message>
+    <message key="Content.docTypeSetError">Тип документа должен быть задан</message>
+    <message key="Content.SEO">SEO</message>
+
+    <message key="Content.asc">По возрастанию</message>
+    <message key="Content.desc">По убыванию</message>
+    <!--document-->
+    <message key="Document">Версия Документа</message>
+    <message key="Document.createdDateTime">Создан</message>
+    <message key="Document.modifiedDateTime">Изменен</message>
+    <message key="document.xmlSource">XML</message>
+    <message key="Document.state">Статус</message>
+    <message key="document.state_1">Черновик</message>
+    <message key="document.state_2">Нужно проверить</message>
+    <message key="document.state_3">Можно публиковать</message>
+    <message key="document.state_4">Опубликован</message>
+    <message key="Document.title">Заголовок</message>
+    <message key="Document.description">Краткое описание</message>
+    <message key="Document.tags">Метки</message>
+    <message key="Document.version">Версия</message>
+    <message key="Document.versionComment">Комментарий</message>
+    <message key="document.versionModifierId">Редактор</message>
+    <message key="document.addAction">создать версию документа</message>
+    <message key="document.removeAction">Удалить</message>
+    <message key="Document.list">Список документов</message>
+    <message key="Document.create">Создать документ</message>
+    <message key="Document.edit">Редактировать версию документа</message>
+    <message key="Document.save">Сохранить документ</message>
+    <message key="Document.addNew">Создать версию</message>
+    <message key="Document.editXML">Изменить Данные Документа</message>
+    <message key="Document.metaData">Мета Данные</message>
+    <message key="Document.workflowData">Процесс</message>
+    <message key="Document.revisionData">Проверка</message>
+    <message key="Document.langVersions">Языки и версии</message>
+    <message key="Document.thumbnail">Миниатюра</message>
+
+    <!--documentType-->
+    <message key="DocumentTypes">Типы Док-ов</message>
+    <message key="DocumentType.type">Тип</message>
+    <message key="DocumentType.path">Путь</message>
+    <message key="DocumentType.name">Имя</message>
+    <message key="DocumentType.list">Список типов</message>
+    <message key="DocumentType.edit">Редактировать данные документа</message>
+    <message key="DocumentType.addNew">Добавить новый</message>
+    <message key="DocumentType.advertisement">Рекламный материал</message>
+
+    <!--folder-->
+    <message key="Folders">Папки</message>
+    <message key="Folder.path">Путь</message>
+    <message key="Folder.list">Список папок и файлов</message>
+    <message key="Folder.tree">Дерево папок и файлов</message>
+    <message key="Folder.addNew">Добавить новую папку</message>
+    <message key="Folder.edit">Редактировать папку</message>
+
+    <!--fileObject-->
+    <message key="FileObjects">Файлы</message>
+    <message key="FileObject.upload">Загрузить файл</message>
+    <message key="FileObject.download">Скачать файл</message>
+    <message key="FileObject.name">Название файла</message>
+    <message key="FileObject.mimeType">Тип Файла</message>
+    <message key="FileObject.contentType">Тип Файла</message>
+    <message key="FileObject.size">Размер</message>
+    <message key="FileObject.path">Путь</message>
+    <message key="FileObject.hide">Cкрыть дерево доступных объектов</message>
+    <message key="FileObject.choose">Выбрать Файлы для добавления к текущему документу</message>
+    <message key="FileObject.root">Доступные Объекты</message>
+
+    <message key="FileTypeGroup">Типы Файлов</message>
+    <message key="FileTypeGroup.images">Картинки</message>
+    <message key="FileTypeGroup.sound">Звук</message>
+    <message key="FileTypeGroup.video">Видео</message>
+    <message key="FileTypeGroup.files">Файлы</message>
+
+    <!--digitaAsset-->
+    <message key="Media">Медиафайлы</message>
+    <message key="Mediateka">Медиатека</message>
+    <message key="Media.list">Список медиа</message>
+    <message key="Media.addNew">Добавить новый</message>
+    <!--<message key="DigitalAsset.root">Доступные Объекты</message>-->
+    <!--<message key="DigitalAsset.id">id</message>-->
+    <!--<message key="DigitalAsset.name">Название Объекта</message>-->
+    <!--<message key="DigitalAsset.assetFileName">Название Объекта</message>-->
+    <!--<message key="DigitalAsset.mimeType">Тип Медиаконтента</message>-->
+    <!--<message key="DigitalAsset.choose">Выбрать объект для добавления к текущему документу</message>-->
+    <!--<message key="DigitalAsset.hide">скрыть дерево доступных объектов</message>-->
+    <!--<message key="DigitalAsset.assetKey">Ключ</message>-->
+    <!--<message key="DigitalAsset.assetFileSize">Размер Файла</message>-->
+    <!--<message key="DigitalAsset.assetFilePath">Путь до Объекта</message>-->
+    <!--<message key="DigitalAsset.assetContentType">Тип объекта</message>-->
+    <!--<message key="digitalAsset.mimeType">Редактировать меню</message>-->
+
+    <!--services-->
+    <message key="Services">Сервисы</message>
+    <message key="Service.list">Список Сервисов</message>
+    <message key="Service.addNew">Добавить Сервис</message>
+
+    <!--Tag-->
+    <message key="Tag.confirmRemoval">Удалить Метку (Тэг)?</message>
+    <message key="Tag.choose">Указать метки</message>
+
+
+</catalogue>

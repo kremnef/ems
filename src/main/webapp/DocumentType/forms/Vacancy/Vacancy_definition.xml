@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<fd:form
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <fd:widgets>
+        <fd:group id="Vacancy">
+
+            <fd:widgets>
+
+                <fd:field id="post">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.post"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="400"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="department">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.department"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="400"/>
+                    </fd:validation>
+                </fd:field>
+
+                <fd:field id="number">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.number"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="50"/>
+                    </fd:validation>
+                </fd:field>
+
+
+                <fd:field id="responsibility">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.responsibility"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+
+                </fd:field>
+                <fd:field id="requirements">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.requirements"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+
+                </fd:field>
+                 <fd:field id="job-place">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.job-place"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="400"/>
+                    </fd:validation>
+                </fd:field>
+
+                <fd:field id="contacts">
+                    <fd:label>
+                        <i18n:text i18n:catalogue="documenttypes" key="Vacancy.contacts"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length max="400"/>
+                    </fd:validation>
+                </fd:field>
+            </fd:widgets>
+        </fd:group>
+        <fd:submit id="saveDocumentType">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

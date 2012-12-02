@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <items>
+
+        <jx:forEach items="${items}" var="item" varStatus="status">
+            <item value="${item.value}" label="${item.label}"/>
+        </jx:forEach>
+    </items>
+
+</jx:template>

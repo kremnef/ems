@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+
+    <class name="Template" table="template" lazy="false">
+        <id name="id" column="id" type="int">
+            <generator class="identity" />
+        </id>
+        <property name="name" column="template_name" type="string" not-null="true" lazy="true"/>
+        <property name="URI" column="template_uri" type="string" not-null="true" lazy="true"/>
+        <property name="positionsAmount" column="positions_amount" type="int" not-null="true" lazy="true"/>
+    </class>
+</hibernate-mapping>
+

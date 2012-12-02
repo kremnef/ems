@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+
+    <jx:macro name="objectRows">
+        <li>
+            <label for="path" class="label">
+                <ft:widget-label id="path"/>
+            </label>
+            <ft:widget id="path">
+                <fi:styling size="60"/>
+            </ft:widget>
+        </li>
+    </jx:macro>
+
+    <content>
+        <userDataMacro/>
+        <parentObjects/>
+        <tree-script/>
+        <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
+                          ajax="true">
+            <script type="text/javascript">
+                $(function() {
+                $("#folder-tabs").tabs();
+                });
+            </script>
+            <translate/>
+
+            <div id="folder-tabs" class="panel">
+                <ul>
+
+                </ul>
+                <div id="folder-tabs-1">
+                    <emsFields entity="Folder" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                </div>
+            </div>
+            <ft:widget id="saveFolder" class="ui-button"/>
+        </ft:form-template>
+    </content>
+
+</jx:template>

@@ -1,0 +1,228 @@
+
+
+
+function captcha() {
+    var background = cocoon.request.getParameter('background');
+//    if (background.startsWith('#')) {
+//        background = '0x' + background.substring(1);
+//    }
+//
+//    print('background = ' + background);
+
+    var captchaLength = 5;
+    var captchaText = '';
+    var charArray = new Array();
+    var arrIndex = 0;
+    for (var i = 48; i < 58; i++) {
+        charArray[arrIndex++] = i;
+    }
+    for (var i = 65; i < 91; i++) {
+        charArray[arrIndex++] = i;
+    }
+    for (var i = 97; i < 123; i++) {
+        charArray[arrIndex++] = i;
+    }
+    for (var i = 0; i < captchaLength; i++) {
+        captchaText += String.fromCharCode(charArray[Math.floor(Math.random() * charArray.length)]);
+    }
+    cocoon.session.setAttribute('captcha', captchaText);
+    cocoon.sendPage('show-captcha/' + captchaText + '/' + background, {});
+}
+
+
+function sendletter() {
+    var send = true;
+    var answer = JSONUTIL.object();
+    var answerObj = [];
+    var captcha1 = cocoon.request.getParameter('captcha-input1');
+    var captcha2 = cocoon.request.getParameter('captcha-input2');
+    var fio = new java.lang.String("");
+    var content = new java.lang.String("");
+    var fileName = new java.lang.String("");
+    var attachment = new java.lang.String("");
+    var mimeType = new java.lang.String("");
+    if (captcha1 != null) {
+        fio = cocoon.request.getParameter('fio');
+        if (fio != null) {
+            fio = fio.trim();
+            if (fio.length == 0) {
+                answerObj[answerObj.length] = {'name' : 'fio', 'value': 'This field is required.'};
+                answer.addStringProperty('fio', 'This field is required.');
+                send = false;
+            }
+        }
+        else {
+            answer.addStringProperty('fio', 'This field is required.');
+            answerObj[answerObj.length] = {'name' : 'fio', 'value': 'This field is required.'};
+            send = false;
+        }
+        var position = cocoon.request.getParameter('position');
+        if (position != null) {
+            position = position.trim();
+            if (position.length == 0) {
+                answer.addStringProperty('position', 'This field is required.');
+                answerObj[answerObj.length] = {'name' : 'position', 'value': 'This field is required.'};
+                send = false;
+            }
+        }
+        else {
+            answer.addStringProperty('position', 'This field is required.');
+            answerObj[answerObj.length] = {'name' : 'position', 'value': 'This field is required.'};
+            send = false;
+        }
+        var info = cocoon.request.getParameter('info');
+        if (info != null) {
+            info = info.trim();
+            if (info.length == 0) {
+                answer.addStringProperty('info', 'This field is required.');
+                answerObj[answerObj.length] = {'name' : 'info', 'value': 'This field is required.'};
+                send = false;
+            }
+        }
+        else {
+            answer.addStringProperty('info', 'This field is required.');
+            answerObj[answerObj.length] = {'name' : 'info', 'value': 'This field is required.'};
+            send = false;
+        }
+        var contacts = cocoon.request.getParameter('contacts');
+        if (contacts != null) {
+            contacts = contacts.trim();
+            if (contacts.length == 0) {
+                answer.addStringProperty('contacts', 'This field is required.');
+                answerObj[answerObj.length] = {'name' : 'contacts', 'value': 'This field is required.'};
+                send = false;
+            }
+        }
+        else {
+            answer.addStringProperty('contacts', 'This field is required.');
+            answerObj[answerObj.length] = {'name' : 'contacts', 'value': 'This field is required.'};
+            send = false;
+        }
+        captcha1 = captcha1.trim();
+        if (!captcha1.equals(cocoon.session.getAttribute('captcha'))) {
+            answer.addStringProperty('captcha-input1', 'Incorrect value.');
+            answerObj[answerObj.length] = {'name' : 'captcha-input1', 'value': 'Incorrect value.'};
+            send = false;
+        }
+        if (send) {
+            content = 'FIO: ' + fio + "\n";
+            content += 'Position: ' + position + "\n";
+            content += 'Info: ' + info + "\n";
+            content += 'Contacts: ' + contacts + "\n";
+        }
+    }
+    else {
+        if (captcha2 != null) {
+            var file = cocoon.request.getParameter('file');
+            if (file != null) {
+                var f = new java.io.File(file);
+                if (f.isFile()) {
+                    fileName = f.getName();
+                    print('fileName = ' + fileName);
+                    var fileNameMap = java.net.URLConnection.getFileNameMap();
+                    mimeType = fileNameMap.getContentTypeFor(fileName);
+                    print('mimeType = ' + mimeType);
+                    if (mimeType != null) {
+                        attachment = file;
+                        print('attachment = ' + attachment);
+                    }
+                }
+            }
+            else {
+                answer.addStringProperty('file', 'This field is required.');
+                answerObj[answerObj.length] = {'name' : 'file', 'value': 'This field is required.'};
+                send = false;
+            }
+            captcha2 = captcha2.trim();
+            if (!captcha2.equals(cocoon.session.getAttribute('captcha'))) {
+                answer.addStringProperty('captcha-input2', 'Incorrect value.');
+                answerObj[answerObj.length] = {'name' : 'captcha-input2', 'value': 'Incorrect value.'};
+                send = false;
+            }
+        }
+    }
+//    var email = cocoon.request.getParameter('email-input');
+//    if (email != null) {
+//        email = email.trim();
+//        if (email.length == 0) {
+//            answer.addStringProperty('email-input', 'This field is required.');
+//            send = false;
+//        }
+//        else if (!/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(email)) {
+//            answer.addStringProperty('email-input', 'Please enter a valid email address.');
+//            send = false;
+//        }
+//    }
+    if (send) {
+        var from = '=?UTF-8?B?' + org.apache.xerces.impl.dv.util.Base64.encode(fio.getBytes("UTF-8")) + '?=<career@tgc-2.ru>';
+        var to = 'setkov@yandex.ru';
+        var subject = '=?UTF-8?B?' + org.apache.xerces.impl.dv.util.Base64.encode(new java.lang.String('ѕисьмо с сайта tgc-2.ru').getBytes("UTF-8")) + '?=';
+        var mailData = {
+            'from' : from,
+            'content' : content,
+            'to' : to,
+            'subject' : subject,
+            'fileName' : fileName,
+            'attachment' : attachment,
+            'mimeType' : mimeType
+        };
+        print('mailData.from = ' + mailData.from);
+        print('mailData.content = ' + mailData.content);
+        var output = new Packages.java.io.ByteArrayOutputStream();
+
+        try {
+            cocoon.processPipelineTo("sendmail",
+                    mailData,
+                    output);
+            print('output.toString() = ' + output.toString());
+            var input = new Packages.java.io.ByteArrayInputStream(output.toByteArray());
+            var document = Packages.javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input) ;
+            var nodeList = document.getElementsByTagName('email:result');
+            if (nodeList.getLength() > 0) {
+                var resultNode = nodeList.item(0);
+                var firstChild = resultNode.getFirstChild();
+                if (firstChild == null || !firstChild.getNodeName().equals('email:success')) {
+                    answer.addStringProperty('form', 'Error While Sending"/>');
+                    answerObj[answerObj.length] = {'name' : 'form', 'key': 'form.errorWhileSending'};
+                }
+                else {
+                    answer.addStringProperty('success', 'Message is sent successfully');
+                    answerObj[answerObj.length] = {'name' : 'success', 'key': 'form.success'};
+                }
+            }
+            input.close();
+
+        }
+        catch(e) {
+            print('e = ' + e);
+            answer.addStringProperty('form', 'Could Not Send Message');
+            answerObj[answerObj.length] = {'name' : 'form', 'key': 'form.couldNotSendMessage'};
+        }
+        output.close();
+    }
+    var referer = cocoon.request.getHeader("Referer");
+    if (captcha2 != null && referer.length() > 0) {
+        var properties = answer.getProperties();
+        var getString = "";
+        if (properties) {
+            for (var i = 0; i < properties.length; i++) {
+                getString += "&" + properties[i].getName() + "=" + properties[i].getObject();
+            }
+            getString = encodeURI(getString.substr(1));
+            var ind = referer.indexOf("?");
+            if (ind > -1) {
+                referer = referer.substring(0, ind);
+            }
+            referer += "?" + getString;
+        }
+        cocoon.redirectTo(referer);
+    }
+    else {
+        cocoon.sendPage("/json",
+           {
+               "json" :  answer.toString(),
+               "obj" : answerObj
+           }
+       );
+    }
+}

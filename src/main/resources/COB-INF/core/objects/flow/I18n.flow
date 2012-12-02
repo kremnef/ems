@@ -1,0 +1,176 @@
+importClass(Packages.ru.tastika.tools.util.Utilities);
+
+function listI18n() {
+
+    var fileObjectService = cocoon.getComponent("fileObjectService");
+    var contextRealPath = fileObjectService.getContextRealPath();
+
+    var i18n_ru = contextRealPath + "/i18n/messages_" + "ru" + ".xml";
+    var i18n_en = contextRealPath + "/i18n/messages_" + "en" + ".xml";
+
+
+//    print(i18n_ru);
+//    var list = new Array();
+
+    cocoon.redirectTo("list-directory-i18n");
+//    var list = cocoon.load("list-directory-i18n");
+//    list.add(1,i18n_ru);
+//    list.add(2,i18n_en);
+    cocoon.sendPage(list.displayURI, list);
+}
+
+
+function createI18n(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var templateService = cocoon.getComponent("templateService");
+//    var template = createEmsObject(templateService);
+    var template = cocoon.createObject("ru.strela.ems.core.model.I18n");
+
+
+    /*var parentId = 0;
+     var parentName = "";
+     var parentObject = template.getParent();
+     if (parentObject != null) {
+     parentId = parentObject.getId();
+     parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+     }
+     */
+    var actionState = "create";
+    /*  var viewData = {
+     "actionState": actionState
+     }*/
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+//    template = showEmsObjectForm(form, template, showFormURI, {    
+    form.showForm(showFormURI, {
+//        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData": getLoggedInUser(),
+        "actionState": actionState
+    });
+
+    form.save(template);
+    templateService.saveI18n(template);
+    cocoon.releaseComponent(templateService);
+
+    var id = template.getId();
+    cocoon.disposeObject(template);
+
+    cocoon.redirectTo("I18n-edit?id=" + id);
+}
+
+
+function editI18nById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    /*if (cocoon.request.getParameter("id") != null) {
+     id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+     }
+     if (id == 0) {
+     cocoon.redirectTo("I18n-create");
+     }*/
+
+    /*var templateService = cocoon.getComponent("templateService");
+     var template = templateService.getI18n(id);
+     if (template == null) {
+
+     cocoon.releaseComponent(templateService);
+     cocoon.redirectTo("I18n-create");
+     }*/
+
+    /*var parentId = template.getParentId();
+     var parentName = "";
+     if (parentId > 0) {
+     var parent = template.getParent();
+     parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+     }*/
+
+    var actionState = "edit";
+    /*var viewData = {
+     "actionState": actionState
+     }*/
+    var availableLanguages = getAvailableLanguages();
+//    var xmlEditor = form.getChild("xmlEditor");
+
+    var fileObjectService = cocoon.getComponent("fileObjectService");
+    var contextRealPath = fileObjectService.getContextRealPath();
+
+
+    importClass(Packages.ru.tastika.tools.file.FileAddition);
+    var FileAdditional = new Packages.ru.tastika.tools.file.FileAddition();
+
+
+    var repeater = form.getChild("messages");
+    if (availableLanguages.size() > 0) {
+//        for (var i = 0; i < repeater.getSize(); i++) {
+        for (var i = 0; i < availableLanguages.size(); i++) {
+//            print(i);
+            var language = availableLanguages.get(i);
+            var languageCode = language.getCode()
+//            print(languageCode);
+//            var row = repeater.getRow(i);
+            var row = repeater.addRow();
+            row.getChild("languageCode").setValue(languageCode);
+
+
+            var i18nURI = contextRealPath + "/i18n/messages_" + languageCode + ".xml";
+            var fileI18n = FileAdditional.getFile(i18nURI);
+            var fileI18n_str;
+            if (fileI18n != null) {
+                fileI18n_str = FileAdditional.getFileStringContent(fileI18n, true);
+//                print(fileI18n_str);
+                row.getChild("xmlEditor").setValue(fileI18n_str);
+            } else {
+                row.getChild("xmlEditor").setValue("");
+            }
+
+
+        }
+    }
+
+
+//    form.load(template);
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+    form.showForm(showFormURI, {
+        "userData" : getLoggedInUser(),
+        "servletPath" : servletPath,
+        "availableLanguages" : availableLanguages,
+        "actionState": actionState,
+        "formLocale": locale
+    });
+//    form.save(template);
+
+    for (var e = 0; e < repeater.getSize(); e++) {
+        var row = repeater.getRow(e);
+        var languageCode = row.getChild("languageCode").value;
+        var resultXML = row.getChild("xmlEditor").value;
+//        print(resultXML);
+        var i18nURI = contextRealPath + "/i18n/messages_" + languageCode + ".xml";
+        FileAdditional.createFile(i18nURI, resultXML);
+
+
+    }
+
+
+    cocoon.redirectTo("I18n-edit?id=" + 1);
+}
+
+
+function deleteI18nById(id) {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = null;
+    id = parseInt(cocoon.request.getParameter("id"));
+    var templateService = cocoon.getComponent("templateService");
+    var template = templateService.getI18n(id);
+    templateService.deleteI18n(template);
+    cocoon.releaseComponent(templateService);
+    cocoon.redirectTo("I18n-list");
+}
+

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<root xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <head>
+        <title>Contents successful</title>
+    </head>
+    <body>
+        <list>
+            <jx:import uri="view/document/Document_template.jx"/>
+        </list>
+    </body>
+</root>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="SiteMapObject" table="site_map_object">
+        <id name="id" column="id" type="int">
+            <generator class="native"/>
+        </id>
+        <property name="objectId" column="object_id" type="int" not-null="true" lazy="true"/>
+        <property name="mainObjectId" column="main_object_id" type="int" not-null="true" lazy="true"/>
+        <property name="siteMapId" column="site_map_id" type="int" not-null="true" insert="false" update="false" lazy="true"/>
+        <property name="baseUrl" column="base_url" type="string" not-null="true" lazy="true"/>
+        <property name="objectUrl" column="object_url" type="string" not-null="true" lazy="true"/>
+    </class>
+</hibernate-mapping>

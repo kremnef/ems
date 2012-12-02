@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<jx:forEach select="#{document}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <document id="#{id}">
+        <!--
+            #{XML}
+
+            <jx:import uri="view/Language/Language_template.jx"/>-->
+        <jx:forEach select="#{tags}" xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+            <tag id="#{id}">#{tag}</tag>
+        </jx:forEach>
+
+    </document>
+</jx:forEach>

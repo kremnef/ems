@@ -1,0 +1,144 @@
+body {
+    background-color: white;
+    color: black;
+    font-family: verdana, helvetica, arial, sans-serif;
+    font-size: 80%;
+}
+
+h1 {
+    color: #336699;
+    text-align: center;
+    font-size: 3em;
+    padding-bottom: 10px;
+    margin: 0;
+}
+
+h2 {
+    color: #336699;
+}
+
+h3 {
+    color: #336699;
+}
+
+h4 {
+    color: #336699;
+}
+
+a:link {
+    color: #336699;
+}
+
+a:visited {
+    color: #800080;
+}
+
+a:hover {
+    color: #800080;
+    background-color: #ffff80;
+}
+
+a:active {
+    color: #006666;
+}
+
+img {
+    border: 0;
+}
+
+hr {
+    height: 0;
+    color: #336699;
+}
+
+input.valid {
+    background: url(../img/button_ok.png) no-repeat right;
+    padding-right: 32px;
+}
+
+input.invalid {
+    background: url(../img/button_cancel.png) no-repeat right;
+    padding-right: 32px;
+}
+
+#checkSystemName {
+    background: url(../img/button_cancel.png) no-repeat right top;
+    padding: 0 30px 30px 0;
+    float: right;
+}
+
+#checkSystemName.output {
+    background: url(../img/button_ok.png) no-repeat right top;
+}
+
+span.mouseover {
+    background: yellow;
+    cursor: pointer;
+}
+
+span.checked {
+    background: silver;
+    border: 1px dotted gray;
+}
+
+div#objectsTreeDiv {
+    position: absolute;
+    border: 1px solid silver;
+    display: none;
+    padding: 20px;
+    background: #eeeeee;
+}
+
+#objectsTree td {
+    padding: 0.1em;
+    border-top: black 1px dotted;
+}
+
+.switch {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.forms.label {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.forms.content {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 5px;
+}
+
+table.forms {
+    border-bottom: 1px solid #ccc;
+}
+
+.odd {
+    background-color: #eee;
+}
+
+a#labelsLink {
+    display: block;
+    float: left;
+    width: 19px;
+    height: 20px;
+    background-image: url("../img/screen-options-right.gif");
+}
+
+#labelsLink.open {
+    background-image: url("../img/screen-options-right-up.gif");
+}
+
+fieldset.objectFields {
+    float: left;
+    padding: 3px;
+}
+
+fieldset.objectFeatures div {
+    padding: 5px;
+}
+

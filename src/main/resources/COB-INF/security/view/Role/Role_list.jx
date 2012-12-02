@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.roleId}">
+                    <name>${item.roleName}</name>
+                    <authority>${item.authority}</authority>
+
+
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="security">name</header>
+            <header i18nCatalogueName="security">authority</header>
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="blockcontext:/ems/core/objects/view/Library/list.jx"/>
+
+</jx:template>

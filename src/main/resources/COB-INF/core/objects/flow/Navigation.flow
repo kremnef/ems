@@ -1,0 +1,189 @@
+function listNavigation(parentId) {
+//    print("listNavigation");
+    var filter = null;
+    var listData = prepareListData(parentId);
+    var children = listData.children;
+    var systemNodeIds = new java.util.HashSet();
+    for (var i = 0; i < children.size(); i++) {
+        var systemNodeId = children.get(i).getSystemNodeId();
+        if (systemNodeId != null && systemNodeId > 0) {
+            systemNodeIds.add(systemNodeId);
+        }
+    }
+    if (systemNodeIds.size() > 0) {
+        if (cocoon.parameters.entity != "") {
+            var entity = cocoon.parameters.entity;
+            var typifiedObjectService = getServiceByEntity(entity);
+            var systemNodeUrls = typifiedObjectService.getSystemNodeUrls(systemNodeIds);
+            if (systemNodeUrls.size() > 0) {
+                for (var i = 0; i < children.size(); i++) {
+                    var systemNodeId = children.get(i).getSystemNodeId();
+                    if (systemNodeId != null && systemNodeId > 0) {
+                        var url = systemNodeUrls.get(systemNodeId);
+                        if (url != null) {
+//                            print('url = ' + url);
+                            children.get(i).setPathURL(url);
+                        }
+                    }
+                }
+            }
+            cocoon.releaseComponent(typifiedObjectService);
+        }
+
+    }
+
+    sendListPage(listData.displayURI, listData);
+}
+
+//chenged
+function createNavigation(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var navigationService = cocoon.getComponent("navigationService");
+    var navigation = createTypifiedObject(navigationService);
+
+    var parentId = 0;
+    var parentName = "";
+    var parentObject = navigation.getParent();
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+    }
+
+
+    var actionState = "create";
+    var systemNodeName = "";
+
+    navigation = showEmsObjectForm(form, navigationService, navigation, showFormURI, {
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "servletPath" : servletPath,
+        "systemNodeName" : systemNodeName,
+        "actionState": actionState
+    });
+
+
+    navigationService.save(navigation);
+    cocoon.releaseComponent(navigationService);
+
+    var id = navigation.getId();
+    cocoon.disposeObject(navigation);
+
+    cocoon.redirectTo("Navigation-edit?id=" + id);
+}
+
+
+function editNavigationById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Navigation-create");
+    }
+    var navigationService = cocoon.getComponent("navigationService");
+    var navigation = navigationService.getTypifiedObject(id, true);
+
+    if (navigation == null) {
+        cocoon.releaseComponent(navigationService);
+        cocoon.disposeObject(navigation);
+        cocoon.redirectTo("Navigation-create");
+    }
+
+
+    var parentId = navigation.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = navigation.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+    var systemNodeId = navigation.getSystemNodeId();
+
+    var systemNodeName;
+
+    if (systemNodeId != null) {
+        systemNodeId = Utilities.parseStringToInteger(systemNodeId);
+        var systemNodeService = cocoon.getComponent("systemNodeService");
+
+        var systemNode = systemNodeService.getSystemNode(systemNodeId);
+        systemNodeName = systemNode.getName();
+    }
+    var actionState = "edit";
+
+    cocoon.request.setAttribute('navigationForm', form.getWidget());
+
+    var availableLanguages = getAvailableLanguages();
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+    navigation = showEmsObjectForm(form, navigationService, navigation, showFormURI, {
+        "navigationId": id,
+        "parentId" : parentId,
+        "systemNodeName":systemNodeName,
+        "systemNodeId":systemNodeId,
+        "parentName" : parentName,
+        "servletPath" : servletPath,
+        "id" : id,
+        "formName" : "navigationForm",
+        "actionState": actionState,
+        "availableLanguages": availableLanguages,
+        "formLocale": locale
+
+    });
+//    typifiedObject.printList(navigation.getObjectLabelList());
+    /* print("beForeSave :");
+     var objectLabelList = navigation.getObjectLabelList();
+     for (var y = 0; y < objectLabelList.size(); y++) {
+     var lo = objectLabelList.get(y);
+     print("LABEL :" + lo.getLabel());
+     print("langCode :" + lo.getLanguageCode());
+     print("oid :" + lo.getObjectId());
+     }*/
+
+    if (navigation != null) {
+
+        saveObjectLabelList(navigation);
+//        print("Navigation "+navigation);
+        navigationService.save(navigation);
+        cocoon.releaseComponent(navigationService);
+        cocoon.releaseComponent(systemNodeService);
+        cocoon.disposeObject(navigation);
+        cocoon.disposeObject(systemNode);
+    } else {
+        print("ERORR! - Navigation is NULL");
+    }
+
+    cocoon.redirectTo("Navigation-edit?id=" + navigation.getId());
+}
+
+
+function deleteNavigationById() {
+    deleteObjectById("Navigation");
+}
+
+/*
+ function treeSystemNode(parentId){
+ var displayXMLURI = cocoon.parameters.displayXMLURI;
+ var listData = prepareListData(parentId);
+ cocoon.sendPage(displayXMLURI, listData);
+
+ }
+
+ function treeNavigation(parentId){
+ if (cocoon.request.getParameter("excludedId") != null) {
+ var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
+ }
+ var displayXMLURI = cocoon.parameters.displayXMLURI;
+ var listData = prepareListData(parentId);
+ print("excludedId: "+excludedId);
+
+ listData["excludedId"] =excludedId;
+ cocoon.sendPage(displayXMLURI, listData);
+ }
+ */
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.ecommerce.model">
+
+    <class name="ru.strela.ems.ecommerce.model.Country" table="ecommerce_list_country">
+        <id name="id" column="id" type="int">
+            <generator class="increment"/>
+        </id>
+        <property name="name" column="country" type="string" not-null="true"/>
+        <property name="isocode" column="isocode" type="string" not-null="false"/>
+        <property name="currency" column="currency" type="string" not-null="false"/>
+        <property name="symbol" column="symbol" type="string" not-null="false"/>
+        <property name="symbol_html" column="symbol_html" type="string" not-null="false"/>
+
+        <property name="code" column="code" type="string" not-null="false"/>
+
+
+        <property name="tax" column="tax" type="string" not-null="false"/>
+        <property name="continent" column="continent" type="string" not-null="false"/>
+        <property name="visible" column="visible" type="boolean" not-null="true"/>
+        <property name="hasRegions" column="has_regions" type="boolean" not-null="true"/>
+        <property name="isDefaultCountry" column="is_default_country" type="boolean" not-null="true"/>
+
+    </class>
+</hibernate-mapping>

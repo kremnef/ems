@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+
+    <fb:group id="Vacancy" path="Vacancy">
+<!--
+        Наименование должности
+        Отдел, служба
+        Кол-во
+
+        Обязанности:
+        Требования к кандидату
+        Требования к кандидату\
+        Место работы:
+        Контакты:
+-->
+                <fb:value id="post" path="post"/>
+                <fb:value id="department" path="department"/>
+                <fb:value id="number" path="number"/>
+                <fb:value id="responsibility" path="responsibility"/>
+                <fb:value id="requirements" path="requirements"/>
+                <fb:value id="job-place" path="job-place"/>
+                <fb:value id="contacts" path="contacts"/>
+
+    </fb:group>
+
+</fb:context>

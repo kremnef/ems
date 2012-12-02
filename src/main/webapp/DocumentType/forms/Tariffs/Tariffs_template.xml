@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <!--<jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>-->
+    <jx:import uri="context:/DocumentType/forms/Common/template.xml"/>
+
+    <ft:form-template id="dynamicForm" location="${cocoon.request.getAttribute('dynamicForm')}"
+                      ajax-action="${cocoon.session.getAttribute('dynamicForm.id')}.continue"
+                      action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" method="POST" ajax="false">
+
+
+        <ft:group id="Tariffs">
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <fi:items>
+
+                    <ft:repeater id="Tariffs-termal">
+                        <table border="0" class="order table">
+                            <thead>
+                                <tr>
+                                    <th width="50" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="category"/>
+                                    </th>
+                                    <th width="15" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="hot-water"/>
+                                    </th>
+                                    <th width="15" class="manage-column">
+
+                                        <ft:repeater-widget-label widget-id="selected-vapor"/>
+                                    </th>
+                                    <th width="15" class="manage-column">
+                                        <ft:repeater-widget-label widget-id="live-steam"/>
+                                    </th>
+
+
+                                    <th width="5">
+                                        <ft:repeater-widget-label widget-id="select"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ft:repeater-rows>
+                                    <tr class="forms-row">
+                                        <td>
+                                            <ft:widget id="category">
+                                                <fi:styling size="50"/>
+                                            </ft:widget>
+                                        </td>
+                                        <td>
+
+                                            <ft:widget id="hot-water">
+                                                <fi:styling size="15"/>
+                                            </ft:widget>
+
+                                        </td><td>
+
+                                            <ft:widget id="selected-vapor">
+                                                <fi:styling size="15"/>
+                                            </ft:widget>
+
+                                        </td>
+
+                                        <td>
+                                            <ft:widget id="live-steam">
+                                                <fi:styling size="15"/>
+                                            </ft:widget>
+
+                                        </td>
+                                        <td>
+                                            <ft:widget id="select"/>
+
+                                        </td>
+                                    </tr>
+                                </ft:repeater-rows>
+
+
+                            </tbody>
+                        </table>
+                    </ft:repeater>
+                    <ft:widget id="add"/>
+                    <jx:if test="${widget.getSize() > 0}">
+                        <ft:widget id="remove"/>
+                    </jx:if>
+                </fi:items>
+            </fi:group>
+        </ft:group>
+        <ft:widget id="saveDocumentType" class="button-primary">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+    </ft:form-template>
+
+    <!--</content>-->
+</jx:template>

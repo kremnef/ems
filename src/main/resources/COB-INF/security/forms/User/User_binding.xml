@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <!--<fb:group id="user" path=".">-->
+    <!--<fb:value id="id" path="id"/>-->
+    <fb:value id="login" path="login"/>
+    <fb:value id="firstName" path="firstName"/>
+    <fb:value id="lastName" path="lastName"/>
+    <fb:value id="creditStatus" path="creditStatus"/>
+    <fb:value id="accountStatus" path="accountStatus"/>
+    <fb:value id="email" path="email"/>
+
+
+    <!--<fb:value id="systemName" path="systemName"/>-->
+
+    <!--<fb:value id="parentId" path="parentId"/>-->
+    <!--<fb:value id="login" path="login"/>-->
+    <fb:value id="expires" path="expires"/>
+    <!--<fb:value id="tab-state" path="tab-state"/>-->
+    <fb:repeater id="roles" parent-path="." row-path="roles">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="id" path="id"/>
+            <fb:value id="name" path="name"/>
+
+        </fb:on-bind>
+        <fb:on-insert-row>
+            <fb:insert-bean classname="ru.strela.ems.core.model.UserProperties" addmethod="addRole"/>
+        </fb:on-insert-row>
+        <fb:on-delete-row>
+            <fb:insert-bean classname="ru.strela.ems.core.model.UserProperties" addmethod="removeRole"/>
+        </fb:on-delete-row>
+    </fb:repeater>
+    <fb:repeater id="groups" parent-path="." row-path="groups">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="id" path="id"/>
+            <fb:value id="name" path="name"/>
+        </fb:on-bind>
+        <fb:on-insert-row>
+            <fb:insert-bean classname="ru.strela.ems.core.model.UserProperties" addmethod="addGroup"/>
+        </fb:on-insert-row>
+        <fb:on-delete-row>
+            <fb:insert-bean classname="ru.strela.ems.core.model.UserProperties" addmethod="removeGroup"/>
+        </fb:on-delete-row>
+    </fb:repeater>
+    <!--
+   <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+   <fb:expand id="core:labels"/>-->
+
+</fb:context>

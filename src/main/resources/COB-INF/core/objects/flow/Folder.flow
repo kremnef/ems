@@ -1,0 +1,300 @@
+function listFolder(parentId) {
+    var parentId = Utilities.parseStringToInteger(parentId);
+    var filterParam = cocoon.request.getParameter("filter");
+    if (filterParam != null) {
+        var filterFieldValue = 0;
+        var filter = new Packages.ru.strela.ems.core.model.Filter();
+        filter.setEntity("FileObject");
+        filter.setField("fileTypeGroupId");
+
+        var filters = {'images':1, 'sound' : 2, 'video' : 3, 'files': 4};
+        filterFieldValue = filters[filterParam];
+        if (!filterFieldValue) {
+            filterFieldValue = 0;
+        }
+        filter.setFieldValue(filterFieldValue.toString());
+
+    }
+
+   var listData = prepareListData(parentId, filter);
+
+    var form = new Form("forms/FileObject/upload_definition.xml");
+    var locale = getLocale();
+    cocoon.request.setAttribute("forms", true);
+    form.locale = new java.util.Locale(locale);
+    var uploadWidget = form.lookupWidget("upload");
+    var formMimeTypes = uploadWidget.getUploadDefinition().getMimeTypes();
+    if (!formMimeTypes || formMimeTypes.length() == 0) {
+        formMimeTypes = getGlobal('mimeTypes');
+        uploadWidget.getUploadDefinition().addMimeTypes(formMimeTypes);
+    }
+
+    //  разрешенные типы
+        listData.images = getGlobal('fileTypes.images');
+        listData.sound = getGlobal('fileTypes.sound');
+        listData.video = getGlobal('fileTypes.video');
+        listData.files = getGlobal('fileTypes.files');
+
+    var fileTypeGroupService = cocoon.getComponent("fileTypeGroupService");
+    listData.fileTypes = fileTypeGroupService.getFileTypeGroups();
+
+        if (parentId > 0) {
+            var folderService = cocoon.getComponent("folderService");
+            parentObject = folderService.getTypifiedObject(parentId);
+            if (parentObject != null) {
+                parentFolder = parentObject.getPath();
+            }
+
+        }
+        var fileTypeGroupId = Utilities.parseStringToInteger(cocoon.request.getParameter("fileTypeGroupId"));
+            if (fileTypeGroupId != 0) {
+            print("fileTypeGroupId "+fileTypeGroupId+":parentId "+parentId);
+                    var folderService = cocoon.getComponent("folderService");
+                    var files = folderService.getFoldersByFileTypeGroup(parentId, fileTypeGroupId);
+//                    var files = folderService.getFoldersByFileTypeGroup(0, 2);
+                    listData.children = files;
+                }
+
+
+
+
+    form.showForm(listData.displayURI, listData);
+
+// *********** FILE UPLOAD ********** //
+    var widget = form.lookupWidget("upload");
+    var file = widget.getValue();
+    if (file != null) {
+        var fileObjectService = cocoon.getComponent("fileObjectService");
+        var contextRealPath = fileObjectService.getContextRealPath();
+        var mediatekaFolder = getGlobal("mediatekaFolder");
+        var fileName = file.getUploadName();
+//        print('fileName = ' + fileName);
+        var realFile = new java.io.File(fileName);
+        fileName = realFile.getName();
+        var fileMimeType = file.getMimeType();
+        var fileSize = file.getSize();
+
+        var canCreate = true;
+        var fileTypeGroupId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+        parentId = listData.parentId;
+
+        var parentFolder = mediatekaFolder;
+
+        var parentObject = null;
+
+
+        var fileObject = fileObjectService.getFileObjectByPath(parentFolder + fileName);
+        if (fileObject == null) {
+            fileObject = createTypifiedObject(fileObjectService);
+            var className = "" + fileObjectService.getEntityClassName();
+
+            fileObject = cocoon.createObject(className);
+            fileObject.setParent(parentObject);
+
+            var freeSystemName = fileObjectService.getFreeSystemName();
+            fileObject.setSystemName(freeSystemName);
+
+            var userData = getLoggedInUser();
+
+            var userService = cocoon.getComponent("userService");
+            var user = userService.getUser(userData.id);
+            cocoon.releaseComponent(userService);
+            fileObject.setOwner(user);
+        }
+
+        var parentDir = new Packages.java.io.File(contextRealPath, parentFolder);
+        if (!parentDir.isDirectory()) {
+            canCreate = parentDir.mkdirs();
+        }
+
+
+        if (canCreate) {
+
+            fileObject.setContentType(fileMimeType);
+            fileObject.setSize(fileSize);
+            fileObject.setPath(parentFolder + fileName);
+            fileObject.setName(fileName);
+
+
+            fileObjectService.save(fileObject);
+
+            // Create File
+            file.copyToFile(contextRealPath + fileObject.getPath());
+            fileObject.createPreview(contextRealPath);
+        }
+        file.dispose();
+        cocoon.disposeObject(fileObject);
+        cocoon.releaseComponent(fileObjectService);
+        cocoon.releaseComponent(folderService);
+
+    }
+
+
+//    print(listData.objectType);
+    sendListPage(listData.displayURI, listData);
+//    cocoon.sendPage(list.displayURI, listData);
+//    cocoon.redirectTo("Folder-list?parentId=" + listData.parentId);
+}
+
+
+function createFolder(form) {
+//    var showFormURI = cocoon.parameters.showFormURI;
+//    var servletPath = cocoon.parameters.servletPath;
+
+    var folderService = cocoon.getComponent("folderService");
+    var folder = createTypifiedObject(folderService);
+
+    var parentId = 0;
+    var parentName = "";
+    var parentPath = "";
+    var parentObject = folder.getParent();
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+        parentPath = parentObject.getPath();
+    }
+    else {
+        parentPath = getGlobal("mediatekaFolder");
+    }
+
+    var actionState = "create";
+
+    importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+//    form.getChild("systemURL").getChild("systemName").setState(WidgetState.DISABLED);
+    form.getChild("path").setState(WidgetState.INVISIBLE);
+
+    showFolder(folderService, folder, form, actionState);
+//    var newFolderPath = form.getChild("systemURL").getChild("systemName").getValue();
+    folder.setPath(parentPath + folder.getSystemName() + "/");
+    folderService.save(folder);
+
+    var id = folder.getId();
+    if (folder.getId() > 0) {
+        print("saveMetaInfo" + id);
+        saveObjectLabelList(folder);
+//        saveMetaInfoList(folder);
+    }
+    cocoon.releaseComponent(folderService);
+
+    cocoon.disposeObject(folder);
+
+    cocoon.redirectTo("Folder-edit?id=" + id);
+}
+
+function showFolder(folderService, folder, form, actionState) {
+
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+    var parentId = folder.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
+        var parent = typifiedObjectService.getParent(parentId);
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+    var id = folder.getId();
+    var availableLanguages = getAvailableLanguages();
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+
+    try {
+        folder = showEmsObjectForm(form, folderService, folder, showFormURI, {
+            "formLocale": locale,
+            "availableLanguages": availableLanguages,
+            "navigationId": id,
+            "parentId" : parentId,
+            "parentName" : parentName,
+            "servletPath" : servletPath,
+            "id" : id,
+            "actionState": actionState
+        });
+    }
+    finally {
+
+    }
+}
+
+function editFolderById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var id = 0;
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (cocoon.request.getParameter("id") != null) {
+        id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    }
+    if (id == 0) {
+        cocoon.redirectTo("Folder-create");
+    }
+    var folderService = cocoon.getComponent("folderService");
+    var folder = folderService.getTypifiedObject(id, true);
+    if (folder == null) {
+        cocoon.releaseComponent(folderService);
+        cocoon.redirectTo("Folder-create");
+    }
+    /*
+
+     var parentId = folder.getParentId();
+     var parentName = "";
+     if (parentId > 0) {
+     var parent = folder.getParent();
+     parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+     }
+     */
+
+    var actionState = "edit";
+    showFolder(folderService, folder, form, actionState);
+
+    folderService.save(folder);
+    if (folder.getId() > 0) {
+        saveObjectLabelList(folder);
+        saveMetaInfoList(folder);
+    }
+    cocoon.releaseComponent(folderService);
+    cocoon.disposeObject(folder);
+
+    cocoon.redirectTo("Folder-edit?id=" + folder.getId());
+}
+
+
+function deleteFolderById() {
+    deleteObjectById("Folder");
+}
+
+
+function folderTree(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var blockPrefix = cocoon.parameters.blockPrefix;
+    var servletPath = cocoon.parameters.servletPath;
+
+    var CKEditorFuncNum = Utilities.parseStringToInteger(cocoon.request.getParameter("CKEditorFuncNum"));
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+
+    var formData = {
+        "servletPath" : servletPath,
+        "CKEditorFuncNum" : CKEditorFuncNum
+    };
+
+    form.showForm(showFormURI, formData);
+
+//    cocoon.redirectTo("editFolder?id=" + folder.getId());
+}
+
+
+/*
+ function treeFolder(parentId){
+ if (cocoon.request.getParameter("excludedId") != null) {
+ var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
+ }
+ var displayXMLURI = cocoon.parameters.displayXMLURI;
+ var listData = prepareListData(parentId);
+ print("excludedId: "+excludedId);
+
+ listData["excludedId"] =excludedId;
+ cocoon.sendPage(displayXMLURI, listData);
+ }
+ */
+

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<fd:form
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <fd:widgets>
+        <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+        <!--<fd:expand id="emsObject"/>-->
+
+        <fd:repeater id="messages" orderable="true">
+            <fd:widgets>
+
+                <fd:field id="languageCode">
+                    <fd:datatype base="string"/>
+                </fd:field>
+
+                <fd:field id="xmlEditor">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Template.xsl"/>
+                    </fd:label>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+
+                </fd:field>
+            </fd:widgets>
+        </fd:repeater>
+
+
+        <fd:expand id="core:translate"/>
+        <fd:expand id="core:formLocale"/>
+
+
+        <fd:submit id="saveNavigation">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+    </fd:widgets>
+
+</fd:form>

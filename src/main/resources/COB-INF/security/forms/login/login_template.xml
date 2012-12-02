@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>
+    <!--<script language="javascript">
+        $("#loginform").validator();
+    </script>-->
+    <!--<ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST">-->
+        <!-- enctype="multipart/form-data">-->
+    <ft:form-template id="loginform" method="post" action="checklogin">
+
+        <!-- <script type="text/javascript">
+            $(function() {
+                $("select").uniform();
+            });
+        </script>-->
+        <div id="container"></div>
+        <ft:widget-label id="errorMessage"/>
+        <ft:widget-label id="loggedInMessage"/>
+        <fi:group>
+            <!--<fi:styling layout="columns"/>-->
+            <fi:items>
+                <ft:widget id="errorMessage"/>
+                <ft:widget id="loggedInMessage"/>
+                <label for="login" class="forms field">
+
+                    <ft:widget-label id="login"/>
+                </label>
+                <ft:widget id="login">
+                    <fi:styling  size="4" min="5" max="50" pattern="[a-zA-Z ]{5,}" maxlength="30"/>
+                    <fi:validation-message>
+                        Не верный логин
+                    </fi:validation-message>
+                </ft:widget>
+                <label for="password" class="forms field">
+                    <ft:widget-label id="password"/>
+                </label>
+                <ft:widget id="password">
+                    <fi:validation-message>
+                        Не верный пароль
+                    </fi:validation-message>
+                    <fi:styling type="password"/>
+                </ft:widget>
+                <label for="locale" class="forms field">
+                    <ft:widget-label id="locale"/>
+                </label>
+                <ft:widget id="locale">
+                    <fi:styling style="height:30px"/>
+                </ft:widget>
+                <input id="_spring_security_remember_me" name="_spring_security_ remember_me" type="checkbox"
+                       value="true"/>
+                <label for="_spring_security_remember_me">Remember Me?</label>
+                <!--
+                <ft:widget-label id="confirmPassword"/>
+                <ft:widget id="confirmPassword">
+                    <fi:styling type="password"/>
+                </ft:widget>-->
+                <!--<ft:widget-label id="rememberme"/>-->
+                <!--ft:widget id="rememberme"/-->
+            </fi:items>
+        </fi:group>
+        <ft:widget id="enter"/>
+        <br/>
+        <ft:widget id="changeAccount">
+            <fi:styling type="link"/>
+        </ft:widget>
+    </ft:form-template>
+
+</jx:template>
+

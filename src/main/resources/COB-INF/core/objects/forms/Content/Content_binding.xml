@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+
+    <!--<fb:value id="emsObjectId" path="emsObject/id"/>-->
+
+    <fb:value id="parentId" path="emsObject/parentId"/>
+    <!--<fb:value id="urlRelativity" path="urlRelativity"/>-->
+    <!--<fb:value id="relativeURL" path="relativeURL"/>-->
+
+    <fb:value id="publishDateTime" path="publishDateTime"/>
+    <fb:value id="expireDateTime" path="expireDateTime"/>
+    <fb:value id="documentTypeId" path="documentTypeId"/>
+    <!--<fb:value id="dtId" path="documentTypeId"/>-->
+    <!--fb:value id="creatorName" path="owner/login"/-->
+    <fb:value id="isProtected" path="emsObject/isProtected"/>
+    <fb:value id="isPublished" path="emsObject/isPublished"/>
+    <fb:value id="homeId" path="homeId"/>
+
+    <fb:value id="thumbnailId" path="thumbnailId"/>
+    <!--<fb:value id="isSystemNameUseDate" path="isSystemNameUseDate"/>-->
+    <!--<fb:value id="tempSystemName" path="tempSystemName"/>-->
+
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+    <fb:expand id="core:labels"/>
+    <fb:expand id="core:metaInfo"/>
+    <fb:expand id="core:linked"/>
+    <fb:expand id="core:systemURL"/>
+
+
+
+</fb:context>

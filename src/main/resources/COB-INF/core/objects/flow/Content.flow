@@ -1,0 +1,431 @@
+importClass(Packages.java.util.Calendar);
+importClass(Packages.org.apache.cocoon.forms.formmodel.tree.DefaultTreeModel);
+//importClass(Packages.org.apache.cocoon.forms.formmodel.tree.SourceTreeModel);
+//еest
+
+//*** GET
+function getContentsByOwner() {
+    var displayURI = cocoon.parameters.displayURI;
+    var owner = cocoon.parameters.owner;
+    // get the documentURI parameter from the sitemap which contains the
+    // location of the file to be edited
+
+    //    var documentURI = cocoon.parameters["documentURI"];
+    //    var formName = cocoon.parameters["formName"];
+
+
+    var contentService = cocoon.getComponent("contentService");
+    var contents = contentService.getContents(owner);
+    var name = "error";
+    if (contents != null) {
+        name = "contentName:";
+    }
+     cocoon.releaseComponent(contentService);
+    cocoon.sendPage(displayURI, {"content": content, "name": name});
+}
+
+function showContent(contentService, content, form, actionState) {
+
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+    var availableLanguages = getAvailableLanguages();
+    var parentId = content.getParentId();
+    var id = content.getId();
+
+    var languageCode = cocoon.request.getParameter("languageCode");
+    var parentName = "";
+    if (parentId > 0) {
+        var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
+        var parent = typifiedObjectService.getParent(parentId);
+//        var parent = contentService.getParent(parentId);
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+    var systemNodeName = '';
+    var systemNodeId = content.getHomeId();
+
+    if (systemNodeId > 0) {
+
+        var systemNodeParents = contentService.getTypifiedObjectParents(Packages.ru.strela.ems.core.model.SystemNode, systemNodeId, true);
+        if (systemNodeParents.size() == 0) {
+            content.setHomeId(0);
+            systemNodeId = 0;
+        }
+        else {
+            for (var i = 0; i < systemNodeParents.size(); i++) {
+                systemNodeName += ' / ' + systemNodeParents.get(i).getName();
+            }
+            if (systemNodeName.length > 0) {
+                systemNodeName = systemNodeName.substr(3);
+            }
+        }
+    }
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    // availableDocumentTypes
+    var documentTypeList = documentTypeService.getDocumentTypes();
+
+    print("content.getDocumentTypeId()"+content.getDocumentTypeId());
+//    миниатюра
+    var thumbnail = null;
+    var thumbnailId = content.getThumbnailId();
+    if (thumbnailId != null) {
+        thumbnail = content.getThumbnail();
+    }
+    var documentType = documentTypeService.getDocumentType(content.getDocumentTypeId());
+    var documentService = cocoon.getComponent("documentService");
+    var availableDocuments = documentService.getDocumentsByContentId(content.getId());
+    var locale = getLocale();
+    form.locale = new java.util.Locale(locale);
+    try {
+        importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+        if (languageCode != null) {
+            form.getChild("translate").setValue(languageCode);
+        } else {
+            form.getChild("translate").setValue(locale);
+        }
+
+//        form.getChild("documentTypeId").setState(WidgetState.INVISIBLE);
+        if (actionState == "edit") {
+            form.getChild("documentTypeList").setValue(documentType.getId().toString());
+        }
+        else if(actionState == "create") {
+            form.getChild("documentTypeList").setValue(form.getChild("documentTypeId").getValue().toString());
+        }
+
+        form.setAttribute('formName', 'contentForm');
+
+//        content = sendEmsObjectPage(form, contentService, content, showFormURI, {
+
+        content = showEmsObjectForm(form, contentService, content, showFormURI, {
+//            "viewData": viewData,
+            "parentId" : parentId,
+            "parentName" : parentName,
+            "documentTypeList" : documentTypeList,
+            "id" : id,
+            "servletPath" : servletPath,
+            "systemNodeName":systemNodeName,
+            "systemNodeId":systemNodeId,
+//            "tags" : tags,
+            "thumbnail" : thumbnail,
+            "inner" : inner,
+            "actionState" : actionState,
+            "documentType": documentType,
+            "availableLanguages": availableLanguages,
+            "formLocale":locale,
+            "languageCode":languageCode,
+            "availableDocuments": availableDocuments
+
+        });
+        print("return to showContentForm");
+        var newThumbnailId = form.getChild("thumbnailId").getValue();
+        if (newThumbnailId != thumbnailId) {
+            var fileObjectService = cocoon.getComponent("fileObjectService");
+            var f = fileObjectService.getFileObject(newThumbnailId);
+            content.setThumbnail(f);
+        }
+        var documentTypeId = content.getDocumentTypeId();
+//        var documentType;
+//            print("documentTypeId" + documentTypeId);
+
+        if (documentType == null && documentTypeId < 1) {
+            var newDocumentTypeId = form.getChild("documentTypeId").getValue();
+//            print("newDocumentTypeId" + newDocumentTypeId);
+            documentType = documentTypeService.getDocumentType(newDocumentTypeId);
+
+        } else if (documentType == null) {
+            documentType = documentTypeService.getDocumentType(documentTypeId);
+        }
+
+        content.setDocumentType(documentType);
+
+//        print("make Content finally");
+        /*cocoon.releaseComponent(contentService);
+        cocoon.releaseComponent(documentTypeService);
+        cocoon.releaseComponent(documentService);
+        cocoon.releaseComponent(typifiedObjectService);
+        cocoon.disposeObject(documentType);
+        cocoon.disposeObject(documentTypeList);
+        cocoon.disposeObject(availableDocuments);
+        cocoon.disposeObject(form);*/
+    }
+    catch(e){
+         print("Error:"+e);
+    }
+  /*  finally {
+        print("make Content finally");
+        cocoon.releaseComponent(contentService);
+        cocoon.releaseComponent(documentTypeService);
+        cocoon.releaseComponent(documentService);
+        cocoon.releaseComponent(typifiedObjectService);
+        cocoon.disposeObject(documentType);
+        cocoon.disposeObject(documentTypeList);
+        cocoon.disposeObject(availableDocuments);
+        cocoon.disposeObject(form);
+    }*/
+
+}
+
+function createContent(form) {
+//    print("createContent start");
+    cocoon.session.removeAttribute('lastContent');
+
+    var actionState = "create";
+//    print("c"+1);
+    var isFolder = cocoon.request.getParameter("isFolder");
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+
+    var contentService = cocoon.getComponent("contentService");
+    var content = createTypifiedObject(contentService);
+//    print("test content.getEmsObject().getId():" + content.getEmsObject().getId());
+    //  get DocumentTypes
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+
+    var currentDateTime = Calendar.getInstance().getTime();
+
+    content.setMetaInfo(null);
+    content.setPublishDateTime(currentDateTime);
+    content.setExpireDateTime(currentDateTime);
+
+    var parentId = 0;
+    var parentName = "";
+    var parentObject = content.getParent();
+    var parentDocumentTypeId = 0;
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+        parentDocumentTypeId = parentObject.getDocumentTypeId();
+    }
+
+
+    importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+//    print("createContent - parentDocumentTypeId: " + parentDocumentTypeId);
+
+    if (parentDocumentTypeId != 0) {
+        /*form.getChild("documentTypeId").setState(WidgetState.ACTIVE);
+         }
+         else {*/
+//     form.getChild("documentTypeId").setState(WidgetState.INVISIBLE);
+        var childDT = form.getChild("documentTypeId");
+
+//        print("childDT 1: " + childDT.getValue());
+        childDT.setValue(parentDocumentTypeId);
+//        print("childDT 1: " + childDT.getValue());
+        content.setDocumentTypeId(parentDocumentTypeId);
+    }
+
+    form.setAttribute('formName', 'contentForm');
+
+//    form.getChild('tempSystemName').setValue(content.getSystemName());
+
+    var newDate = Packages.ru.strela.ems.validators.DateFormatValidator.now("yyyy-MM-dd-hh-mm");
+    var dateToString = newDate.toString();
+    content.setSystemName(dateToString.substring(0, 16));
+//    print("showContent -create");
+    showContent(contentService, content, form, actionState);
+
+//      print("!!!to saaaaaveeee");
+    contentService.save(content);
+    if (content.getId() > 0) {
+//        print("!!!!save translates for contetn :" + content.getId() > 0);
+        saveObjectLabelList(content);
+        saveMetaInfoList(content);
+    }
+
+//    print("createContent end");
+    cocoon.session.setAttribute('lastContent', content);
+    cocoon.sendStatus(200);
+
+//
+//    cocoon.disposeObject(content);
+//    cocoon.releaseComponent(contentService);
+//    cocoon.releaseComponent(documentTypeService);
+}
+
+
+function editContent(form) {
+    var actionState = "edit";
+
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    var id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+
+    if (id == 0) {
+        cocoon.redirectTo("Content-create?parentId=0");
+    }
+    var contentService = cocoon.getComponent("contentService");
+    var content = contentService.getContent(id);
+
+    if (content == null) {
+        cocoon.releaseComponent(contentService);
+        cocoon.redirectTo("Content-create?parentId=0");
+        return;
+    }
+//    print("c1: " + content.getEmsObject().getId());
+//    print("showContent -edit");
+    showContent(contentService, content, form, actionState);
+
+    if (content.getEmsObject().getId() > 0) {
+//        print("content to save: " + content);
+        contentService.save(content);
+    }
+    if (content.getId() > 0) {
+//        print("!!!!save translates for contetn :" + content.getId() > 0);
+        saveObjectLabelList(content);
+        saveMetaInfoList(content);
+    }
+    //cocoon.redirectTo("editContent?id=" + id);
+    cocoon.sendStatus(200);
+    cocoon.disposeObject(content);
+
+    //cocoon.sendPage("listContent", {"viewData": viewData, "content": content});
+
+}
+
+
+function getLanguage(availableLanguages, locale) {
+    for (var i = 0; i < availableLanguages.size(); i++) {
+        var language = availableLanguages.get(i);
+        if (language.getCode().equals(locale)) {
+            return language;
+        }
+    }
+    return null;
+}
+
+
+/*
+ function getLastDocumentVersion(availableDocuments, languageId) {
+ var lastVersion = 0;
+ var lastVersionDocument = null;
+ for (var i = 0; i < availableDocuments.size(); i++) {
+ var document = availableDocuments.get(i);
+ if (document.getLanguageId() == languageId) {
+ if (lastVersion == 0 || lastVersion < document.getVersion()) {
+ lastVersion = document.getVersion();
+ lastVersionDocument = document;
+ }
+ }
+ }
+ return lastVersionDocument;
+ }
+ */
+
+
+function viewContent() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
+
+    var contentService = cocoon.getComponent("contentService");
+    var content = contentService.getContent(id);
+    cocoon.releaseComponent(contentService);
+
+    var documentService = cocoon.getComponent("documentService");
+    var availableDocuments = documentService.getDocumentsByContentId(id);
+    cocoon.releaseComponent(documentService);
+
+    cocoon.sendPage(displayURI, {"content": content, "availableDocuments": availableDocuments});
+}
+
+
+function listContent(parentId) {
+    var listData = prepareListData(parentId);
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    var documentTypeId = Utilities.parseStringToInteger(cocoon.request.getParameter("documentTypeId"));
+//    print("parentId1 - " + parentId);
+    if (parentId == null) {
+        parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+//        print("parentId2- " + parentId);
+    }
+
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    var documentTypeList = null;
+    documentTypeList = documentTypeService.getDocumentTypes();
+    listData.documentTypeList = documentTypeList;
+
+    listData.documentType = documentTypeList;
+//    print("documentTypeList - " + documentTypeList);
+
+    listData.documentTypeId = documentTypeId;
+    if (documentTypeId != 0) {
+        var contentService = cocoon.getComponent("contentService");
+        var contents = contentService.getContentsByDocumentType(documentTypeId);
+        cocoon.releaseComponent(contentService);
+        listData.children = contents;
+    }
+    sendListPage(listData.displayURI, listData);
+}
+
+
+function listAjaxContent(parentId) {
+    var filter = cocoon.parameters.filter;
+    var listData = prepareListData(parentId);
+//    print("ListContentAjax filter" + filter);
+
+
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+//    var documentTypeId = Utilities.parseStringToInteger(cocoon.request.getParameter("documentTypeId"));
+
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    var documentTypeList = null;
+    documentTypeList = documentTypeService.getDocumentTypes();
+    listData.documentType = documentTypeList;
+    var documentType = documentTypeService.getDocumentTypeByName(filter);
+    var documentTypeId = 0;
+    if (documentType != null) {
+        documentTypeId = documentType.getId();
+    } else {
+        print("documentType = null!!!" + documentType);
+    }
+
+
+    listData.documentTypeId = documentTypeId;
+    if (documentTypeId != 0) {
+        var contentService = cocoon.getComponent("contentService");
+        var contents = contentService.getContentsByDocumentType(documentTypeId);
+        cocoon.releaseComponent(contentService);
+        listData.children = contents;
+    }
+    sendListPage(listData.displayURI, listData);
+}
+
+
+function deleteContentById() {
+    deleteObjectById("Content");
+}
+
+
+function loadDocument(uri) {
+    var parser = null;
+    var source = null;
+    var resolver = null;
+    try {
+        parser =
+            cocoon.getComponent(Packages.org.apache.excalibur.xml.dom.DOMParser.ROLE);
+        resolver =
+            cocoon.getComponent(Packages.org.apache.cocoon.environment.SourceResolver.ROLE);
+        source = resolver.resolveURI(uri);
+        var is = new Packages.org.xml.sax.InputSource(source.getInputStream());
+        is.setSystemId(source.getURI());
+        return parser.parseDocument(is);
+    }
+    finally {
+        if (source != null)
+            resolver.release(source);
+        cocoon.releaseComponent(parser);
+        cocoon.releaseComponent(resolver);
+    }
+}
+
+/*function treeContent(parentId){
+ if (cocoon.request.getParameter("excludedId") != null) {
+ var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
+ }
+ var displayXMLURI = cocoon.parameters.displayXMLURI;
+ var listData = prepareListData(parentId);
+ print("excludedId: "+excludedId);
+
+ listData["excludedId"] =excludedId;
+ cocoon.sendPage(displayXMLURI, listData);
+ }*/
+

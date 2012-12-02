@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <!--<jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}"
+                      childrenCount="${item.childrenCount}"
+                      hasChildren="${item.objectType.hasChildren}"
+                      parentId="${item.parentId}"
+                      position="${item.position}">
+                    <name>${item.name}</name>
+                    <login>${item.login}</login>
+                    <expires>${item.expires}</expires>
+
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>-->
+    <jx:macro name="currentNode">
+        <items>
+            <headersMacro/>
+            <jx:forEach items="${children}" var="item" varStatus="status">
+                <item id="${item.id}">
+                    <email>${item.email}</email>
+                    <firstName>${item.firstName}</firstName>
+                    <lastName>${item.lastName}</lastName>
+                    <login>${item.login}</login>
+                    <creditStatus>${item.creditStatus}</creditStatus>
+                    <accountStatus>${item.accountStatus}</accountStatus>
+                    <!--<URI>${item.URI}</URI>-->
+                    <!--<positionsAmount>${item.positionsAmount}</positionsAmount>-->
+
+                </item>
+            </jx:forEach>
+        </items>
+    </jx:macro>
+    <jx:macro name="headersMacro">
+        <headers>
+            <header i18nCatalogueName="security" i18nPrefix="Customer">firstName</header>
+            <header i18nCatalogueName="security" i18nPrefix="Customer">lastName</header>
+            <header i18nCatalogueName="security" i18nPrefix="Customer">email</header>
+            <header i18nCatalogueName="security" i18nPrefix="Customer">login</header>
+            <header i18nCatalogueName="security" i18nPrefix="Customer">creditStatus</header>
+            <header i18nCatalogueName="security" i18nPrefix="Customer">accountStatus</header>
+
+        </headers>
+    </jx:macro>
+
+    <jx:import uri="blockcontext:/ems/core/objects/view/Library/list.jx"/>
+    
+</jx:template>

@@ -1,0 +1,233 @@
+importClass(Packages.java.util.Calendar);
+importClass(Packages.org.apache.cocoon.forms.formmodel.tree.DefaultTreeModel);
+//importClass(Packages.org.apache.cocoon.forms.formmodel.tree.SourceTreeModel);
+
+
+//*** GET
+function getCataloguesByOwner() {
+    var displayURI = cocoon.parameters.displayURI;
+    var owner = cocoon.parameters.owner;
+    // get the documentURI parameter from the sitemap which contains the
+    // location of the file to be edited
+
+    //    var documentURI = cocoon.parameters["documentURI"];
+    //    var formName = cocoon.parameters["formName"];
+
+
+    var catalogueService = cocoon.getComponent("catalogueService");
+    var catalogues = catalogueService.getCatalogues(owner);
+    var name = "error";
+    if (catalogues != null) {
+        name = "contetnName:";
+    }
+    cocoon.releaseComponent(catalogueService);
+
+    cocoon.sendPage(displayURI, {"catalogue": catalogue, "name": name});
+}
+
+
+function createCatalogue(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+   
+    var catalogueService = cocoon.getComponent("catalogueService");
+    var catalogue = createTypifiedObject(catalogueService);
+    var actionState="create";
+    //  get DocumentTypes
+    /*var documentTypeService = cocoon.getComponent("documentTypeService");
+    var availableDocumentTypes = documentTypeService.getDocumentTypes();
+    var documentTypeList = new Array(availableDocumentTypes.size());
+    documentTypeList[0] = {
+            value: 0,
+            label: 'None'
+        };
+    for (var i = 0; i < availableDocumentTypes.size(); i++) {
+        var documentType = availableDocumentTypes.get(i);
+        documentTypeList[i + 1] = {
+            value: documentType.getId(),
+            label: documentType.getName()
+        };
+    }
+
+*/
+    //  get availableLanguages
+    var languageService = cocoon.getComponent("languageService");
+    var availableLanguages = languageService.getVisibleLanguages();
+
+
+//    var currentDateTime = Calendar.getInstance().getTime();
+
+
+    var parentId = 0;
+    var parentName = "";
+    var parentObject = catalogue.getParent();
+    var parentDocumentTypeId = 0;
+    if (parentObject != null) {
+        parentId = parentObject.getId();
+        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+    }
+
+
+    importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+    /*if (parentDocumentTypeId == 0) {
+        form.getChild("documentTypeId").setState(WidgetState.ACTIVE);
+    }
+    else {
+        form.getChild("documentTypeId").setState(WidgetState.INVISIBLE);
+        catalogue.setDocumentTypeId(parentDocumentTypeId);
+    }*/
+
+    form.setAttribute('formName', 'catalogueForm');
+    
+    catalogue = showEmsObjectForm(form, catalogueService, catalogue, showFormURI, {
+        "parentId" : parentId,
+        "parentName" : parentName,
+        "actionState": actionState,
+        "availableLanguages": availableLanguages,
+        "servletPath" : servletPath,
+        "inner" : inner
+    });
+    print("catalogue.systemNodeId = " + catalogue.systemNodeId);
+    catalogueService.save(catalogue);
+    cocoon.releaseComponent(catalogueService);
+
+    var id = catalogue.getId();
+    cocoon.disposeObject(catalogue);
+
+    cocoon.redirectTo("Catalogue-edit?id=" + id);
+
+}
+
+
+function editCatalogueById(form) {
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    var id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+
+    if (id == 0) {
+        cocoon.redirectTo("Catalogue-create");
+    }
+
+    var catalogueService = cocoon.getComponent("catalogueService");
+    var catalogue = catalogueService.getTypifiedObject(id, true);
+    if (catalogue == null) {
+        cocoon.releaseComponent(catalogueService);
+        cocoon.redirectTo("Catalogue-create");
+    }
+
+    var parentId = catalogue.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = catalogue.getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }
+
+
+    var languageService = cocoon.getComponent("languageService");
+    var availableLanguages = languageService.getVisibleLanguages();
+    cocoon.releaseComponent(languageService);
+
+
+
+    try {
+        var viewData = {
+            "actionState" : "edit",
+//            "documentType": documentType,
+            "availableLanguages": availableLanguages
+//            "availableDocuments": availableDocuments
+        }
+
+        importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+//        form.getChild("documentTypeId").setState(WidgetState.INVISIBLE);
+
+        form.setAttribute('formName', 'catalogueForm');
+
+        catalogue = showEmsObjectForm(form, catalogueService, catalogue, showFormURI, {
+            "viewData": viewData,
+            "parentId" : parentId,
+            "parentName" : parentName,
+//            "documentTypeList" : documentTypeList,
+            "id" : id,
+            "servletPath" : servletPath,
+            "inner" : inner
+        });
+
+        print('catalogueForm');
+        catalogueService.save(catalogue);
+    }
+    finally {
+        cocoon.releaseComponent(catalogueService);
+    }
+    cocoon.redirectTo("Catalogue-edit?id=" + id);
+//    cocoon.sendStatus(200);
+    //cocoon.sendPage("listCatalogue", {"viewData": viewData, "catalogue": catalogue});
+
+}
+
+
+function getLanguage(availableLanguages, locale) {
+    for (var i = 0; i < availableLanguages.size(); i++) {
+        var language = availableLanguages.get(i);
+        if (language.getCode().equals(locale)) {
+            return language; 
+        }
+    }
+    return null;
+}
+
+
+
+
+function viewCatalogueById() {
+    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
+
+    var catalogueService = cocoon.getComponent("catalogueService");
+    var catalogue = catalogueService.getCatalogue(id);
+    cocoon.releaseComponent(catalogueService);
+
+
+
+
+    cocoon.sendPage(displayURI, {"catalogue": catalogue});
+}
+
+function listCatalogue(parentId) {
+var listData = prepareListData(parentId);
+sendListPage(listData.displayURI, listData);
+
+}
+
+
+function deleteCatalogueById() {
+    deleteObjectById("Catalogue");
+}
+
+
+function loadDocument(uri) {
+    var parser = null;
+    var source = null;
+    var resolver = null;
+    try {
+        parser =
+        cocoon.getComponent(Packages.org.apache.excalibur.xml.dom.DOMParser.ROLE);
+        resolver =
+        cocoon.getComponent(Packages.org.apache.cocoon.environment.SourceResolver.ROLE);
+        source = resolver.resolveURI(uri);
+        var is = new Packages.org.xml.sax.InputSource(source.getInputStream());
+        is.setSystemId(source.getURI());
+        return parser.parseDocument(is);
+    }
+    finally {
+        if (source != null)
+            resolver.release(source);
+        cocoon.releaseComponent(parser);
+        cocoon.releaseComponent(resolver);
+    }
+}
+
+

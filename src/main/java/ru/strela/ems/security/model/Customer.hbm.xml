@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.strela.ems.core.model">
+    <class name="ru.strela.ems.security.model.Customer" table="ecommerce_customer">
+         <id name="id" column="id" type="int">
+            <generator class="increment"/>
+        </id>
+        <property name="email" column="email" type="string" not-null="true"/>
+        <property name="firstName" column="first_name" type="string" not-null="false"/>
+        <property name="lastName" column="last_name" type="string" not-null="false"/>
+        <property name="creditStatus" column="credit_status" type="string" not-null="true"/>
+        <property name="accountStatus" column="account_status" type="string" not-null="true"/>
+        <property name="login" column="login" type="string" not-null="true"/>
+        <!--<many-to-one name="user" class="org.springframework.security.core.userdetails.User" unique="true" column="username" cascade="all" lazy="false"/>-->
+        <!--<property name="positionsAmount" column="positions_amount" type="int" not-null="true"/>-->
+    </class>
+    <!--</union-subclass>-->
+</hibernate-mapping>
+

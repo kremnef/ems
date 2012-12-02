@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
+    <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
+    <!--<fb:value id="emsObjectId" path="emsObject/id"/>-->
+    <fb:value id="parentId" path="emsObject/parentId"/>
+    <fb:value id="redirectTo" path="redirectTo"/>
+    <fb:value id="fullURL" path="fullURL"/>
+    <!--<fb:value id="publishDateTime" path="publishDateTime"/>-->
+    <!--<fb:value id="expireDateTime" path="expireDateTime"/>-->
+    <!--fb:value id="nodeURI" path="nodeURI"/-->
+    <fb:value id="templateId" path="templateId"/>
+
+    <fb:expand id="core:labels"/>
+    <fb:expand id="core:metaInfo"/>
+    <fb:expand id="core:systemURL"/>
+
+    <fb:repeater id="addedObjects" parent-path="." row-path="objectsDataList">
+        <fb:identity>
+            <fb:value id="objectPosition" path="position"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="linkId" path="id"/>
+            <fb:value id="objectId" path="objectId"/>
+            <fb:value id="objectName" path="name"/>
+            <fb:value id="objectTypeSelect" path="typeId"/>
+            <fb:value id="objectTypeName" path="typeName"/>
+            <fb:value id="objectTypeAction" path="typeActionId"/>
+            <!--<fb:value id="homeId" path="homeId"/>-->
+            <fb:value id="objectLevels" path="levels"/>
+            <fb:value id="objectType" path="objectType"/>
+            <fb:value id="objectItemsOnPage" path="itemsOnPage"/>
+
+            <fb:value id="tagId" path="tagId"/>
+            <fb:value id="sortField" path="sortField"/>
+            <fb:value id="sortDirection" path="sortDirection"/>
+            <!--<fb:value id="renderLike" path="renderLike"/>-->
+
+            <!--fb:value id="objectTypeActions" path="typeActionsData" direction="load"/-->
+        </fb:on-bind>
+    </fb:repeater>
+
+    <!--<fb:group id="content" path=".">
+    <fb:value id="name" path="name"/>
+    <fb:value id="owner" path="owner"/>
+    <fb:value id="publishDateTime" path="publishDateTime"/>
+    <fb:value id="expireDateTime" path="expireDateTime"/>
+    <fb:context path="documentType">
+        <fb:value id="documentTypeId" path="@documentTypeId"/>
+        <fb:value id="documentTypeName" path="name"/>
+    </fb:context>
+    --><!--<fb:value id="documentTypeId" path="documentType/@documentTypeId"/>--><!--
+        <fb:repeater id="documents" parent-path="." row-path="document">
+            <fb:on-bind>
+                --><!--<fb:expand id="document"/>--><!--
+            </fb:on-bind>
+            <fb:on-insert-row>
+                <fb:insert-node>
+                    <document/>
+                </fb:insert-node>
+            </fb:on-insert-row>
+            <fb:on-delete-row>
+                <fb:delete-node/>
+            </fb:on-delete-row>
+        </fb:repeater>
+    </fb:group>-->
+
+    <!--<fb:value id="name" path="name"/>
+    <fb:value id="owner" path="owner"/>
+    <fb:value id="publishDateTime" path="publishDateTime"/>
+    <fb:value id="expireDateTime" path="expireDateTime"/>
+    <fb:value id="documentType" path="documentType/@documentTypeId"/>
+    <fb:repeater id="documents" parent-path="." row-path="document">
+        <fb:on-bind>
+            <fb:expand id="lib:document"/>
+        </fb:on-bind>
+        <fb:on-insert-row>
+            <fb:insert-node>
+                <document/>
+            </fb:insert-node>
+        </fb:on-insert-row>
+        <fb:on-delete-row>
+            <fb:delete-node/>
+        </fb:on-delete-row>
+    </fb:repeater>-->
+
+    <!--<fb:context path="document">
+        <fb:value id="documentId" path="@documentId"/>
+    </fb:context>-->
+    <!--</fb:group>-->
+    <!--</fb:group>-->
+    <!--<fb:value id="place" path="place"/>
+    <fb:value id="idea" path="idea"/>
+    <fb:value id="description" path="description"/>
+    <fb:value id="placephoto" path="placephoto"/>
+    <fb:value id="participment" path="participment"/>
+    <fb:value id="org" path="org"/>
+    -->
+    <!--<fb:repeater id="partnerlogos" >
+            <fb:identity>
+                <fb:value id="partnerlogo" path="partnerlogo" direction="load"/>
+            </fb:identity>
+
+    </fb:repeater>-->
+    <!--<fb:repeater id="keywords" parent-path="keywords" row-path="keyword">
+        <fb:identity>
+            <fb:value id="id" path="@id"/>
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="category" path="category"/>
+        </fb:on-bind>
+        <fb:on-delete-row>
+            <fb:delete-node/>
+        </fb:on-delete-row>
+        <fb:on-insert-row>
+            <fb:insert-bean classname="Keyword" addmethod="addKeyword"/>
+        </fb:on-insert-row>
+    </fb:repeater>-->
+    <!--<fb:value id="class-text" path="class-text"/>
+    <fb:value id="class-description" path="class-description"/>
+    <fb:repeater row-path="description" parent-path="." id="class-repeater">
+        <fb:on-bind>
+            <fb:new id="basic-class-text"/>
+        </fb:on-bind>
+        <fb:on-delete-row>
+            <fb:delete-node/>
+        </fb:on-delete-row>
+        <fb:on-insert-row>
+            <fb:insert-node>
+                <description/>
+            </fb:insert-node>
+        </fb:on-insert-row>
+    </fb:repeater>-->
+    <!--<fb:value id="partnertext" path="partnertext"/>-->
+</fb:context>

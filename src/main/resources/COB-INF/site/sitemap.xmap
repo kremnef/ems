@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://apache.org/cocoon/sitemap/1.0 http://cocoon.apache.org/schema/sitemap/cocoon-sitemap-1.0.xsd"
+             xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+    <map:components>
+        <!--map:include dir="../../conf" pattern="*.xconf"/-->
+
+        <map:generators default="file">
+            <map:generator name="file"
+                           src="org.apache.cocoon.generation.FileGenerator"/>
+            <map:generator name="sitePage"
+                           src="ru.strela.ems.generator.SitePageGenerator"/>
+        </map:generators>
+
+        <map:actions>
+            <!--    <map:action name="cauth-is-logged-in"
+            src="org.apache.cocoon.auth.acting.LoggedInAction"/>
+<map:action name="cauth-login"
+            src="org.apache.cocoon.auth.acting.LoginAction"/>
+<map:action name="cauth-logout"
+            src="org.apache.cocoon.auth.acting.LogoutAction"/>-->
+            <map:action name="clear-cache"
+                        src="org.apache.cocoon.acting.ClearCacheAction"/>
+
+        </map:actions>
+
+        <map:transformers default="xslt">
+            <map:transformer name="browser-update" src="org.apache.cocoon.ajax.BrowserUpdateTransformer"/>
+            <map:transformer name="i18n"
+                             src="org.apache.cocoon.transformation.I18nTransformer">
+                <use-store>true</use-store>
+                <!--<use-request-parameters>true</use-request-parameters>-->
+                <!--<use-session-parameters>true</use-session-parameters>-->
+                <!--<use-cookie-parameters>true</use-cookie-parameters>-->
+                <!--<xslt-processor-role>xalan</xslt-processor-role>-->
+                <check-includes>true</check-includes>
+                <use-request-parameters>true</use-request-parameters>
+                <catalogues default="site">
+                    <catalogue id="site" name="messages" location="context://i18n"/>
+                    <catalogue id="forms" name="messages"
+                               location="resource://org/apache/cocoon/forms/system/i18n"/>
+                </catalogues>
+                <cache-at-startup>true</cache-at-startup>
+                <encoding>UTF-8</encoding>
+            </map:transformer>
+        </map:transformers>
+        <!-- Serializers -->
+
+        <map:serializers default="xhtml">
+
+            <!-- CMS (changes begin): setting encoding UTF-8 -->
+
+
+            <map:serializer name="xhtml"
+                            src="org.apache.cocoon.serialization.XMLSerializer"
+                            mime-type="text/html"
+                            logger="sitemap.serializer.xhtml"
+                            pool-max="64"
+                    >
+                <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+                <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+                <encoding>UTF-8</encoding>
+            </map:serializer>
+
+            <map:serializer logger="sitemap.serializer.xml" mime-type="text/xml" name="xml"
+                            src="org.apache.cocoon.serialization.XMLSerializer">
+                <!--<doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+                <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>-->
+                <doctype-public>-//Strela//DTD Entities//EN</doctype-public>
+                <doctype-system>xhtml.ent</doctype-system>
+                <!--<doctype-system>file:xhtml.ent</doctype-system>-->
+                <!--<doctype-system>https://dl-ssl.google.com/gwt/DTD/xhtml.ent</doctype-system>-->
+                <encoding>UTF-8</encoding>
+            </map:serializer>
+
+
+            <map:serializer logger="sitemap.serializer.html" mime-type="text/html" name="html"
+                            pool-max="32" src="org.apache.cocoon.serialization.HTMLSerializer">
+                <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+                <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
+                <encoding>UTF-8</encoding>
+                <method>html</method>
+                <version>4.0</version>
+                <omit-xml-declaration>yes</omit-xml-declaration>
+            </map:serializer>
+            <map:serializer name="fo2pdf"
+                            src="org.apache.cocoon.serialization.FOPSerializer"
+                            mime-type="application/pdf">
+                <user-config>classpath:/META-INF/cocoon/fo2pdf/fo2pdf-config.xml</user-config>
+            </map:serializer>
+            <!-- CMS (changes end) -->
+        </map:serializers>
+        <map:selectors>
+            <map:selector name="ajax-request" src="org.apache.cocoon.ajax.AjaxRequestSelector"/>
+        </map:selectors>
+
+    </map:components>
+
+    <map:views>
+        <map:view name="content" from-label="content">
+            <map:serialize type="xml"/>
+        </map:view>
+    </map:views>
+
+    <map:flow language="javascript">
+        <map:script src="flow/SiteProcessor.flow"/>
+    </map:flow>
+
+
+    <!--+
+    | Definition of the control flow implementation.
+    +-->
+    <map:resources>
+
+        <map:resource name="test">
+            <map:transform src="../../stylesheets/admin/test.xsl">
+                <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                <map:parameter name="dojo-debug" value="true"/>
+                <!-- set to true to turn on dojo debugging in the Browser -->
+                <map:parameter name="dojo-locale" value="{flow-attr:locale}"/>
+                <map:parameter name="requestURI" value="{request:requestURI}"/>
+                <map:parameter name="requestParam" value="{request-param:param}"/>
+            </map:transform>
+            <map:transform type="i18n" label="messages">
+                <map:parameter name="locale" value="{session-attr:locale}"/>
+            </map:transform>
+            <map:serialize type="html"/>
+        </map:resource>
+
+
+        <map:resource name="xml">
+           <!-- <map:transform src="blockcontext:/ems/stylesheets/system/xml2html.xslt">
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+            </map:transform>
+            <map:select type="parameter">
+                <map:parameter name="parameter-selector-test" value="{block}"/>
+                <map:when test="true">
+                    <map:serialize type="xml"/>
+                </map:when>
+                <map:otherwise>
+                    <map:serialize type="html"/>
+                </map:otherwise>
+            </map:select>-->
+            <map:serialize type="xml"/>
+        </map:resource>
+        <!-- <map:resource name="pdf">
+            <map:transform src="blockcontext:/ems/stylesheets/system/page2fo.xsl">
+                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+            </map:transform>
+            <map:serialize type="fo2pdf"/>
+        </map:resource>-->
+
+
+        <map:resource name="generate">
+            <map:select type="request-parameter">
+                <map:parameter name="parameter-name" value="xml"/>
+                <map:when test="true">
+                    <map:call resource="xml">
+                        <map:parameter name="block" value="{block}"/>
+                    </map:call>
+                </map:when>
+                <!--<map:parameter name="parameter-name" value="pdf" />
+                <map:when test="true">
+                    <map:call resource="pdf">
+                        <map:parameter name="block" value="{block}"/>
+                    </map:call>
+                </map:when>-->
+                <map:otherwise>
+                    <map:transform type="xslt" src="cocoon:/generateXSLTFromSession"/>
+                    <map:transform type="i18n">
+                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                    </map:transform>
+                    <map:select type="parameter">
+                        <map:parameter name="parameter-selector-test" value="{block}"/>
+                        <map:when test="true">
+                            <map:serialize type="xml"/>
+                        </map:when>
+                        <map:otherwise>
+                            <map:serialize type="html"/>
+                        </map:otherwise>
+                    </map:select>
+                </map:otherwise>
+            </map:select>
+        </map:resource>
+
+
+    </map:resources>
+
+    <map:pipelines id="static">
+
+        <map:pipeline id="system">
+
+            <map:match pattern="xhtml.ent">
+                <map:read src="../resources/xhtml.ent"/>
+            </map:match>
+            <map:match pattern="**/xhtml.ent">
+                <map:read src="../resources/xhtml.ent"/>
+            </map:match>
+
+
+            <!--<map:match pattern="ckeditor/**">
+                <map:read src="../resources/ckeditor/{1}"/>
+            </map:match>-->
+
+            <!--<map:match pattern="flowplayer/**">
+                <map:read src="../resources/flowplayer/{1}"/>
+            </map:match>
+            <map:match pattern="resource/m4player/IBMAppletForMpeg4.jar">
+                <map:read mime-type="application/java-archive" src="../resources/m4player/IBMAppletForMpeg4.jar"/>
+            </map:match>-->
+
+            <map:match pattern="mediateka/**.pdf">
+                <map:read src="context://mediateka/{1}.pdf">
+                    <map:parameter name="byte-ranges" value="false"/>
+                </map:read>
+            </map:match>
+
+
+            <map:match pattern="mediateka/**">
+                <map:read src="context://mediateka/{1}"/>
+            </map:match>
+
+            <!--<map:match pattern="resource/img/**.gif">-->
+                <!--<map:read mime-type="image/gif" src="resources/img/{1}.gif"/>-->
+            <!--</map:match>-->
+            <!--<map:match pattern="resource/img/**.png">-->
+                <!--<map:read mime-type="image/png" src="resources/img/{1}.png"/>-->
+            <!--</map:match>-->
+            <!--<map:match pattern="resource/img/**.png">-->
+                <!--<map:read mime-type="image/png" src="resources/img/{1}.jpg"/>-->
+            <!--</map:match>-->
+
+            <!--  CSS stylesheets -->
+            <!--<map:match pattern="resource/css/**.css">
+                <map:read mime-type="text/css" src="resources/css/{1}.css"/>
+            </map:match>-->
+            <!--  CSS Themes -->
+            <!--<map:match pattern="resource/themes/**">
+                <map:read src="resources/themes/{1}"/>
+                &lt;!&ndash;<map:read mime-type="text/css" src="resources/themes/reinder/{1}.css"/>&ndash;&gt;
+            </map:match>-->
+            <!--<map:match pattern="resource/js/**">
+                <map:read src="resources/js/{1}"/>
+                &lt;!&ndash;<map:read mime-type="text/css" src="resources/themes/reinder/{1}.css"/>&ndash;&gt;
+            </map:match>-->
+            <!--<map:match pattern="resource/js/jquery-plugin/aloha/i18n/**.dict">
+                &lt;!&ndash;<map:read src="resources/js/{1}"/>&ndash;&gt;
+                <map:read mime-type="text/plain" src="resources/js/jquery-plugin/aloha/i18n/{1}.dict"/>
+            </map:match>-->
+            <!--  JavaScript scripts -->
+
+            <!--<map:match pattern="resource/js/**.js">
+                <map:read mime-type="text/javascript" src="resources/js/{1}.js"/>
+            </map:match>-->
+            <!--<map:match pattern="resource/js/**.swf">
+                <map:read mime-type="application/x-shockwave-flash" src="resources/js/{1}.swf"/>
+            </map:match>-->
+            <!--  favicon -->
+            <!--<map:match pattern="**favicon.ico">
+                <map:read mime-type="image/x-icon" src="resources/icons/cocoon.ico"/>
+            </map:match>-->
+
+            <map:match pattern="img/**.gif">
+                <map:read mime-type="image/gif" src="context://img/{1}.gif"/>
+            </map:match>
+            <map:match pattern="img/**.png">
+                <map:read mime-type="image/png" src="context://img/{1}.png"/>
+            </map:match>
+            <map:match pattern="img/**.jpg">
+                <map:read mime-type="image/jpg" src="context://img/{1}.jpg"/>
+            </map:match>
+            <map:match pattern="images/**.gif">
+                <map:read mime-type="image/gif" src="context://images/{1}.gif"/>
+            </map:match>
+            <map:match pattern="images/**.png">
+                <map:read mime-type="image/png" src="context://images/{1}.png"/>
+            </map:match>
+            <map:match pattern="images/**.jpg">
+                <map:read mime-type="image/jpg" src="context://images/{1}.jpg"/>
+            </map:match>
+
+            <!--  CSS stylesheets -->
+            <!--<map:match pattern="css/**.css">
+                <map:read mime-type="text/css" src="context://css/{1}.css"/>
+            </map:match>
+-->
+            <!--  JavaScript scripts -->
+            <map:match pattern="js/**.js">
+                <map:read mime-type="text/javascript" src="context://js/{1}.js"/>
+            </map:match>
+
+            <map:match pattern="**.*">
+                <map:read src="context://{1}.{2}"/>
+            </map:match>
+
+            <!--map:match pattern="WEB-INF/**.xsl">
+                <map:read src="context://WEB-INF/{1}.xsl"/>
+            </map:match>
+
+            <map:match pattern="WEB-INF/**.xslt">
+                <map:read src="context://WEB-INF/{1}.xslt"/>
+            </map:match>-->
+
+
+        </map:pipeline>
+
+        <!--set cache??-->
+        <map:pipeline type="noncaching" id="common">
+            <map:match pattern="*.pdf">
+                <map:generate type="sitePage" src="{1}">
+                    <map:parameter name="index" value="{global:startPage}"/>
+                </map:generate>
+                <map:transform src="blockcontext:/ems/stylesheets/system/page2fo.xsl"/>
+                <map:serialize type="fo2pdf"/>
+            </map:match>
+            <map:match pattern="*.rss">
+                <map:generate type="sitePage" src="{1}">
+                    <map:parameter name="index" value="{global:startPage}"/>
+                </map:generate>
+                <map:transform src="context://WEB-INF/xslt/rss/content2rss.xsl">
+                    <map:parameter name="siteName" value="{1}"/>
+                    <map:parameter name="contextPath" value="{1}"/>
+                </map:transform>
+                <map:serialize type="xml"/>
+            </map:match>
+
+            <!-- <map:match pattern="*_template-pipeline">
+                <map:generate type="jx" src="forms/DocumentType/{1}/{1}_template.xml"/>
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="edit"/>
+                </map:call>
+            </map:match>
+
+
+            <map:match pattern="*_success-pipeline">
+                <map:generate type="jx" src="view/DocumentType/{1}/{1}_success.jx"/>
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="edit"/>
+                </map:call>
+            </map:match>
+
+            <map:match pattern="*-edit-template-pipeline">
+                <map:generate type="jx" src="forms/{1}/{1}_template.xml" />
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="edit"/>
+                </map:call>
+            </map:match>
+            <map:match pattern="*-create-template-pipeline">
+                <map:generate type="jx" src="forms/{1}/{1}_template.xml" />
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="create"/>
+                </map:call>
+            </map:match>
+            <map:match pattern="*.continue">
+                <map:call continuation="{1}"/>
+            </map:match>
+
+            <map:match pattern="*-success-pipeline">
+                <map:generate type="jx" src="view/{1}/{1}_template.jx"/>
+                <map:transform type="i18n">
+                    <map:parameter name="locale" value="{session-attr:locale}"/>
+                </map:transform>
+                &lt;!&ndash;<map:serialize type="xml"/>&ndash;&gt;
+                <map:call resource="edit">
+                    <map:parameter name="entity" value="{1}"/>
+                    <map:parameter name="actionState" value="create"/>
+                </map:call>
+
+            </map:match>
+            <map:match pattern="*-redirect-pipeline/*/*">
+                <map:redirect-to uri="{1}?id={2}&amp;documentTypeId={3}">
+                    &lt;!&ndash;<map:parameter name="requestParam" value="{request:param}"/>&ndash;&gt;
+                    &lt;!&ndash;<map:parameter name="id" value="{2}"/>&ndash;&gt;
+                </map:redirect-to>
+            </map:match>
+            <map:match pattern="*-redirect-pipeline/*">
+                <map:redirect-to uri="{1}?id={2}">
+                    <map:parameter name="requestParam" value="{request:param}"/>
+                    <map:parameter name="id" value="{2}"/>
+                </map:redirect-to>
+            </map:match>
+            <map:match pattern="*-list-pipeline">
+                <map:generate type="jx" src="view/{1}/{1}_list.jx"/>
+                <map:call resource="list">
+                    <map:parameter name="entity" value="{1}"/>
+                </map:call>
+
+            </map:match>-->
+            <map:match pattern="generateXSLTFromSession">
+                <map:generate type="jx" src="view/generateXSLT.jx">
+                    <map:parameter name="xsltTemplateFile" value="{request-attr:xsltTemplateFile}"/>
+                    <map:parameter name="typesActions" value="{request-attr:typesActions}"/>
+                    <map:parameter name="realRootPath" value="{request-attr:realRootPath}"/>
+                    <map:parameter name="servletPath" value="{request:servletPath}"/>
+                    <map:parameter name="locale" value="{request-attr:locale}"/>
+                    <map:parameter name="makeRedirect" value="{request-attr:makeRedirect}"/>
+                    <map:parameter name="redirect" value="{request-attr:redirect}"/>
+                </map:generate>
+                <!--map:call resource="xml" /-->
+
+                <map:serialize type="xml"/>
+
+            </map:match>
+           <!-- <map:match pattern="generateXSLTFromSessionTest">
+                <map:generate type="jx" src="view/generateXSLT.jx">
+                    <map:parameter name="xsltTemplateFile" value="index.xsl"/>
+                    <map:parameter name="typesActions" value="Content:xml,Navigation:showHor,SiteMap:showBreadCrumb"/>
+                    &lt;!&ndash;<map:parameter name="realRootPath" value="D:\work\java\projects\cms\ems\target\rcl\webapp\"/>&ndash;&gt;
+                    <map:parameter name="servletPath" value="{request:servletPath}"/>
+                    <map:parameter name="locale" value="{request-attr:locale}"/>
+                    <map:parameter name="makeRedirect" value="{request-attr:makeRedirect}"/>
+                    <map:parameter name="redirect" value="{request-attr:redirect}"/>
+                </map:generate>
+                <map:call resource="xml"/>
+
+                <map:serialize type="xml"/>
+
+            </map:match>-->
+            <map:match pattern="block">
+                <map:redirect-to uri="block/"/>
+            </map:match>
+
+            <!--<map:match pattern="search">
+                <map:redirect-to uri="cocoon://service/search">
+                    <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                    <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                    <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                    <map:parameter name="requestURI" value="{request:requestURI}"/>
+                    <map:parameter name="requestParam" value="{request-param:param}"/>
+                    <map:parameter name="query" value="{request-param:query}"/>
+                </map:redirect-to>
+            </map:match>-->
+
+            <map:match pattern="service/search-results">
+                <map:aggregate element="root">
+                    <map:part src="cocoon://service/search">
+                        <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                        <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                        <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                        <map:parameter name="requestURI" value="{request:requestURI}"/>
+                        <map:parameter name="requestParam" value="{request-param:param}"/>
+                        <map:parameter name="query" value="{request-param:query}"/>
+                    </map:part>
+                    <map:part src="cocoon:/omitRoot/service/search-results"/>
+                </map:aggregate>
+
+                <map:call resource="generate"/>
+
+            </map:match>
+
+            <map:match pattern="block/service/search-results">
+                <map:aggregate element="root">
+                    <map:part src="cocoon://service/search">
+                        <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                        <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                        <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                        <map:parameter name="requestURI" value="{request:requestURI}"/>
+                        <map:parameter name="requestParam" value="{request-param:param}"/>
+                        <map:parameter name="query" value="{request-param:query}"/>
+                    </map:part>
+                    <map:part src="cocoon:/omitRoot/service/search-results"/>
+                </map:aggregate>
+
+                <map:call resource="generate">
+                    <map:parameter name="block" value="true"/>
+                </map:call>
+            </map:match>
+
+
+            <!--<map:match pattern="search">-->
+                <!--<map:aggregate element="root">-->
+                    <!--<map:part src="cocoon://service/search">-->
+                        <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>-->
+                        <!--<map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>-->
+                        <!--<map:parameter name="blockPrefix" value="{global:blockPrefix}"/>-->
+                        <!--<map:parameter name="requestURI" value="{request:requestURI}"/>-->
+                        <!--<map:parameter name="requestParam" value="{request-param:param}"/>-->
+                        <!--<map:parameter name="query" value="{request-param:query}"/>-->
+                    <!--</map:part>-->
+                    <!--&lt;!&ndash;<map:part src="cocoon:/search/*"/>&ndash;&gt;-->
+                <!--</map:aggregate>-->
+                <!--<map:serialize type="xml"/>-->
+                <!--&lt;!&ndash;<map:call resource="generate">-->
+                    <!--<map:parameter name="block" value="true"/>-->
+                <!--</map:call>&ndash;&gt;-->
+            <!--</map:match>-->
+            <!--<map:match pattern="search/*">-->
+                <!--<map:generate type="sitePage" src="{1}">-->
+                    <!--<map:parameter name="index" value="{global:startPage}"/>-->
+                <!--</map:generate>-->
+                <!--&lt;!&ndash;<map:call resource="generate"/>&ndash;&gt;-->
+            <!--</map:match>-->
+
+            <!--<map:match pattern="search-results">
+                <map:aggregate element="root1">
+                    <map:part src="cocoon:/investors/registrar-auditor"/>
+                    <map:part src="cocoon:/search-obj/"/>
+                </map:aggregate>
+
+                 <map:call resource="generate">
+                    <map:parameter name="block" value="true"/>
+                </map:call>
+            </map:match>
+
+            <map:match pattern="search-obj">
+                <map:generate type="jx" src="view/search_list.jx">
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                    <map:parameter name="locale" value="{flow-attribute:locale}"/>
+                </map:generate>
+            </map:match>
+-->
+
+            <map:match pattern="block/**">
+                <!--map:call function="processPath">
+                    <map:parameter name="path" value="{1}"/>
+                </map:call-->
+                <map:generate type="sitePage" src="{1}">
+                    <map:parameter name="index" value="{global:startPage}"/>
+                </map:generate>
+
+                <map:call resource="generate">
+                    <map:parameter name="block" value="true"/>
+                </map:call>
+            </map:match>
+            <map:match pattern="omitRoot/**">
+                <map:generate type="sitePage" src="{1}">
+                    <map:parameter name="index" value="{global:startPage}"/>
+                    <map:parameter name="omitRoot" value="true"/>
+                </map:generate>
+                <map:serialize type="xml"/>
+            </map:match>
+            <map:match pattern="**">
+                <map:generate type="sitePage" src="{1}">
+                    <map:parameter name="index" value="{global:startPage}"/>
+                </map:generate>
+                <map:call resource="generate"/>
+            </map:match>
+            <!--<map:match pattern="**/**">-->
+                <!--<map:generate type="sitePage" src="{1}">-->
+                    <!--<map:parameter name="index" value="{global:startPage}"/>-->
+                <!--</map:generate>-->
+                <!--<map:call resource="generate"/>-->
+            <!--</map:match>-->
+        </map:pipeline>
+
+    </map:pipelines>
+    <!--<map:match pattern="*">
+        <map:mount
+                check-reload="yes"
+                src="in/{1}/"
+                uri-prefix="{1}/"
+                />
+    </map:match>-->
+
+
+</map:sitemap>

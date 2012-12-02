@@ -1,0 +1,584 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<fd:library
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+    <fd:widgets>
+        <fd:group id="systemURL">
+            <!-- using to check uniqueness-->
+            <fd:widgets>
+                <fd:field id="emsObjectId" state="invisible">
+                    <fd:datatype base="integer"/>
+                </fd:field>
+                <!--<fd:field id="id" state="output">
+            <fd:label>ID</fd:label>
+            <fd:datatype base="integer"/>
+            <fd:on-value-changed>
+                <javascript>
+                    var value = new java.lang.Integer(this.value);
+                    var parentsTreeWidget = widget.lookupWidget("../parentsTree")
+                    parentsTreeWidget.getModel().setLimitingObjectId(value);
+                </javascript>
+            </fd:on-value-changed>
+        </fd:field>-->
+
+                <fd:field id="name" required="true">
+                    <fd:label>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:label>
+                    <fd:initial-value>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:initial-value>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length min="1" max="400"/>
+                    </fd:validation>
+                </fd:field>
+
+
+                <fd:field id="checkSystemName" state="output">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="systemName">
+                    <fd:label>
+                        <i18n:text key="EmsObject.systemName"/>
+                    </fd:label>
+                    <fd:initial-value/>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <!-- <fd:validation>
+                        <fd:length min="0" max="45"/>
+                        <fd:java ref="systemNameUniquenessValidator">
+                            <fd:failmessage>
+                                <i18n:text key="EmsObject.systemName"/>
+                                is not unique.
+                            </fd:failmessage>
+                        </fd:java>
+                    </fd:validation>-->
+                    <fd:on-value-changed>
+                        <javascript>
+                            var checkSystemNameWidget = widget.lookupWidget("../checkSystemName");
+                            //print("DEBUG---checkSystemNameWidget " + checkSystemNameWidget.getValue());
+
+                            var emsObjectIdWidget = widget.lookupWidget("../emsObjectId");
+                            //print("DEBUG---emsObjectIdWidget " + emsObjectIdWidget.getValue());
+
+                            var systemNameWidget = widget.lookupWidget("../systemName");
+
+                            var parentIdWidget = widget.lookupWidget("../../parentId");
+                            //print("DEBUG---parentIdWidget " + parentIdWidget.getValue());
+
+                            var entityWidget = widget.lookupWidget("../../entity");
+                            //print("DEBUG---entityWidget " + entityWidget.getValue());
+
+                            if (checkSystemNameWidget != null &amp;&amp; emsObjectIdWidget != null &amp;&amp;
+                            parentIdWidget != null &amp;&amp; entityWidget != null) {
+                            if (checkSystemNameUniqueness(systemNameWidget, systemNameWidget.value,
+                            emsObjectIdWidget.value, parentIdWidget.value, entityWidget.value)) {
+                            checkSystemNameWidget.state = Packages.org.apache.cocoon.forms.formmodel.WidgetState.OUTPUT;
+                            this.setAttribute("unique", "true");
+                            print("DEBUG---SystemURL is UNIQUE");
+                            }
+                            else {
+                            checkSystemNameWidget.state =
+                            Packages.org.apache.cocoon.forms.formmodel.WidgetState.INVISIBLE;
+                            this.setAttribute("unique", "false");
+                            print("DEBUG---SystemURL is FALSE");
+                            }
+                            }
+                        </javascript>
+                    </fd:on-value-changed>
+                    <fd:attributes>
+                        <fd:attribute name="unique" value="true"/>
+                    </fd:attributes>
+                </fd:field>
+                <!--  <fd:field id="tempSystemName">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:booleanfield id="isSystemNameUseDate">
+                    <fd:initial-value>true</fd:initial-value>
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Content.systemNameUseDate"/>
+                    </fd:label>
+                    <fd:on-value-changed>
+                        <javascript>
+                            var systemNameWidget = widget.lookupWidget("../systemName");
+                            var tempSystemNameWidget = widget.lookupWidget("../tempSystemName");
+                            var idWidget = widget.lookupWidget("../id");
+                            //tempSystemNameWidget.value = systemNameWidget.value;
+                            if(this.value ==true){
+
+                            var newDate = Packages.ru.strela.ems.validators.DateFormatValidator.now("yyyy-MM-dd-hh-mm");
+                            //print("Use Date"+newDate);
+
+                            &lt;!&ndash;var newDate = new Date();&ndash;&gt;
+                            var dateToString =newDate.toString();
+                            &lt;!&ndash;var newId = idWidget.value;&ndash;&gt;
+
+
+                            systemNameWidget.value = dateToString.substring(0,16);
+                            &lt;!&ndash;systemNameWidget.value = systemNameWidget.value +newDate.getTime();&ndash;&gt;
+                            //print ("tmp: "+tempSystemNameWidget.value);
+                            }
+                            else{
+                            // print("Use Date"+this.value);
+                            systemNameWidget.value = tempSystemNameWidget.value;
+                            //print ("tmp: "+tempSystemNameWidget.value);
+                            }
+
+                        </javascript>
+                    </fd:on-value-changed>
+                </fd:booleanfield>-->
+            </fd:widgets>
+        </fd:group>
+
+        <!--<fd:group id="emsObject">
+            <fd:widgets>
+                <fd:field id="id" state="output">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                    <fd:on-value-changed>
+                        <javascript>
+                            var value = new java.lang.Integer(this.value);
+                            var parentsTreeWidget = widget.lookupWidget("../parentsTree")
+                            parentsTreeWidget.getModel().setLimitingObjectId(value);
+                        </javascript>
+                    </fd:on-value-changed>
+                </fd:field>
+
+                <fd:field id="parentId">
+                    <fd:label>
+                        <i18n:text key="EmsObject.parentElement"/>
+                    </fd:label>
+                    <fd:datatype base="integer"/>
+                    &lt;!&ndash;<fd:selection-list type="flow-jxpath" list-path="navigationList"&ndash;&gt;
+                    &lt;!&ndash;value-path="value" label-path="label"/>&ndash;&gt;
+                </fd:field>
+                <fd:field id="entity" state="invisible">
+                    <fd:datatype base="string"/>
+                    <fd:initial-value>Navigation</fd:initial-value>
+                </fd:field>
+                <fd:tree id="parentsTree">
+                    <fd:tree-model type="java" ref="parentsTreeModel"/>
+                    <fd:on-create>
+                        <javascript>
+                            this.getModel().setEntity("navigation");
+                        </javascript>
+                    </fd:on-create>
+                </fd:tree>
+
+                &lt;!&ndash;<fd:field id="parentId" state="invisible">
+                    <fd:datatype base="integer" />
+                </fd:field>&ndash;&gt;
+                <fd:field id="checkSystemName" state="output">
+                    <fd:datatype base="string"/>
+                </fd:field>
+
+
+                <fd:field id="systemName">
+                    <fd:label>
+                        <i18n:text key="EmsObject.systemName"/>
+                    </fd:label>
+                    <fd:initial-value/>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length min="0" max="45"/>
+                        <fd:java ref="systemNameUniquenessValidator">
+                            <fd:failmessage>
+                                <i18n:text key="EmsObject.systemName"/>
+                                is not unique.
+                            </fd:failmessage>
+                        </fd:java>
+                    </fd:validation>
+                    <fd:on-value-changed>
+                        <javascript>
+                            var checkSystemNameWidget = widget.lookupWidget("../checkSystemName");
+                            var emsObjectIdWidget = widget.lookupWidget("../emsObjectId");
+                            var systemNameWidget = widget.lookupWidget("../systemName");
+                            var parentIdWidget = widget.lookupWidget("../parentId");
+                            var entityWidget = widget.lookupWidget("../entity");
+                            if (checkSystemNameUniqueness(systemNameWidget, systemNameWidget.value,
+                            emsObjectIdWidget.value, parentIdWidget.value, entityWidget.value)) {
+                            checkSystemNameWidget.state = Packages.org.apache.cocoon.forms.formmodel.WidgetState.OUTPUT;
+                            // this.setAttribute("unique", "true");
+                            }
+                            else {
+                            checkSystemNameWidget.state =
+                            Packages.org.apache.cocoon.forms.formmodel.WidgetState.INVISIBLE;
+                            // this.setAttribute("unique", "false");
+                            }
+                        </javascript>
+                    </fd:on-value-changed>
+                    <fd:attributes>
+                        <fd:attribute name="unique" value="true"/>
+                    </fd:attributes>
+                </fd:field>
+                <fd:field id="name" required="true">
+                    <fd:label>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:label>
+                    <fd:initial-value>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:initial-value>
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length min="1" max="50"/>
+                    </fd:validation>
+                </fd:field>
+                <fd:field id="urlRelativity" required="true">
+                    <fd:label>
+                        <i18n:text key="EmsObject.urlRelativity"/>
+                    </fd:label>
+                    <fd:initial-value>1</fd:initial-value>
+                    <fd:datatype base="integer"/>
+                    <fd:selection-list>
+                        <fd:item value="0">
+                            <fd:label>
+                                <i18n:text key="EmsObject.urlRelativityAbsolute"/>
+                            </fd:label>
+                        </fd:item>
+                        <fd:item value="1">
+                            <fd:label>
+                                <i18n:text key="EmsObject.urlRelativityRelative"/>
+                            </fd:label>
+                        </fd:item>
+                    </fd:selection-list>
+                </fd:field>
+
+                <fd:field id="rootId" state="invisible">
+                    <fd:datatype base="integer"/>
+                </fd:field>
+
+                 &lt;!&ndash;<fd:expand id="labels"/>&ndash;&gt;
+                <fd:repeater id="labels" orderable="true">
+            <fd:widgets>
+                <fd:field id="languageCode" state="invisible">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="languageName" state="invisible">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="label">
+                    <fd:datatype base="string"/>
+                </fd:field>
+            </fd:widgets>
+        </fd:repeater>
+            </fd:widgets>
+        </fd:group>-->
+
+        <fd:repeater id="labels" orderable="true">
+            <fd:widgets>
+                <fd:field id="languageCode">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="objectId">
+                    <fd:datatype base="integer"/>
+                </fd:field>
+                <fd:field id="label">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Label.translate"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <!--<fd:field id="alt">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Label.alt"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                </fd:field>-->
+                <!-- <fd:field id="copyright">
+                    <fd:datatype base="string"/>
+                </fd:field>-->
+            </fd:widgets>
+        </fd:repeater>
+
+        <!--<fd:validation>-->
+        <!--<fd:length min="0" max="500">-->
+        <!--<fd:failmessage>Много или мало букв</fd:failmessage>-->
+        <!--</fd:length>-->
+        <!--</fd:validation>-->
+
+
+        <fd:field id="translate">
+            <fd:label>
+                <i18n:text catalogue="core" key="Languages"/>
+            </fd:label>
+            <fd:hint>
+                <i18n:text catalogue="core" key="Languages"/>
+            </fd:hint>
+            <fd:datatype base="string"/>
+            <!--<fd:on-value-changed>
+                <javascript>
+                    &lt;!&ndash;java.lang.System.err.println("23Drinks value changed: " + event.newValue);&ndash;&gt;
+                    &lt;!&ndash;cocoon.session.setAttribute("formLocale", this.value);&ndash;&gt;
+                    cocoon.session.setAttribute("formLocale", event.newValue);
+                    var formLocale = widget.lookupWidget("../formLocale");
+                    if(formLocale){
+                    formLocale.setValue(event.newValue);
+                    print("New formLocale: "+cocoon.session.getAttribute("formLocale"));
+                    }
+
+                </javascript>
+            </fd:on-value-changed>-->
+            <!--<fd:on-value-changed>
+                <fd:javascript>
+                    print("this.value"+this.value);
+                    cocoon.session.setAttribute("formLocale", this.value);
+                </fd:javascript>
+            </fd:on-value-changed>-->
+            <!--<fd:on-value-changed>
+                <javascript>
+                    java.lang.System.err.println("Drinks value changed: " + event.newValue);
+                    cocoon.session.setAttribute("formLocale", this.value);
+                </javascript>
+            </fd:on-value-changed>-->
+            <!--<fd:on-selection-changed>
+
+                <fd:javascript>
+                    print("this.value"+this.value);
+                    cocoon.session.setAttribute("formLocale", this.value);
+
+                    print("this.value1"+cocoon.session.getAttribute("formLocale");
+                </fd:javascript>
+            </fd:on-selection-changed>-->
+        </fd:field>
+        <fd:field id="formLocale">
+            <fd:datatype base="string"/>
+            <fd:on-value-changed>
+                <javascript>
+                    java.lang.System.err.println("value changed: " + event.newValue);
+                    cocoon.session.setAttribute("formLocale", event.newValue);
+                </javascript>
+            </fd:on-value-changed>
+        </fd:field>
+
+        <fd:repeater id="metaInfo">
+            <!--<fd:group id="metaInfo">-->
+            <fd:widgets>
+                <!--<fd:field id="id">
+                    <fd:datatype base="integer"/>
+                </fd:field>-->
+                <!--Meta Group-->
+                <fd:field id="title">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="MetaInfo.title"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="description">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="MetaInfo.description"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+
+                </fd:field>
+                <fd:field id="keywords">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="MetaInfo.keywords"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="languageCode">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="objectId">
+                    <fd:datatype base="integer"/>
+                </fd:field>
+                <fd:repeater id="tagList" orderable="true">
+                    <fd:widgets>
+                        <fd:field id="id" state="invisible">
+                            <fd:datatype base="integer"/>
+                        </fd:field>
+                        <fd:field id="tag">
+                            <fd:datatype base="string"/>
+                        </fd:field>
+                        <fd:action id="delete">
+                            <fd:on-action>
+                                <fd:javascript>
+                                    var repeater = widget.lookupWidget("/tagList");
+                                    <!--print("repeater:" + repeater);-->
+                                    var selectedRow = repeater.getParentRow(widget);
+                                    <!--var fileId = selectedRow.getChild("id").value;-->
+                                    var selectedRowIndex = repeater.indexOf(selectedRow);
+                                    repeater.removeRow(selectedRowIndex);
+                                    <!--var excludedIds = cocoon.session.getAttribute("excludedIds");-->
+                                    <!--excludedIds.remove(fileId);-->
+                                </fd:javascript>
+                            </fd:on-action>
+                        </fd:action>
+                        <!--<fd:field id="tagValue">
+                            <fd:datatype base="string"/>
+                        </fd:field>-->
+                    </fd:widgets>
+                </fd:repeater>
+                <fd:field id="addTag">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Document.tags"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                    <fd:on-value-changed>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("../tagList");
+                            <!--print("repeater:" + repeater);-->
+                            <!--print("this.value:" + this.value);-->
+                            var newRow = repeater.addRow();
+                            newRow.getChild("tag").value = this.value;
+                        </fd:javascript>
+                    </fd:on-value-changed>
+                </fd:field>
+                <!--<fd:field id="addTagValue">
+                    <fd:datatype base="string"/>
+                </fd:field>-->
+                <!--<fd:expand id="tagList"/>-->
+                <!-- <fd:field id="tags">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="Document.tags"/>
+                    </fd:label>
+                    <fd:datatype base="string"/>
+                </fd:field>-->
+
+            </fd:widgets>
+            <!--</fd:group>-->
+        </fd:repeater>
+        <!--  <fd:field id="simpleTags">
+            <fd:label>
+                <i18n:text catalogue="core" key="Document.tags"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+        </fd:field>-->
+
+        <!--tets linked-->
+        <fd:repeater id="linked" orderable="true">
+            <fd:widgets>
+                <fd:output id="id">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="name">
+                    <!--<fd:label>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:label>-->
+                    <fd:hint>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <fd:output id="publishDateTime">
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="Content.publishDateTime"/>
+                    </fd:hint>
+                    <!--<fd:label>
+                        <i18n:text catalogue="core" key="Content.publishDateTime"/>
+                    </fd:label>-->
+                    <fd:datatype base="date">
+                        <fd:convertor variant="date">
+                            <fd:patterns>
+                                <fd:pattern>dd/MM/yyyy HH:mm</fd:pattern>
+                            </fd:patterns>
+                        </fd:convertor>
+                    </fd:datatype>
+                </fd:output>
+                <fd:action id="delete">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/linked");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var linkId = selectedRow.getChild("id").value;
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            repeater.removeRow(selectedRowIndex);
+                            var excludedIds = cocoon.session.getAttribute("excludedIds");
+                            excludedIds.remove(linkId);
+                            //var linktree = widget.lookupWidget("/tree");
+                            //tree.clearSelection();
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:action>
+                <fd:booleanfield id="select">
+                    <fd:label>Select</fd:label>
+                </fd:booleanfield>
+            </fd:widgets>
+        </fd:repeater>
+        <!--<fd:group id="fileFields">
+            <fd:widgets>
+                <fd:field id="addFile">
+                    <fd:datatype base="integer"/>
+                    <fd:on-value-changed>
+                        <fd:javascript>
+                            print(" AddCHANGE VALUE");
+                            var repeater = widget.lookupWidget("../fileSystemObjects");
+                            print(" 1");
+                            var lastPosition = repeater.getSize();
+                            print(" 2 - lastPosition"+lastPosition);
+                            var newRow = repeater.addRow();
+                            print(" 3");
+                            newRow.getChild("id").value = new java.lang.Integer (this.value);
+                            print(" 4");
+                            var addFileName = widget.lookupWidget("../addFileName");
+                            print(" 4+"+addFileName.value);
+                            newRow.getChild("name").value = addFileName.value;
+                            print(" 5"+addFileName.value);
+
+                            var addFilePath=widget.lookupWidget("../addFilePath");
+                            newRow.getChild("path").value =addFilePath.value;
+                            print("6"+addFilePath.value);
+
+                            var addFileSystemName=widget.lookupWidget("../addFileSystemName");
+                            newRow.getChild("systemName").value =addFileSystemName.value;
+                            print("7"+addFileSystemName.value);
+
+                            //var addFileSize=widget.lookupWidget("../addFileSize");
+                            //newRow.getChild("size").value =new java.lang.Integer(addFileSize.value);
+                            //print("8"+addFileSize.value);
+
+                            var addFileType=widget.lookupWidget("../addFileType");
+                            newRow.getChild("contentType").value =addFileType.value;
+                            if(addFileType.value =='folder'){
+                            newRow.getChild("folder").value = true;
+                            print("9"+addFileType.value);
+                            }
+                            print("9"+addFileType.value);
+
+
+                        </fd:javascript>
+                    </fd:on-value-changed>
+                </fd:field>
+                <fd:field id="addFileName">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="addFileSystemName">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="addFilePath">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="addFileType">
+                    <fd:datatype base="string"/>
+                </fd:field>
+                <fd:field id="addFileSize">
+                    <fd:datatype base="integer"/>
+                </fd:field>
+            </fd:widgets>
+        </fd:group>-->
+
+    </fd:widgets>
+</fd:library>

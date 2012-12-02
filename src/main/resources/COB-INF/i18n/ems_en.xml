@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<catalogue xml:lang="en">
+
+    <!--error-->
+    <message key="error.notUnique">Value of the field is not unique</message>
+    <!--common-->
+    <message key="common.createdDateTime">Created</message>
+    <message key="common.modifiedDateTime">Modified</message>
+    <message key="common.publishDateTime">Publish Date</message>
+    <message key="common.expiredDateTime">Expired Date</message>
+    <message key="common.isProtected">Protected</message>
+    <message key="common.settings">settings</message>
+    <message key="common.tools">tools</message>
+    <message key="common.create">create</message>
+    <message key="common.add">add</message>
+    <message key="common.remove">remove</message>
+
+    <!--object Action-->
+        <message key="action.showHTML">стандартный HTML</message>
+        <message key="action.showHTMLSimple">только HTML</message>
+        <message key="action.show">вывести</message>
+        <message key="action.showHor">вывести горизонтально</message>
+        <message key="action.showVer">вывести вертикально</message>
+        <message key="action.showImageBanner">Банер Картинкой</message>
+        <message key="action.showMovie">Видео</message>
+        <message key="action.showLanguages">Список Языков</message>
+        <message key="action.showHierarchy">Показать иерахически</message>
+        <message key="action.showImages">Показать картинки</message>
+        <message key="action.showOL">Вывести OL</message>
+        <message key="action.showNewsList">Списко Новостей</message>
+        <message key="action.showOLCollections">Стандартный HTML</message>
+        <message key="action.showFeedbackHTML">Стандартный HTML</message>
+        <message key="action.showRandomImage">Стандартный HTML</message>
+        <message key="action.showName">Стандартный HTML</message>
+        <message key="action.showName">Стандартный HTML</message>
+        <message key="action.showFirstNewsItem">Стандартный HTML</message>
+        <message key="action.showProducts">Стандартный HTML</message>
+        <message key="action.searchResults">Стандартный HTML</message>
+        <message key="action.showHor2Levels">Стандартный HTML</message>
+        <message key="action.cycle">Стандартный HTML</message>
+        <message key="action.showScrollable">Стандартный HTML</message>
+        <message key="action.showScrollAuto">Стандартный HTML</message>
+        <message key="action.showItem">Стандартный HTML</message>
+        <message key="action.showItemsPositionSorted">Стандартный HTML</message>
+        <message key="action.showVacancies">Стандартный HTML</message>
+        <message key="action.showFiles">Стандартный HTML</message>
+        <message key="action.dropdown">Стандартный HTML</message>
+        <message key="action.showTariff">Стандартный HTML</message>
+        <message key="action.showLease">Стандартный HTML</message>
+        <message key="action.showInner">Стандартный HTML</message>
+        <message key="action.showNewsListNoImage">Стандартный HTML</message>
+
+
+
+     <!--interface -->
+    <message key="interface.goSite">Go to Site</message>
+    <message key="interface.reindex">Reindex</message>
+    <message key="interface.hallo">Hello</message>
+    <message key="interface.help">Help</message>
+    <message key="interface.language">English</message>
+    <message key="interface.logout">Logout</message>
+    <message key="interface.search">Search</message>
+    <!--Content -->
+    <message key="interface.content">Content</message>
+    <message key="interface.documents">Docs</message>
+    <message key="interface.events">Events</message>
+    <message key="interface.galleries">Image Gallery</message>
+
+    <message key="interface.catalogues">Catalogues</message>
+    <message key="interface.projects">Projects</message>
+    <message key="interface.products">Products</message>
+
+    <message key="interface.mediateka">Mediateka</message>
+    <message key="interface.pictures">Pictures</message>
+    <message key="interface.sound">Sound</message>
+    <message key="interface.video">Video</message>
+    <message key="interface.files">Files</message>
+
+    <message key="interface.modules">Modules</message>
+    <message key="interface.portfolio">Portfolio</message>
+
+    <message key="interface.interactive">Interactive</message>
+    <message key="interface.blog">Blog</message>
+    <message key="interface.comments">Comments</message>
+    <message key="interface.voiting">Voiting</message>
+    <message key="interface.forms">Forms</message>
+
+    <!--Structure -->
+    <message key="interface.structure">Structure</message>
+    <message key="interface.menu">Memnu</message>
+    <message key="interface.pages">Pages</message>
+
+    <message key="interface.appearance">Appearance</message>
+    <message key="interface.templates">Templates</message>
+    <message key="interface.css">CSS</message>
+    <!--administration -->
+    <message key="interface.administration">Administration</message>
+    <message key="interface.access">Access Rules</message>
+    <message key="interface.users">Users</message>
+    <message key="interface.groups">User Groups</message>
+    <message key="interface.roles">User Roles</message>
+
+    <message key="interface.settings">Settings</message>
+    <message key="interface.site">Site</message>
+    <message key="interface.languages">Languages</message>
+    <message key="interface.dataFormat">Data Format</message>
+    <message key="interface.documentTypes">Document Types</message>
+
+    <message key="interface.journals">Journals</message>
+    <message key="interface.eventJournal">commerce ML</message>
+    <message key="interface.report">Report</message>
+    <message key="interface.stats">Stats</message>
+
+    <message key="interface.importExport">Import/Export</message>
+    <message key="interface.commerceML">commerce ML</message>
+    <message key="interface.yandexMarket">Yandex.Market</message>
+    <message key="interface.1c">1с buch</message>
+
+    <message key="interface.useful">Useful</message>
+    <message key="interface.backup">Backups</message>
+    <message key="interface.update">Updates</message>
+    <message key="interface.objectTypeAction">Snippets</message>
+    <message key="interface.i18n">Lacolization</message>
+
+
+    <!--emsObject-->
+       <message key="EmsObject.parentElement">Parent element</message>
+       <message key="EmsObject.noParentElement">No parent element</message>
+       <message key="EmsObject.systemName">URL</message>
+       <message key="EmsObject.name">Name</message>
+       <message key="EmsObject.langLabels">Name in different languages</message>
+       <message key="EmsObject.children">Children</message>
+       <message key="EmsObject.addedObjects">Added Objects</message>
+       <message key="EmsObject.position">Position</message>
+       <message key="EmsObject.noObjectsToDisplay">There are no objects to display</message>
+       <message key="EmsObject.addObject">Add Object</message>
+       <message key="EmsObject.removeObjects">Remove Selected Objects</message>
+       <message key="EmsObject.typeName">Type Name</message>
+       <message key="EmsObject.typeAction">Action</message>
+       <message key="EmsObject.localizedName">Localized Name</message>
+       <message key="EmsObject.addLocalizedName">Add Localized Name</message>
+       <message key="EmsObject.removeLocalizedName">Remove Localized Name</message>
+       <message key="EmsObject.urlRelativity">URL Relativity</message>
+       <message key="EmsObject.relativeURL">Specific Path</message>
+       <message key="EmsObject.urlRelativityAbsolute">Absolute (Specific Path)</message>
+       <message key="EmsObject.urlRelativityRelative">Relative (From Parent Element)</message>
+       <message key="EmsObject.position">Position</message>
+       <message key="EmsObject.isProtected">Protected</message>
+       <message key="EmsObject.isPublished">Published</message>
+
+
+
+
+
+
+    <message key="go">Go</message>
+    <message key="root">Root</message>
+    <message key="toList">To Elements List</message>
+    <message key="goToChildren">Go To Children</message>
+    <message key="CreateChild">Create Child</message>
+    <message key="CreateSUB">Create SUB</message>
+    <message key="buy">Buy</message>
+
+    <message key="Last modified">Last&#160;modified</message>
+
+    <!-- common used words -->
+
+    <message key="AreYouSure">Are you sure?</message>
+
+
+    <message key="Width">Width</message>
+    <message key="Height">Height</message>
+    <message key="Choose">Choose</message>
+    <message key="Modify">Modify</message>
+    <message key="NotSet">Not Set</message>
+    <message key="Close">Close</message>
+    <message key="Save">Save</message>
+    <message key="Submit">Submit</message>
+    <message key="Cancel">Canel</message>
+    <message key="Delete">Delete</message>
+    <message key="NOTE">Note</message>
+    <message key="No referer">No referer</message>
+    <message key="Referer">Referee</message>
+    <message key="EXCEPTION">Exption</message>
+    <message key="User">User</message>
+    <message key="live">Live</message>
+    <message key="not">not</message>
+    <message key="authoring">Authoring</message>
+    <message key="review">review</message>
+
+
+    <message key="Yes">Yes</message>
+    <message key="No">No</message>
+    <message key="Description">Description</message>
+    <message key="Name">Name</message>
+    <message key="Full Name">Full Name</message>
+    <message key="required fields">Required fields</message>
+    <message key="Search">Search</message>
+    <message key="Home">Home</message>
+    <message key="Title">Title</message>
+    <message key="Last modified">Last&#160;modified</message>
+    <message key="Overview">Overview</message>
+    <message key="View">View</message>
+    <message key="Assets">Assets</message>
+    <message key="true">true</message>
+    <message key="false">false</message>
+    <message key="Rename">Rename</message>
+    <message key="Date">Date</message>
+    <message key="Back">Back</message>
+    <message key="Add">Add</message>
+    <message key="Create">Create</message>
+    <message key="The Archive">Archive</message>
+    <message key="Trash">Trash</message>
+    <message key="Publisher">Publisher</message>
+    <message key="Navigation Title">Navigation Title</message>
+    <message key="Creator">Создатель</message>
+    <message key="Language">Language</message>
+    <message key="Subject">Subject</message>
+    <message key="Rights">Rights</message>
+    <message key="Select File">Select File</message>
+    <message key="select-object">select-object {0}</message>
+    <message key="Insert">Insert</message>
+    <message key="Insert File">Insert File</message>
+    <message key="upload-with-invalid-extension">Uploading file has incorrect extension. Correct extension is {0}.
+        Extension shoud be lower case.
+    </message>
+    <message key="upload-with-missing-title">Uploading file without name.</message>
+    <message key="filename-format-exception">Uploading file does not have extension or its name contains illegal
+        symbols, ex.: spaces, umlauts.
+    </message>
+    <message key="Creation Date">Creation Date</message>
+    <message key="File Size">File Size</message>
+    <message key="Image">File Size</message>
+    <message key="Link">Link</message>
+    <message key="Caption">Caption</message>
+    <message key="All rights reserved">All rights reserved.</message>
+
+    <!-- publish screen -->
+    <message key="Publish">Publish</message>
+    <message key="Source File(s)">Source File(s)</message>
+
+    <!-- login screen -->
+    <message key="login-to-pub">Войти в {0} публикацию</message>
+    <message key="Login">Login</message>
+    <message key="Password">Password</message>
+    <message key="Username">Username</message>
+    <message key="Authentication failed">Authentication failed</message>
+
+    <!-- logout screen -->
+    <message key="Your History">Your History</message>
+    <message key="Login to Authoring Area">Login to Authoring Area</message>
+
+    <!-- reject screen -->
+    <message key="Reject">Reject</message>
+    <message key="reject-doc?">Reject doc {0}?</message>
+
+    <message key="EditProfile">Edit Profile</message>
+    <message key="Logout">Logout</message>
+    <message key="Help">Help</message>
+    <message key="SelectLanguage">Select Interface Language</message>
+
+    <message key="download">Download</message>
+
+    <message key="form.errorWhileSending">Error While Sending</message>
+    <message key="form.couldNotSendMessage">Could Not Send Message</message>
+    <message key="form.subject">Letter from tgc-2.ru site</message>
+    <message key="form.success">Message is sent successfully</message>
+
+</catalogue>

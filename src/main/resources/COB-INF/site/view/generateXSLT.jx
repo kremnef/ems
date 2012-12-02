@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+    <jx:set var="XSLT_TYPE_FILES_REAL_LOCATION" value="WEB-INF/xslt/types/"/>
+    <jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>
+    <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/templates/"/>
+    <jx:set var="CSS_TYPE_FILES_REAL_LOCATION" value="css/types/"/>
+    <jx:set var="CSS_TEMPLATE_FILE_REAL_LOCATION" value="css/templates/"/>
+    <jx:set var="REAL_ROOT_PATH" value="${cocoon.parameters.realRootPath}"/>
+    <jx:set var="SERVLET_PATH" value="${cocoon.parameters.servletPath}"/>
+    <!--<!DOCTYPE xsl:stylesheet SYSTEM "dtd/escape.dtd">-->
+    <xsl:stylesheet version="1.0"
+                    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                    xmlns:i18n="http://apache.org/cocoon/i18n/2.1" exclude-result-prefixes="xsl i18n jx">
+
+        <jx:set var="makeRedirect" value="${cocoon.parameters.makeRedirect}"/>
+        <jx:choose>
+            <jx:when test="${makeRedirect == 'true'}">
+                <xsl:template match="/">
+                    <html>
+                        <head>
+                            <meta http-equiv="refresh" content="0;URL=${cocoon.parameters.redirect}"/>
+
+                        </head>
+                    </html>
+                </xsl:template>
+            </jx:when>
+            <jx:otherwise>
+
+
+                <jx:set var="locale" value="${cocoon.parameters.locale}"/>
+                <jx:set var="actions" value="${java.util.TreeSet()}"/>
+                <jx:set var="actionXSLTFiles" value="${java.util.ArrayList()}"/>
+
+                <jx:set var="typeActionsString" value="${cocoon.parameters.typesActions}"/>
+                <jx:if test="${typeActionsString.length() &gt; 0}">
+                    <jx:forEach var="typeAction" items="${cocoon.parameters.typesActions.split(',')}">
+                        <jx:set var="typeActionSplitted" value="${typeAction.split(':')}"/>
+                        <jx:set var="type" value="${typeActionSplitted.0}"/>
+                        <jx:set var="action" value="${typeActionSplitted.1}"/>
+                        <jx:set var="ignored" value="${actions.add(action)}"/>
+                        <jx:set var="ignored" value="${actionXSLTFiles.add(type + '/' + type + '-' + action)}"/>
+                    </jx:forEach>
+                    <jx:forEach var="action" items="${actions}">
+                        <jx:set var="commonActionFile"
+                                value="${java.io.File(REAL_ROOT_PATH + '/' + XSLT_TYPE_FILES_REAL_LOCATION + 'common-' + action + '.xsl')}"/>
+                        <jx:if test="${commonActionFile.isFile()}">
+                            <xsl:import href="${XSLT_TYPE_FILES_LOCATION + 'common-' + action + '.xsl'}"/>
+                        </jx:if>
+                    </jx:forEach>
+                    <jx:forEach var="filePath" items="${actionXSLTFiles}">
+                        <jx:set var="actionFile"
+                                value="${java.io.File(REAL_ROOT_PATH + '/' + XSLT_TYPE_FILES_REAL_LOCATION + filePath + '.xsl')}"/>
+                        <jx:if test="${actionFile.isFile()}">
+                            <xsl:import href="${XSLT_TYPE_FILES_LOCATION + filePath + '.xsl'}"/>
+                        </jx:if>
+                    </jx:forEach>
+                </jx:if>
+
+                <jx:set var="xsltTemplateFile" value="${cocoon.parameters.xsltTemplateFile}"/>
+                <xsl:import href="${XSLT_TEMPLATE_FILE_LOCATION}${xsltTemplateFile}"/>
+
+                <xsl:output method="html" encoding="UTF-8" omit-xml-declaration="yes"/>
+
+                <xsl:variable name="page" select="'${cocoon.request.getParameter('page')}'"/>
+                <xsl:variable name="locale" select="'${locale}'"/>
+                <xsl:variable name="servletPath"
+                              select="'${Packages.ru.tastika.tools.util.Utilities.removeTrailingSlash(cocoon.request.getServletPath())}'"/>
+                <xsl:variable name="blockPrefix"
+                              select="'${Packages.ru.strela.ems.tools.ServerTools.getGlobalParameter(\'blockPrefix\')}'"/>
+
+                <jx:set var="scheme" value="${cocoon.request.getScheme()}"/>
+                <jx:set var="sitemapPath" value=""/>
+                <jx:if test="${scheme != 'servlet'}">
+                    <jx:set var="sitemapPath" value="${cocoon.request.getSitemapPath()}"/>
+                </jx:if>
+
+                <xsl:variable name="sitemapPath" select="'${sitemapPath}'"/>
+
+                <xsl:template match="/">
+                    <html>
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                            <meta name="description">
+                                <xsl:attribute name="content">
+                                    <xsl:copy>
+                                        <xsl:value-of select="/root/systemNode/metaInfo/description"/>
+                                        <!--<xsl:apply-templates select="//*[name='description']"/>-->
+                                    </xsl:copy>
+                                </xsl:attribute>
+                            </meta>
+                            <meta name="robots" content="index, follow"/>
+                            <meta name="viewport" content="width=1016"/>
+                            <meta name="keywords">
+                                <xsl:attribute name="content">
+                                    <xsl:copy>
+                                        <xsl:value-of select="/root/systemNode/metaInfo/keywords"/>
+                                        <xsl:text>,</xsl:text>
+                                        <!--<xsl:value-of select="/root/systemNode/metaInfo/*/tag"/>-->
+                                        <!--<xsl:for-each select="/root/systemNode/metaInfo/tags">
+                                            <xsl:value-of select="tag"/>
+                                            <xsl:if test="position() != last()">
+                                                <xsl:text>,</xsl:text>
+                                            </xsl:if>
+                                        </xsl:for-each>-->
+                                        <xsl:for-each select="//tags">
+                                            <xsl:value-of select="tag"/>
+                                            <xsl:if test="position() != last()">
+                                                <xsl:text>,</xsl:text>
+                                            </xsl:if>
+                                        </xsl:for-each>
+                                        <!--<xsl:apply-templates select="/root/systemNode/metaInfo/*/tag"/>-->
+                                    </xsl:copy>
+                                </xsl:attribute>
+                            </meta>
+
+                            <xsl:variable name="title" select="/root/systemNode/labels[languageCode=$locale]/label"/>
+                            <title>
+
+                                <xsl:choose>
+                                    <xsl:when test="$title">
+                                        <xsl:value-of select="$title"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="/root/systemNode/name"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:text>|</xsl:text>
+                                <xsl:value-of select="/root/systemNode/metaInfo/description"/>
+                            </title>
+                            <jx:forEach var="action" items="${actions}">
+                                <jx:set var="commonActionCSSFile"
+                                        value="${java.io.File(REAL_ROOT_PATH + CSS_TYPE_FILES_REAL_LOCATION + 'common-' + action + '.css')}"/>
+                                <jx:if test="${commonActionFile.isFile()}">
+                                    <link rel="stylesheet" type="text/css"
+                                          href="${SERVLET_PATH}/${CSS_TYPE_FILES_REAL_LOCATION}common-${action}.css"/>
+                                </jx:if>
+                            </jx:forEach>
+                            <jx:forEach var="filePath" items="${actionXSLTFiles}">
+                                <jx:set var="actionFile"
+                                        value="${java.io.File(REAL_ROOT_PATH + '/' + CSS_TYPE_FILES_REAL_LOCATION + filePath + '.css')}"/>
+                                <jx:if test="${actionFile.isFile()}">
+                                    <link rel="stylesheet" type="text/css"
+                                          href="${SERVLET_PATH}/${CSS_TYPE_FILES_REAL_LOCATION}${filePath}.css"/>
+                                </jx:if>
+                            </jx:forEach>
+                            <jx:set var="tempateCSSFilePath"
+                                    value="${CSS_TEMPLATE_FILE_REAL_LOCATION + xsltTemplateFile.replaceAll('\.xsl$', '.css')}"/>
+                            <jx:set var="tempateCSSFile"
+                                    value="${java.io.File(REAL_ROOT_PATH + '/' + tempateCSSFilePath)}"/>
+                            <jx:if test="${tempateCSSFile.isFile()}">
+                                <link rel="stylesheet" type="text/css" href="${SERVLET_PATH}/${tempateCSSFilePath}"/>
+                            </jx:if>
+                            <xsl:call-template name="scripts"/>
+                            <xsl:call-template name="styles"/>
+                        </head>
+                        <body>
+                            <xsl:apply-templates select="/root"/>
+                        </body>
+                    </html>
+                </xsl:template>
+
+
+            </jx:otherwise>
+        </jx:choose>
+    </xsl:stylesheet>
+
+</jx:template>

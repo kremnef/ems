@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <!--<jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>-->
+    <jx:import uri="context:/DocumentType/forms/Common/template.xml"/>
+
+    <ft:form-template id="dynamicForm" location="${cocoon.request.getAttribute('dynamicForm')}"
+                      ajax-action="${cocoon.session.getAttribute('dynamicForm.id')}.continue"
+                      action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" method="POST" ajax="true">
+
+
+
+        <ft:group id="Vacancy">
+            <fi:group>
+                <fi:styling layout="columns"/>
+                <fi:items>
+
+                    <ft:widget id="post">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                    <ft:widget id="department">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                    <ft:widget id="number">
+                        <fi:styling size="20" type="number"/>
+                    </ft:widget>
+                     <ft:widget id="responsibility">
+                        <fi:styling size="200" type="textarea"/>
+                    </ft:widget>
+                    <ft:widget id="requirements">
+                        <fi:styling size="200" type="textarea"/>
+                    </ft:widget>
+                    <ft:widget id="job-place">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+                    <ft:widget id="contacts">
+                        <fi:styling size="200" type="textarea"/>
+                    </ft:widget>
+                </fi:items>
+            </fi:group>
+        </ft:group>
+        <ft:widget id="saveDocumentType" class="button-primary">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+    </ft:form-template>
+
+    <!--</content>-->
+</jx:template>

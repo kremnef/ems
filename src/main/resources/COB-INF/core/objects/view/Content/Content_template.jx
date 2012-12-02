@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+    <jx:forEach select="#{objects/emsObject[@xsi:type='content']}">
+
+        <content id="#{id}"
+                 expireDateTime="#{expireDateTime}"
+                 isProtected="#{isProtected}"
+                 documentTypeId="#{documentTypeId}"
+                 sposition="${item.position}">
+            <name>#{name}</name>
+            <creator>#{creator/name}</creator>
+            <jx:import uri="view/Document/Document_template.jx"/>
+                        <!--publishDateTime="#{publishDateTime}"-->
+        </content>
+
+    </jx:forEach>
+</jx:template>
+
+

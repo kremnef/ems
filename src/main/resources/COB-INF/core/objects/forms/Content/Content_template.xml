@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+    <jx:import uri="forms/Library/CoreLib_template.xml"/>
+    <!--dd-->
+    <!-- OnlyContent -->
+    <jx:macro name="objectRows">
+
+
+        <script type="text/javascript">
+
+            function changeDocumentType(id){
+            var documentTypeId = document.getElementById("documentTypeId");
+            documentTypeId.value = id;
+            cocoon.session.setAttribute("documentTypeId", id);
+            <!--cocoon.forms.submitForm(documentTypeId);-->
+            <!--cocoon.forms.submitForm(documentTypeId);-->
+            }
+        </script>
+        <label for="documentTypeList" class="label">
+            <ft:widget-label id="documentTypeList"/>
+        </label>
+
+
+        <ft:widget id="documentTypeList">
+            <i18n:text catalogue="core" key="Content.documentType"/>
+            <fi:styling class="documentType-select" style="width:350px;" onChange="changeDocumentType(this.value);"/>
+            <!--<fi:value>
+                ${documentType.id}
+            </fi:value>-->
+            <fi:selection-list>
+                <fi:item value="0">
+                    <fi:label>
+                        -----
+                    </fi:label>
+                </fi:item>
+                <jx:forEach items="${documentTypeList}" var="dt">
+                    <fi:item value="${dt.id}">
+                        <!--<jx:if test="${dt.id == 1}">
+                            <jx:attribute name="selected">
+                                true
+                            </jx:attribute>
+                        </jx:if>-->
+                        <fi:label>
+                            <i18n:text catalogue="documenttypes" key="${dt.name}"/>
+                        </fi:label>
+                    </fi:item>
+                </jx:forEach>
+            </fi:selection-list>
+        </ft:widget>
+
+        <script type="text/javascript">
+            $(".documentType-select").chosen();
+        </script>
+        <ft:widget id="documentTypeId">
+            <fi:styling type="hidden"/>
+        </ft:widget>
+
+
+        <!--</jx:if>-->
+        <label for="publishDateTime" class="label">
+            <ft:widget-label id="publishDateTime"/>
+        </label>
+        <ft:widget id="publishDateTime">
+            <fi:styling size="50"/>
+        </ft:widget>
+        <label for="systemNodeName" class="label">
+            <i18n:text catalogue="core" key="Content.homeURL"/>
+        </label>
+        <a href="SystemNode-edit?id=${systemNodeId}" title="${systemNodeName}" id="systemNodeName" class="">
+            <jx:out value="${systemNodeName}"/>
+
+        </a>
+        <div i18n:attr="title" title="core:SystemNode.choose" id="pagesTreeContainer" class="dialogContent">
+            <div class="common-div">
+                <span class="ui-icon-home"></span>
+                <a id="treeRootNode" href="#" class=""></a>
+            </div>
+            <div id="pagesTree"></div>
+        </div>
+        <!--<input type="button" id="selectPage" i18n:attr="value" value="core:SystemNode.choose" onclick="openXMLTree('SystemNode', 'null', 'false', '#pagesTree'); $('#systemNodeName').show();"/>-->
+        <!--  <button type="button" role="button" i18n:attr="value" value="core:SystemNode.choose"
+        class="ui-button-icon-only ui-corner-all ui-icon ui-icon-link ui-widget"
+        onclick="openPagesDialog(); $('#systemNodeName').show();"/>
+<button type="button" role="button" class="ui-button-icon-only ui-icon ui-corner-all ui-icon-close "
+        onclick="detachPage();"/>-->
+
+
+    </jx:macro>
+
+
+    <userDataMacro/>
+    <parentObjects/>
+    <!--<script type="text/javascript" src="/ems/resource/js/jquery-plugin/flowplayer/jquery.tools.min.js" />
+    <link media="screen" href="/ems/resource/js/jquery-plugin/flowplayer/css/form.css" type="text/css"
+              rel="stylesheet"/>
+
+    <script type="text/javascript">
+        $("#contentForm").validator();
+    </script>
+    -->
+    <ft:form-template id="contentForm" location="${cocoon.request.getAttribute('contentForm')}"
+                      action="${cocoon.session.getAttribute('contentForm.id')}.continue"
+                      ajax-action="${cocoon.session.getAttribute('contentForm.id')}.continue" method="POST" ajax="true">
+        <!--action="${cocoon.session.getAttribute('contentForm.id')}.continue"-->
+        <!--<span>
+            todo:
+            1. сделать проверку деревьев на тип контена при перемещении
+            1. сделать проверку деревьев на уже прикрепленные
+            2. седлать выборку по типу документа
+            4. додумать репитер для линков
+
+        </span>-->
+
+        <!--<translate/>-->
+        <script type="text/javascript">
+            $(function() {
+            $("#content-tabs").tabs();
+            $("#ftabs").tabs();
+            });
+        </script>
+        <translate/>
+        <span class="label"><i18n:text catalogue="core" key="Document.version"/>:
+        </span>
+        ${version}
+        <div id="content-tabs" class="panel">
+            <ul>
+                <li>
+                    <a href="#content-tabs-1">
+                        <i18n:text catalogue="core" key="SystemNode.settings"/>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#content-tabs-2">
+                        <!--<i18n:text catalogue="core" key="Content.SEO"/>-->
+                        <i18n:text catalogue="core" key="Document.metaData"/>
+                    </a>
+                </li>
+                <jx:if test="${documentActionState == 'edit'}">
+                    <li>
+                        <a href="#content-tabs-3">
+                            <i18n:text catalogue="core" key="Content.linked"/>
+                        </a>
+                    </li>
+                </jx:if>
+
+            </ul>
+            <div id="content-tabs-1">
+                <emsFields entity="Content" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+            </div>
+
+            <div id="content-tabs-2">
+                <!-- <label for="thumbnail" class="label">
+                    <ft:widget-label id="thumbnail"/>
+                </label>-->
+                <table class="table">
+                    <tr valign="top">
+                        <td>
+
+                            <label for="thumbnailId" class="label">
+                                <ft:widget-label id="thumbnailId"/>
+                            </label>
+                            <ft:widget id="thumbnailId">
+                                <fi:styling type="hidden"/>
+                            </ft:widget>
+
+                            <div i18n:attr="title" title="core:FileObject.choose"
+                                 id="thumbnailTreeContainer"
+                                 class="dialogContent">
+                                <div class="common-div">
+                                    <span class="ui-icon-home"></span>
+                                    <a id="parentTreeRootNode" href="#" class="">File</a>
+                                </div>
+                                <div id="thumbnailTree"></div>
+                            </div>
+
+
+                            <div i18n:attr="title" title="core:FileObject.choose"
+                                 id="CkeditorImagelTreeContainer"
+                                 class="dialogContent">
+                                <div class="common-div">
+                                    <span class="ui-icon-home"></span>
+                                    <a id="parentTreeRootNode" href="#" class="">File</a>
+                                </div>
+                                <div id="CkeditorImagelTree"></div>
+                            </div>
+
+                            <jx:choose>
+                                <jx:when test="${thumbnail !=null}">
+
+                                    <jx:set var="fileId"
+                                            value="${thumbnail.id}"/>
+                                    <jx:set var="filePath"
+                                            value="${thumbnail.path}"/>
+                                    <jx:set var="fileName"
+                                            value="${thumbnail.name}"/>
+                                    <jx:set var="prepath"
+                                            value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
+
+                                    <!--<script>
+                                        globalPrePath =${prepath};
+                                    </script>-->
+                                    <img class="ui-button" id="chooseThumbnail"
+                                         src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg"
+                                         onclick="openXMLTree('Folder', 'null', 'false', '#thumbnailTree')"
+                                         width="100px" height="100px"
+                                         alt="${thumbnail.name}"/>
+                                </jx:when>
+                                <jx:otherwise>
+                                    <img class="ui-button" id="chooseThumbnail" style="cursor: pointer;"
+                                         onclick="openXMLTree('Folder', 'null', 'false', '#thumbnailTree')"
+                                         src="/ems/resource/img/thumbnail.png" width="150px" height="150px"
+                                         alt="Выбрать миниатюру"/>
+                                </jx:otherwise>
+                            </jx:choose>
+
+                        </td>
+                        <!--<jx:if test="${actionState == 'edit'}">-->
+                        <td>
+                            <metaInfo/>
+                        </td>
+                        <!--</jx:if>-->
+                    </tr>
+                </table>
+
+            </div>
+            <jx:if test="${documentActionState == 'edit'}">
+                <div id="content-tabs-3">
+
+                    <!--pages-->
+
+
+                     $("#pagesTree").click( function (e) {
+                    var f = jQuery.jstree._focused();
+                    var id=f.data.ui.selected.attr("id");
+                    var name=f.data.ui.selected.attr("name");
+
+                    var systemNodeNameElement = document.getElementById('systemNodeName');
+                    systemNodeNameElement.innerHTML = name;
+                    systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
+                    document.getElementById('homeId').value = id;
+
+                    });
+                    <script type="text/javascript">
+
+
+                        function openPagesDialog() {
+                        jQuery("#pagesTreeContainer").dialog("open");
+                        }
+
+
+                        function detachPage(){
+                        jQuery("#homeId").val(0);
+                        jQuery("#systemNodeName").hide();
+                        }
+
+
+                        jQuery(function () {
+                        jQuery("#pagesTreeContainer").dialog({
+                        width: 800,
+                        height:400,
+                        modal: true,
+                        autoOpen: false,
+                        buttons: {
+                        "<i18n:text key="Save"/>": function() {
+                        jQuery(this).dialog("close");
+                        }
+                        }
+                        });
+
+
+                        var divId = "#pagesTree";
+                        var entity = "SystemNode";
+                        var ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+
+                        initXmlTree(divId, ajaxUrl);
+                        $(divId).click( function (e) {
+                        var f = jQuery.jstree._focused();
+                        var id=f.data.ui.selected.attr("id");
+                        var name=f.data.ui.selected.attr("name");
+                        var path=f.data.ui.selected.attr("path");
+
+
+                        var systemNodeNameElement = document.getElementById('systemNodeName');
+                        systemNodeNameElement.innerHTML = path;
+                        systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
+                        document.getElementById('homeId').value = id;
+                        });
+                        });
+                    </script>
+                    <!--Pages Properties-->
+
+
+                    <jx:set var="link-excludedIds" value="${cocoon.session.getAttribute('link-excludedIds')}"/>
+
+
+                    <input type="hidden" id="reset_form" value="no"/>
+                    <!--<fileFields/>-->
+
+                    <jx:import uri="view/Tree/FileTree_modal.jx"/>
+                    <div class="panel">
+                        <linked/>
+                        <input type="button" id="selectLinked" i18n:attr="value" value="core:Content.chooseLinks"
+                               onclick="openXMLTree('Content', 'null', 'false', '#linkedTree'); "/>
+                    </div>
+                    <ft:widget id="addLink">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+                    <ft:widget id="addLinkName">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+
+                    <!--<input type="button" id="selectLinked" i18n:attr="value" value="core:Content.chooseLinks"
+                           onclick="openXMLTree('Content', 'null', 'false', '#linkedTree'); "/>
+
+
+
+                    <div i18n:attr="title" title="core:Content.chooseLinks" id="linkContainer" class="dialogContent">
+                        <div id="linkedTree">
+
+                        </div>
+                        <a id="reset_link" href="#" class="ui-button">Сбросить</a>
+                    </div>
+
+                    <div class="panel" id="linkedContainer">
+                        <linked/>
+                    </div>-->
+
+                </div>
+            </jx:if>
+        </div>
+
+        <ft:widget id="homeId">
+            <!--<fi:styling type="hidden"/>-->
+        </ft:widget>
+
+        <script type="text/javascript">
+            var globalRowId;
+            var globalEntityId;
+            var globalCheckbox;
+            var globalEntity;
+            var globalFilter;
+            var globalDivTree;
+            var globalDivTreeContainer;
+            var globalButtonSave;
+            globalButtonSave = '<i18n:text key="Save"/>';
+        </script>
+
+        <div class="panel-button">
+            <ft:widget id="saveContent">
+                <fi:styling type="hidden"/>
+            </ft:widget>
+        </div>
+    </ft:form-template>
+
+</jx:template>

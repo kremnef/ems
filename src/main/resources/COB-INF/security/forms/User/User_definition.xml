@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2004 Outerthought bvba and Schaubroeck nv
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<fd:form
+
+        xmlns:fd="http://apache.org/cocoon/forms/1.0#definition"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:fi="http://www.w3.org/1999/xhtml">
+    <!--<fd:widgets>-->
+    <!--<fd:group id="user">-->
+    <fd:widgets>
+       
+        <!--<fd:field id="id" state="invisible">
+        <fd:datatype base="integer"/>
+        </fd:field>-->
+        <!--<fd:field id="parentId" state="invisible">-->
+        <!--<fd:datatype base="integer"/>-->
+        <!--</fd:field>-->
+         <fd:field id="firstName" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="Customer.firstName"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length max="30"/>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="lastName" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="Customer.lastName"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length max="30"/>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="creditStatus" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="Customer.creditStatus"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length max="30"/>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="accountStatus" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="Customer.accountStatus"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length max="30"/>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="email" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="Customer.email"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length max="30"/>
+            </fd:validation>
+        </fd:field>
+        <fd:field id="checkLogin" state="output">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="login" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="User.login"/>
+            </fd:label>
+            <fd:initial-value/>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length min="0" max="45"/>
+                <fd:java ref="loginUniquenessValidator">
+                    <fd:failmessage>
+                        <i18n:text catalogue="security" key="User.login"/>
+                        is not unique.
+                    </fd:failmessage>
+                </fd:java>
+            </fd:validation>
+            <fd:on-value-changed>
+                <javascript>
+                    var checkLoginWidget = widget.lookupWidget("../checkLogin");
+                    var idWidget = widget.lookupWidget("../id");
+                    var loginWidget = widget.lookupWidget("../login");
+                    <!--if (checkLoginUniqueness(loginWidget, this.value, idWidget.value)) {-->
+                    <!--checkLoginWidget.state = Packages.org.apache.cocoon.forms.formmodel.WidgetState.OUTPUT;-->
+                    <!--this.setAttribute("unique", "true");-->
+                    <!--}-->
+                    <!--else {-->
+                    <!--checkLoginWidget.state =-->
+                    <!--Packages.org.apache.cocoon.forms.formmodel.WidgetState.INVISIBLE;-->
+                    <!--this.setAttribute("unique", "false");-->
+                    <!--}-->
+                </javascript>
+            </fd:on-value-changed>
+            <fd:attributes>
+                <fd:attribute name="unique" value="true"/>
+            </fd:attributes>
+        </fd:field>
+        <!--<fd:field id="name" required="true">
+            <fd:label>
+                <i18n:text catalogue="security" key="User.name"/>
+            </fd:label>
+            <fd:datatype base="string">
+            </fd:datatype>
+            <fd:validation>
+                <fd:length min="2" max="50"/>
+            </fd:validation>
+        </fd:field>-->
+        <fd:field id="expires">
+            <fd:label>
+                <i18n:text catalogue="security" key="User.expires"/>
+            </fd:label>
+            <fd:initial-value>31/12/9999 23:59</fd:initial-value>
+            <fd:datatype base="date">
+                <fd:convertor variant="date">
+                    <fd:patterns>
+                        <fd:pattern>dd/MM/yyyy H:m</fd:pattern>
+                    </fd:patterns>
+                </fd:convertor>
+            </fd:datatype>
+        </fd:field>
+
+        <fd:field id="password">
+            <fd:label>
+                <i18n:text catalogue="security" key="User.password"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+            <fd:validation>
+                <fd:length max="45" min="6"/>
+            </fd:validation>
+        </fd:field>
+
+        <fd:field id="confirmPassword">
+            <fd:label>
+                <i18n:text catalogue="security" key="User.confirmPassword"/>
+            </fd:label>
+            <fd:datatype base="string"/>
+            <fd:validation>
+                <fd:assert test="password = confirmPassword">
+                    <fd:failmessage>
+                        <i18n:text catalogue="security" key="User.passwordsNotEqual"/>
+                    </fd:failmessage>
+                </fd:assert>
+            </fd:validation>
+        </fd:field>
+
+        <fd:action id="changePassword">
+            <fd:label><i18n:text catalogue="security" key="Change Password"/></fd:label>
+            <fd:on-action>
+                <fd:javascript>
+                    cocoon.redirectTo("/ems/security/changePassword");
+                </fd:javascript>
+            </fd:on-action>
+        </fd:action>
+
+        <fd:repeater id="roles" orderable="true">
+            <fd:widgets>
+                <fd:output id="id">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="name">
+                    <fd:label>
+                        <i18n:text catalogue="security" key="Role.name"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="security" key="Role.name"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <fd:action id="delete">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/roles");
+                            repeater.removeRow(repeater);
+
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:action>
+                <fd:booleanfield id="select">
+                    <fd:label>Select</fd:label>
+                </fd:booleanfield>
+            </fd:widgets>
+        </fd:repeater>
+        <fd:repeater id="groups" orderable="true">
+            <fd:widgets>
+                <fd:output id="id">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="name">
+                    <fd:label>
+                        <i18n:text catalogue="security" key="Group.name"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="security" key="Group.name"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <fd:action id="delete">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/groups");
+                            repeater.removeRow(repeater);
+
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:action>
+                <fd:booleanfield id="select">
+                    <fd:label>Select</fd:label>
+                </fd:booleanfield>
+            </fd:widgets>
+        </fd:repeater>
+
+
+<!--
+        <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
+        <fd:expand id="core:labels"/>-->
+
+
+
+        <fd:submit id="saveUser">
+            <fd:label>
+                <i18n:text key="Save"/>
+            </fd:label>
+        </fd:submit>
+        <!--<fd:submit id="saveUser"><fd:label><i18n:text key="Save"/></fd:label></fd:submit>-->
+    </fd:widgets>
+    <!--</fd:group>-->
+    <!--</fd:widgets>-->
+</fd:form>

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+             xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
+             xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
+             xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+
+    <!--<jx:import uri="servlet:forms:/resource/internal/generation/jx-macros.xml"/>-->
+    <jx:import uri="context:/DocumentType/forms/Common/template.xml"/>
+
+    <!--<content>wwwwwww-->
+        <!--<userDataMacro />-->
+        <!--<parentObjects />-->
+        <ft:form-template id="dynamicForm" location="${cocoon.request.getAttribute('dynamicForm')}" ajax-action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" action="${cocoon.session.getAttribute('dynamicForm.id')}.continue" method="POST" ajax="false">
+            <!--<h3><a href="editDocument?id=#{viewData/document/@id}&amp;documentTypeId=#{viewData/documentTypeId}"><i18n:text key="Document"/> ID #{viewData/document/@id}</a></h3>-->
+             <script type="text/javascript">
+
+function openFileDialog() {
+    $("#fileTree:ui-dialog").dialog("destroy");
+    $("#fileTree").dialog({
+        width: 800,
+        height:400,
+        modal: true,
+        buttons: {
+            "<i18n:text key="Save"/>": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+
+var divId2 = "#fileTree";
+var entity2 = "Folder";
+var ajaxUrl2 = "/ems/core/treeObjects?entity=" + entity2;
+
+document.getElementById('parentTreeRootNode').value = 0;
+document.getElementById('parentTreeRootNode').innerHTML = entity2;
+initXmlTree(divId2, ajaxUrl2);
+
+$("#fileTree").click(function (e) {
+    var f = jQuery.jstree._focused();
+    var id = f.data.ui.selected.attr("id");
+    var name = f.data.ui.selected.attr("name");
+    var imagePath = f.data.ui.selected.attr("path");
+
+    document.forms['dynamicForm'].elements['ImageBanner.image'].value = imagePath;
+});
+};
+        </script>
+
+            <ft:group id="ImageBanner">
+                <ft:widget-label id="image" />
+                <ft:widget id="image">
+                    <fi:styling size="50"/>
+                </ft:widget>
+                <input type="button" value="Choose" i18n:attr="value" onclick="openFileDialog('#fileTreeContainer')"/>
+                <div i18n:attr="title" title="core:FileObject.choose" id="fileTreeContainer" class="dialogContent">
+                    <div class="common-div">
+                        <span class="ui-icon-home"></span>
+                        <a id="parentTreeRootNode" href="#" class=""></a>
+                    </div>
+                    <div id="fileTree"></div>
+                </div>
+
+                <!--<input type="button" value="Choose" i18n:attr="value" onclick="window.open('folderTree', 'folderTree', 'width=500,height=500,toolbar=1')"/>-->
+                <br />
+                <ft:widget-label id="link" />
+                <ft:widget id="link">
+                    <fi:styling size="50"/>
+                </ft:widget>
+
+            </ft:group>
+            <br />
+            <ft:widget id="saveDocumentType" class="button-primary">
+                <fi:styling type="hidden"/>
+            </ft:widget>
+
+
+        </ft:form-template>
+     <!--</content>-->
+</jx:template>
