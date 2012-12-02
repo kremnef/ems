@@ -6,6 +6,7 @@ package ru.strela.ems.actions;
  * Date: 20.02.12
  * Time: 2:50
  * To change this template use File | Settings | File Templates.
+ * fuck
  */
 public class MyIndexedEntity {
     public static String[] getSearchfields() {
