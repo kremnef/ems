@@ -127,15 +127,15 @@ function showContent(contentService, content, form, actionState) {
 //        DocumentTypeId
 
         var documentTypeId_FromForm = form.getChild("documentTypeId").getValue();
-           print("AFTER SUBMIT: > documentTypeId_FromForm" + documentTypeId_FromForm);
+//           print("AFTER SUBMIT: > documentTypeId_FromForm - " + documentTypeId_FromForm);
 
         var documentTypeId_FromObject = content.getDocumentTypeId();
-           print("AFTER SUBMIT: > documentTypeId_FromObject" + documentTypeId_FromObject);
+//           print("AFTER SUBMIT: > documentTypeId_FromObject - " + documentTypeId_FromObject);
 
         var documentType;
 
         if(documentTypeId_FromForm > 0 && documentTypeId_FromForm != documentTypeId_FromObject){
-            print("AFTER SUBMIT: > update documentTypeId_FromForm" + documentTypeId_FromForm);
+            print("AFTER SUBMIT: > update documentTypeId_FromForm - " + documentTypeId_FromForm);
             documentType = documentTypeService.getDocumentType(documentTypeId_FromForm);
 
         }

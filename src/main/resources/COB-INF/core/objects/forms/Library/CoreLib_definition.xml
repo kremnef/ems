@@ -366,8 +366,14 @@
             <fd:datatype base="string"/>
             <fd:on-value-changed>
                 <javascript>
-                    java.lang.System.err.println("value changed: " + event.newValue);
-                    cocoon.session.setAttribute("formLocale", event.newValue);
+                    var languageCode = event.newValue;
+                    java.lang.System.err.println("FormLocale value changed: " + languageCode);
+                    cocoon.session.setAttribute("formLocale", languageCode);
+                    if(cocoon.session.getAttribute("contentId") != null){
+                        reloadXMlForm(languageCode);
+                    }
+
+
                 </javascript>
             </fd:on-value-changed>
         </fd:field>

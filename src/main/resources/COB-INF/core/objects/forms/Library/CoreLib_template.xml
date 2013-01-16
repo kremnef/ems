@@ -77,6 +77,10 @@
             var newFormLocale = document.getElementById('formLocale');
             newFormLocale.value = currentlocale;
             cocoon.forms.submitForm(newFormLocale);
+
+            <!--cocoon.forms.submitForm(dynamicForm);-->
+
+            <!--var dynamicForm = document.getElementById('dynamicForm');-->
             <!--submit DocType-->
             var documentTypeForm =document.getElementById('dynamicForm');
             if(documentTypeForm != null){

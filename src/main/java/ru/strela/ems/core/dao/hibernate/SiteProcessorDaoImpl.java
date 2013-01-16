@@ -379,6 +379,7 @@ public class
 //    private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
 //        System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
         ChildrenMap children = new ChildrenMap();
+        int typifiedObjectId = typifiedObject.getId();
         if (typifiedObject instanceof SystemObject) {
             List list;
             Query query;
@@ -390,9 +391,36 @@ public class
             sql.append(typifiedObjectClass);
             sql.append(" where emsObject.parentId = ");
             sql.append(typifiedObject.getId());
-            if (typifiedObject instanceof Content) {
+            System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
+
+            sql.append(" and entity != 'Content'");
+            sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
+            //System.out.println("sql = " + sql);
+
+            query = session.createQuery(sql.toString());
+
+            if (itemsOnPage > 0) {
+                //System.out.println("itemsOnPage" + itemsOnPage);
+                query.setMaxResults(itemsOnPage);
+            }
+//            typifiedObject =
+            list = query.list();
+
+//            }
+
+            DocumentDao documentDao = new DocumentDaoImpl();
+//            ContentDao contentDao = new ContentDaoImpl();
+            if (typifiedObject instanceof Content && documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
+
+
+                sql = new StringBuilder("from ");
+                sql.append(typifiedObjectClass);
+                sql.append(" where emsObject.parentId = ");
+                sql.append(typifiedObject.getId());
+//                List list = contentDao.
                 sql.append(" and publishDateTime <= current_timestamp() ");
                 if (tagId != null) {
+                    System.out.println("!!! tagId " + tagId);
                     /*    StringBuilder contentSql = new StringBuilder("select d.content_id from document d");
 //                    contentSql.append(" inner join document_tag dt on d.id = dt.document_id");
 //                    contentSql.append(" where dt.tag_id = ").append(tagId);
@@ -409,20 +437,14 @@ public class
                     }
                     sql.append(")");*/
                 }
+                sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
+                query = session.createQuery(sql.toString());
+
+                if (itemsOnPage > 0) {
+                    query.setMaxResults(itemsOnPage);
+                }
+                list.addAll(query.list());
             }
-            sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
-            //System.out.println("sql = " + sql);
-
-            query = session.createQuery(sql.toString());
-
-            if (itemsOnPage > 0) {
-                //System.out.println("itemsOnPage" + itemsOnPage);
-                query.setMaxResults(itemsOnPage);
-            }
-//            typifiedObject =
-            list = query.list();
-
-//            }
             if (typifiedObject instanceof Folder) {
                 sql = new StringBuilder("from ");
                 sql.append(FileObject.class.getSimpleName());
@@ -491,6 +513,7 @@ public class
     //    private ChildrenMap getChildren(ObjectType objectType, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode) {
 //    private ChildrenMap getChildren(ObjectType objectType, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
     private ChildrenMap getChildren(ObjectType objectType, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode, int position) {
+
 
         ChildrenMap children = new ChildrenMap();
 

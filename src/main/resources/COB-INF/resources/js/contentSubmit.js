@@ -166,12 +166,15 @@ dojo.widget.defineWidget(
                     if (afterSubmitFunction) {
                         afterSubmitFunction();
                     }
-                    if (data) {
+//                    if (data != null) {
+//                        alert(data);
+                    /*if(data.getElementsByTagName("url")!= null){
                         var url = data.getElementsByTagName("url")[0].childNodes[0].nodeValue;
 
                         window.location.href = url;
-                        //document.body.innerHTML = data;
-                    }
+                        }
+                        //document.body.innerHTML = data;*/
+//                    }
                 });
 //                    if (form.method.toLowerCase() == "post") {
 //                        // Create a fake form and post it

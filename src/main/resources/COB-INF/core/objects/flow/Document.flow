@@ -193,9 +193,6 @@ function editDocument(form) {
     if (document == null) {
         document = createNewVersionDocument(content.getId(), languageCode);
     }
-    /*if (contentId == 0) {
-        contentId = document.getContentId();
-    }*/
     if (document.getId() > 0) {
         var documentVersion = documentVersionService.getDocumentVersion(document.getId());
 
@@ -267,6 +264,7 @@ function editDocument(form) {
     documentVersionService.saveDocumentVersion(documentVersion);
 
 
+//Не влияет на сохранение документов
 //    var fileSystemObjects = document.getFileSystemObjects();
 //    var fileSystemObjectsIds = new java.util.HashSet();
 //    for (var iterator = fileSystemObjects.iterator(); iterator.hasNext();) {
@@ -275,7 +273,8 @@ function editDocument(form) {
 //        fileSystemObjectsIds.add(new java.lang.Integer(fileSystemObject.id));
 //    }
 // *** Save Document to DB
-    documentService.saveDocument(document);
+    saveDocument(document,contentId)
+//    documentService.saveDocument(document);
 
 
 
@@ -292,32 +291,141 @@ function editDocument(form) {
     cocoon.session.removeAttribute("documentTypeId");
     cocoon.session.removeAttribute("languageCode");
     cocoon.session.removeAttribute("formLocale");
-    cocoon.releaseComponent(documentService);
+//    cocoon.releaseComponent(documentService);
     cocoon.releaseComponent(documentVersionService);
     cocoon.releaseComponent(contentService);
     cocoon.sendStatus(200);
 }
 
-function editDocumentType() {
-//
-//    print("editDocumentType start");
+function saveDocument(document,contentId){
+            var formLocale = cocoon.session.getAttribute("formLocale");
+            var documentService = cocoon.getComponent("documentService");
+            documentService.saveDocument(document);
+            cocoon.releaseComponent(documentService);
+            cocoon.disposeObject(document);
+
+            var url = "Content-edit?id=" + contentId;
+            if (formLocale != null) {
+                url += '&languageCode=' + formLocale;
+            }
+            print("url!!" + url);
+//            displayURI = url;
+             cocoon.sendStatus(200);
+//            cocoon.redirectTo(url);
+
+//            cocoon.sendPage(displayURI, {
+//                "document": document,
+//                "xmlForm":xmlForm
+//            });
+}
+
+function loadXMLSource(contentId,languageCode) {
+print("loadXMLSource:>>----------" +languageCode);
+        var documentService = cocoon.getComponent("documentService");
+        var document = documentService.getDocumentByNaturalId(contentId, languageCode);
+//        var xml = document != null ? document.getXML() : null;
+        return document;
+}
+
+
+
+
+function reloadXMlForm(languageCode) {
+    print("reloadXMlForm:>>----------");
+    print("as param:" +languageCode);
+    print("as request:" +cocoon.request.getParameter("languageCode"));
+    print("as session:" +cocoon.session.getAttribute("languageCode"));
+    var StringContentId = cocoon.session.getAttribute("contentId");
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    if (languageCode == null){
+     languageCode = cocoon.session.getAttribute("languageCode");
+    }
+
     var inner = cocoon.parameters.inner;
-//    var languageCode = cocoon.request.getParameter("languageCode");
+    var document = cocoon.session.getAttribute("document");
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+    var contentId = Utilities.parseStringToDouble(StringContentId);
+    var documentTypeId = cocoon.session.getAttribute("documentTypeId");
+
+
+    var documentService = cocoon.getComponent("documentService");
+    if (languageCode != null || document == null) {
+        document = loadXMLSource(contentId,languageCode);
+
+    }
+    var documentTypeService = cocoon.getComponent("documentTypeService");
+    if (documentTypeId > 0) {
+        var currentDocumentType = documentTypeService.getDocumentType(documentTypeId);
+        cocoon.releaseComponent(documentTypeService);
+    } else {
+        print("error!!!+documentTypeId: " + documentTypeId);
+    }
+
+//    print("editDocumentType start2");
+    var currentDocumentTypeName = "";
+    if (currentDocumentType != null) {
+        currentDocumentTypeName = currentDocumentType.getName();
+        var definitionURI = "context://DocumentType/forms/" + currentDocumentTypeName + "/" + currentDocumentTypeName + "_definition.xml";
+        var bindingURI = "context://DocumentType/forms/" + currentDocumentTypeName + "/" + currentDocumentTypeName + "_binding.xml";
+        var showFormURI = currentDocumentTypeName + "_template-pipeline";
+        var displayURI = currentDocumentTypeName + "_success-pipeline";
+        var form = new Form(definitionURI);
+        var xml = document != null ? document.getXML() : null;
+        form.createBinding(bindingURI);
+
+
+        if (xml != null) {
+        print("XML:"+xml)
+            form.load(xml);
+        }
+        var formData = {
+            "inner" : inner,
+            "displayURI": displayURI,
+            "documentTypeId" : documentTypeId
+        };
+        form.setAttribute('formName', 'dynamicForm');
+//        form.setAttribute('ajax', 'true');
+        form.showForm(showFormURI, formData);
+        if (xml != null) {
+            form.save(xml);
+        }
+
+        var xmlForm = form.getChild(currentDocumentTypeName);
+        var xmlSource = document.setForm(xmlForm);
+        document.setXmlSource(xmlSource);
+        cocoon.disposeObject(currentDocumentType);
+        saveDocument(document,contentId);
+        print("editDocumentType end");
+    }
+    else {
+        cocoon.releaseComponent(documentService);
+        cocoon.sendStatus(404);
+        print("editDocumentType end 404");
+    }
+
+}
+
+
+
+
+/*function editDocumentType() {
+   importClass(Packages.ru.tastika.tools.util.Utilities);
+//
+    print("editDocumentType start");
+    var inner = cocoon.parameters.inner;
+    print("inner "+inner);
     var languageCode = cocoon.session.getAttribute("languageCode");
     var document = cocoon.session.getAttribute("document");
     importClass(Packages.ru.tastika.tools.util.Utilities);
     var StringContentId = cocoon.session.getAttribute("contentId");
     var contentId = Utilities.parseStringToDouble(StringContentId);
     var documentTypeId = cocoon.session.getAttribute("documentTypeId");
-    var formLocale = cocoon.session.getAttribute("formLocale");
-//    print("formLocale" + formLocale);
-    /*if (formLocale == 'ru') {
-     formLocale = 'en';
-     }*/
-//    print("editDocumentType start1");
-    var documentService = cocoon.getComponent("documentService");
+
+
+//    var documentService = cocoon.getComponent("documentService");
     if (languageCode != null || document == null) {
-        document = documentService.getDocumentByNaturalId(contentId, languageCode);
+        document = loadXMLSource(contentId,languageCode);
+
     }
     var documentTypeService = cocoon.getComponent("documentTypeService");
     if (documentTypeId > 0) {
@@ -342,15 +450,6 @@ function editDocumentType() {
         if (xml != null) {
             form.load(xml);
         }
-        var locale;
-        if (formLocale != null) {
-            locale = formLocale;
-        }
-        else {
-            locale = getLocale();
-        }
-
-        form.locale = new java.util.Locale(locale);
         var formData = {
             "inner" : inner,
             "displayURI": displayURI,
@@ -363,29 +462,10 @@ function editDocumentType() {
         }
 
         var xmlForm = form.getChild(currentDocumentTypeName);
-        print("xmlForm"+xmlForm);
         var xmlSource = document.setForm(xmlForm);
         document.setXmlSource(xmlSource);
-//        print("xmlSource"+xmlSource);
-
-        documentService.saveDocument(document);
-
-        cocoon.releaseComponent(documentService);
         cocoon.disposeObject(currentDocumentType);
-        cocoon.disposeObject(document);
-
-        var url = "Content-edit?id=" + contentId;
-        if (formLocale != null) {
-            url += '&languageCode=' + formLocale;
-        }
-        print("url!!" + url);
-//         cocoon.sendStatus(200);
-        cocoon.redirectTo(url);
-
-//        cocoon.sendPage(displayURI, {
-//            "document": document,
-//            "xmlForm":xmlForm
-//        });
+        saveDocument(document,contentId);
 //        print("editDocumentType end");
     }
     else {
@@ -394,7 +474,7 @@ function editDocumentType() {
         print("editDocumentType end 404");
     }
 
-}
+}*/
 
 
 //function getDocument(content, languageId, version, comment) {
