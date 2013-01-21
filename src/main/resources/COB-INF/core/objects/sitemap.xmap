@@ -692,17 +692,17 @@
                     <map:parameter name="servletPath" value="{request:servletPath}"/>
                     <map:parameter name="inner" value="true"/>
                 </map:call>
-            </map:match>-->
-
+            </map:match>
+-->
 
             <!--<map:match pattern="loadXMLSource/*/inner">-->
             <map:match pattern="Doctype/*/inner">
                 <map:call function="reloadXMlForm">
                     <map:parameter name="languageCode" value="{1}"/>
-                    <!--<map:parameter name="documentId" value="{flow-attribute:documentId}"/>-->
-                    <!--<map:parameter name="documentTypeId" value="{flow-attribute:documentTypeId}"/>-->
-                    <!--<map:parameter name="servletPath" value="{request:servletPath}"/>-->
-                    <!--<map:parameter name="inner" value="true"/>-->
+                    <map:parameter name="documentId" value="{flow-attribute:documentId}"/>
+                    <map:parameter name="documentTypeId" value="{flow-attribute:documentTypeId}"/>
+                    <map:parameter name="servletPath" value="{request:servletPath}"/>
+                    <map:parameter name="inner" value="true"/>
 
                     <!--<map:parameter name="displayURI" value="type-actions-pipeline"/>-->
                     <!--<map:parameter name="contentId" value="{1}"/>-->

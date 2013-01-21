@@ -82,11 +82,11 @@
             <div id="pagesTree"></div>
         </div>
         <!--<input type="button" id="selectPage" i18n:attr="value" value="core:SystemNode.choose" onclick="openXMLTree('SystemNode', 'null', 'false', '#pagesTree'); $('#systemNodeName').show();"/>-->
-        <!--  <button type="button" role="button" i18n:attr="value" value="core:SystemNode.choose"
-        class="ui-button-icon-only ui-corner-all ui-icon ui-icon-link ui-widget"
-        onclick="openPagesDialog(); $('#systemNodeName').show();"/>
-<button type="button" role="button" class="ui-button-icon-only ui-icon ui-corner-all ui-icon-close "
-        onclick="detachPage();"/>-->
+        <button type="button" role="button" i18n:attr="value" value="core:SystemNode.choose"
+        class="ui-button"
+        onclick="openPagesDialog(); $('#systemNodeName').show();">select Home page</button>
+        <!---icon-only ui-corner-all ui-icon ui-icon-link ui-widget-->
+        <button type="button" class="ui-button" value="detach" onclick="detachPage();">detach</button>
 
 
     </jx:macro>
@@ -233,43 +233,43 @@
 
                     <!--pages-->
 
-
+                    <script type="text/javascript">
                      $("#pagesTree").click( function (e) {
-                    var f = jQuery.jstree._focused();
-                    var id=f.data.ui.selected.attr("id");
-                    var name=f.data.ui.selected.attr("name");
+                        var f = jQuery.jstree._focused();
+                        var id=f.data.ui.selected.attr("id");
+                        var name=f.data.ui.selected.attr("name");
 
-                    var systemNodeNameElement = document.getElementById('systemNodeName');
-                    systemNodeNameElement.innerHTML = name;
-                    systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
-                    document.getElementById('homeId').value = id;
+                        var systemNodeNameElement = document.getElementById('systemNodeName');
+                        systemNodeNameElement.innerHTML = name;
+                        systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
+                        document.getElementById('homeId').value = id;
 
                     });
-                    <script type="text/javascript">
 
 
-                        function openPagesDialog() {
+
+                    function openPagesDialog() {
                         jQuery("#pagesTreeContainer").dialog("open");
-                        }
+                    }
 
 
-                        function detachPage(){
+                    function detachPage(){
                         jQuery("#homeId").val(0);
                         jQuery("#systemNodeName").hide();
-                        }
+                    }
 
 
-                        jQuery(function () {
+                    jQuery(function () {
                         jQuery("#pagesTreeContainer").dialog({
-                        width: 800,
-                        height:400,
-                        modal: true,
-                        autoOpen: false,
-                        buttons: {
-                        "<i18n:text key="Save"/>": function() {
-                        jQuery(this).dialog("close");
-                        }
-                        }
+                            width: 800,
+                            height:400,
+                            modal: true,
+                            autoOpen: false,
+                            buttons: {
+                                "<i18n:text key="Save"/>": function() {
+                                    jQuery(this).dialog("close");
+                                }
+                            }
                         });
 
 
@@ -279,17 +279,17 @@
 
                         initXmlTree(divId, ajaxUrl);
                         $(divId).click( function (e) {
-                        var f = jQuery.jstree._focused();
-                        var id=f.data.ui.selected.attr("id");
-                        var name=f.data.ui.selected.attr("name");
-                        var path=f.data.ui.selected.attr("path");
+                            var f = jQuery.jstree._focused();
+                            var id=f.data.ui.selected.attr("id");
+                            var name=f.data.ui.selected.attr("name");
+                            var path=f.data.ui.selected.attr("path");
 
 
-                        var systemNodeNameElement = document.getElementById('systemNodeName');
-                        systemNodeNameElement.innerHTML = path;
-                        systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
-                        document.getElementById('homeId').value = id;
-                        });
+                            var systemNodeNameElement = document.getElementById('systemNodeName');
+                            systemNodeNameElement.innerHTML = path;
+                            systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
+                            document.getElementById('homeId').value = id;
+                            });
                         });
                     </script>
                     <!--Pages Properties-->
@@ -303,7 +303,7 @@
 
                     <jx:import uri="view/Tree/FileTree_modal.jx"/>
                     <div class="panel">
-                        <linked/>
+                        <!--<linked/>-->
                         <input type="button" id="selectLinked" i18n:attr="value" value="core:Content.chooseLinks"
                                onclick="openXMLTree('Content', 'null', 'false', '#linkedTree'); "/>
                     </div>
@@ -314,12 +314,18 @@
                         <fi:styling type="hidden"/>
                     </ft:widget>
 
-                    <!--<input type="button" id="selectLinked" i18n:attr="value" value="core:Content.chooseLinks"
-                           onclick="openXMLTree('Content', 'null', 'false', '#linkedTree'); "/>
 
+                    <div i18n:attr="title" title="core:FileObject.choose"
+                         id="linkedTreeContainer"
+                         class="dialogContent">
+                        <div class="common-div">
+                            <span class="ui-icon-home"></span>
+                            <a id="parentTreeRootNode" href="#" class="">Content</a>
+                        </div>
+                        <div id="linkedTree"></div>
+                    </div>
 
-
-                    <div i18n:attr="title" title="core:Content.chooseLinks" id="linkContainer" class="dialogContent">
+                   <!-- <div i18n:attr="title" title="core:Content.chooseLinks" id="linkContainer" class="dialogContent">
                         <div id="linkedTree">
 
                         </div>
