@@ -23,96 +23,183 @@
     <jx:import uri="forms/Library/CoreLib_template.xml"/>
 
     <jx:macro name="fileSystemObjects">
-           <ft:repeater id="fileSystemObjects">
-               <table border="0" class="order">
-                   <tbody>
-                       <ft:repeater-rows>
-                           <tr class="forms-row">
+           <!--<ft:repeater id="fileSystemObjects">-->
+               <!--<table border="0" class="order">-->
+                   <!--<tbody>-->
+                       <!--<ft:repeater-rows>-->
+                           <!--<tr class="forms-row">-->
+                               <!--&lt;!&ndash;<td>&ndash;&gt;-->
+                                   <!--&lt;!&ndash;<ft:widget id="id"/>&ndash;&gt;-->
+                               <!--&lt;!&ndash;</td>&ndash;&gt;-->
                                <!--<td>-->
                                    <!--<ft:widget id="id"/>-->
+                                   <!--<jx:set var="fileId"-->
+                                           <!--value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>-->
+                                   <!--<jx:set var="fileName"-->
+                                           <!--value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>-->
+                                   <!--<jx:set var="fileType"-->
+                                           <!--value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>-->
+                                   <!--<jx:set var="filePath"-->
+                                           <!--value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>-->
+                                   <!--<jx:set var="fileSystemName"-->
+                                           <!--value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>-->
+
+                                   <!--&lt;!&ndash;<jx:set var="fileSize"-->
+                                   <!--value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>&ndash;&gt;-->
+                                   <!--<jx:if test="${fileType.contains('image')}">-->
+                                       <!--<jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>-->
+
+
+                                       <!--<img src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg" border="0"-->
+                                            <!--width="30px"-->
+                                            <!--height="30px"/>-->
+                                   <!--</jx:if>-->
+                                   <!--<jx:if test="${fileType.contains('folder')}">-->
+                                       <!--<a role="button"-->
+                                          <!--class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>-->
+                                   <!--</jx:if>-->
+                                   <!--&lt;!&ndash;<jx:if test="${item.fileType.contains('image')}">-->
+                                       <!--<jx:set var="prepath"-->
+                                               <!--value="${item.path.substring(0, item.path.indexOf(item.name))}"/>-->
+                                       <!--<img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"-->
+                                            <!--height="30px"/>-->
+                                   <!--</jx:if>&ndash;&gt;-->
                                <!--</td>-->
-                               <td>
-                                   <jx:set var="fileId"
-                                           value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
-                                   <jx:set var="fileName"
-                                           value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
-                                   <jx:set var="fileType"
-                                           value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>
-                                   <jx:set var="filePath"
-                                           value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
-                                   <jx:set var="fileSystemName"
-                                           value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
-
-                                   <!--<jx:set var="fileSize"
-                                   value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>-->
-                                   <jx:if test="${fileType.contains('image')}">
-                                       <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
-
-
-                                       <img src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg" border="0"
-                                            width="30px"
-                                            height="30px"/>
-                                   </jx:if>
-                                   <jx:if test="${fileType.contains('folder')}">
-                                       <a role="button"
-                                          class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
-                                   </jx:if>
-                                   <!--<jx:if test="${item.fileType.contains('image')}">
-                                       <jx:set var="prepath"
-                                               value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
-                                       <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
-                                            height="30px"/>
-                                   </jx:if>-->
-                               </td>
-                               <td>
-                                   <span class="label">
-                                       <!--<a>-->
-                                       <!--<jx:if test="${fileType != 'folder'}">
-                                           <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
-                                       </jx:if>-->
-                                       ${fileName}
-                                       <!--</a>-->
-                                   </span>
-                                   <!--<ft:widget id="name"/>-->
-                               </td>
-                               <!--<td>
-                                   <ft:widget id="systemName"/>
-                               </td>
-                               --><!--<td>
-                                           <ft:widget id="contentType"/>
-                                       </td>-->
-                               <td>
-                                   <span class="label">
-                                       <a>
-                                           <jx:if test="${fileType != 'folder'}">
-                                               <jx:attribute name="href">/ems/${filePath}</jx:attribute>
-                                               <jx:attribute name="target">_blank</jx:attribute>
-                                           </jx:if>
-                                           ${filePath}
-                                       </a>
-                                   </span>
-                                   <!--<ft:widget id="path"/>-->
-                               </td>
                                <!--<td>-->
-                               <!--<jx:set var="sizeMb">-->
-                               <!--<ft:widget id="size"/>-->
-                               <!--</jx:set>-->
-                               <!--<jx:out value="${fileSize/1024}"/>-->
+                                   <!--<span class="label">-->
+                                       <!--&lt;!&ndash;<a>&ndash;&gt;-->
+                                       <!--&lt;!&ndash;<jx:if test="${fileType != 'folder'}">-->
+                                           <!--<jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>-->
+                                       <!--</jx:if>&ndash;&gt;-->
+                                       <!--${fileName}-->
+                                       <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                                   <!--</span>-->
+                                   <!--&lt;!&ndash;<ft:widget id="name"/>&ndash;&gt;-->
                                <!--</td>-->
+                               <!--&lt;!&ndash;<td>-->
+                                   <!--<ft:widget id="systemName"/>-->
+                               <!--</td>-->
+                               <!--&ndash;&gt;&lt;!&ndash;<td>-->
+                                           <!--<ft:widget id="contentType"/>-->
+                                       <!--</td>&ndash;&gt;-->
+                               <!--<td>-->
+                                   <!--<span class="label">-->
+                                       <!--<a>-->
+                                           <!--<jx:if test="${fileType != 'folder'}">-->
+                                               <!--<jx:attribute name="href">/ems/${filePath}</jx:attribute>-->
+                                               <!--<jx:attribute name="target">_blank</jx:attribute>-->
+                                           <!--</jx:if>-->
+                                           <!--${filePath}-->
+                                       <!--</a>-->
+                                   <!--</span>-->
+                                   <!--&lt;!&ndash;<ft:widget id="path"/>&ndash;&gt;-->
+                               <!--</td>-->
+                               <!--&lt;!&ndash;<td>&ndash;&gt;-->
+                               <!--&lt;!&ndash;<jx:set var="sizeMb">&ndash;&gt;-->
+                               <!--&lt;!&ndash;<ft:widget id="size"/>&ndash;&gt;-->
+                               <!--&lt;!&ndash;</jx:set>&ndash;&gt;-->
+                               <!--&lt;!&ndash;<jx:out value="${fileSize/1024}"/>&ndash;&gt;-->
+                               <!--&lt;!&ndash;</td>&ndash;&gt;-->
 
-                               <td>
-                                   <ft:widget id="delete">
-                                       <fi:styling type="link" role="button"
-                                                   class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
-                                   </ft:widget>
-                               </td>
-                           </tr>
-                       </ft:repeater-rows>
+                               <!--<td>-->
+                                   <!--<ft:widget id="delete">-->
+                                       <!--<fi:styling type="link" role="button"-->
+                                                   <!--class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>-->
+                                   <!--</ft:widget>-->
+                               <!--</td>-->
+                           <!--</tr>-->
+                       <!--</ft:repeater-rows>-->
 
 
-                   </tbody>
-               </table>
-           </ft:repeater>
+                   <!--</tbody>-->
+               <!--</table>-->
+           <!--</ft:repeater>-->
+        <ft:repeater id="fileSystemObjects">
+            <!--id="attachedFiles"-->
+            <table border="0" class="order">
+                <tbody>
+                    <ft:repeater-rows>
+                        <tr class="forms-row">
+                            <!--<td>
+                                <ft:widget id="objectPosition"/>
+                            </td>-->
+                            <!--<td>
+                                <ft:widget id="id"/>
+                            </td>-->
+                            <td>
+
+                                <jx:set var="fileId" value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
+                                <jx:set var="fileType" value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>
+                                <jx:set var="filePath" value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
+                                <jx:set var="fileSystemName" value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
+                                <jx:set var="fileName" value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
+                                <!--<jx:set var="fileSize"
+                                value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>-->
+                                <jx:if test="${fileType.contains('image')}">
+                                    <jx:set var="prepath"
+                                            value="${filePath.substring(0, filePath.indexOf(fileName))}"/>
+                                    <img src="/ems${prepath}${fileSystemName}.png" border="0" width="30px"
+                                         height="30px"/>
+                                </jx:if>
+                                <jx:if test="${fileType.contains('folder')}">
+                                    <a role="button"
+                                       class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
+                                </jx:if>
+                                <!--<jx:if test="${item.fileType.contains('image')}">
+                                    <jx:set var="prepath"
+                                            value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
+                                    <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
+                                         height="30px"/>
+                                </jx:if>-->
+                            </td>
+                            <td>
+                                <span class="label">
+                                    <!--<a>-->
+                                    <!--<jx:if test="${fileType != 'folder'}">
+                                        <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
+                                    </jx:if>-->
+                                    ${fileName}
+                                    <!--</a>-->
+                                </span>
+                                <!--<ft:widget id="name"/>-->
+                            </td>
+                            <!--<td>
+                                <ft:widget id="systemName"/>
+                            </td>
+                            --><!--<td>
+                                        <ft:widget id="contentType"/>
+                                    </td>-->
+                            <td>
+                                <span class="label">
+                                    <a>
+                                        <jx:if test="${fileType != 'folder'}">
+                                            <jx:attribute name="href">/ems${filePath}</jx:attribute>
+                                        </jx:if>
+                                        ${filePath}
+                                    </a>
+                                </span>
+                                <!--<ft:widget id="path"/>-->
+                            </td>
+                            <!--<td>-->
+                            <!--<jx:set var="sizeMb">-->
+                            <!--<ft:widget id="size"/>-->
+                            <!--</jx:set>-->
+                            <!--<jx:out value="${fileSize/1024}"/>-->
+                            <!--</td>-->
+
+                            <td>
+                                <ft:widget id="delete">
+                                    <fi:styling type="link" role="button"
+                                                class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
+                                </ft:widget>
+                            </td>
+                        </tr>
+                    </ft:repeater-rows>
+
+
+                </tbody>
+            </table>
+        </ft:repeater>
 
        </jx:macro>
 
@@ -201,9 +288,16 @@
                 </script>-->
 
                 <input type="hidden" id="reset_form" value="no"/>
-                <fileFields/>
-              <!--  <ft:widget id="addFile">
-                    &lt;!&ndash;<fi:styling type="hidden" onchange="11"/>&ndash;&gt;
+                <!--<fileFields/>-->
+                <!--<ft:widget id="addFile">
+                    <fi:styling type="hidden"/>
+                </ft:widget>
+                <ft:widget id="addFileName">
+                    <fi:styling type="hidden"/>
+                </ft:widget>-->
+
+                <ft:widget id="addFile">
+                    <fi:styling type="hidden"/>
                 </ft:widget>
                 <ft:widget id="addFileName">
                     <fi:styling type="hidden"/>
@@ -220,7 +314,7 @@
                 <ft:widget id="addFileSize">
                     <fi:styling type="hidden"/>
                 </ft:widget>
--->
+
                 <!--<jx:import uri="view/Tree/FileTree_modal.jx"/>-->
                 <!--<fileSystemObjects/>-->
                 <ft:repeater id="fileSystemObjects">
@@ -228,11 +322,12 @@
                         <tbody>
                             <ft:repeater-rows>
                                 <tr class="forms-row">
+                                    <!-- id-->
+                                   <!-- <td>
+                                        <ft:widget id="id"/>
+                                    </td>-->
                                     <td>
-                                        <ft:widget id="path"/>
-                                    </td>
-                                    <td>
-                                        <jx:set var="fileId"
+                                        <!--<jx:set var="fileId"
                                                 value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
                                         <jx:set var="fileName"
                                                 value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
@@ -241,11 +336,12 @@
                                         <jx:set var="filePath"
                                                 value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
                                         <jx:set var="fileSystemName"
-                                                value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
+                                                value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>-->
 
                                         <!--<jx:set var="fileSize"
                                         value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>-->
-                                        <jx:if test="${fileType.contains('image')}">
+
+                                        <!--<jx:if test="${fileType.contains('image')}">
                                             <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
 
 
@@ -256,13 +352,8 @@
                                         <jx:if test="${fileType.contains('folder')}">
                                             <a role="button"
                                                class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
-                                        </jx:if>
-                                        <!--<jx:if test="${item.fileType.contains('image')}">
-                                            <jx:set var="prepath"
-                                                    value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
-                                            <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
-                                                 height="30px"/>
                                         </jx:if>-->
+
                                     </td>
                                     <td>
                                         <span class="label">
@@ -270,7 +361,8 @@
                                             <!--<jx:if test="${fileType != 'folder'}">
                                                 <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
                                             </jx:if>-->
-                                            ${fileName}
+                                            <ft:widget id="name"/>
+                                            <!--${fileName}-->
                                             <!--</a>-->
                                         </span>
                                         <!--<ft:widget id="name"/>-->
@@ -281,18 +373,19 @@
                                     --><!--<td>
                                            <ft:widget id="contentType"/>
                                        </td>-->
-                                    <td>
+                                   <!-- <td>
                                         <span class="label">
                                             <a>
                                                 <jx:if test="${fileType != 'folder'}">
                                                     <jx:attribute name="href">/ems/${filePath}</jx:attribute>
                                                     <jx:attribute name="target">_blank</jx:attribute>
                                                 </jx:if>
-                                                ${filePath}
+                                                &lt;!&ndash;${filePath}&ndash;&gt;
+                                                <ft:widget id="path"/>
                                             </a>
                                         </span>
-                                        <!--<ft:widget id="path"/>-->
-                                    </td>
+
+                                    </td>-->
                                     <!--<td>-->
                                     <!--<jx:set var="sizeMb">-->
                                     <!--<ft:widget id="size"/>-->
@@ -300,12 +393,12 @@
                                     <!--<jx:out value="${fileSize/1024}"/>-->
                                     <!--</td>-->
 
-                                    <td>
+                                   <!-- <td>
                                         <ft:widget id="delete">
                                             <fi:styling type="link" role="button"
                                                         class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
                                         </ft:widget>
-                                    </td>
+                                    </td>-->
                                 </tr>
                             </ft:repeater-rows>
 

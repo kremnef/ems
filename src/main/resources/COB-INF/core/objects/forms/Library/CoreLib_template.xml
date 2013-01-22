@@ -68,18 +68,18 @@
         <div class="punto"/>
         <script type="text/javascript">
             function changeLocale(languageCode){
-
             $("div.meta-info").hide();
             var targetDivName ='translate_'+languageCode;
             '*[name= targetDivName]'
             $('*[name='+ targetDivName+']').show();
             <!--var newFormLocale = document.getElementById('translate');-->
             var newFormLocale = document.getElementById('formLocale');
-                                    newFormLocale.value = languageCode;
-                                    cocoon.forms.submitForm(newFormLocale);
-            if(document.getElementById('documentForm') != null){
+            newFormLocale.value = languageCode;
 
+            if(document.getElementById('documentForm') != null){
                 submitAll(languageCode);
+            }else{
+                cocoon.forms.submitForm(newFormLocale);
             }
             <!--if(cocoon.session.getAttribute("languageCode")){
 
@@ -546,8 +546,8 @@
                         <div class="meta-info" name="translate_${rowLanguageCode}">
                             <jx:attribute name="style">
                                 <jx:choose>
-                                    <jx:when test="${rowLanguageCode == formLocale}">
-                                        <!--<jx:when test="${rowLanguageCode == languageCode}">-->
+                                    <!--<jx:when test="${rowLanguageCode == formLocale}">-->
+                                        <jx:when test="${rowLanguageCode == languageCode}">
                                         display:block;
                                     </jx:when>
                                     <jx:otherwise>
@@ -728,7 +728,7 @@
 
 
     </jx:macro>
-    <jx:macro name="fileFields">
+    <!--<jx:macro name="fileFields">
         <ft:widget id="addFile">
             <fi:styling type="hidden"/>
         </ft:widget>
@@ -747,5 +747,5 @@
         <ft:widget id="addFileSize">
             <fi:styling type="hidden"/>
         </ft:widget>
-    </jx:macro>
+    </jx:macro>-->
 </jx:template>

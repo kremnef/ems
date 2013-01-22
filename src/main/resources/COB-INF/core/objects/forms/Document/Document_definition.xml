@@ -98,14 +98,13 @@
         <!--<fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
         <fd:expand id="core:fileSystemObjects"/>-->
 
-        <fd:repeater id="fileSystemObjects" orderable="true">
+        <!--<fd:repeater id="fileSystemObjects" orderable="true">
                    <fd:widgets>
 
-                       <fd:output id="id">
-                           <fd:label>ID</fd:label>
+                       <fd:field id="id" state="invisible">
                            <fd:datatype base="integer"/>
-                       </fd:output>
-                     <!--  <fd:field id="position">
+                       </fd:field>
+                     &lt;!&ndash;  <fd:field id="position">
                            <fd:label>
                                <i18n:text key="EmsObject.position"/>
                            </fd:label>
@@ -113,7 +112,7 @@
                                <i18n:text key="EmsObject.position"/>
                            </fd:hint>
                            <fd:datatype base="integer"/>
-                       </fd:field>-->
+                       </fd:field>&ndash;&gt;
                        <fd:field id="name">
                            <fd:label>
                                <i18n:text key="EmsObject.name"/>
@@ -123,7 +122,7 @@
                            </fd:hint>
                            <fd:datatype base="string"/>
                        </fd:field>
-                       <!--<fd:field id="used">
+                       &lt;!&ndash;<fd:field id="used">
                            <fd:label>
                                <i18n:text key="EmsObject.name"/>
                            </fd:label>
@@ -131,9 +130,9 @@
                                <i18n:text key="EmsObject.name"/>
                            </fd:hint>
                            <fd:datatype base="integer"/>
-                       </fd:field>-->
+                       </fd:field>&ndash;&gt;
 
-                       <fd:output id="systemName">
+                       &lt;!&ndash;<fd:output id="systemName">
                            <fd:label>
                                <i18n:text key="EmsObject.systemName"/>
                            </fd:label>
@@ -141,9 +140,9 @@
                                <i18n:text key="EmsObject.systemName"/>
                            </fd:hint>
                            <fd:datatype base="string"/>
-                       </fd:output>
+                       </fd:output>&ndash;&gt;
 
-                       <fd:output id="contentType">
+                       &lt;!&ndash;<fd:output id="contentType">
                            <fd:label>
                                <i18n:text catalogue="core" key="FileObject.mimeType"/>
                            </fd:label>
@@ -170,10 +169,10 @@
                                <i18n:text catalogue="core" key="FileObject.path"/>
                            </fd:hint>
                            <fd:datatype base="string"/>
-                       </fd:output>
+                       </fd:output>&ndash;&gt;
 
 
-                       <!--<fd:output id="objectType">
+                       &lt;!&ndash;<fd:output id="objectType">
                            <fd:label>
                                <i18n:text key="EmsObject.typeName"/>
                            </fd:label>
@@ -187,10 +186,10 @@
                                <fd:selection-list type="enum" class="ru.strela.ems.core.model.ObjectType"/>
                            </fd:datatype>
                        </fd:output>
-                       <fd:booleanfield id="folder" state="invisible"/>-->
+                       <fd:booleanfield id="folder" state="invisible"/>&ndash;&gt;
 
 
-                       <fd:action id="delete">
+                       &lt;!&ndash;<fd:action id="delete">
                            <fd:on-action>
                                <fd:javascript>
                                    var repeater = widget.lookupWidget("/fileSystemObjects");
@@ -205,41 +204,138 @@
                        </fd:action>
                        <fd:booleanfield id="select">
                            <fd:label>Select</fd:label>
-                       </fd:booleanfield>
+                       </fd:booleanfield>&ndash;&gt;
                    </fd:widgets>
-               </fd:repeater>
+               </fd:repeater>-->
+        <fd:repeater id="fileSystemObjects" orderable="true">
+            <fd:widgets>
+                <!--<fd:output id="objectPosition">
+                    <fd:label>
+                        <i18n:text key="EmsObject.position"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.position"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>-->
+                <fd:output id="id">
+                    <fd:label>ID</fd:label>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="name">
+                    <fd:label>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.name"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+
+                <fd:output id="systemName">
+                    <fd:label>
+                        <i18n:text key="EmsObject.systemName"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.systemName"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <!--<fd:output id="objectType">
+                    <fd:label>
+                        <i18n:text key="EmsObject.typeName"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text key="EmsObject.typeName"/>
+                    </fd:hint>
+                    <fd:datatype base="enum">
+                        <fd:convertor type="enum">
+                            <fd:enum>ru.strela.ems.core.model.ObjectType</fd:enum>
+                        </fd:convertor>
+                        <fd:selection-list type="enum" class="ru.strela.ems.core.model.ObjectType"/>
+                    </fd:datatype>
+                </fd:output>-->
+
+                <fd:output id="contentType">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="FileObject.mimeType"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="FileObject.mimeType"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <fd:output id="size">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="FileObject.size"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="FileObject.size"/>
+                    </fd:hint>
+                    <fd:datatype base="integer"/>
+                </fd:output>
+                <fd:output id="path">
+                    <fd:label>
+                        <i18n:text catalogue="core" key="FileObject.path"/>
+                    </fd:label>
+                    <fd:hint>
+                        <i18n:text catalogue="core" key="FileObject.path"/>
+                    </fd:hint>
+                    <fd:datatype base="string"/>
+                </fd:output>
+                <fd:booleanfield id="folder" state="invisible"/>
+                <!--<fd:output id="delete">
+                    <fd:label>delete</fd:label>
+                    <fd:hint>delete</fd:hint>
+                    <fd:datatype base="integer"/>
+                </fd:output>-->
+
+
+                <fd:action id="delete">
+                    <fd:on-action>
+                        <fd:javascript>
+                            var repeater = widget.lookupWidget("/fileSystemObjects");
+                            var selectedRow = repeater.getParentRow(widget);
+                            var fileId = selectedRow.getChild("id").value;
+                            var selectedRowIndex = repeater.indexOf(selectedRow);
+                            repeater.removeRow(selectedRowIndex);
+                            var excludedIds = cocoon.session.getAttribute("excludedIds");
+                            excludedIds.remove(fileId);
+                        </fd:javascript>
+                    </fd:on-action>
+                </fd:action>
+                <fd:booleanfield id="select">
+                    <fd:label>Select</fd:label>
+                </fd:booleanfield>
+            </fd:widgets>
+        </fd:repeater>
 
         <fd:field id="addFile">
             <fd:datatype base="integer"/>
             <fd:on-value-changed>
                 <fd:javascript>
-                    print ("addFile: "+this.value);
                     var repeater = widget.lookupWidget("../fileSystemObjects");
                     var lastPosition = repeater.getSize();
                     var newRow = repeater.addRow();
 
-                    <!--print("122"+this.value);-->
-                    <!--print("111"+newRow.getChild("id").value);-->
 
-                    if(this.value != null){
-                        newRow.getChild("id").value = new java.lang.Integer (this.value);
-                    }
+                    newRow.getChild("id").value = new java.lang.Integer (this.value);
                     var addFileName = widget.lookupWidget("../addFileName");
                     newRow.getChild("name").value = addFileName.value;
 
-                    <!--var addFilePath=widget.lookupWidget("../addFilePath");-->
-                    <!--newRow.getChild("path").value =addFilePath.value;-->
+                    var addFilePath=widget.lookupWidget("../addFilePath");
+                    newRow.getChild("path").value =addFilePath.value;
 
 
-                    <!--var addFileType=widget.lookupWidget("../addFileType");-->
-                    <!--newRow.getChild("contentType").value =addFileType.value;-->
+                    var addFileType=widget.lookupWidget("../addFileType");
+                    newRow.getChild("contentType").value =addFileType.value;
 
-                    <!--var addFileSystemName=widget.lookupWidget("../addFileSystemName");-->
-                    <!--newRow.getChild("systemName").value =addFileSystemName.value;-->
+                    var addFileSystemName=widget.lookupWidget("../addFileSystemName");
+                    newRow.getChild("systemName").value =addFileSystemName.value;
 
-                    <!--if(addFileType.value =='folder'){-->
-                    <!--newRow.getChild("folder").value = true;-->
-                    <!--}-->
+                    if(addFileType.value =='folder'){
+                    newRow.getChild("folder").value = true;
+                    }
 
 
                 </fd:javascript>
@@ -260,6 +356,58 @@
         <fd:field id="addFileSize">
             <fd:datatype base="integer"/>
         </fd:field>
+        <!--<fd:field id="addFile">
+            <fd:datatype base="integer"/>
+            <fd:on-value-changed>
+                <fd:javascript>
+                    print ("addFile: "+this.value);
+                    var repeater = widget.lookupWidget("../fileSystemObjects");
+                    var lastPosition = repeater.getSize();
+                    var newRow = repeater.addRow();
+
+                    &lt;!&ndash;print("122"+this.value);&ndash;&gt;
+                    &lt;!&ndash;print("111"+newRow.getChild("id").value);&ndash;&gt;
+
+                    if(this.value != null){
+                        print("addFile ID"+this.value);
+                       newRow.getChild("id").value = new java.lang.Integer (this.value);
+                    }
+                    var addFileName = widget.lookupWidget("../addFileName");
+                    newRow.getChild("name").value = addFileName.value;
+
+                    &lt;!&ndash;var addFilePath=widget.lookupWidget("../addFilePath");&ndash;&gt;
+                    &lt;!&ndash;newRow.getChild("path").value =addFilePath.value;&ndash;&gt;
+
+
+                    &lt;!&ndash;var addFileType=widget.lookupWidget("../addFileType");&ndash;&gt;
+                    &lt;!&ndash;newRow.getChild("contentType").value =addFileType.value;&ndash;&gt;
+
+                    &lt;!&ndash;var addFileSystemName=widget.lookupWidget("../addFileSystemName");&ndash;&gt;
+                    &lt;!&ndash;newRow.getChild("systemName").value =addFileSystemName.value;&ndash;&gt;
+
+                    &lt;!&ndash;if(addFileType.value =='folder'){&ndash;&gt;
+                    &lt;!&ndash;newRow.getChild("folder").value = true;&ndash;&gt;
+                    &lt;!&ndash;}&ndash;&gt;
+
+
+                </fd:javascript>
+            </fd:on-value-changed>
+        </fd:field>
+        <fd:field id="addFileName">
+            <fd:datatype base="string"/>
+        </fd:field>-->
+        <!--<fd:field id="addFileSystemName">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFilePath">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFileType">
+            <fd:datatype base="string"/>
+        </fd:field>
+        <fd:field id="addFileSize">
+            <fd:datatype base="integer"/>
+        </fd:field>-->
         <fd:submit id="saveDocument">
             <fd:label>
                 <i18n:text catalogue="core" key="Document.save"/>

@@ -74,7 +74,7 @@ function editDocument(form) {
     var formLocale = getLocale();
         print ("formLocale:" +formLocale);
     if (languageCode == null) {
-        languageCode = formLocale;
+        languageCode = getLocale();
         print ("переназначаем languageCode через formLocale:" +languageCode);
     }
 
@@ -146,6 +146,12 @@ function editDocument(form) {
     // *** Save form to Document
     print("Save form to Document & documentVersion");
     form.save(document);
+    print("cocoon.session.getAttribute(languageCode)"+cocoon.session.getAttribute("languageCode"));
+   /* if(cocoon.session.getAttribute("languageCode")== null){
+        var newLocale = form.getChild("formLocale").getValue();
+        print("-!!-!_!- NewLocale "+newLocale);
+        cocoon.session.setAttribute("languageCode", newLocale);
+    }*/
 
     // *** Save DocumentVersion to DB
     print("saveDocumentVersion to DB");
@@ -186,13 +192,14 @@ function editDocument(form) {
     print("session удаляем аттрибуты");
     cocoon.session.removeAttribute("document");
     cocoon.session.removeAttribute("documentTypeId");
-    cocoon.session.removeAttribute("languageCode");
+//    cocoon.session.removeAttribute("languageCode");
     cocoon.session.removeAttribute("formLocale");
     cocoon.releaseComponent(documentVersionService);
     cocoon.sendStatus(200);
 }
 
 function getRedirectUrl(contentId){
+    print("cocoon.session.getAttribute(languageCode)2"+ cocoon.session.getAttribute("languageCode"));
         var sessionChangedLanguageCode = cocoon.session.getAttribute("languageCode");
 //        var contentId = cocoon.session.getAttribute("contentId");
         var languageCode;
@@ -306,6 +313,8 @@ function reloadXMlForm(languageCode) {
         var xmlSource = document.setForm(xmlForm);
         document.setXmlSource(xmlSource);
         cocoon.disposeObject(currentDocumentType);
+
+
 
         print("saveDocument to DB");
         saveDocument(document,contentId);

@@ -373,8 +373,6 @@
                     cocoon.session.setAttribute("languageCode", languageCode);
                     if(cocoon.session.getAttribute("contentId") != null){
                         print("session languageCode"+cocoon.session.getAttribute("languageCode"));
-                        <!--submitAll(languageCode);-->
-                        <!--reloadXMlForm(languageCode);-->
                     }
 
 

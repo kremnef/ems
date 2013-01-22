@@ -12,30 +12,51 @@
     <!--<fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>-->
     <!--<fb:expand id="core:fileSystemObjects"/>-->
     <!--<fb:expand id="core:linked"/>-->
-    <!--<fb:repeater id="fileSystemObjects" parent-path="." row-path="fileObjects">-->
-    <fb:repeater id="fileSystemObjects" parent-path="." row-path="fileSystemObjects">
+   <!-- <fb:repeater id="fileSystemObjects" parent-path="." row-path="fileSystemObjects">
             <fb:identity>
-                <fb:value id="systemName" path="systemName"/>
+                <fb:value id="id" path="id"/>
             </fb:identity>
             <fb:on-bind>
-                <!--<fb:value id="id" path="id"/>-->
+                <fb:value id="id" path="id"/>
                 <fb:value id="name" path="name"/>
-                <fb:value id="systemName" path="systemName"/>
-                <fb:value id="contentType" path="fileType"/>
-                <fb:value id="size" path="size"/>
-                <fb:value id="path" path="path"/>
-                <!--<fb:value id="position" path="position"/>-->
-                <!--<fb:value id="used" path="used"/>-->
+                &lt;!&ndash;<fb:value id="systemName" path="systemName"/>&ndash;&gt;
+                &lt;!&ndash;<fb:value id="contentType" path="fileType"/>&ndash;&gt;
+                &lt;!&ndash;<fb:value id="size" path="size"/>&ndash;&gt;
+                &lt;!&ndash;<fb:value id="path" path="path"/>&ndash;&gt;
+                &lt;!&ndash;<fb:value id="position" path="position"/>&ndash;&gt;
+                &lt;!&ndash;<fb:value id="used" path="used"/>&ndash;&gt;
 
 
-                <!--<fb:value id="objectType" path="objectType"/>
-                <fb:value id="folder" path="folder"/>-->
+                &lt;!&ndash;<fb:value id="objectType" path="objectType"/>
+                <fb:value id="folder" path="folder"/>&ndash;&gt;
 
             </fb:on-bind>
-            <!--todo: ???? не существующий метод -> hobal-->
-            <!--<fb:on-insert-row>-->
-                <!--<fb:insert-bean classname="ru.strela.ems.core.model.FileSystemObject" addmethod="addFileSystemObject"/>-->
-            <!--</fb:on-insert-row>-->
-        </fb:repeater>
+            &lt;!&ndash;todo: ???? не существующий метод -> hobal&ndash;&gt;
+            &lt;!&ndash;<fb:on-insert-row>
+                <fb:insert-bean classname="ru.strela.ems.core.model.Document" addmethod="addFileSystemObject"/>
+            </fb:on-insert-row>&ndash;&gt;
+        </fb:repeater>-->
+
+    <fb:repeater id="fileSystemObjects" parent-path="." row-path="fileSystemObjects">
+        <fb:identity>
+            <fb:value id="id" path="id"/>
+            <!--<fb:value id="objectPosition" path="position"/>-->
+        </fb:identity>
+        <fb:on-bind>
+            <fb:value id="id" path="id"/>
+            <fb:value id="name" path="name"/>
+            <fb:value id="systemName" path="systemName"/>
+            <!--<fb:value id="objectType" path="objectType"/>-->
+            <fb:value id="contentType" path="fileType"/>
+            <fb:value id="size" path="size"/>
+            <fb:value id="path" path="path"/>
+            <fb:value id="folder" path="folder"/>
+
+        </fb:on-bind>
+        <!--todo: ???? не существующий метод -> hobal-->
+        <fb:on-insert-row>
+            <fb:insert-bean classname="ru.strela.ems.core.model.FileSystemObject" addmethod="addFileSystemObject"/>
+        </fb:on-insert-row>
+    </fb:repeater>
 
 </fb:context>
