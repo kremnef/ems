@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ru.strela.ems.core.model" >
-    <union-subclass name="FileObject" table="file" extends="TypifiedObject" lazy="true">
-        <property name="path" column="path" type="string" not-null="true" lazy="true"/>
-        <property name="size" column="file_size" type="int" not-null="true" lazy="true"/>
-        <property name="contentType" column="content_type" type="string" not-null="true" lazy="true"/>
-        <property name="used" column="used" type="int" not-null="true" lazy="true"/>
-        <property name="fileTypeGroupId" column="file_type_group_id" type="int" not-null="true" lazy="true"/>
+    <union-subclass name="FileObject" table="file" extends="TypifiedObject" lazy="false">
+        <property name="path" column="path" type="string" not-null="true" lazy="false"/>
+        <property name="size" column="file_size" type="int" not-null="true" lazy="false"/>
+        <property name="contentType" column="content_type" type="string" not-null="true" lazy="false"/>
+        <property name="used" column="used" type="int" not-null="true" lazy="false"/>
+        <property name="fileTypeGroupId" column="file_type_group_id" type="int" not-null="true" lazy="false"/>
         <many-to-one name="emsObject" class="EmsObject" column="ems_object_id" unique="true" cascade="all" lazy="false"/>
     </union-subclass>
 </hibernate-mapping>

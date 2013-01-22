@@ -229,7 +229,7 @@
                             <ft:repeater-rows>
                                 <tr class="forms-row">
                                     <td>
-                                        <ft:widget id="id"/>
+                                        <ft:widget id="path"/>
                                     </td>
                                     <td>
                                         <jx:set var="fileId"

@@ -266,6 +266,7 @@ function editContent(form) {
     }
     var contentService = cocoon.getComponent("contentService");
     var content = contentService.getContent(id);
+    cocoon.session.setAttribute('content', content);
 
     if (content == null) {
         cocoon.releaseComponent(contentService);
@@ -277,7 +278,7 @@ function editContent(form) {
     showContent(contentService, content, form, actionState);
 
     if (content.getEmsObject().getId() > 0) {
-//        print("content to save: " + content);
+        print("content to save: " + content);
         contentService.save(content);
     }
     if (content.getId() > 0) {

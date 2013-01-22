@@ -15,10 +15,10 @@
     <!--<fb:repeater id="fileSystemObjects" parent-path="." row-path="fileObjects">-->
     <fb:repeater id="fileSystemObjects" parent-path="." row-path="fileSystemObjects">
             <fb:identity>
-                <fb:value id="id" path="id"/>
+                <fb:value id="systemName" path="systemName"/>
             </fb:identity>
             <fb:on-bind>
-                <fb:value id="id" path="id"/>
+                <!--<fb:value id="id" path="id"/>-->
                 <fb:value id="name" path="name"/>
                 <fb:value id="systemName" path="systemName"/>
                 <fb:value id="contentType" path="fileType"/>

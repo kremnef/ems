@@ -6,6 +6,7 @@
     <div>
         <!--<script type="text/javascript" src="${cocoon.parameters.blockPrefix}/resource/js/dojo/dojo.js"/>-->
         <script type="text/javascript" src="${cocoon.parameters.blockPrefix}/resource/js/contentSubmit.js"/>
+        <h1>${cocoon.session.getAttribute("languageCode")}</h1>
         <input class="button-primary" id="myForm" type="button" i18n:attr="value" value="Save" onclick="submitAll()"/>
     </div>
 </jx:template>

@@ -34,11 +34,13 @@
             <key column="document_id"/>
             <many-to-many class="Folder" lazy="false" column="folder_id"/>
         </set>-->
-        <bag name="fileObjects" table="document_file_object" lazy="false" cascade="all,delete-orphan" order-by="id">
+        <!--<bag name="fileObjects" table="document_file_object" lazy="false" cascade="all,delete-orphan" order-by="document_id">-->
+        <bag name="fileObjects" table="document_file_object" lazy="false" cascade="save-update" order-by="document_id">
             <key column="document_id"/>
             <many-to-many column="file_object_id" class="FileObject" lazy="false"/>
         </bag>
-        <bag name="folders" table="document_folder" lazy="false" cascade="all,delete-orphan" order-by="id">
+        <!--<bag name="folders" table="document_folder" lazy="false" cascade="all,delete-orphan" order-by="document_id">-->
+        <bag name="folders" table="document_folder" lazy="false" cascade="save-update" order-by="document_id">
             <key column="document_id"/>
             <many-to-many column="folder_id" class="Folder" lazy="false"/>
         </bag>

@@ -22,9 +22,9 @@
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -42,12 +42,12 @@
     <orderEntry type="library" name="Maven: org.outerj.xreporter:xreporter-expression:1.2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-linkrewriter-impl:1.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-core:2.2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-spring-configurator:2.2.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-configuration-api:1.0.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-spring-configurator:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-configuration-api:1.0.4" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:3.2.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-block-deployment:1.2.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-block-deployment:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-pipeline-components:1.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-pipeline-impl:1.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-pipeline-api:1.1.0-SNAPSHOT" level="project" />
@@ -211,7 +211,7 @@
     <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-rcl-webapp-wrapper:1.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-jci-core:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-jci-fam:1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-rcl-spring-reloader:1.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.cocoon:cocoon-rcl-spring-reloader:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: net.rkbloom:logdriver:1.0" level="project" />
     <orderEntry type="library" name="Maven: jmimemagic:jmimemagic:0.1.2" level="project" />
     <orderEntry type="library" name="Maven: eu.medsea.mimeutil:mime-util:2.1.3" level="project" />

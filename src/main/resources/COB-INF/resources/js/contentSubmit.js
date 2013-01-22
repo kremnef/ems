@@ -217,7 +217,7 @@ function submitForm(form, name, params, afterSubmitFunction) {
                 };
             };
 function submitAll() {
-//    jQuery("#dynamicForm").attr("ajax", false);
+    jQuery("#dynamicForm").attr("ajax", false);
     checkDocumentTypeId();
     var submitDocumentFormAndDocumentTypeForm = function() {
         submitForm(document.getElementById('documentForm'), 'saveDocument', {}, function() {
@@ -242,4 +242,5 @@ function submitAll() {
 
 
 }
+
 

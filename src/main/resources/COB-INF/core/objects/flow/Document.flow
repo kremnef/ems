@@ -23,174 +23,64 @@ function createNewVersionDocument(contentId, languageCode) {
 }
 
 
-function createDocument(form) {
-//    print("createDocument start");
-    var showFormURI = cocoon.parameters.showFormURI;
-    var servletPath = cocoon.parameters.servletPath;
-    var inner = cocoon.parameters.inner;
 
-    importClass(Packages.ru.tastika.tools.util.Utilities);
-
-    var languageCode = cocoon.request.getParameter("languageCode");
-    var version = Utilities.parseStringToInteger(cocoon.request.getParameter("version"));
-    var isFolder = cocoon.request.getParameter("isFolder");
-
-
-//    if (isFolder = 'true') {
-
-    var formLocale = getLocale();
-    if (languageCode == null) {
-        languageCode = formLocale;
-//        print("languageCode :" + languageCode);
-    }
-
-    var userData = getLoggedInUser();
-
-        form.locale = new java.util.Locale(formLocale);
-
-        form.setAttribute('formName', 'documentForm');
-
-        form.showForm(showFormURI, {
-            "servletPath" : servletPath,
-            "userData": userData,
-            "inner" : inner,
-//            "contentId": contentId,
-            "languageCode": languageCode,
-            "actionState": actionState,
-            "document": document
-        });
-
-
-        // bind the form's data back to the document
-        form.save(document);
-    print ("doc save");
-    var content = cocoon.session.getAttribute('lastContent');
-    cocoon.session.removeAttribute('lastContent');
-    var contentId = 0;
-    if (content != null) {
-        contentId = content.getId();
-    }
-
-    if (contentId > 0 && isFolder != 'true') {
-//        print("Create Document -2");
-
-        var documentVersionService = cocoon.getComponent("documentVersionService");
-        var documentService = cocoon.getComponent("documentService");
-
-        var document = createNewVersionDocument(contentId, languageCode);
-
-        if (document.getId() > 0) {
-            var documentVersion = documentVersionService.getDocumentVersion(document.getId());
-
-
-            if (version != documentVersion.getVersion()) {
-                version = documentVersion.getVersion();
-                cocoon.request.setAttribute('version', version);
-            }
-            var fileSystemObjects = document.getFileSystemObjects();
-
-            var fileSystemObjectsIds = new java.util.HashSet();
-            for (var iterator = fileSystemObjects.iterator(); iterator.hasNext();) {
-                var fileSystemObject = iterator.next();
-                print ("fileSystemObject!!!:"+fileSystemObject.getId());
-                fileSystemObjectsIds.add(new java.lang.Integer(fileSystemObject.id));
-            }
-
-        }
-
-
-        cocoon.session.setAttribute("excludedIds", fileSystemObjectsIds);
-        cocoon.session.setAttribute("document", document);
-        cocoon.session.setAttribute("formLocale", formLocale);
-        cocoon.session.setAttribute("contentId", contentId);
-
-
-        var actionState = "create";
-
-        var fileObjectsIds = new java.util.HashSet();
-        cocoon.session.setAttribute("excludedIds", fileObjectsIds);
-
-
-        /*
-
-
-         form.load(document);
-         // show the form to the user until it is validated successfully
-
-         importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
-
-         if (languageCode > 0) {
-         form.getChild("languageCode").setState(WidgetState.DISABLED);
-         form.getChild("languageCode").setValue(languageCode);
-         }
-         else {
-         form.getChild("languageCode").setState(WidgetState.ACTIVE);
-         }
-         */
-
-
-        document.setXmlSource(null);
-        documentService.saveDocument(document);
-//        print("document to save: " + document);
-//    var documentId = document.getId();
-        cocoon.releaseComponent(documentService);
-        cocoon.releaseComponent(documentVersionService);
-        cocoon.session.removeAttribute("excludedIds");
-
-        cocoon.disposeObject(document);
-
-    }
-    var url = "Content-edit?id=" + contentId;
-    if (languageCode != null) {
-        url += '&languageCode=' + languageCode;
-    }
-    if (version > 0) {
-        url += '&version=' + version;
-    }
-    //cocoon.redirectTo(url);
-//    print("createDocument end");
-    cocoon.sendPage("content-edit-url", {url: url});
-
-}
 
 
 function editDocument(form) {
-//    print("editDocument start");
+    print("--------- enter function editDocument ---------");
 
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
     var blockPrefix = cocoon.parameters.blockPrefix;
     var inner = cocoon.parameters.inner;
-
+        print ("showFormURI: "+showFormURI+" servletPath: "+servletPath+" blockPrefix: "+blockPrefix+" inner: "+inner);
 
     importClass(Packages.ru.tastika.tools.util.Utilities);
     var contentId = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+        print ("contentId from request: "+contentId);
     var languageCode = cocoon.request.getParameter("languageCode");
+        print ("languageCode from request: "+languageCode);
 
     var comment = cocoon.request.getParameter("comment");
+        print ("comment from request: "+comment);
     var versionObj = cocoon.request.getParameter("version");
+        print ("versionObj from request: "+versionObj);
 
 
     var documentService = cocoon.getComponent("documentService");
     var documentVersionService = cocoon.getComponent("documentVersionService");
-    var contentService = cocoon.getComponent("contentService");
-//    print("doc contentId:" + contentId);
-    var content = contentService.getContent(contentId);
+//    todo: заменить на уже загруженный объект из сессии
+
+
+    var content;
+        if( cocoon.session.getAttribute("content")!=null){
+
+            var content = cocoon.session.getAttribute("content");
+                print ("content взят из сессии");
+        }else{
+            var contentService = cocoon.getComponent("contentService");
+            content = contentService.getContent(contentId);
+            cocoon.releaseComponent(contentService);
+                print ("content загружен из базы данных");
+        };
     if (content == null) {
-        cocoon.releaseComponent(contentService);
+            print ("content не существует, приступаем к созданию");
         cocoon.redirectTo("Content-create?parentId=0");
         return;
     }
 
     var version = Utilities.parseStringToInteger(versionObj);
-
+        print ("version:" +version);
     var formLocale = getLocale();
+        print ("formLocale:" +formLocale);
     if (languageCode == null) {
         languageCode = formLocale;
+        print ("переназначаем languageCode через formLocale:" +languageCode);
     }
 
     var document = documentService.getDocumentByNaturalId(content.getId(), languageCode);
     if (document == null) {
+        print ("document не существует, приступаем к созданию новой версии");
         document = createNewVersionDocument(content.getId(), languageCode);
     }
     if (document.getId() > 0) {
@@ -203,12 +93,9 @@ function editDocument(form) {
         }
         var fileSystemObjects = document.getFileSystemObjects();
         var fileObjects = document.getFileObjects();
-//        print("DOC exist fileSystemObjects: "+fileObjects);
         for (var iterator = fileObjects.iterator(); iterator.hasNext();) {
                     var fileObject = iterator.next();
-//                    print("fileObjects: "+fileObject.id);
-                    print("fileObjects: "+fileObject.position);
-                    print("fileObjects: "+fileObject.used);
+                    print("fileObject.position: "+fileObject.position);
                 }
 // add existing ids
 
@@ -220,22 +107,25 @@ function editDocument(form) {
 
     }
 
-
+    print("устанавливаем в сессию excludedIds-formLocale-languageCode");
     cocoon.session.setAttribute("excludedIds", fileSystemObjectsIds);
     cocoon.session.setAttribute("documentTypeId", content.getDocumentTypeId());
     cocoon.session.setAttribute("document", document);
     cocoon.session.setAttribute("formLocale", formLocale);
+    cocoon.session.setAttribute("languageCode", languageCode);
     cocoon.session.setAttribute("contentId", contentId);
     var actionState = "edit";
 
     form.load(document);
+    print("загрузили document в форму");
     importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
 
     form.setAttribute('formName', 'documentForm');
-
+//todo: вынести в ajax по запросу
     var documentVersions = documentVersionService.getAllVersions(contentId);
-
+    print("загрузили из базы все версии");
     var userData = getLoggedInUser();
+
     form.showForm(showFormURI, {
         "documentActionState" : actionState,
         "contentId" : contentId,
@@ -254,14 +144,17 @@ function editDocument(form) {
     }
 
     // *** Save form to Document
+    print("Save form to Document & documentVersion");
     form.save(document);
-    print("document save");
+
     // *** Save DocumentVersion to DB
+    print("saveDocumentVersion to DB");
     var dateTime = Calendar.getInstance().getTime();
 
     documentVersion.setModifiedDateTime(dateTime);
     documentVersion.setVersionModifierId(userData.customer.getId());
     documentVersionService.saveDocumentVersion(documentVersion);
+
 
 
 //Не влияет на сохранение документов
@@ -273,57 +166,79 @@ function editDocument(form) {
 //        fileSystemObjectsIds.add(new java.lang.Integer(fileSystemObject.id));
 //    }
 // *** Save Document to DB
-    saveDocument(document,contentId)
+
+//    saveDocument(document,contentId)
 //    documentService.saveDocument(document);
 
 
 
     cocoon.session.removeAttribute("excludedIds");
 
-    var newFormLocale = cocoon.session.getAttribute("formLocale");
+    /*var newFormLocale = cocoon.session.getAttribute("formLocale");
     if (newFormLocale != null){
        languageCode = newFormLocale;
-    }
-//  print("languageCode from formLocale" +languageCode);
+    }*/
+//  todo: возможно излишнее
     var documentTypeId = content.getDocumentTypeId();
+    print("session setAttribute documentTypeId" +documentTypeId);
     cocoon.session.setAttribute("documentTypeId", documentTypeId);
+
+    print("session удаляем аттрибуты");
     cocoon.session.removeAttribute("document");
     cocoon.session.removeAttribute("documentTypeId");
     cocoon.session.removeAttribute("languageCode");
     cocoon.session.removeAttribute("formLocale");
-//    cocoon.releaseComponent(documentService);
     cocoon.releaseComponent(documentVersionService);
-    cocoon.releaseComponent(contentService);
     cocoon.sendStatus(200);
 }
 
-function saveDocument(document,contentId){
-            var formLocale = cocoon.session.getAttribute("formLocale");
+function getRedirectUrl(contentId){
+        var sessionChangedLanguageCode = cocoon.session.getAttribute("languageCode");
+//        var contentId = cocoon.session.getAttribute("contentId");
+        var languageCode;
+        var url = "Content-edit?id=" + contentId;
+
+        if (sessionChangedLanguageCode != null){
+            print("sessionChangedLanguageCode" + sessionChangedLanguageCode);
+            languageCode = sessionChangedLanguageCode;
+        }
+        if (languageCode != null) {
+            url += '&languageCode=' + languageCode;
+        }
+        /*if (version > 0) {
+            url += '&version=' + version;
+        }*/
+
+            print("url: " + url);
+//            displayURI = url;
+    return url;
+}
+function saveDocument(document, contentId){
+    print("--------- enter function saveDocument to DB ---------");
+
             var documentService = cocoon.getComponent("documentService");
             documentService.saveDocument(document);
             cocoon.releaseComponent(documentService);
             cocoon.disposeObject(document);
 
-            var url = "Content-edit?id=" + contentId;
-            if (formLocale != null) {
-                url += '&languageCode=' + formLocale;
-            }
-            print("url!!" + url);
-//            displayURI = url;
-             cocoon.sendStatus(200);
+
+
+//             cocoon.sendStatus(200);
 //            cocoon.redirectTo(url);
 
 //            cocoon.sendPage(displayURI, {
 //                "document": document,
 //                "xmlForm":xmlForm
 //            });
+    print("--------- exit function saveDocument ---------");
 }
 
 function loadXMLSource(contentId,languageCode) {
-print("loadXMLSource:>>----------" +languageCode);
+        print("--------- enter function loadXMLSource ---------");
         var documentService = cocoon.getComponent("documentService");
         var document = documentService.getDocumentByNaturalId(contentId, languageCode);
 //        var xml = document != null ? document.getXML() : null;
+    print("--------- exit function loadXMLSource ---------");
         return document;
 }
 
@@ -331,8 +246,8 @@ print("loadXMLSource:>>----------" +languageCode);
 
 
 function reloadXMlForm(languageCode) {
-    print("reloadXMlForm:>>----------");
-    print("as param:" +languageCode);
+    print("--------- enter function reloadXMlForm DocumentTypeForm---------");
+    print("as function param:" +languageCode);
     print("as request:" +cocoon.request.getParameter("languageCode"));
     print("as session:" +cocoon.session.getAttribute("languageCode"));
     var StringContentId = cocoon.session.getAttribute("contentId");
@@ -351,7 +266,6 @@ function reloadXMlForm(languageCode) {
     var documentService = cocoon.getComponent("documentService");
     if (languageCode != null || document == null) {
         document = loadXMLSource(contentId,languageCode);
-
     }
     var documentTypeService = cocoon.getComponent("documentTypeService");
     if (documentTypeId > 0) {
@@ -361,7 +275,6 @@ function reloadXMlForm(languageCode) {
         print("error!!!+documentTypeId: " + documentTypeId);
     }
 
-//    print("editDocumentType start2");
     var currentDocumentTypeName = "";
     if (currentDocumentType != null) {
         currentDocumentTypeName = currentDocumentType.getName();
@@ -375,7 +288,6 @@ function reloadXMlForm(languageCode) {
 
 
         if (xml != null) {
-        print("XML:"+xml)
             form.load(xml);
         }
         var formData = {
@@ -394,13 +306,16 @@ function reloadXMlForm(languageCode) {
         var xmlSource = document.setForm(xmlForm);
         document.setXmlSource(xmlSource);
         cocoon.disposeObject(currentDocumentType);
+
+        print("saveDocument to DB");
         saveDocument(document,contentId);
-        print("editDocumentType end");
+        cocoon.redirectTo(getRedirectUrl(contentId));
+        print("--------- ecit function reloadXMlForm ---------");
     }
     else {
         cocoon.releaseComponent(documentService);
         cocoon.sendStatus(404);
-        print("editDocumentType end 404");
+        print(" !!!!!!!!!!!!!function reloadXMlForm 404");
     }
 
 }
@@ -631,3 +546,139 @@ function listDocument(parentId) {
  listData["excludedId"] =excludedId;
  cocoon.sendPage(displayXMLURI, listData);
  }*/
+
+
+function createDocument(form) {
+//    print("createDocument start");
+    var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var inner = cocoon.parameters.inner;
+
+    importClass(Packages.ru.tastika.tools.util.Utilities);
+
+    var languageCode = cocoon.request.getParameter("languageCode");
+    var version = Utilities.parseStringToInteger(cocoon.request.getParameter("version"));
+    var isFolder = cocoon.request.getParameter("isFolder");
+
+
+//    if (isFolder = 'true') {
+
+    var formLocale = getLocale();
+    if (languageCode == null) {
+        languageCode = formLocale;
+//        print("languageCode :" + languageCode);
+    }
+
+    var userData = getLoggedInUser();
+
+        form.locale = new java.util.Locale(formLocale);
+
+        form.setAttribute('formName', 'documentForm');
+
+        form.showForm(showFormURI, {
+            "servletPath" : servletPath,
+            "userData": userData,
+            "inner" : inner,
+//            "contentId": contentId,
+            "languageCode": languageCode,
+            "actionState": actionState,
+            "document": document
+        });
+
+
+        // bind the form's data back to the document
+        form.save(document);
+    print ("doc save");
+    var content = cocoon.session.getAttribute('lastContent');
+    cocoon.session.removeAttribute('lastContent');
+    var contentId = 0;
+    if (content != null) {
+        contentId = content.getId();
+    }
+
+    if (contentId > 0 && isFolder != 'true') {
+//        print("Create Document -2");
+
+        var documentVersionService = cocoon.getComponent("documentVersionService");
+        var documentService = cocoon.getComponent("documentService");
+
+        var document = createNewVersionDocument(contentId, languageCode);
+
+        if (document.getId() > 0) {
+            var documentVersion = documentVersionService.getDocumentVersion(document.getId());
+
+
+            if (version != documentVersion.getVersion()) {
+                version = documentVersion.getVersion();
+                cocoon.request.setAttribute('version', version);
+            }
+            var fileSystemObjects = document.getFileSystemObjects();
+
+            var fileSystemObjectsIds = new java.util.HashSet();
+            for (var iterator = fileSystemObjects.iterator(); iterator.hasNext();) {
+                var fileSystemObject = iterator.next();
+                print ("fileSystemObject!!!:"+fileSystemObject.getId());
+                fileSystemObjectsIds.add(new java.lang.Integer(fileSystemObject.id));
+            }
+
+        }
+
+
+        cocoon.session.setAttribute("excludedIds", fileSystemObjectsIds);
+        cocoon.session.setAttribute("document", document);
+        cocoon.session.setAttribute("formLocale", formLocale);
+        cocoon.session.setAttribute("contentId", contentId);
+
+
+        var actionState = "create";
+
+        var fileObjectsIds = new java.util.HashSet();
+        cocoon.session.setAttribute("excludedIds", fileObjectsIds);
+
+
+        /*
+
+
+         form.load(document);
+         // show the form to the user until it is validated successfully
+
+         importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
+
+         if (languageCode > 0) {
+         form.getChild("languageCode").setState(WidgetState.DISABLED);
+         form.getChild("languageCode").setValue(languageCode);
+         }
+         else {
+         form.getChild("languageCode").setState(WidgetState.ACTIVE);
+         }
+         */
+
+
+        document.setXmlSource(null);
+        documentService.saveDocument(document);
+//        print("document to save: " + document);
+//    var documentId = document.getId();
+        cocoon.releaseComponent(documentService);
+        cocoon.releaseComponent(documentVersionService);
+        cocoon.session.removeAttribute("excludedIds");
+
+        cocoon.disposeObject(document);
+
+    }
+    var url = "Content-edit?id=" + contentId;
+    var sessionChangedLanguageCode = cocoon.session.getAttribute("languageCode");
+    if (sessionChangedLanguageCode != null && sessionChangedLanguageCode != languageCode){
+        languageCode = sessionChangedLanguageCode;
+    }
+    if (languageCode != null) {
+//        url += '&languageCode=' + languageCode;
+        url += '&languageCode=' + languageCode;
+    }
+    if (version > 0) {
+        url += '&version=' + version;
+    }
+    //cocoon.redirectTo(url);
+//    print("createDocument end");
+    cocoon.sendPage("content-edit-url", {url: url});
+
+}

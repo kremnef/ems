@@ -67,16 +67,23 @@
 
         <div class="punto"/>
         <script type="text/javascript">
-            function changeLocale(currentlocale){
+            function changeLocale(languageCode){
 
             $("div.meta-info").hide();
-            var targetDivName ='translate_'+currentlocale;
+            var targetDivName ='translate_'+languageCode;
             '*[name= targetDivName]'
             $('*[name='+ targetDivName+']').show();
             <!--var newFormLocale = document.getElementById('translate');-->
             var newFormLocale = document.getElementById('formLocale');
-            newFormLocale.value = currentlocale;
-            cocoon.forms.submitForm(newFormLocale);
+                                    newFormLocale.value = languageCode;
+                                    cocoon.forms.submitForm(newFormLocale);
+            if(document.getElementById('documentForm') != null){
+
+                submitAll(languageCode);
+            }
+            <!--if(cocoon.session.getAttribute("languageCode")){
+
+            }-->
 
             <!--cocoon.forms.submitForm(dynamicForm);-->
 

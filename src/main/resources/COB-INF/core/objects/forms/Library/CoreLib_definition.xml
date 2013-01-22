@@ -366,11 +366,15 @@
             <fd:datatype base="string"/>
             <fd:on-value-changed>
                 <javascript>
+                    print("enter 1");
                     var languageCode = event.newValue;
                     java.lang.System.err.println("FormLocale value changed: " + languageCode);
                     cocoon.session.setAttribute("formLocale", languageCode);
+                    cocoon.session.setAttribute("languageCode", languageCode);
                     if(cocoon.session.getAttribute("contentId") != null){
-                        reloadXMlForm(languageCode);
+                        print("session languageCode"+cocoon.session.getAttribute("languageCode"));
+                        <!--submitAll(languageCode);-->
+                        <!--reloadXMlForm(languageCode);-->
                     }
 
 

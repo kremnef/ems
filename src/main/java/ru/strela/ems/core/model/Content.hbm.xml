@@ -31,10 +31,10 @@
             <one-to-many class="ru.strela.ems.core.model.OnlyContent"/>
         </set>-->
 
-        <!-- <bag name="linked" lazy="false" table="content_linked">
+         <bag name="linked" lazy="false" table="content_linked">
             <key column="content_id"/>
             <many-to-many column="linked_id" class="Content" lazy="false"/>
-        </bag>-->
+        </bag>
     </union-subclass>
 </hibernate-mapping>
 
