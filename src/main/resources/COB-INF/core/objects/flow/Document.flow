@@ -161,6 +161,7 @@ function editDocument(form) {
     documentVersion.setVersionModifierId(userData.customer.getId());
     documentVersionService.saveDocumentVersion(documentVersion);
 
+    print("fileObjects0"+document.getFileSystemObjects());
 
 
 //Не влияет на сохранение документов
@@ -174,10 +175,7 @@ function editDocument(form) {
 // *** Save Document to DB
 
 //    saveDocument(document,contentId)
-//    documentService.saveDocument(document);
-
-
-
+    documentService.saveDocument(document);
     cocoon.session.removeAttribute("excludedIds");
 
     /*var newFormLocale = cocoon.session.getAttribute("formLocale");
@@ -222,6 +220,8 @@ function getRedirectUrl(contentId){
 }
 function saveDocument(document, contentId){
     print("--------- enter function saveDocument to DB ---------");
+    print("docId"+document.getId());
+    print("fileObjects"+document.getFileSystemObjects());
 
             var documentService = cocoon.getComponent("documentService");
             documentService.saveDocument(document);
@@ -317,6 +317,7 @@ function reloadXMlForm(languageCode) {
 
 
         print("saveDocument to DB");
+        print("fileObjects1"+document.getFileSystemObjects());
         saveDocument(document,contentId);
         cocoon.redirectTo(getRedirectUrl(contentId));
         print("--------- ecit function reloadXMlForm ---------");
