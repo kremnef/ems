@@ -606,7 +606,7 @@ function treeObjects(parentId) {
 
     var displayXMLURI = cocoon.parameters.displayXMLURI;
     var excludedIds = cocoon.session.getAttribute("excludedIds");
-    cocoon.session.setAttribute("excludedIds", "");
+//    cocoon.session.setAttribute("excludedIds", "");
 
     /*if (entity == 'SystemNode' & excludedIds != '') {
      var navigationService = cocoon.getComponent("navigationService");
@@ -620,6 +620,7 @@ function treeObjects(parentId) {
     var listData = prepareListData(parentId, filter);
     listData["entity"] = entity;
     listData["excludedId"] = excludedId;
+    listData["excludedIds"] = excludedIds;
     cocoon.sendPage(displayXMLURI, listData);
 }
 

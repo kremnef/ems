@@ -22,14 +22,16 @@
 
                     var parentPath = getParentPath(entityWidget.value, parentId);
 
-                    var systemNameWidget = widget.lookupWidget("../systemName");
-                    if (systemNameWidget != null){
-                    print("---systemNameWidget " + systemNameWidget.getValue());
+                    var systemURLWidget = widget.lookupWidget("../systemURL");
+                    var systemURLNameWidget = systemURLWidget.getChild('systemName');
+                    print("---systemURLWidget " + systemURLNameWidget.getValue());
+                    if (systemURLWidget != null){
+                    print("---systemURLNameWidget " + systemURLNameWidget.getValue());
 
                     var fullURLWidget = widget.lookupWidget("../fullURL");
                     print("---fullURLWidget " + fullURLWidget.getValue());
 
-                    fullURLWidget.value = parentPath + systemNameWidget.value;
+                    fullURLWidget.value = parentPath + systemURLNameWidget.value;
                     }
                     }
                 </javascript>

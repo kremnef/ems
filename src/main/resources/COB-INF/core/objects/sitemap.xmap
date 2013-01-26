@@ -74,11 +74,9 @@
 
         <map:actions>
             <map:action name="uploadFile" src="ru.strela.ems.actions.UploadFileAction"/>
-        </map:actions>
-
-        <map:actions>
             <map:action name="reindex" src="ru.strela.ems.actions.ReindexAction"/>
         </map:actions>
+
 
     </map:components>
 
@@ -200,14 +198,14 @@
         </map:resource>
 
         <map:resource name="cocoon-ajax">
-            <map:select type="ajax-request">
+            <!--<map:select type="ajax-request">
                 <map:when test="true">
                     <map:serialize type="xml"/>
                 </map:when>
                 <map:otherwise>
                     <map:serialize type="html"/>
                 </map:otherwise>
-            </map:select>
+            </map:select>-->
             <!--<map:select type="ajax-request">
                 <map:when test="true">
                     <map:call resource="forms-styling"/>
@@ -235,29 +233,29 @@
                     <map:serialize type="xml"/>
                 </map:otherwise>
             </map:select>-->
-            <!--<map:select type="ajax-request">-->
-                <!--<map:when test="true">-->
-                    <!--&lt;!&ndash;  sending a partial Browser Update &ndash;&gt;-->
-                    <!--<map:select type="request-parameter">-->
-                        <!--<map:parameter name="parameter-name" value="dojo.transport"/>-->
-                        <!--<map:when test="iframe">-->
-                            <!--&lt;!&ndash;  sending BU via iFrameIO &ndash;&gt;-->
-                            <!--<map:transform-->
-                                    <!--src="servlet:forms:/resource/internal/xsl/IframeTransport-bu-styling.xsl"/>-->
-                            <!--<map:serialize type="xhtml"/>-->
-                            <!--&lt;!&ndash;  this is REALLY important &ndash;&gt;-->
-                        <!--</map:when>-->
-                        <!--<map:otherwise>-->
-                            <!--&lt;!&ndash;  sending BU via XHR &ndash;&gt;-->
-                            <!--<map:serialize type="xml"/>-->
-                        <!--</map:otherwise>-->
-                    <!--</map:select>-->
-                <!--</map:when>-->
-                <!--<map:otherwise>-->
-                    <!--&lt;!&ndash;  sending a complete page &ndash;&gt;-->
-                    <!--<map:serialize type="html"/>-->
-                <!--</map:otherwise>-->
-            <!--</map:select>-->
+            <map:select type="ajax-request">
+                <map:when test="true">
+                    <!--  sending a partial Browser Update -->
+                    <map:select type="request-parameter">
+                        <map:parameter name="parameter-name" value="dojo.transport"/>
+                        <map:when test="iframe">
+                            <!--  sending BU via iFrameIO -->
+                            <map:transform
+                                    src="servlet:forms:/resource/internal/xsl/IframeTransport-bu-styling.xsl"/>
+                            <map:serialize type="xhtml"/>
+                            <!--  this is REALLY important -->
+                        </map:when>
+                        <map:otherwise>
+                            <!--  sending BU via XHR -->
+                            <map:serialize type="xml"/>
+                        </map:otherwise>
+                    </map:select>
+                </map:when>
+                <map:otherwise>
+                    <!--  sending a complete page -->
+                    <map:serialize type="html"/>
+                </map:otherwise>
+            </map:select>
         </map:resource>
 
 
@@ -531,12 +529,7 @@
     </map:resources>
 
 
-    <map:pipelines id="static">
-
-
-
-
-
+    <map:pipelines>
         <map:pipeline type="caching" id="typesActions">
             <map:match pattern="typeActions/*">
                 <map:call function="getTypeActions">
@@ -884,17 +877,17 @@
 
         <map:pipeline type="caching" id="redirect">
             <map:match pattern="*-redirect-pipeline/*/*">
-                <map:redirect-to uri="{1}?id={2}&amp;documentTypeId={3}">
+                <map:redirect-to uri="{1}?id={2}&amp;documentTypeId={3}"/>
                     <!--<map:parameter name="requestParam" value="{request:param}"/>-->
                     <!--<map:parameter name="id" value="{2}"/>-->
-                </map:redirect-to>
+                <!--</map:redirect-to>-->
             </map:match>
 
             <map:match pattern="*-redirect-pipeline/*">
-                <map:redirect-to uri="{1}?id={2}">
-                    <map:parameter name="requestParam" value="{request:param}"/>
-                    <map:parameter name="id" value="{2}"/>
-                </map:redirect-to>
+                <map:redirect-to uri="{1}?id={2}"/>
+                    <!--<map:parameter name="requestParam" value="{request:param}"/>-->
+                    <!--<map:parameter name="id" value="{2}"/>-->
+                <!--</map:redirect-to>-->
             </map:match>
         </map:pipeline>
 

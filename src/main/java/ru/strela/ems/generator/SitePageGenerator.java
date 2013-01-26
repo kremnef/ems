@@ -208,7 +208,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
 
     private void runTypeAction(SystemNodeObject nodeObject, String typeActionName, Map model, String src) {
-//        System.out.println("1-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("1-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
         String objectName;
         Object obj;
         if (nodeObject instanceof SystemNodeObjectType) {
@@ -242,12 +242,12 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         catch (IllegalAccessException e) {
             Logger.getLogger(SitePageGenerator.class).warn(e.getMessage(), e);
         }
-//        System.out.println("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
     }
 
 
     public void generate() throws IOException, SAXException, ProcessingException {
-//         System.out.println("1XML. System.currentTimeMillis() = " + System.currentTimeMillis());
+         System.out.println("1XML. System.currentTimeMillis() = " + System.currentTimeMillis());
         contentHandler.startDocument();
         if (!omitRoot) {
             contentHandler.startElement("", "root", "root", new AttributesImpl());
@@ -336,7 +336,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             contentHandler.endElement("", "root", "root");
         }
         contentHandler.endDocument();
-//        System.out.println("2XML. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("2XML. System.currentTimeMillis() = " + System.currentTimeMillis());
     }
 
     private HashMap<String, HashMap<String, Object>> fillRequestParams(Request request, String src) {

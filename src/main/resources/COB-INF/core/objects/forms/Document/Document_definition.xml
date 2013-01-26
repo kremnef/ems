@@ -310,6 +310,11 @@
             </fd:widgets>
         </fd:repeater>
 
+
+
+        <!--Files -->
+
+
         <fd:field id="addFile">
             <fd:datatype base="integer"/>
             <fd:on-value-changed>
@@ -319,7 +324,10 @@
                     var newRow = repeater.addRow();
 
 
-                    newRow.getChild("id").value = new java.lang.Integer (this.value);
+                    if(this.value != null){
+                        print("addFile ID"+this.value);
+                        newRow.getChild("id").value = new java.lang.Integer (this.value);
+                    }
                     var addFileName = widget.lookupWidget("../addFileName");
                     newRow.getChild("name").value = addFileName.value;
 
@@ -356,58 +364,7 @@
         <fd:field id="addFileSize">
             <fd:datatype base="integer"/>
         </fd:field>
-        <!--<fd:field id="addFile">
-            <fd:datatype base="integer"/>
-            <fd:on-value-changed>
-                <fd:javascript>
-                    print ("addFile: "+this.value);
-                    var repeater = widget.lookupWidget("../fileSystemObjects");
-                    var lastPosition = repeater.getSize();
-                    var newRow = repeater.addRow();
 
-                    &lt;!&ndash;print("122"+this.value);&ndash;&gt;
-                    &lt;!&ndash;print("111"+newRow.getChild("id").value);&ndash;&gt;
-
-                    if(this.value != null){
-                        print("addFile ID"+this.value);
-                       newRow.getChild("id").value = new java.lang.Integer (this.value);
-                    }
-                    var addFileName = widget.lookupWidget("../addFileName");
-                    newRow.getChild("name").value = addFileName.value;
-
-                    &lt;!&ndash;var addFilePath=widget.lookupWidget("../addFilePath");&ndash;&gt;
-                    &lt;!&ndash;newRow.getChild("path").value =addFilePath.value;&ndash;&gt;
-
-
-                    &lt;!&ndash;var addFileType=widget.lookupWidget("../addFileType");&ndash;&gt;
-                    &lt;!&ndash;newRow.getChild("contentType").value =addFileType.value;&ndash;&gt;
-
-                    &lt;!&ndash;var addFileSystemName=widget.lookupWidget("../addFileSystemName");&ndash;&gt;
-                    &lt;!&ndash;newRow.getChild("systemName").value =addFileSystemName.value;&ndash;&gt;
-
-                    &lt;!&ndash;if(addFileType.value =='folder'){&ndash;&gt;
-                    &lt;!&ndash;newRow.getChild("folder").value = true;&ndash;&gt;
-                    &lt;!&ndash;}&ndash;&gt;
-
-
-                </fd:javascript>
-            </fd:on-value-changed>
-        </fd:field>
-        <fd:field id="addFileName">
-            <fd:datatype base="string"/>
-        </fd:field>-->
-        <!--<fd:field id="addFileSystemName">
-            <fd:datatype base="string"/>
-        </fd:field>
-        <fd:field id="addFilePath">
-            <fd:datatype base="string"/>
-        </fd:field>
-        <fd:field id="addFileType">
-            <fd:datatype base="string"/>
-        </fd:field>
-        <fd:field id="addFileSize">
-            <fd:datatype base="integer"/>
-        </fd:field>-->
         <fd:submit id="saveDocument">
             <fd:label>
                 <i18n:text catalogue="core" key="Document.save"/>

@@ -50,8 +50,9 @@ public class
                 systemNamesPath = indexPage;
             }
 
-//            System.out.println("systemNamesPath = " + systemNamesPath);
-//            System.out.println("1. System.currentTimeMillis() = " + System.currentTimeMillis());
+//            //System.out.println("systemNamesPath = " + systemNamesPath);
+//            todo: оптимизировать загрузку страницы. достаточно медленно
+            System.out.println("1. System.currentTimeMillis() = " + System.currentTimeMillis());
 
             HashSet<Integer> redirectCycle = new HashSet<Integer>();
             // s.id, s.redirect_to s.full_path, e.system_name, t.id template_id, t.positions_amount
@@ -144,7 +145,7 @@ public class
                                         }
                                     }
                                 }
-//                                System.out.println("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
+                                System.out.println("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
                             }
                             if (children.size() > 0) {
                                 systemObjects.put(SitePageGenerator.CHILDREN_KEY, children);
@@ -157,7 +158,7 @@ public class
                     }
                 }
             }
-//            System.out.println("5. System.currentTimeMillis() = " + System.currentTimeMillis());
+            System.out.println("5. System.currentTimeMillis() = " + System.currentTimeMillis());
             tx.commit();
             session.close();
         } catch (HibernateException he) {
@@ -279,7 +280,7 @@ public class
         }
         ObjectLabelDao objectLabelDao = new ObjectLabelDaoImpl();
         ObjectLabel objectLabel = objectLabelDao.getObjectLabelNaturalId(emsObjectId, currentLocale);
-        System.out.println("SystemNode - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
+        //System.out.println("SystemNode - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
         if (objectLabel != null && objectLabel.getId() > 0) {
             systemNode.setObjectLabel(objectLabel);
         }*/
@@ -300,7 +301,7 @@ public class
 
     private Object getObject(Session session, Class entityClass, int id) {
 
-        System.out.println("Class: " + entityClass + " and id: " + id);
+        //System.out.println("Class: " + entityClass + " and id: " + id);
         return session.get(entityClass, id);
     }
 
@@ -308,7 +309,7 @@ public class
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentSimple document = (DocumentSimple) documentDao.getLastVersionDocument(content.getId(), languageId);
         if (document != null) {
-            System.out.println("document id: " + document.getId() + " title: " + document.getTitle());
+            //System.out.println("document id: " + document.getId() + " title: " + document.getTitle());
             content.setDocument(DocumentSimple);
 
     }*/
@@ -328,21 +329,21 @@ public class
 
     //    private void fillDocumentFolders(Content content, ChildrenMap children, Session session, int languageId, int position) {
     private void fillDocumentFolders(Content content, ChildrenMap children, Session session, String languageCode, int position) {
-        System.out.println("fillDocumentFolders:>> ENtER");
+        //System.out.println("fillDocumentFolders:>> ENtER");
         DocumentDao documentDao = new DocumentDaoImpl();
         Document document = documentDao.getDocumentByNaturalId(content.getId(), languageCode);
 
         if (document != null) {
-            System.out.println("fillDocumentFolders:>> document.getId(): " + document.getId());
+            //System.out.println("fillDocumentFolders:>> document.getId(): " + document.getId());
             content.setDocument(document);
             for (Object obj : document.getFolders()) {
                 Folder folder = (Folder) obj;
-//                System.out.println(folder.toExtendedString());
+//                //System.out.println(folder.toExtendedString());
                 children.putAll(getChildren(folder, 1, 0, 0, "position", "asc", 0, session, new HashSet<Integer>(), languageCode, position));
             }
 
         } else {
-            System.out.println("fillDocumentFolders:>>  Need Remove Content with Id: " + content.getId());
+            //System.out.println("fillDocumentFolders:>>  Need Remove Content with Id: " + content.getId());
         }
     }
 
@@ -377,7 +378,7 @@ public class
     private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode, int position) {
         currentLocale = languageCode;
 //    private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
-//        System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
+//        //System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
         ChildrenMap children = new ChildrenMap();
         int typifiedObjectId = typifiedObject.getId();
         if (typifiedObject instanceof SystemObject) {
@@ -391,16 +392,16 @@ public class
             sql.append(typifiedObjectClass);
             sql.append(" where emsObject.parentId = ");
             sql.append(typifiedObject.getId());
-            System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
+            //System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
 
             sql.append(" and entity != 'Content'");
             sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
-            //System.out.println("sql = " + sql);
+            ////System.out.println("sql = " + sql);
 
             query = session.createQuery(sql.toString());
 
             if (itemsOnPage > 0) {
-                //System.out.println("itemsOnPage" + itemsOnPage);
+                ////System.out.println("itemsOnPage" + itemsOnPage);
                 query.setMaxResults(itemsOnPage);
             }
 //            typifiedObject =
@@ -420,7 +421,7 @@ public class
 //                List list = contentDao.
                 sql.append(" and publishDateTime <= current_timestamp() ");
                 if (tagId != null) {
-                    System.out.println("!!! tagId " + tagId);
+                    //System.out.println("!!! tagId " + tagId);
                     /*    StringBuilder contentSql = new StringBuilder("select d.content_id from document d");
 //                    contentSql.append(" inner join document_tag dt on d.id = dt.document_id");
 //                    contentSql.append(" where dt.tag_id = ").append(tagId);
@@ -475,10 +476,10 @@ public class
                         systemNodeIdsForUrls.add(content.getHomeId());
                     }
                     /*  if (tagId != null) {
-                    System.out.println("tagId != null"+tagId);
+                    //System.out.println("tagId != null"+tagId);
                     session.enableFilter("hasTag").setParameter("tagId", tagId);
                 } else
-                System.out.println("tagId = null"+tagId);
+                //System.out.println("tagId = null"+tagId);
                     session.disableFilter("hasTag");*/
 
 
@@ -538,7 +539,7 @@ public class
             for (Object obj : list) {
 
                 TypifiedObject to = (TypifiedObject) obj;
-//                System.out.println("systemObjects " + to.getName());
+//                //System.out.println("systemObjects " + to.getName());
                 if (currentLevel < levels) {
                     children.putAll(getChildren(to, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageCode, position));
 //                    children.putAll(getChildren(to, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageId, position));
@@ -564,7 +565,7 @@ public class
         int emsObjectId = systemObject.getEmsObject().getId();
         ObjectLabelDao objectLabelDao = new ObjectLabelDaoImpl();
         ObjectLabel objectLabel = objectLabelDao.getObjectLabelNaturalId(emsObjectId, currentLocale);
-//        System.out.println("TypifiedObject - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
+//        //System.out.println("TypifiedObject - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
 
         return objectLabel;
     }

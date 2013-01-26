@@ -5,21 +5,10 @@
     <!--parentId="${item.parentId}"-->
     <!--hasChildren="${item.objectType.hasChildren}"-->
     <jx:macro name="currentNode">
-        <!--&lt;!&ndash;<jx:when test="${listData.excludedIds != null}">
-           <jx:set var="excludedIds" value="${cocoon.session.getAttribute('excludedIds')}"/>
-        </jx:when>&ndash;&gt;
-        <jx:otherwise>-->
-        <jx:set var="excludedIds" value="${cocoon.session.getAttribute('excludedIds')}"/><!--</jx:otherwise>-->
+
 
         <jx:forEach items="${children}" var="item" varStatus="status">
-    <!--        <jx:when test="${listData.entity =='systemNode'}">
-                item.systemNodeId == null
-
-            </jx:when>-->
-            <!--<h1>systemNode ${excludedIds}</h1>-->
-            <jx:choose>
-                <jx:when test="${!excludedIds.contains(item.id)}">
-                    <!--<jx:if test="${!excludedIds.contains(item.id)}">-->
+                    <jx:if test="${!excludedIds.contains(item.id)}">
                     <item id="${item.id}"
                           name="${item.name}"
                           systemName="${item.systemName}"
@@ -27,7 +16,8 @@
                           position="${item.position}"
                           parentId="${item.emsObject.parentId}"
                           contentType="${item.contentType}"
-                          path="${item.path}">
+                          path="${item.path}"
+                        excludedIds="${excludedIds}">
                         <!--<jx:if test="${item.contentType !=''}">
                             <jx:attribute name="size" value="${item.size}"/>
                         </jx:if>-->
@@ -56,11 +46,11 @@
 
                         </content>
                     </item>
-                    <!--</jx:if>-->
-                </jx:when>
-                <jx:when test="${excludedIds== null}">
+                    </jx:if>
+                <!--<jx:when test="${excludedIds== null}">
                     <jx:choose>
                         <jx:when test="${excludedId != null}">
+                            <h1>excludedId =${excludedId}</h1>
                             <jx:if test="${item.id != excludedId}">
                                 <item id="${item.id}"
                                       name="${item.name}"
@@ -80,44 +70,16 @@
                                     </jx:if>
 
                                     <content>
-                                        <name>@##<jx:out value="${excludedId}"/>--${item.name} - ${item.id} -
+                                        <name>@##<jx:out value="${excludedId}"/>-${item.name} - ${item.id} -
                                             ${item.contentType}
                                         </name>
-                                        <!--<ur>${item.contentType}</ur>-->
+                                        &lt;!&ndash;<ur>${item.contentType}</ur>&ndash;&gt;
                                     </content>
                                 </item>
                             </jx:if>
-                        </jx:when>
+                        </jx:when>-->
 
-                        <!--<jx:otherwise>
-                            <item id="${item.id}"
-                                  name="${item.name}"
-                                  systemName="${item.systemName}"
-                                  childrenCount="${item.emsObject.childrenCount}"
-                                  position="${item.position}"
-                                  parentId="${item.emsObject.parentId}"
-                                  linkOnClick="alert('Click'+'${item.emsObject.parentId}');">
-                                <jx:attribute name="rel">
-                                    <jx:choose>
-                                        <jx:when test="${item.emsObject.childrenCount > 0}">branch</jx:when>
-                                        <jx:otherwise>leaf</jx:otherwise>
-                                    </jx:choose>
-                                </jx:attribute>
-                                <jx:if test="${item.emsObject.childrenCount > 0}">
-                                    <jx:attribute name="state">closed</jx:attribute>
-                                </jx:if>
 
-                                <content>
-                                    <name>${item.name} - ${item.id}</name>
-                                    &lt;!&ndash;<ur>${item.contentType}</ur>&ndash;&gt;
-                                </content>
-                            </item>
-                        </jx:otherwise>-->
-                    </jx:choose>
-
-                </jx:when>
-
-            </jx:choose>
         </jx:forEach>
     </jx:macro>
 
@@ -138,4 +100,30 @@
 
     <!--<jx:import uri="view/Library/list.jx"/>-->
 
+
+
+    <!--<jx:otherwise>
+                           <item id="${item.id}"
+                                 name="${item.name}"
+                                 systemName="${item.systemName}"
+                                 childrenCount="${item.emsObject.childrenCount}"
+                                 position="${item.position}"
+                                 parentId="${item.emsObject.parentId}"
+                                 linkOnClick="alert('Click'+'${item.emsObject.parentId}');">
+                               <jx:attribute name="rel">
+                                   <jx:choose>
+                                       <jx:when test="${item.emsObject.childrenCount > 0}">branch</jx:when>
+                                       <jx:otherwise>leaf</jx:otherwise>
+                                   </jx:choose>
+                               </jx:attribute>
+                               <jx:if test="${item.emsObject.childrenCount > 0}">
+                                   <jx:attribute name="state">closed</jx:attribute>
+                               </jx:if>
+
+                               <content>
+                                   <name>${item.name} - ${item.id}</name>
+                                   &lt;!&ndash;<ur>${item.contentType}</ur>&ndash;&gt;
+                               </content>
+                           </item>
+                       </jx:otherwise>-->
 </jx:template>

@@ -187,7 +187,8 @@
                     <map:transform type="i18n">
                         <map:parameter name="locale" value="{session-attr:locale}"/>
                     </map:transform>
-                    <map:select type="parameter">
+                    <map:serialize type="html"/>
+                    <!--<map:select type="parameter">
                         <map:parameter name="parameter-selector-test" value="{block}"/>
                         <map:when test="true">
                             <map:serialize type="xml"/>
@@ -195,7 +196,7 @@
                         <map:otherwise>
                             <map:serialize type="html"/>
                         </map:otherwise>
-                    </map:select>
+                    </map:select>-->
                 </map:otherwise>
             </map:select>
         </map:resource>
@@ -203,7 +204,7 @@
 
     </map:resources>
 
-    <map:pipelines id="static">
+    <map:pipelines>
 
         <map:pipeline id="system">
 
@@ -454,14 +455,14 @@
 
             <map:match pattern="service/search-results">
                 <map:aggregate element="root">
-                    <map:part src="cocoon://service/search">
-                        <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                    <map:part src="cocoon://service/search"/>
+                        <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
                         <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
                         <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
                         <map:parameter name="requestURI" value="{request:requestURI}"/>
                         <map:parameter name="requestParam" value="{request-param:param}"/>
-                        <map:parameter name="query" value="{request-param:query}"/>
-                    </map:part>
+                        <map:parameter name="query" value="{request-param:query}"/>-->
+                    <!--</map:part>-->
                     <map:part src="cocoon:/omitRoot/service/search-results"/>
                 </map:aggregate>
 
@@ -471,14 +472,14 @@
 
             <map:match pattern="block/service/search-results">
                 <map:aggregate element="root">
-                    <map:part src="cocoon://service/search">
-                        <map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                    <map:part src="cocoon://service/search"/>
+                        <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
                         <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
                         <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
                         <map:parameter name="requestURI" value="{request:requestURI}"/>
                         <map:parameter name="requestParam" value="{request-param:param}"/>
-                        <map:parameter name="query" value="{request-param:query}"/>
-                    </map:part>
+                        <map:parameter name="query" value="{request-param:query}"/>-->
+                    <!--</map:part>-->
                     <map:part src="cocoon:/omitRoot/service/search-results"/>
                 </map:aggregate>
 

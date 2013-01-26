@@ -189,10 +189,10 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
         if (quantity > 0) {
             criteria.setMaxResults(quantity);
         }
-        log.warn("8. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
 
         List<TypifiedObject> list = criteria.list();
-        log.warn("9. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
         closeSession();
         return list;
     }

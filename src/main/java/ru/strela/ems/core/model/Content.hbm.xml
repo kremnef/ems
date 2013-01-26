@@ -20,21 +20,11 @@
                      column="thumbnail_id"
                      class="FileObject"
                      unique="true" cascade="none" lazy="false"/>
-        <!--<set name="documents" inverse="true" cascade="all" lazy="false">
-            <key column="content_id"/>
-            <one-to-many class="Document"/>
-            &lt;!&ndash;<one-to-many entity-name=""/>&ndash;&gt;
-        </set>-->
 
-        <!--<set name="content" inverse="true">
-            <key column="parentContentId"/>
-            <one-to-many class="ru.strela.ems.core.model.OnlyContent"/>
-        </set>-->
-
-         <bag name="linked" lazy="false" table="content_linked">
+         <!--<bag name="linked" lazy="false" table="content_linked">
             <key column="content_id"/>
             <many-to-many column="linked_id" class="Content" lazy="false"/>
-        </bag>
+        </bag>-->
     </union-subclass>
 </hibernate-mapping>
 

@@ -423,11 +423,15 @@
                         <fd:action id="delete">
                             <fd:on-action>
                                 <fd:javascript>
-                                    var repeater = widget.lookupWidget("/tagList");
-                                    <!--print("repeater:" + repeater);-->
-                                    var selectedRow = repeater.getParentRow(widget);
+                                    <!--var repeater = widget.lookupWidget("../tagList");-->
+                                    print("!----------------------!!! :" +  widget.getParent());
+                                    var repeaterRow = widget.getParent();
+                                    var repeater =  repeaterRow.getParent();
+                                    print("!----------------------!!! :" +  repeater);
+                                    <!--var selectedRow = repeater.getParentRow(widget);-->
                                     <!--var fileId = selectedRow.getChild("id").value;-->
-                                    var selectedRowIndex = repeater.indexOf(selectedRow);
+                                    var selectedRowIndex = repeater.indexOf(repeaterRow);
+                                    <!--repeater.removeRow(selectedRowIndex);-->
                                     repeater.removeRow(selectedRowIndex);
                                     <!--var excludedIds = cocoon.session.getAttribute("excludedIds");-->
                                     <!--excludedIds.remove(fileId);-->
