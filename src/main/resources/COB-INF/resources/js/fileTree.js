@@ -98,6 +98,31 @@ function openXMLTree(entity, filter, checkbox, divTree, entityId, rowId) {
 }
 function openModalDialog(globalDivTreeContainer) {
     jQuery(globalDivTreeContainer + ":ui-dialog").dialog("destroy");
+
+    var options = {
+      /*  сбросить: function() {
+            reset_tree(globalDivTree);
+            jQuery(':input', globalDivTree)
+                .not(':button, :submit, :reset, :hidden')
+                .val('')
+                .removeAttr('checked')
+                .removeAttr('selected');
+        },
+        выбрать: function() {
+            if (globalCheckbox == 'true') {
+                checkValues(globalDivTree);
+                jQuery(this).dialog("close");
+//                    updateAttachedFilesTable();
+            }
+            else {
+                jQuery(this).dialog("close");
+            }
+        }*/
+    };
+//    jQuery(globalDivTreeContainer).toggle( "drop", 1000 );
+//    jQuery(globalDivTreeContainer).show( 'drop', options, 500);
+
+
     jQuery(globalDivTreeContainer).dialog({
         width: 800,
         height:500,

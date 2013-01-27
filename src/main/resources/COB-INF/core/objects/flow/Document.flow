@@ -234,73 +234,31 @@ function createDocument(form) {
     print("переназначаем languageCode через formLocale:" + languageCode);
 //    }
 
-    var content = cocoon.session.getAttribute('lastContent');
-    cocoon.session.removeAttribute('lastContent');
-    var contentId = 0;
-    if (content != null) {
-        contentId = content.getId();
-    }
-    if (contentId > 0 && isFolder != 'true') {
-//    var document = documentService.getDocumentByNaturalId(content.getId(), languageCode);
-//    if (document == null) {
-        print("document не существует, приступаем к созданию новой версии");
-        var document = createNewVersionDocument(content.getId(), languageCode);
 
-        if (document.getId() > 0) {
-            var documentVersion = documentVersionService.getDocumentVersion(document.getId());
-
-
-            if (version != documentVersion.getVersion()) {
-                version = documentVersion.getVersion();
-                cocoon.request.setAttribute('version', version);
-            }
-
-// add existing ids
-            var fileSystemObjects = document.getFileSystemObjects();
-
-            var fileSystemObjectsIds = new java.util.HashSet();
-            for (var iterator = fileSystemObjects.iterator(); iterator.hasNext();) {
-                var fileSystemObject = iterator.next();
-                print("fileSystemObject!!!:" + fileSystemObject.getId());
-                fileSystemObjectsIds.add(new java.lang.Integer(fileSystemObject.id));
-            }
-            print("устанавливаем в сессию excludedIds-formLocale-languageCode");
-            cocoon.session.setAttribute("excludedIds", fileSystemObjectsIds);
-            print("-установили :"+cocoon.session.getAttribute('excludedIds'));
-
-        }
-        cocoon.session.setAttribute("documentTypeId", content.getDocumentTypeId());
-        cocoon.session.setAttribute("document", document);
-
-    }
-
-
-
+    var documentModel = cocoon.createObject("ru.strela.ems.core.model.Document");
+    var fileSystemObjectsIds = new java.util.HashSet();
     cocoon.session.setAttribute("formLocale", formLocale);
     cocoon.session.setAttribute("languageCode", languageCode);
-    cocoon.session.setAttribute("contentId", contentId);
+
     var documentActionState = cocoon.session.getAttribute('contentActionState');
 
-    form.load(document);
+    form.load(documentModel);
     print("загрузили document в форму");
     importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
 
     form.setAttribute('formName', 'documentForm');
-//todo: вынести в ajax по запросу
-    var documentVersions = documentVersionService.getAllVersions(contentId);
-    print("загрузили из базы все версии");
     var userData = getLoggedInUser();
 
     form.showForm(showFormURI, {
         "documentActionState": documentActionState,
-        "contentId": contentId,
-        "version": version,
+//        "contentId": contentId,
+//        "version": version,
         "servletPath": servletPath,
         "inner": inner,
         "blockPrefix": blockPrefix,
         "userData": userData,
-        "documentVersions": documentVersions,
-        "fileSystemObjects": fileSystemObjects,
+//        "documentVersions": documentVersions,
+//        "fileSystemObjects": fileSystemObjects,
         "fileSystemObjectsIds": fileSystemObjectsIds
     });
 
@@ -310,14 +268,53 @@ function createDocument(form) {
 
     // *** Save form to Document
     print("Save form to Document & documentVersion");
-    form.save(document);
-    print("cocoon.session.getAttribute(languageCode)" + cocoon.session.getAttribute("languageCode"));
-    /* if(cocoon.session.getAttribute("languageCode")== null){
-     var newLocale = form.getChild("formLocale").getValue();
-     print("-!!-!_!- NewLocale "+newLocale);
-     cocoon.session.setAttribute("languageCode", newLocale);
-     }*/
+    form.save(documentModel);
 
+    print("cocoon.session.getAttribute(languageCode)" + cocoon.session.getAttribute("languageCode"));
+
+    var content = cocoon.session.getAttribute('lastContent');
+    cocoon.session.removeAttribute('lastContent');
+    var contentId = 0;
+    if (content != null) {
+        contentId = content.getId();
+    }
+
+//     && isFolder != 'true'
+
+    if (contentId > 0) {
+
+
+        print("document не существует, приступаем к созданию новой версии");
+        var document = createNewVersionDocument(content.getId(), languageCode);
+
+
+        if (document.getId() > 0) {
+            var documentVersion = documentVersionService.getDocumentVersion(document.getId());
+
+            if (version != documentVersion.getVersion()) {
+                version = documentVersion.getVersion();
+                cocoon.request.setAttribute('version', version);
+            }
+
+// add existing ids
+            var fileSystemObjects = documentModel.getFileSystemObjects();
+            document.setFileSystemObjects(fileSystemObjects);
+
+
+            for (var iterator = fileSystemObjects.iterator(); iterator.hasNext();) {
+                var fileSystemObject = iterator.next();
+                print("fileSystemObject!!!:" + fileSystemObject.getId());
+                fileSystemObjectsIds.add(new java.lang.Integer(fileSystemObject.id));
+            }
+            print("устанавливаем в сессию excludedIds-formLocale-languageCode");
+            cocoon.session.setAttribute("excludedIds", fileSystemObjectsIds);
+            print("-установили :" + cocoon.session.getAttribute('excludedIds'));
+
+        }
+        cocoon.session.setAttribute("documentTypeId", content.getDocumentTypeId());
+        cocoon.session.setAttribute("document", document);
+
+    }
     // *** Save DocumentVersion to DB
     print("saveDocumentVersion to DB");
     var dateTime = Calendar.getInstance().getTime();
@@ -326,38 +323,29 @@ function createDocument(form) {
     documentVersion.setVersionModifierId(userData.customer.getId());
     documentVersionService.saveDocumentVersion(documentVersion);
 
-    print("fileObjects0" + document.getFileSystemObjects());
 
-
-//todo: убрать сохраение, заменить на корректную передачу документа в сессию
     documentService.saveDocument(document);
     cocoon.session.setAttribute("document", document);
     cocoon.session.removeAttribute("excludedIds");
 
-    /*var newFormLocale = cocoon.session.getAttribute("formLocale");
-     if (newFormLocale != null){
-     languageCode = newFormLocale;
-     }*/
+
 //  todo: возможно излишнее
     var documentTypeId = content.getDocumentTypeId();
+
     print("session setAttribute documentTypeId" + documentTypeId);
     cocoon.session.setAttribute("documentTypeId", documentTypeId);
 
     print("session удаляем аттрибуты");
-//    cocoon.session.removeAttribute("document");
+    cocoon.session.removeAttribute("document");
     cocoon.session.removeAttribute("documentTypeId");
-//    cocoon.session.removeAttribute("languageCode");
+    cocoon.session.removeAttribute("languageCode");
     cocoon.session.removeAttribute("formLocale");
     cocoon.releaseComponent(documentVersionService);
 
+    cocoon.disposeObject(document);
 
-    if (documentActionState == 'create') {
-        print("documentActionState" + documentActionState);
-        cocoon.redirectTo(getRedirectUrl(contentId));
-    } else {
-        print("documentActionState" + documentActionState);
-        cocoon.sendStatus(200);
-    }
+    print("documentActionState" + documentActionState);
+    cocoon.sendPage("content-edit-url", {url: getRedirectUrl(contentId)});
 
 }
 

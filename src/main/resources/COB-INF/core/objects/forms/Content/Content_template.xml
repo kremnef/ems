@@ -284,9 +284,8 @@
                             var name=f.data.ui.selected.attr("name");
                             var path=f.data.ui.selected.attr("path");
 
-
                             var systemNodeNameElement = document.getElementById('systemNodeName');
-                            systemNodeNameElement.innerHTML = path;
+                            systemNodeNameElement.innerHTML = name;
                             systemNodeNameElement.href = 'SystemNode-edit?id=' + id;
                             document.getElementById('homeId').value = id;
                             });
@@ -341,7 +340,7 @@
         </div>
 
         <ft:widget id="homeId">
-            <!--<fi:styling type="hidden"/>-->
+            <fi:styling type="hidden"/>
         </ft:widget>
 
         <script type="text/javascript">

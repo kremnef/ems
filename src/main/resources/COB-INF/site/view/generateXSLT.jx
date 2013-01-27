@@ -125,7 +125,7 @@
                                         <xsl:value-of select="/root/systemNode/name"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
-                                <xsl:text>|</xsl:text>
+                                <xsl:text> | </xsl:text>
                                 <xsl:value-of select="/root/systemNode/metaInfo/description"/>
                             </title>
                             <jx:forEach var="action" items="${actions}">
