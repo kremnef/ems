@@ -15,9 +15,11 @@
         <property name="levels" column="levels" type="int" not-null="true" lazy="true"/>
         <property name="itemsOnPage" column="items_on_page" type="int" not-null="true" lazy="true"/>
         <property name="sortField" column="sort_field" type="string" not-null="false" lazy="true"/>
+        <!--<property name="childrenCount" type="int" formula="(select count(o.id) from object o where o.parent_id = object_id)" />-->
         <property name="renderLike" column="render_like" type="string" not-null="false" lazy="true"/>
         <property name="sortDirection" column="sort_direction" type="string" not-null="false" lazy="true"/>
         <property name="tagId" column="tag_id" type="int" not-null="false" lazy="true"/>
+        <!--<property name="totalPages" type="int" not-null="false" lazy="true"/>-->
     </class>
 </hibernate-mapping>
 

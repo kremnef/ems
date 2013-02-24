@@ -19,14 +19,13 @@ public abstract class SystemNodeObject implements java.io.Serializable {
     private int itemsOnPage;
     private String sortField;
 
-
-
-    private String renderLike;
     private String sortDirection;
     private Integer tagId;
 
+    private String renderLike;
 
-
+//    private int childrenCount;
+    private int totalPages;
 
     public int getSystemNodeId() {
         return systemNodeId;
@@ -151,4 +150,36 @@ public abstract class SystemNodeObject implements java.io.Serializable {
     public void setRenderLike(String renderLike) {
         this.renderLike = renderLike;
     }
+
+
+
+//    kremnef add
+
+    /**
+        * @return the childrenCount
+        *//*
+       public int getChildrenCount() {
+           return childrenCount;
+       }
+
+       *//**
+        * @param childrenCount the childrenCount to set
+        *//*
+       public void setChildrenCount(int childrenCount) {
+           this.childrenCount = childrenCount;
+       }*/
+    /**
+        * @return the totalPages
+        */
+       public int getTotalPages() {
+//           totalPages = Math.round(childrenCount/itemsOnPage);
+           return totalPages;
+       }
+
+       /**
+        * @param totalPages the totalPages to set
+        */
+       public void setTotalPages(int totalPages) {
+           this.totalPages = totalPages;
+       }
 }

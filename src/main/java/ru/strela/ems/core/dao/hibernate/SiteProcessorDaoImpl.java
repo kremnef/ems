@@ -38,11 +38,11 @@ public class
         currentLocale = languageCode;
         TreeMap<String, Object> systemObjects = new TreeMap<String, Object>();
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-//        kremnef
-        session.setDefaultReadOnly(true);
+      Session session = HibernateUtil.getSessionFactory().openSession();
+//    kremnef
+      session.setDefaultReadOnly(true);
 
-        Transaction tx = null;
+      Transaction tx = null;
         try {
             tx = session.beginTransaction();
 
@@ -135,6 +135,13 @@ public class
                                             if (content.getHomeId() > 0) {
                                                 systemNodeIdsForUrls.add(content.getHomeId());
                                             }
+                                            int contentChildrenCount = content.getEmsObject().getChildrenCount();
+                                            if (contentChildrenCount > 0) {
+                                                int totalPages = Math.round(contentChildrenCount / systemNodeObject.getItemsOnPage()) + 1;
+                                                systemNodeObject.setTotalPages(totalPages);
+                                            }
+
+
 //                                            todo: need move to ContentDao
                                             fillDocumentFolders(content, children, session, languageCode, position);
                                         } else if (typifiedObject instanceof Navigation) {
@@ -381,18 +388,35 @@ public class
 //        //System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
         ChildrenMap children = new ChildrenMap();
         int typifiedObjectId = typifiedObject.getId();
+        int typifiedObjectParentId = typifiedObject.getParentId();
+
+        System.out.println("CLASS ID =  " + typifiedObjectId);
+        System.out.println("CLASS PARENT ID =  " + typifiedObjectParentId);
+        System.out.println("itemsOnPage =  " + itemsOnPage);
         if (typifiedObject instanceof SystemObject) {
+            String typifiedObjectClass = typifiedObject.getClass().getSimpleName();
+            System.out.println("CLASS NAME =  " + typifiedObjectClass);
             List list;
             Query query;
             StringBuilder sql = new StringBuilder("");
-            String typifiedObjectClass = typifiedObject.getClass().getSimpleName();
+
+            Integer page = 1;
 //             else {
 
+            /*if (filter != null){
+                var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc, filter);
+            }else{*/
+            TypifiedObjectDao typifiedObjectDao = null;
+//            TypifiedObjectService typifiedObjectService = null;
+            if (typifiedObjectClass == "Content") {
+                list = typifiedObjectDao.getObjects(typifiedObjectParentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
+            } else {
+                            //System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
             sql.append("from ");
             sql.append(typifiedObjectClass);
             sql.append(" where emsObject.parentId = ");
             sql.append(typifiedObject.getId());
-            //System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
+
 
             sql.append(" and entity != 'Content'");
             sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
@@ -400,17 +424,19 @@ public class
 
             query = session.createQuery(sql.toString());
 
+/*
             if (itemsOnPage > 0) {
-                ////System.out.println("itemsOnPage" + itemsOnPage);
                 query.setMaxResults(itemsOnPage);
             }
-//            typifiedObject =
+*/
             list = query.list();
 
-//            }
+//                list = typifiedObjectDao.getObjects(typifiedObjectParentId, 0, 0, "", false, null);
+            }
+
+
 
             DocumentDao documentDao = new DocumentDaoImpl();
-//            ContentDao contentDao = new ContentDaoImpl();
             if (typifiedObject instanceof Content && documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
 
 
@@ -555,7 +581,6 @@ public class
         MetaInfoDao metaInfoDao = new MetaInfoDaoImpl();
         int emsObjectId = systemObject.getEmsObject().getId();
         MetaInfo metaInfo = metaInfoDao.getMetaInfoNaturalId(emsObjectId, currentLocale);
-
 
 
         return metaInfo;

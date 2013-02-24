@@ -67,10 +67,10 @@
         </init-param>
     </filter>
 
-    <filter>
+    <!--<filter>
             <filter-name>HibernateFilter</filter-name>
             <filter-class>ru.strela.ems.filters.HibernateFilter</filter-class>
-    </filter>
+    </filter>-->
 
     <!-- Filter mappings ================================================ -->
 
@@ -89,10 +89,18 @@
         <filter-name>Set Character Encoding</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <filter-mapping>
+
+
+
+
+    <!--<filter-mapping>
         <filter-name>HibernateFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
+
+
+
+
     <!--
     - Use the Cocoon debug filter together with the Cocoon demo webapp
   <filter-mapping>

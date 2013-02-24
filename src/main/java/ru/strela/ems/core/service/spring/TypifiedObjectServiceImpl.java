@@ -58,12 +58,13 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
 
 
     public List<TypifiedObject> getChildren(int parentId) {
-        return getChildren(parentId, 0, 0, "", false);
+        return getChildren(parentId, 0, 0, "", false, null);
     }
 
 
     public List<TypifiedObject> getChildren(int parentId, int start, int quantity, String sortName, boolean desc) {
         return typifiedObjectDao.getObjects(start, quantity, sortName, desc);
+
 //        return typifiedObjectDao.getObjects(parentId, start, quantity, sortName, desc);
     }
 
