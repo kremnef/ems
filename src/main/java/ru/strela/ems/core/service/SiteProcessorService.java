@@ -1,6 +1,7 @@
 package ru.strela.ems.core.service;
 
 
+import java.util.HashMap;
 import java.util.TreeMap;
 
 
@@ -13,6 +14,7 @@ public interface SiteProcessorService {
 
 
     public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode);
+    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString);
 //    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, int languageId);
 
 

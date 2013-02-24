@@ -24,6 +24,7 @@ import ru.strela.ems.core.model.*;
 import ru.strela.ems.tools.ServerTools;
 import ru.tastika.tools.util.Utilities;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
@@ -132,7 +133,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
 //        //log.info("systemNamesPath = " + systemNamesPath);
 //        //log.info("indexPage = " + indexPage);
-        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode);
+        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, request.getQueryString());
 //        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageId);
 //        //log.info("map = " + map);
 
@@ -201,8 +202,11 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         request.setAttribute(TYPES_ACTIONS, Utilities.implode(typesActions, ","));
 //        //log.info("request.getAttribute(TYPES_ACTIONS) = " + request.getAttribute(TYPES_ACTIONS));
         request.setAttribute(REAL_ROOT_PATH, currentWebApplicationContext.getServletContext().getRealPath("/"));
+
         request.getSession().setAttribute(ServerTools.LOCALE_TITLE, request.getAttribute(ServerTools.LOCALE_TITLE));
         requestParams = fillRequestParams(request, src);
+
+
 
     }
 

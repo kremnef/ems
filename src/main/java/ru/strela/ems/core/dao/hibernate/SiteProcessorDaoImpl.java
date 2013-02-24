@@ -1,6 +1,7 @@
 package ru.strela.ems.core.dao.hibernate;
 
 
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -13,6 +14,9 @@ import ru.strela.ems.generator.ChildrenMap;
 import ru.strela.ems.generator.SitePageGenerator;
 import ru.tastika.tools.util.Utilities;
 
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 
 
@@ -21,10 +25,10 @@ import java.util.*;
  * Date: 12.05.2010
  * Time: 23:55:19
  */
-public class
-        SiteProcessorDaoImpl implements SiteProcessorDao {
+public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private String currentLocale;
+    private String requestQueryString;
     private final static Logger log = LoggerFactory.getLogger(SiteProcessorDaoImpl.class);
 
 
@@ -33,16 +37,22 @@ public class
     }
 
 
-    //    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, int languageId) {
     public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    //    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, int languageId) {
+    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString) {
         currentLocale = languageCode;
         TreeMap<String, Object> systemObjects = new TreeMap<String, Object>();
 
-      Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        this.requestQueryString = requestQueryString;
+        System.out.println("requestQueryString!! " + requestQueryString);
 //    kremnef
-      session.setDefaultReadOnly(true);
+        session.setDefaultReadOnly(true);
 
-      Transaction tx = null;
+        Transaction tx = null;
         try {
             tx = session.beginTransaction();
 
@@ -381,14 +391,36 @@ public class
         return systemNodeObjectMap;
     }
 
-
+    public static Map<String, List<String>> getUrlParameters(String url)
+            throws UnsupportedEncodingException {
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        String[] urlParts = url.split("\\?");
+        if (urlParts.length > 1) {
+            String query = urlParts[1];
+            for (String param : query.split("&")) {
+                String pair[] = param.split("=");
+                String key = URLDecoder.decode(pair[0], "UTF-8");
+                String value = "";
+                if (pair.length > 1) {
+                    value = URLDecoder.decode(pair[1], "UTF-8");
+                }
+                List<String> values = params.get(key);
+                if (values == null) {
+                    values = new ArrayList<String>();
+                    params.put(key, values);
+                }
+                values.add(value);
+            }
+        }
+        return params;
+    }
     private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode, int position) {
         currentLocale = languageCode;
 //    private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
 //        //System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
         ChildrenMap children = new ChildrenMap();
-        int typifiedObjectId = typifiedObject.getId();
-        int typifiedObjectParentId = typifiedObject.getParentId();
+        Integer typifiedObjectId = typifiedObject.getId();
+        Integer typifiedObjectParentId = typifiedObject.getParentId();
 
         System.out.println("CLASS ID =  " + typifiedObjectId);
         System.out.println("CLASS PARENT ID =  " + typifiedObjectParentId);
@@ -400,7 +432,22 @@ public class
             Query query;
             StringBuilder sql = new StringBuilder("");
 
-            Integer page = 1;
+            /*Uri uri = Uri.parse(requestQueryString.replace("+", "%20"));
+            uri.getQueryParameter("para1");*/
+            Integer pageNumber;
+            try {
+                Map<String, List<String>> qparams = getUrlParameters(requestQueryString);
+//                pageNumber = qparams.get("page");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+
+
+            pageNumber = Integer.parseInt(requestQueryString);
+
+
+
 //             else {
 
             /*if (filter != null){
@@ -409,31 +456,30 @@ public class
             TypifiedObjectDao typifiedObjectDao = null;
 //            TypifiedObjectService typifiedObjectService = null;
             if (typifiedObjectClass == "Content") {
-                list = typifiedObjectDao.getObjects(typifiedObjectParentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
+                list = typifiedObjectDao.getObjects(typifiedObjectParentId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
             } else {
-                            //System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
-            sql.append("from ");
-            sql.append(typifiedObjectClass);
-            sql.append(" where emsObject.parentId = ");
-            sql.append(typifiedObject.getId());
+                //System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
+                sql.append("from ");
+                sql.append(typifiedObjectClass);
+                sql.append(" where emsObject.parentId = ");
+                sql.append(typifiedObject.getId());
 
 
-            sql.append(" and entity != 'Content'");
-            sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
-            ////System.out.println("sql = " + sql);
+                sql.append(" and entity != 'Content'");
+                sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
+                ////System.out.println("sql = " + sql);
 
-            query = session.createQuery(sql.toString());
+                query = session.createQuery(sql.toString());
 
 /*
             if (itemsOnPage > 0) {
                 query.setMaxResults(itemsOnPage);
             }
 */
-            list = query.list();
+                list = query.list();
 
 //                list = typifiedObjectDao.getObjects(typifiedObjectParentId, 0, 0, "", false, null);
             }
-
 
 
             DocumentDao documentDao = new DocumentDaoImpl();
