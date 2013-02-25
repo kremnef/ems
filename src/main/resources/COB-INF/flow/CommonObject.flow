@@ -43,7 +43,8 @@ function listCommon(entityName, defSortName, defSotOrder, params) {
 
 //    }
 
-    print("total Common" + total);
+//    print("total Common" + total);
+
     var children = entityService.getChildren(0, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc);
     //entity = entityService.getEntities();
 //    print (children);

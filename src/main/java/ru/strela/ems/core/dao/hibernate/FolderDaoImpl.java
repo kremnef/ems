@@ -104,7 +104,7 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
         }
 
 
-    public List<TypifiedObject> getChildren(final int parentId, final int start, final int quantity, final String sortName, final boolean desc) {
+    public List<TypifiedObject> getChildren(final int parentId, final int start, final int itemsOnPage, final String sortField, final String SortDirection) {
 
         Session session = getCurrentSession();
         List list = new ArrayList();
@@ -112,7 +112,7 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
         StringBuilder sql = new StringBuilder("select count(*) from Folder f where f.emsObject.parentId " + (parentId > 0 ? (" = " + parentId) : " is null"));
         int foldersAmount = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
 
-        int objectsCount = quantity == 0 ? Integer.MAX_VALUE - start : quantity;
+        int objectsCount = itemsOnPage == 0 ? Integer.MAX_VALUE - start : itemsOnPage;
         if (start < foldersAmount) {
             StringBuilder sb = new StringBuilder("from Folder f where f.emsObject.parentId");
             if (parentId > 0) {
@@ -121,10 +121,11 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
             } else {
                 sb.append(" is null");
             }
-            if (sortName.length() > 0) {
+            if (sortField.length() > 0) {
                 sb.append(" order by ");
-                sb.append(sortName);
-                sb.append(desc ? " desc" : " asc");
+                sb.append(sortField);
+                sb.append(SortDirection);
+//                sb.append(SortDirection ? " desc" : " asc");
             }
 
             //sb.append(" limit ");
@@ -145,10 +146,11 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
             } else {
                 sb.append(" is null");
             }
-            if (sortName.length() > 0) {
+            if (sortField.length() > 0) {
                 sb.append(" order by ");
-                sb.append(sortName);
-                sb.append(desc ? " desc" : " asc");
+                sb.append(sortField);
+                sb.append(SortDirection);
+//                sb.append(desc ? " desc" : " asc");
             }
             log.warn("SQL" + sb);
             /*    sb.append(" limit ");
@@ -164,15 +166,14 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
         return list;
     }
 
-
-    public List<TypifiedObject> getChildren(final int parentId, final int start, final int quantity, final String sortName, final boolean desc, final Filter filter) {
+    public List<TypifiedObject> getChildren(final int parentId, final int start, final int itemsOnPage, final String sortField, final boolean desc, final Filter filter) {
         Session session = getCurrentSession();
         List list = new ArrayList();
         log.warn("getChildren-02");
         StringBuilder sql = new StringBuilder("select count(*) from Folder f where f.emsObject.parentId " + (parentId > 0 ? (" = " + parentId) : " is null"));
         int foldersAmount = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
 
-        int objectsCount = quantity == 0 ? Integer.MAX_VALUE - start : quantity;
+        int objectsCount = itemsOnPage == 0 ? Integer.MAX_VALUE - start : itemsOnPage;
         if (start < foldersAmount) {
             StringBuilder sb = new StringBuilder("from Folder f where f.emsObject.parentId");
             if (parentId > 0) {
@@ -181,9 +182,9 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
             } else {
                 sb.append(" is null");
             }
-            if (sortName.length() > 0) {
+            if (sortField.length() > 0) {
                 sb.append(" order by ");
-                sb.append(sortName);
+                sb.append(sortField);
                 sb.append(desc ? " desc" : " asc");
             }
 
@@ -200,9 +201,9 @@ public class FolderDaoImpl extends SystemObjectDaoImpl implements FolderDao {
             } else {
                 sb.append(" is null");
             }
-            if (sortName.length() > 0) {
+            if (sortField.length() > 0) {
                 sb.append(" order by ");
-                sb.append(sortName);
+                sb.append(sortField);
                 sb.append(desc ? " desc" : " asc");
             }
             if (filter != null && filter.getEntity().equals("FileObject")) {

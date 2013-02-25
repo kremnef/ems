@@ -1,11 +1,9 @@
 package ru.strela.ems.core.dao.hibernate;
 //chenged
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -14,8 +12,10 @@ import ru.strela.ems.core.dao.MetaInfoDao;
 import ru.strela.ems.core.dao.ObjectLabelDao;
 import ru.strela.ems.core.dao.TypifiedObjectDao;
 import ru.strela.ems.core.model.*;
+import ru.strela.ems.core.model.Filter;
 import ru.tastika.tools.util.Utilities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -159,44 +159,104 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
 
     public List<TypifiedObject> getObjects(final Order order) {
         log.warn("getObjects()-4");
-        return getObjects(null, order, 0, 0, null);
-    }
-
-    public List<TypifiedObject> getObjects(int start, int quantity, final String sortName, final boolean desc) {
-
-        return getObjects(null, start, quantity, sortName, desc, null);
+        return getObjects(order, 0, 0);
     }
 
 
-    public List<TypifiedObject> getObjects(Integer parentId, int start, int quantity, final String sortName, final boolean desc, Filter filter) {
+
+    public List<TypifiedObject> getObjects(int start, int itemsOnPage, final String sortField, final String sortDirection) {
         log.warn("getObjects()-3");
-        String sortBy = sortName.length() > 0 ? sortName : "position";
-        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
-        return getObjects(parentId, order, start, quantity, filter);
-    }
-
-
-    public List<TypifiedObject> getObjects(final Integer parentId, final Order order, final int start, final int quantity, final Filter filter) {
-        Session session = getCurrentSession();
-        log.warn("getObjects()-5");
-        Criteria criteria = session.createCriteria(getEntityClass());
-        if (parentId != null) {
-            Criterion criterion = Restrictions.like("parentId", parentId);
-            //        , MatchMode.ANYWHERE
-            criteria.add(criterion);
+        String sortBy = sortField.length() > 0 ? sortField : "position";
+        Boolean desc = null;
+        if(sortDirection.equalsIgnoreCase("desc")){
+         desc = true;
         }
 
+        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
+        return getObjects(order, start, itemsOnPage);
+    }
+
+
+    public List<TypifiedObject> getObjects(final Order order, final int start, final int itemsOnPage) {
+        Session session = getCurrentSession();
+        Criteria criteria = session.createCriteria(getEntityClass());
         criteria.setFirstResult(start);
-        if (quantity > 0) {
-            criteria.setFetchSize(quantity);
-//            criteria.setMaxResults(quantity);
+        if (itemsOnPage > 0) {
+            criteria.setMaxResults(itemsOnPage);
         }
 //        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
+
         criteria.addOrder(order);
 
 
         List<TypifiedObject> list = criteria.list();
 //        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
+        closeSession();
+        return list;
+    }
+
+
+//    public List<TypifiedObject> getChildren(final Integer parentId, final int start, final int itemsOnPage, final String sortField, final String sortDirection, final Filter filter) {
+    public List<TypifiedObject> getChildren(final Integer parentId, final int start, final int itemsOnPage, final String sortField, final boolean sortDirection, final Filter filter) {
+        Session session = getCurrentSession();
+        String typifiedObjectClass = getEntityClass().getSimpleName();
+        List list = new ArrayList();
+        StringBuilder sql = new StringBuilder("select count(*) from " +typifiedObjectClass+
+                "  f where f.emsObject.parentId " + (parentId > 0 ? (" = " + parentId) : " is null"));
+        int foldersAmount = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
+
+        int objectsCount = itemsOnPage == 0 ? Integer.MAX_VALUE - start : itemsOnPage;
+        if (start < foldersAmount) {
+            StringBuilder sb = new StringBuilder("from " +typifiedObjectClass+" f where f.emsObject.parentId");
+            if (parentId > 0) {
+                sb.append(" = ");
+                sb.append(parentId);
+            } else {
+                sb.append(" is null");
+            }
+            if (sortField.length() > 0) {
+                sb.append(" order by ");
+                sb.append(sortField);
+//                sb.append(sortDirection);
+                sb.append(sortDirection ? " desc" : " asc");
+            }
+
+            Query query = session.createQuery(sb.toString());
+            query.setFirstResult(start);
+            query.setFetchSize(objectsCount);
+            list.addAll(query.list());
+        }
+        if (start + objectsCount > foldersAmount) {
+            StringBuilder sb = new StringBuilder("from "+typifiedObjectClass+" fo where fo.emsObject.parentId");
+            if (parentId > 0) {
+                sb.append(" = ");
+                sb.append(parentId);
+            } else {
+                sb.append(" is null");
+            }
+            if (sortField.length() > 0) {
+                sb.append(" order by ");
+                sb.append(sortField);
+//                sb.append(sortDirection);
+                sb.append(sortDirection ? " desc" : " asc");
+            }
+          /*  if (filter != null && filter.getEntity().equals("FileObject")) {
+                int filterValue = 0;
+                try {
+                    filterValue = Integer.parseInt(filter.getFieldValue());
+                } catch (NumberFormatException e) {
+                    log.error("filterValue-!!!!!" + e);
+                }
+                sb.append(" and fo.").append(filter.getField()).append("=");
+                sb.append(filterValue);
+                log.warn("SQL" + sb);
+            }*/
+
+            Query query = session.createQuery(sb.toString());
+            query.setFirstResult(start > foldersAmount ? start : 0);
+            query.setFetchSize(objectsCount - list.size());
+            list.addAll(query.list());
+        }
         closeSession();
         return list;
     }

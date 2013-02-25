@@ -150,7 +150,7 @@
                 singleSelect: true,
                 title: '<xsl:copy-of select="title/*"/>',
                 useRp: true,
-                rp: 25,
+                rp: 10,
                 showTableToggleBtn: true,
                 height:auto
 

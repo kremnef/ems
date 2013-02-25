@@ -27,8 +27,8 @@ public interface TypifiedObjectDao {
 
     List<TypifiedObject> getObjects();
     List<TypifiedObject> getObjects(Order order);
-    List<TypifiedObject> getObjects(int start, int quantity, String sortName, boolean desc);
-    List<TypifiedObject> getObjects(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter);
+    List<TypifiedObject> getObjects(int start, int itemsOnPage, String sortField, String sortDirection);
+    List<TypifiedObject> getChildren(Integer parentId, int start, int itemsOnPage, String sortField, boolean sortDirection, Filter filter);
 
     Class getEntityClass();
     ObjectType getObjectType(String className);

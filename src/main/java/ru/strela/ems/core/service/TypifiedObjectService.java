@@ -25,10 +25,12 @@ public interface TypifiedObjectService {
     TypifiedObject getParent(int id);
     int getChildrenCount(int id);
 
-    List<TypifiedObject> getChildren();
-//    List<TypifiedObject> getChildren(Integer parentId);
-    List<TypifiedObject> getChildren(int start, int quantity, String sortName, boolean desc);
-    List<TypifiedObject> getChildren(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter);
+
+//    List<TypifiedObject> getChildren(int start, int quantity, String sortName, boolean desc);
+//    List<TypifiedObject> getChildren(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter);
+
+    List<TypifiedObject> getObjects(int start, int itemsOnPage, String sortField, String sortDirection);
+    List<TypifiedObject> getChildren(Integer parentId, int start, int itemsOnPage, String sortField, boolean sortDirection, Filter filter);
 
     List<TypifiedObject> getTypifiedObjectParents(int id, boolean includeTypifiedObject);
     List<TypifiedObject> getTypifiedObjectParents(Class entityClass, int id, boolean includeTypifiedObject);

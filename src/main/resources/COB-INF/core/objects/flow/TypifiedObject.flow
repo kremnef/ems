@@ -113,25 +113,25 @@ function prepareListData(parentId, filter) {
     if (page <= 1) {
         page = new java.lang.Integer(1);
     }
-    var sortName = cocoon.request.getParameter("sortname");
-    if (sortName != 'name' && sortName != 'systemName' && sortName != 'position') {
-        sortName = '';
+    var sortField = cocoon.request.getParameter("sortname");
+    if (sortField != 'name' && sortField != 'systemName' && sortField != 'position') {
+        sortField = '';
     }
-    var sortDesc = cocoon.request.getParameter("sortorder") == 'desc';
+    var sortDirection = cocoon.request.getParameter("sortorder") == 'desc';
 
     var typifiedObjectService = getServiceByEntity(entity);
     var total = typifiedObjectService.getChildrenCount(parentId);
 
 //    print("parentId:" + parentId);
-if (filter != null){
-    var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc, filter);
-}else{
-/*print("1"+parentId);
-print("2"+(page - 1) * itemsOnPage);
-print("3"+itemsOnPage);
-print("4"+sortName);
-print("5"+sortDesc);*/
-    var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc);
+    if (filter != null){
+        var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection, filter);
+    }else{
+        print("1 - "+parentId);
+         print("2 - "+(page - 1) * itemsOnPage);
+         print("3 -"+itemsOnPage);
+         print("4 - "+sortField);
+         print("5 - "+sortDirection);
+        var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection);
 }
 
 //    print("children -:"+children);

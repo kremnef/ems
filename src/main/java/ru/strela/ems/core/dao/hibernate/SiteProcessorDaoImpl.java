@@ -445,82 +445,72 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
         Integer typifiedObjectId = typifiedObject.getId();
         Integer typifiedObjectParentId = typifiedObject.getParentId();
 
-        System.out.println("CLASS ID =  " + typifiedObjectId);
-        System.out.println("CLASS PARENT ID =  " + typifiedObjectParentId);
-        System.out.println("itemsOnPage =  " + itemsOnPage);
+//        System.out.println("CLASS ID =  " + typifiedObjectId);
+//        System.out.println("CLASS PARENT ID =  " + typifiedObjectParentId);
+//        System.out.println("itemsOnPage =  " + itemsOnPage);
+
+
         if (typifiedObject instanceof SystemObject) {
             String typifiedObjectClass = typifiedObject.getClass().getSimpleName();
-            System.out.println("CLASS NAME =  " + typifiedObjectClass);
-            List list;
+//            System.out.println("CLASS NAME =  " + typifiedObjectClass);
+            List list = null;
             Query query;
             StringBuilder sql = new StringBuilder("");
 
 
-            Integer pageNumber = 1;
-            if (requestQueryString != null && requestQueryString.contains("page")) {
-                try {
-                    Map<String, String> paramsMap = getUrlParameters(requestQueryString);
-                    String pageValue = null;
-                    Set<String> keys = paramsMap.keySet();
-                    for (String key : keys) {
-                        if (key.equalsIgnoreCase("page")) {
-                            pageValue = paramsMap.get(key);
-                            break;
+            if (typifiedObject instanceof Content) {
+                DocumentDao documentDao = new DocumentDaoImpl();
+                if (documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
+                    Integer pageNumber = 1;
+                    if (requestQueryString != null && requestQueryString.contains("page")) {
+                        try {
+                            Map<String, String> paramsMap = getUrlParameters(requestQueryString);
+//                            String pageValue = null;
+                            Set<String> keys = paramsMap.keySet();
+                            for (String key : keys) {
+                                if (key.equalsIgnoreCase("page")) {
+                                    pageNumber = Integer.parseInt(paramsMap.get(key));
+//                                    pageValue = paramsMap.get(key);
+                                }
+                                if (key.equalsIgnoreCase("itemsOnPage")) {
+                                    itemsOnPage = Integer.parseInt(paramsMap.get(key));
+                                }
+                                if (key.equalsIgnoreCase("sortField")) {
+                                    sortField = paramsMap.get(key);
+                                }
+                                if (key.equalsIgnoreCase("sortDirection")) {
+                                    sortDirection = paramsMap.get(key);
+                                }
+
+                            }
+//                            pageNumber = Integer.parseInt(pageValue);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
 
                     }
-                    pageNumber = Integer.parseInt(pageValue);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    ContentDaoImpl contentDaoImpl = new ContentDaoImpl();
+//                    list = contentDaoImpl.getChildren(typifiedObjectId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
+                    sql = new StringBuilder("from ");
+                    sql.append(typifiedObjectClass);
+                    sql.append(" where emsObject.parentId = ");
+                    sql.append(typifiedObjectId);
+                    sql.append(" and publishDateTime <= current_timestamp() ");
+                    sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
+                    query = session.createQuery(sql.toString());
+                    query.setFirstResult((pageNumber - 1) * itemsOnPage);
+                    if (itemsOnPage > 0) {
+                        query.setMaxResults(itemsOnPage);
+//                        query.setFetchSize(itemsOnPage);
+                    }
+                    list = query.list();
                 }
 
-            }
-
-            TypifiedObjectDaoImpl typifiedObjectDaoImpl = new TypifiedObjectDaoImpl();
-            if (typifiedObjectClass.equalsIgnoreCase("Content")) {
-//                String na =typifiedObject.getSystemName();
-                list = typifiedObjectDaoImpl.getObjects(typifiedObjectId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
-                DocumentDao documentDao = new DocumentDaoImpl();
-                           if (typifiedObject instanceof Content && documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
-
-
-                               sql = new StringBuilder("from ");
-                               sql.append(typifiedObjectClass);
-                               sql.append(" where emsObject.parentId = ");
-                               sql.append(typifiedObject.getId());
-               //                List list = contentDao.
-                               sql.append(" and publishDateTime <= current_timestamp() ");
-                               if (tagId != null) {
-                                   //System.out.println("!!! tagId " + tagId);
-                                   /*    StringBuilder contentSql = new StringBuilder("select d.content_id from document d");
-               //                    contentSql.append(" inner join document_tag dt on d.id = dt.document_id");
-               //                    contentSql.append(" where dt.tag_id = ").append(tagId);
-               //                    contentSql.append(" and d.language_id = ").append(languageId);
-                                   contentSql.append(" and d.language_code = ").append(languageCode);
-               //                    contentSql.append(" and d.version = (select max(d1.version) from document d1 where d1.content_id = d.content_id and d1.language_id = ").append(languageId).append(")");
-               //                    contentSql.append(" and d.version = (select d1.version from document d1 where d1.is_last_version = 1 and d1.content_id = d.content_id and d1.language_code = ").append(languageCode).append(")");
-                                   List contentIds = session.createSQLQuery(contentSql.toString()).list();
-                                   sql.append(" and id in (");
-                                   if (contentIds.size() > 0) {
-                                       sql.append(Utilities.implode(contentIds, ","));
-                                   } else {
-                                       sql.append("''");
-                                   }
-                                   sql.append(")");*/
-                               }
-                               sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
-                               query = session.createQuery(sql.toString());
-
-                               if (itemsOnPage > 0) {
-                                   query.setMaxResults(itemsOnPage);
-                               }
-                               list.addAll(query.list());
-                           }
             } else {
                 sql.append("from ");
                 sql.append(typifiedObjectClass);
                 sql.append(" where emsObject.parentId = ");
-                sql.append(typifiedObject.getId());
+                sql.append(typifiedObjectId);
                 sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
                 ////System.out.println("sql = " + sql);
 
@@ -531,9 +521,6 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 list = query.list();
 
             }
-
-
-
             if (typifiedObject instanceof Folder) {
                 sql = new StringBuilder("from ");
                 sql.append(FileObject.class.getSimpleName());
@@ -543,6 +530,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 query = session.createQuery(sql.toString());
                 list.addAll(query.list());
             }
+
 
             TypifiedObject[] systemObjects = (TypifiedObject[]) list.toArray(new TypifiedObject[list.size()]);
             children.put(typifiedObject.getId(), typifiedObject.getSystemName(), position, systemObjects);

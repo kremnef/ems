@@ -9,8 +9,10 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.ContentDao;
+import ru.strela.ems.core.dao.DocumentDao;
 import ru.strela.ems.core.dao.DocumentVersionDao;
 import ru.strela.ems.core.model.*;
+import ru.strela.ems.core.model.Filter;
 import ru.tastika.tools.util.Utilities;
 
 import java.util.*;
@@ -229,6 +231,61 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
     }
 
 
+    public List<TypifiedObject> getContents(Integer parentId, int start, int itemsOnPage, String sortField, boolean desc, Filter filter) {
+        Session session = getCurrentSession();
+        Query query = null;
+        StringBuilder sql;
+        List<TypifiedObject> list = null;
+
+        sql = new StringBuilder("from ");
+        sql.append(getEntityClass());
+        sql.append(" where emsObject.parentId = ");
+        sql.append(parentId);
+
+
+        sql.append(" and publishDateTime <= current_timestamp() ");
+
+        sql.append(" order by ").append(sortField).append(" ").append("desc");
+        query = session.createQuery(sql.toString());
+        /*query.setFirstResult(start);
+        if (itemsOnPage > 0) {
+            query.setMaxResults(itemsOnPage);
+        }*/
+
+
+        log.warn("getObjects()-5");
+//        Criteria criteria = session.createCriteria(getEntityClass());
+
+        /*if (parentId != null) {
+            Criterion criterion = Restrictions.sqlRestriction("emsObject.parentId = "+parentId);
+            criteria.add(criterion);
+        }
+
+        Criterion criterion1 = Restrictions.sqlRestriction("publishDateTime <= current_timestamp()");
+        criteria.add(criterion1);*/
+
+
+//        if (itemsOnPage > 0) {
+//            criteria.setFetchSize(quantity);
+//            criteria.setMaxResults(itemsOnPage);
+//        }
+//        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
+
+        String sortBy = sortField.length() > 0 ? sortField : "position";
+        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
+//        criteria.addOrder(order);
+
+//        = criteria.list()
+
+//        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
+
+
+        list.addAll(query.list());
+        closeSession();
+        return list;
+    }
+
+
     public List getContents() {
         return getObjects(Order.desc("publishDateTime"));
     }
@@ -391,7 +448,6 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
     }*/
 
 
-
     protected TypifiedObject saveObject(TypifiedObject typifiedObject) {
 
 //    protected TypifiedObject saveObject(Content typifiedObject) {
@@ -423,12 +479,13 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
         Integer emsId = c.getEmsObject().getId();*/
 //        System.out.println("Content saveOrUpdate: " +emsId);
 //        if (emsId != null){
-            super.saveObject(typifiedObject);
+        super.saveObject(typifiedObject);
 //        }
 
 //        reindexSiteMap((SystemObject) typifiedObject);
         return typifiedObject;
     }
+
     @Override
     protected void deleteObject(TypifiedObject typifiedObject) {
         DocumentVersionDao documentVersionDao = new DocumentVersionDaoImpl();

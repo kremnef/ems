@@ -160,15 +160,13 @@
                     {separator: true}
                 ],-->
 
-            <!--<xsl:if test="item/@position">-->
                 sortname: "date",
                 sortorder: "desc",
-            <!--</xsl:if>-->
                 usepager: true,
                 singleSelect: true,
                 title: '<xsl:copy-of select="title/*"/>',
                 useRp: true,
-                rp: 25,
+                rp: 10,
                 showTableToggleBtn: true,
                 height:auto
 

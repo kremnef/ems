@@ -55,25 +55,21 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
         return typifiedObjectDao.getChildrenCount(id);
     }
 
-    public List<TypifiedObject> getChildren() {
-        return  typifiedObjectDao.getObjects();
-    }
 
 
 
-
-    public List<TypifiedObject> getChildren(int parentId) {
+    /*public List<TypifiedObject> getChildren(int parentId) {
         return getChildren(parentId, 0, 0, "", false, null);
+    }*/
+
+
+    public List<TypifiedObject> getObjects(int start, int itemsOnPage, String sortField, String sortDirection) {
+        return typifiedObjectDao.getObjects(start, itemsOnPage, sortField, sortDirection);
     }
 
 
-    public List<TypifiedObject> getChildren(int start, int quantity, String sortName, boolean desc) {
-        return typifiedObjectDao.getObjects(start, quantity, sortName, desc);
-    }
-
-
-    public List<TypifiedObject> getChildren(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter) {
-        return typifiedObjectDao.getObjects(parentId, start, quantity, sortName, desc, filter);
+    public List<TypifiedObject> getChildren(Integer parentId, int start, int itemsOnPage, String sortField, boolean sortDirection, Filter filter) {
+        return typifiedObjectDao.getChildren(parentId, start, itemsOnPage, sortField, sortDirection, filter);
     }
 
     public List<TypifiedObject> getTypifiedObjectParents(int id, boolean includeTypifiedObject) {
