@@ -23,7 +23,6 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
     protected TypifiedObjectDao typifiedObjectDao = null;
 
 
-
     public TypifiedObjectDao getTypifiedObjectDao() {
         return typifiedObjectDao;
     }
@@ -56,23 +55,26 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
         return typifiedObjectDao.getChildrenCount(id);
     }
 
+    public List<TypifiedObject> getChildren() {
+        return  typifiedObjectDao.getObjects();
+    }
+
+
+
 
     public List<TypifiedObject> getChildren(int parentId) {
         return getChildren(parentId, 0, 0, "", false, null);
     }
 
 
-    public List<TypifiedObject> getChildren(int parentId, int start, int quantity, String sortName, boolean desc) {
+    public List<TypifiedObject> getChildren(int start, int quantity, String sortName, boolean desc) {
         return typifiedObjectDao.getObjects(start, quantity, sortName, desc);
-
-//        return typifiedObjectDao.getObjects(parentId, start, quantity, sortName, desc);
     }
 
 
-    public List<TypifiedObject> getChildren(int parentId, int start, int quantity, String sortName, boolean desc, Filter filter) {
+    public List<TypifiedObject> getChildren(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter) {
         return typifiedObjectDao.getObjects(parentId, start, quantity, sortName, desc, filter);
     }
-
 
     public List<TypifiedObject> getTypifiedObjectParents(int id, boolean includeTypifiedObject) {
         ArrayList<TypifiedObject> parents = new ArrayList<TypifiedObject>();
@@ -81,7 +83,6 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
         }
         return parents;
     }
-
 
     public List<TypifiedObject> getTypifiedObjectParents(Class entityClass, int id, boolean includeTypifiedObject) {
         ArrayList<TypifiedObject> parents = new ArrayList<TypifiedObject>();
@@ -102,7 +103,6 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
     }
 
 
-
     public TypifiedObject save(TypifiedObject typifiedObject) {
         return typifiedObjectDao.save(typifiedObject);
     }
@@ -116,7 +116,6 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
     public String getContextRealPath() {
         return ServerTools.getContextRealPath();
     }
-
 
 
     public String getFreeSystemName() {

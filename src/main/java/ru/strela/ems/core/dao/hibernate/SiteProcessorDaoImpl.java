@@ -1,7 +1,6 @@
 package ru.strela.ems.core.dao.hibernate;
 
 
-
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,7 +13,6 @@ import ru.strela.ems.generator.ChildrenMap;
 import ru.strela.ems.generator.SitePageGenerator;
 import ru.tastika.tools.util.Utilities;
 
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
@@ -391,33 +389,58 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
         return systemNodeObjectMap;
     }
 
-    public static Map<String, List<String>> getUrlParameters(String url)
+    public static Map<String, String> getUrlParameters(String query)
             throws UnsupportedEncodingException {
-        Map<String, List<String>> params = new HashMap<String, List<String>>();
-        String[] urlParts = url.split("\\?");
-        if (urlParts.length > 1) {
-            String query = urlParts[1];
-            for (String param : query.split("&")) {
-                String pair[] = param.split("=");
-                String key = URLDecoder.decode(pair[0], "UTF-8");
-                String value = "";
-                if (pair.length > 1) {
-                    value = URLDecoder.decode(pair[1], "UTF-8");
-                }
-                List<String> values = params.get(key);
+        Map<String, String> params = new HashMap<String, String>();
+        for (String param : query.split("&")) {
+            String pair[] = param.split("=");
+            String key = URLDecoder.decode(pair[0], "UTF-8");
+            String value = "";
+            if (pair.length > 1) {
+                value = URLDecoder.decode(pair[1], "UTF-8");
+            }
+            params.put(key, value);
+                /*List<String> values = params.get(key);
                 if (values == null) {
                     values = new ArrayList<String>();
                     params.put(key, values);
                 }
-                values.add(value);
-            }
+                values.add(value);*/
         }
+//        }
         return params;
     }
+
+    public static String getUrlParameter(Map<String, List<String>> params, String paramName)
+            throws UnsupportedEncodingException {
+        String value;
+        value = params.get(paramName).get(1);
+        /*for(int i=0; params.size()>i; i++){
+
+            params.containsKey(paramName);
+        }*/
+
+        return value;
+    }
+
+    public static String getUrlParameterValue(String pairUrl)
+            throws UnsupportedEncodingException {
+
+        String pair[] = pairUrl.split("=");
+//            String key = URLDecoder.decode(pair[0], "UTF-8");
+        String value = "";
+        if (pair.length > 1) {
+            value = URLDecoder.decode(pair[1], "UTF-8");
+        }
+        return value;
+    }
+
     private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode, int position) {
         currentLocale = languageCode;
 //    private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
 //        //System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
+
+
         ChildrenMap children = new ChildrenMap();
         Integer typifiedObjectId = typifiedObject.getId();
         Integer typifiedObjectParentId = typifiedObject.getParentId();
@@ -432,97 +455,90 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
             Query query;
             StringBuilder sql = new StringBuilder("");
 
-            /*Uri uri = Uri.parse(requestQueryString.replace("+", "%20"));
-            uri.getQueryParameter("para1");*/
-            Integer pageNumber;
-            try {
-                Map<String, List<String>> qparams = getUrlParameters(requestQueryString);
-//                pageNumber = qparams.get("page");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
+            Integer pageNumber = 1;
+            if (requestQueryString != null && requestQueryString.contains("page")) {
+                try {
+                    Map<String, String> paramsMap = getUrlParameters(requestQueryString);
+                    String pageValue = null;
+                    Set<String> keys = paramsMap.keySet();
+                    for (String key : keys) {
+                        if (key.equalsIgnoreCase("page")) {
+                            pageValue = paramsMap.get(key);
+                            break;
+                        }
+
+                    }
+                    pageNumber = Integer.parseInt(pageValue);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
             }
 
+            TypifiedObjectDaoImpl typifiedObjectDaoImpl = new TypifiedObjectDaoImpl();
+            if (typifiedObjectClass.equalsIgnoreCase("Content")) {
+//                String na =typifiedObject.getSystemName();
+                list = typifiedObjectDaoImpl.getObjects(typifiedObjectId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
+                DocumentDao documentDao = new DocumentDaoImpl();
+                           if (typifiedObject instanceof Content && documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
 
 
-            pageNumber = Integer.parseInt(requestQueryString);
+                               sql = new StringBuilder("from ");
+                               sql.append(typifiedObjectClass);
+                               sql.append(" where emsObject.parentId = ");
+                               sql.append(typifiedObject.getId());
+               //                List list = contentDao.
+                               sql.append(" and publishDateTime <= current_timestamp() ");
+                               if (tagId != null) {
+                                   //System.out.println("!!! tagId " + tagId);
+                                   /*    StringBuilder contentSql = new StringBuilder("select d.content_id from document d");
+               //                    contentSql.append(" inner join document_tag dt on d.id = dt.document_id");
+               //                    contentSql.append(" where dt.tag_id = ").append(tagId);
+               //                    contentSql.append(" and d.language_id = ").append(languageId);
+                                   contentSql.append(" and d.language_code = ").append(languageCode);
+               //                    contentSql.append(" and d.version = (select max(d1.version) from document d1 where d1.content_id = d.content_id and d1.language_id = ").append(languageId).append(")");
+               //                    contentSql.append(" and d.version = (select d1.version from document d1 where d1.is_last_version = 1 and d1.content_id = d.content_id and d1.language_code = ").append(languageCode).append(")");
+                                   List contentIds = session.createSQLQuery(contentSql.toString()).list();
+                                   sql.append(" and id in (");
+                                   if (contentIds.size() > 0) {
+                                       sql.append(Utilities.implode(contentIds, ","));
+                                   } else {
+                                       sql.append("''");
+                                   }
+                                   sql.append(")");*/
+                               }
+                               sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
+                               query = session.createQuery(sql.toString());
 
-
-
-//             else {
-
-            /*if (filter != null){
-                var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortName, sortDesc, filter);
-            }else{*/
-            TypifiedObjectDao typifiedObjectDao = null;
-//            TypifiedObjectService typifiedObjectService = null;
-            if (typifiedObjectClass == "Content") {
-                list = typifiedObjectDao.getObjects(typifiedObjectParentId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
+                               if (itemsOnPage > 0) {
+                                   query.setMaxResults(itemsOnPage);
+                               }
+                               list.addAll(query.list());
+                           }
             } else {
-                //System.out.println("!!! Ищем объекты у который emsObject.parentId =  " + typifiedObjectId);
                 sql.append("from ");
                 sql.append(typifiedObjectClass);
                 sql.append(" where emsObject.parentId = ");
                 sql.append(typifiedObject.getId());
-
-
-                sql.append(" and entity != 'Content'");
                 sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
                 ////System.out.println("sql = " + sql);
 
                 query = session.createQuery(sql.toString());
-
-/*
-            if (itemsOnPage > 0) {
-                query.setMaxResults(itemsOnPage);
-            }
-*/
-                list = query.list();
-
-//                list = typifiedObjectDao.getObjects(typifiedObjectParentId, 0, 0, "", false, null);
-            }
-
-
-            DocumentDao documentDao = new DocumentDaoImpl();
-            if (typifiedObject instanceof Content && documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
-
-
-                sql = new StringBuilder("from ");
-                sql.append(typifiedObjectClass);
-                sql.append(" where emsObject.parentId = ");
-                sql.append(typifiedObject.getId());
-//                List list = contentDao.
-                sql.append(" and publishDateTime <= current_timestamp() ");
-                if (tagId != null) {
-                    //System.out.println("!!! tagId " + tagId);
-                    /*    StringBuilder contentSql = new StringBuilder("select d.content_id from document d");
-//                    contentSql.append(" inner join document_tag dt on d.id = dt.document_id");
-//                    contentSql.append(" where dt.tag_id = ").append(tagId);
-//                    contentSql.append(" and d.language_id = ").append(languageId);
-                    contentSql.append(" and d.language_code = ").append(languageCode);
-//                    contentSql.append(" and d.version = (select max(d1.version) from document d1 where d1.content_id = d.content_id and d1.language_id = ").append(languageId).append(")");
-//                    contentSql.append(" and d.version = (select d1.version from document d1 where d1.is_last_version = 1 and d1.content_id = d.content_id and d1.language_code = ").append(languageCode).append(")");
-                    List contentIds = session.createSQLQuery(contentSql.toString()).list();
-                    sql.append(" and id in (");
-                    if (contentIds.size() > 0) {
-                        sql.append(Utilities.implode(contentIds, ","));
-                    } else {
-                        sql.append("''");
-                    }
-                    sql.append(")");*/
-                }
-                sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
-                query = session.createQuery(sql.toString());
-
                 if (itemsOnPage > 0) {
                     query.setMaxResults(itemsOnPage);
                 }
-                list.addAll(query.list());
+                list = query.list();
+
             }
+
+
+
             if (typifiedObject instanceof Folder) {
                 sql = new StringBuilder("from ");
                 sql.append(FileObject.class.getSimpleName());
                 sql.append(" where emsObject.parentId = ");
-                sql.append(typifiedObject.getId());
+                sql.append(typifiedObjectId);
                 sql.append(" order by position");
                 query = session.createQuery(sql.toString());
                 list.addAll(query.list());

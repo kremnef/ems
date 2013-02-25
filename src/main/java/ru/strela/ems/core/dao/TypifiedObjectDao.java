@@ -24,10 +24,12 @@ public interface TypifiedObjectDao {
 
     TypifiedObject getTypifiedObject(Class entityClass, int id);
     TypifiedObject getParent(int id);
+
     List<TypifiedObject> getObjects();
-    List<TypifiedObject> getObjects(int start, int quantity, String sortName, boolean desc);
-    List<TypifiedObject> getObjects(int parentId, int start, int quantity, String sortName, boolean desc, Filter filter);
     List<TypifiedObject> getObjects(Order order);
+    List<TypifiedObject> getObjects(int start, int quantity, String sortName, boolean desc);
+    List<TypifiedObject> getObjects(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter);
+
     Class getEntityClass();
     ObjectType getObjectType(String className);
     ObjectType getObjectTypeById(int objectTypeId);

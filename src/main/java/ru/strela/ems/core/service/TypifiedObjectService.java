@@ -2,6 +2,7 @@ package ru.strela.ems.core.service;
 
 
 import ru.strela.ems.core.dao.TypifiedObjectDao;
+import ru.strela.ems.core.model.Filter;
 import ru.strela.ems.core.model.ObjectType;
 import ru.strela.ems.core.model.TypifiedObject;
 
@@ -23,10 +24,15 @@ public interface TypifiedObjectService {
     Class getEntityClass();
     TypifiedObject getParent(int id);
     int getChildrenCount(int id);
-    List<TypifiedObject> getChildren(int parentId);
-    List<TypifiedObject> getChildren(int parentId, int start, int quantity, String sortName, boolean desc);
+
+    List<TypifiedObject> getChildren();
+//    List<TypifiedObject> getChildren(Integer parentId);
+    List<TypifiedObject> getChildren(int start, int quantity, String sortName, boolean desc);
+    List<TypifiedObject> getChildren(Integer parentId, int start, int quantity, String sortName, boolean desc, Filter filter);
+
     List<TypifiedObject> getTypifiedObjectParents(int id, boolean includeTypifiedObject);
     List<TypifiedObject> getTypifiedObjectParents(Class entityClass, int id, boolean includeTypifiedObject);
+
     String getEntityClassName();
     ObjectType getObjectType(String className);
     TypifiedObject save(TypifiedObject typifiedObject);

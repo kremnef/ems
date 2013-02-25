@@ -5,7 +5,9 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.MetaInfoDao;
@@ -141,69 +143,62 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
         return typifiedObject;
     }
 
-
-    public List<TypifiedObject> getObjects() {
-        log.warn("getObjects()-1");
-        return getObjects(null);
-    }
-
-
-    public List<TypifiedObject> getObjects(int start, int quantity, final String sortName, final boolean desc) {
-        log.warn("getObjects()-2");
-        String sortBy = sortName.length() > 0 ? sortName : "position";
-        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
-        return getObjects(order, start, quantity);
-    }
-
-
-    public List<TypifiedObject> getObjects(int parentId, int start, int quantity, final String sortName, final boolean desc, Filter filter) {
-        return getObjects(start, quantity, sortName, desc);
-    }
-
-
-    public List<TypifiedObject> getObjects(int start, int quantity, final String sortName, final boolean desc, String filter) {
-        log.warn("getObjects()-3");
-        String sortBy = sortName.length() > 0 ? sortName : "position";
-        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
-        return getObjects(order, start, quantity);
-    }
-
-
-    public List<TypifiedObject> getObjects(final Order order) {
-        log.warn("getObjects()-4");
-        return getObjects(order, 0, 0);
-    }
-
-
-    public List<TypifiedObject> getObjects(final Order order, final int start, final int quantity) {
-        Session session = getCurrentSession();
-        log.warn("getObjects()-5");
-        Criteria criteria = session.createCriteria(getEntityClass());
-        //            speed test
-        /* if (order != null) {
-            criteria.addOrder(order);
-        } else {
-            criteria.addOrder(Order.asc("position"));
-        }*/
-        criteria.setFirstResult(start);
-        if (quantity > 0) {
-            criteria.setMaxResults(quantity);
-        }
-        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
-
-        List<TypifiedObject> list = criteria.list();
-        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
-        closeSession();
-        return list;
-    }
-
-
     public int getChildrenCount(int id) {
         Session session = getCurrentSession();
         StringBuilder sql = new StringBuilder("select count(*) from ").append(getEntityClass().getSimpleName()).append(" eo");
         int count = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
         closeSession();
         return count;
+    }
+
+
+    public List<TypifiedObject> getObjects() {
+        log.warn("getObjects()-1");
+        return getObjects(null);
+    }
+
+    public List<TypifiedObject> getObjects(final Order order) {
+        log.warn("getObjects()-4");
+        return getObjects(null, order, 0, 0, null);
+    }
+
+    public List<TypifiedObject> getObjects(int start, int quantity, final String sortName, final boolean desc) {
+
+        return getObjects(null, start, quantity, sortName, desc, null);
+    }
+
+
+    public List<TypifiedObject> getObjects(Integer parentId, int start, int quantity, final String sortName, final boolean desc, Filter filter) {
+        log.warn("getObjects()-3");
+        String sortBy = sortName.length() > 0 ? sortName : "position";
+        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
+        return getObjects(parentId, order, start, quantity, filter);
+    }
+
+
+    public List<TypifiedObject> getObjects(final Integer parentId, final Order order, final int start, final int quantity, final Filter filter) {
+        Session session = getCurrentSession();
+        log.warn("getObjects()-5");
+        Criteria criteria = session.createCriteria(getEntityClass());
+        if (parentId != null) {
+            Criterion criterion = Restrictions.like("parentId", parentId);
+            //        , MatchMode.ANYWHERE
+            criteria.add(criterion);
+        }
+
+        criteria.setFirstResult(start);
+        if (quantity > 0) {
+            criteria.setFetchSize(quantity);
+//            criteria.setMaxResults(quantity);
+        }
+//        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
+        criteria.addOrder(order);
+
+
+        List<TypifiedObject> list = criteria.list();
+//        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
+        closeSession();
+        return list;
     }
 
 
