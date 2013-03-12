@@ -205,6 +205,8 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
                 "  f where f.emsObject.parentId " + (parentId > 0 ? (" = " + parentId) : " is null"));
         int foldersAmount = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
 
+//        int contentChildrenCount = content.getEmsObject().getChildrenCount();
+
         int objectsCount = itemsOnPage == 0 ? Integer.MAX_VALUE - start : itemsOnPage;
         if (start < foldersAmount) {
             StringBuilder sb = new StringBuilder("from " +typifiedObjectClass+" f where f.emsObject.parentId");

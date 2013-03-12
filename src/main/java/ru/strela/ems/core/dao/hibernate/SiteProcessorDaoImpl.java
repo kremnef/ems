@@ -509,6 +509,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                         }
 
                     }
+//                    int contentChildrenCount = typifiedObject.getEmsObject().getChildrenCount();
                     ContentDaoImpl contentDaoImpl = new ContentDaoImpl();
 //                    list = contentDaoImpl.getChildren(typifiedObjectId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
                     sql = new StringBuilder("from ");
