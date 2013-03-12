@@ -68,9 +68,9 @@ function editDocument(form) {
     }
 
     var version = Utilities.parseStringToInteger(versionObj);
-    print("version:" + version);
+//    print("version:" + version);
     var formLocale = getLocale();
-    print("formLocale:" + formLocale);
+//    print("formLocale:" + formLocale);
     if (languageCode == null) {
         languageCode = getLocale();
         print("переназначаем languageCode через formLocale:" + languageCode);
@@ -212,6 +212,7 @@ function editDocument(form) {
 
 function createDocument(form) {
     print("--------- enter function createDocument ---------");
+    var version = Utilities.parseStringToInteger(cocoon.request.getParameter("version"));
 
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;

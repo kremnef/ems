@@ -9,10 +9,11 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.ContentDao;
-import ru.strela.ems.core.dao.DocumentDao;
 import ru.strela.ems.core.dao.DocumentVersionDao;
-import ru.strela.ems.core.model.*;
+import ru.strela.ems.core.model.Content;
+import ru.strela.ems.core.model.DocumentVersion;
 import ru.strela.ems.core.model.Filter;
+import ru.strela.ems.core.model.TypifiedObject;
 import ru.tastika.tools.util.Utilities;
 
 import java.util.*;
@@ -25,6 +26,8 @@ import java.util.*;
 public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
     private final static Logger log = LoggerFactory.getLogger(ContentDaoImpl.class);
     private SessionFactory sessionFactory;
+
+
 //    private TransactionTemplate transactionTemplate;
     /*public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -45,6 +48,7 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
 
     @Override
     public Class getEntityClass() {
+
         return Content.class;
     }
 

@@ -114,17 +114,18 @@
                                 </xsl:attribute>
                             </meta>
 
-                            <xsl:variable name="title" select="/root/systemNode/labels[languageCode=$locale]/label"/>
+                            <!--<xsl:variable name="title" select="/root/systemNode/labels[languageCode=$locale]/label"/>-->
                             <title>
-
-                                <xsl:choose>
+                                <xsl:value-of select="/root/systemNode/objectLabel/label"/>
+                                <xsl:text> | </xsl:text> <xsl:value-of select="/root/systemNode/metaInfo/title"/>
+                            <!--    <xsl:choose>
                                     <xsl:when test="$title">
                                         <xsl:value-of select="$title"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:value-of select="/root/systemNode/name"/>
                                     </xsl:otherwise>
-                                </xsl:choose>
+                                </xsl:choose>-->
                                 <xsl:text> | </xsl:text>
                                 <xsl:value-of select="/root/systemNode/metaInfo/description"/>
                             </title>
