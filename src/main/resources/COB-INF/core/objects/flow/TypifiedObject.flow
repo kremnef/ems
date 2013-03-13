@@ -481,6 +481,7 @@ function getTypeActions() {
 
 //Sprig Security Auth
 function getLoggedInUser() {
+    print("!!!!! getLoggedInUser()");
     var authUser = cocoon.session.getAttribute("authUser");
     if (authUser == null) {
 //        print("authUserNull"+authUser);

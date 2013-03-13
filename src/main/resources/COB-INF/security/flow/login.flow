@@ -1,8 +1,6 @@
 
-
-//cocoon.load("servlet:flow/Form.js");
-////chenged
-function login() {
+/*
+function restlogin() {
             print( "!!!!LOGIN FORM"+userLocale);
     var redirectURI = cocoon.request.getParameter("redirectURI");
     var queryString = "";
@@ -40,7 +38,8 @@ function login() {
     form.locale = new java.util.Locale(locale);
     importClass(org.apache.cocoon.forms.formmodel.WidgetState);
 
-    /*var userData = getLoggedInUser();
+    */
+/*var userData = getLoggedInUser();
     if (userData.login) {
         form.lookupWidget("loggedInMessage").setState(WidgetState.OUTPUT);
         form.lookupWidget("login").setValue(userData.name);
@@ -54,7 +53,8 @@ function login() {
         form.lookupWidget("password").setState(WidgetState.ACTIVE);
         form.lookupWidget("changeAccount").setState(WidgetState.INVISIBLE);
     }
-     */
+     *//*
+
     if (login) {
         form.lookupWidget("errorMessage").setState(WidgetState.OUTPUT);
         form.lookupWidget("login").setValue(login);
@@ -67,9 +67,11 @@ function login() {
     var inputPassword = form.getChild("password").getValue().trim();
 //    inputPassword = MD5Crypt.md5ToString16(inputPassword);
 //    print("inputPassword = " + inputPassword);
-    /*if (!redirectURI) {
+    */
+/*if (!redirectURI) {
         redirectURI = "../core/Content-list";
-    }*/
+    }*//*
+
 //    cocoon.redirectTo("../../j_spring_security_check?j_username="+inputName+"&j_password="+inputPassword);
 //    cocoon.redirectTo("checklogin?j_username="+inputName+"&j_password="+inputPassword);
 //    cocoon.redirectTo("/ems/service/checklogin", {"loginform.login": inputName, "loginform.password": inputPassword});
@@ -97,4 +99,4 @@ function login() {
 //        cocoon.sendPage(failPipeline, {"fail": true, "username": inputUsername, "redirectURI" : redirectURI});
 //    }
 
-}
+}*/

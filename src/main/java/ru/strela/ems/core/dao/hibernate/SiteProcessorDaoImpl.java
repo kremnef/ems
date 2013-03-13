@@ -552,26 +552,26 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 list.addAll(query.list());
             }
 
+            if(list != null){
+                TypifiedObject[] systemObjects = (TypifiedObject[]) list.toArray(new TypifiedObject[list.size()]);
+                children.put(typifiedObject.getId(), typifiedObject.getSystemName(), position, systemObjects);
+                for (TypifiedObject tObject : systemObjects) {
 
-            TypifiedObject[] systemObjects = (TypifiedObject[]) list.toArray(new TypifiedObject[list.size()]);
-            children.put(typifiedObject.getId(), typifiedObject.getSystemName(), position, systemObjects);
-            for (TypifiedObject tObject : systemObjects) {
+                    if (tObject instanceof Content) {
+                        Content content = (Content) tObject;
 
-                if (tObject instanceof Content) {
-                    Content content = (Content) tObject;
+                        MetaInfo metaInfo = getMetaInfo(content);
+                        if (metaInfo != null) {
+                            content.setMetaInfo(metaInfo);
+                        }
+                        ObjectLabel objectLabel = getObjectLabel(content);
+                        if (objectLabel != null) {
+                            content.setObjectLabel(objectLabel);
+                        }
 
-                    MetaInfo metaInfo = getMetaInfo(content);
-                    if (metaInfo != null) {
-                        content.setMetaInfo(metaInfo);
-                    }
-                    ObjectLabel objectLabel = getObjectLabel(content);
-                    if (objectLabel != null) {
-                        content.setObjectLabel(objectLabel);
-                    }
-
-                    if (content.getHomeId() > 0) {
-                        systemNodeIdsForUrls.add(content.getHomeId());
-                    }
+                        if (content.getHomeId() > 0) {
+                            systemNodeIdsForUrls.add(content.getHomeId());
+                        }
                     /*  if (tagId != null) {
                     //System.out.println("tagId != null"+tagId);
                     session.enableFilter("hasTag").setParameter("tagId", tagId);
@@ -580,21 +580,21 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                     session.disableFilter("hasTag");*/
 
 //                    добавить условие только для ObjectURL
-                    if(this.objectURL != null && content.getEmsObject().getSystemName().contains(this.objectURL)){
-                        setDocumentToCurrentContent(content, children, session, languageCode, position);
-                    }
+                        if(this.objectURL != null && content.getEmsObject().getSystemName().contains(this.objectURL)){
+                            setDocumentToCurrentContent(content, children, session, languageCode, position);
+                        }
 
-                } else if (tObject instanceof Navigation) {
-                    Navigation navigation = (Navigation) tObject;
+                    } else if (tObject instanceof Navigation) {
+                        Navigation navigation = (Navigation) tObject;
 
-                    ObjectLabel objectLabel = getObjectLabel(navigation);
-                    if (objectLabel != null) {
-                        navigation.setObjectLabel(objectLabel);
-                    }
+                        ObjectLabel objectLabel = getObjectLabel(navigation);
+                        if (objectLabel != null) {
+                            navigation.setObjectLabel(objectLabel);
+                        }
 
-                    if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
-                        systemNodeIdsForUrls.add(navigation.getSystemNodeId());
-                    }
+                        if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
+                            systemNodeIdsForUrls.add(navigation.getSystemNodeId());
+                        }
 
   /*              } else if (tObject instanceof Folder) {
                     Navigation navigation = (Navigation) tObject;
@@ -608,15 +608,19 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                         systemNodeIdsForUrls.add(navigation.getSystemNodeId());
                     }
   */              }
-            }
-
-            currentLevel++;
-            if (currentLevel < levels) {
-                for (Object obj : list) {
-                    children.putAll(getChildren((TypifiedObject) obj, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageCode, position));
+                }
+                currentLevel++;
+                if (currentLevel < levels) {
+                    for (Object obj : list) {
+                        children.putAll(getChildren((TypifiedObject) obj, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageCode, position));
 //                    children.putAll(getChildren((TypifiedObject) obj, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageId, position));
+                    }
                 }
             }
+
+
+
+
         }
         return children;
     }

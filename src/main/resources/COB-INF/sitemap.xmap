@@ -222,6 +222,14 @@
         </map:pipeline>
 
         <map:pipeline id="mountSiteMap" type="noncaching">
+            <map:match pattern="site/**">
+                <map:mount
+                        check-reload="no"
+                        src="site/sitemap.xmap"
+                        uri-prefix="site/"
+                        />
+            </map:match>
+
 
             <map:match pattern="WEB-INF/**.xsl">
                 <map:read src="context://WEB-INF/{1}.xsl"/>
@@ -239,7 +247,7 @@
                 <map:serialize type="json"/>
             </map:match>
 
-            <map:match pattern="">
+            <map:match pattern="core">
                 <map:redirect-to uri="security/login"/>
             </map:match>
 
@@ -323,13 +331,7 @@
             </map:match>
 
 
-            <map:match pattern="site/**">
-                <map:mount
-                        check-reload="no"
-                        src="site/sitemap.xmap"
-                        uri-prefix="site/"
-                        />
-            </map:match>
+
 
 
 
