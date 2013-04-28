@@ -929,12 +929,10 @@
 
         <map:pipeline  id="xsl-templates">
             <map:match pattern="getTemplate-*">
-                <map:read mime-type="text" src="context://WEB-INF/xslt/templates/{1}" />
-                <!--<map:generate type="file" src="context://WEB-INF/xslt/templates/{1}"/>-->
-                <!--<map:serialize type="text"/>-->
+                <map:read mime-type="text" src="context://WEB-INF/xslt/pages/{1}" />
             </map:match>
             <map:match pattern="getTemplateXML-*">
-                <map:generate type="file" src="context://WEB-INF/xslt/templates/{1}"/>
+                <map:generate type="file" src="context://WEB-INF/xslt/pages/{1}"/>
                 <map:serialize type="xml"/>
             </map:match>
         </map:pipeline>

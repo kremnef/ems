@@ -3,7 +3,7 @@
     <!--todo: Вынести эти пути в настройки сайта -->
     <jx:set var="XSLT_TYPE_FILES_REAL_LOCATION" value="WEB-INF/xslt/types/"/>
     <jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>
-    <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/templates/"/>
+    <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/pages/"/>
     <jx:set var="CSS_TYPE_FILES_REAL_LOCATION" value="css/types/"/>
     <jx:set var="CSS_TEMPLATE_FILE_REAL_LOCATION" value="css/templates/"/>
     <jx:set var="REAL_ROOT_PATH" value="${cocoon.parameters.realRootPath}"/>

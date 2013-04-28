@@ -212,7 +212,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
 
     private void runTypeAction(SystemNodeObject nodeObject, String typeActionName, Map model, String src) {
-        System.out.println("1-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
+//        System.out.println("1-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
         String objectName;
         Object obj;
         if (nodeObject instanceof SystemNodeObjectType) {
@@ -246,12 +246,12 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         catch (IllegalAccessException e) {
             Logger.getLogger(SitePageGenerator.class).warn(e.getMessage(), e);
         }
-        System.out.println("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
+        /*System.out.println("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());*/
     }
 
 
     public void generate() throws IOException, SAXException, ProcessingException {
-         System.out.println("1XML. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("1XML " + System.currentTimeMillis());
         contentHandler.startDocument();
         if (!omitRoot) {
             contentHandler.startElement("", "root", "root", new AttributesImpl());
@@ -294,6 +294,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             }
         }
 
+        System.out.println("2XML " + System.currentTimeMillis());
         TransformerFactory transFactory = TransformerFactory.newInstance();
         SAXTransformerFactory saxTransFactory = (SAXTransformerFactory)transFactory;
         SAXResult saxResult = new SAXResult(innerContentSaxHandler);
@@ -301,21 +302,16 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         try {
             JAXBContext jaxbContext
                 = JAXBContext.newInstance(classes.toArray(new Class[classes.size()]));
-//            OutputFormat of = new OutputFormat();
-//            of.setCDataElements();
-//            Marshaller m = jaxbContext.createMarshaller();
-//            XMLSerializer serializer = getXMLSerializer();
-//            serializer.setOutputByteStream();
-//            m.marshal(o, serializer.asContentHandler());
             JAXBSource jaxbSource = new JAXBSource(jaxbContext, systemNode);
             Transformer trans = saxTransFactory.newTransformer();
             trans.transform(jaxbSource, saxResult);
 
-            ////log.info("children = " + children);
+            System.out.println("3XML " + System.currentTimeMillis());
             if (children != null) {
                 jaxbSource = new JAXBSource(jaxbContext, children);
                 trans.transform(jaxbSource, saxResult);
             }
+            System.out.println("4XML " + System.currentTimeMillis());
 
 //            if (siteMap != null) {
 //                jaxbSource = new JAXBSource(jaxbContext, siteMap);
@@ -324,6 +320,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
             jaxbSource = new JAXBSource(jaxbContext, pageObjects);
             trans.transform(jaxbSource, saxResult);
+            System.out.println("5XML " + System.currentTimeMillis());
 
         }
         catch (JAXBException e) {
@@ -340,7 +337,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             contentHandler.endElement("", "root", "root");
         }
         contentHandler.endDocument();
-        System.out.println("2XML. System.currentTimeMillis() = " + System.currentTimeMillis());
+        System.out.println("6XML " + System.currentTimeMillis());
     }
 
     private HashMap<String, HashMap<String, Object>> fillRequestParams(Request request, String src) {

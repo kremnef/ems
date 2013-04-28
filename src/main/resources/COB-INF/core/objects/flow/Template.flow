@@ -87,8 +87,8 @@ function editTemplateById(form) {
     var fileObjectService = cocoon.getComponent("fileObjectService");
     var contextRealPath = fileObjectService.getContextRealPath();
 
-    var xslURI = contextRealPath+"/WEB-INF/xslt/templates/" + template.getURI();
-    var cssURI = contextRealPath+"/css/templates/" + template.getName()+".css";
+    var xslURI = contextRealPath+"/WEB-INF/xslt/pages/" + template.getURI();
+    var cssURI = contextRealPath+"/css/pages/" + template.getName()+".css";
     importClass(Packages.ru.tastika.tools.file.FileAddition);
     var FileAdditional = new Packages.ru.tastika.tools.file.FileAddition();
     print("--"+contextRealPath);
