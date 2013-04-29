@@ -5,7 +5,8 @@
     <jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>
     <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/pages/"/>
     <jx:set var="CSS_TYPE_FILES_REAL_LOCATION" value="css/types/"/>
-    <jx:set var="CSS_TEMPLATE_FILE_REAL_LOCATION" value="css/templates/"/>
+    <jx:set var="CSS_TEMPLATE_FILE_REAL_LOCATION" value="css/pages/"/>
+    <jx:set var="CSS_THEME_FILE_REAL_LOCATION" value="css/theme/"/>
     <jx:set var="REAL_ROOT_PATH" value="${cocoon.parameters.realRootPath}"/>
     <jx:set var="SERVLET_PATH" value="${cocoon.parameters.servletPath}"/>
     <!--<!DOCTYPE xsl:stylesheet SYSTEM "dtd/escape.dtd">-->
@@ -96,25 +97,16 @@
                                     <xsl:copy>
                                         <xsl:value-of select="/root/systemNode/metaInfo/keywords"/>
                                         <xsl:text>,</xsl:text>
-                                        <!--<xsl:value-of select="/root/systemNode/metaInfo/*/tag"/>-->
-                                        <!--<xsl:for-each select="/root/systemNode/metaInfo/tags">
-                                            <xsl:value-of select="tag"/>
-                                            <xsl:if test="position() != last()">
-                                                <xsl:text>,</xsl:text>
-                                            </xsl:if>
-                                        </xsl:for-each>-->
                                         <xsl:for-each select="//tags">
                                             <xsl:value-of select="tag"/>
                                             <xsl:if test="position() != last()">
                                                 <xsl:text>,</xsl:text>
                                             </xsl:if>
                                         </xsl:for-each>
-                                        <!--<xsl:apply-templates select="/root/systemNode/metaInfo/*/tag"/>-->
                                     </xsl:copy>
                                 </xsl:attribute>
                             </meta>
 
-                            <!--<xsl:variable name="title" select="/root/systemNode/labels[languageCode=$locale]/label"/>-->
                             <title>
                                 <xsl:value-of select="/root/systemNode/objectLabel/label"/>
                                 <xsl:text> | </xsl:text> <xsl:value-of select="/root/systemNode/metaInfo/title"/>

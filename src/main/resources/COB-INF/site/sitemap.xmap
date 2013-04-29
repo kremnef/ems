@@ -169,36 +169,28 @@
 
 
         <map:resource name="generate">
-            <map:select type="request-parameter">
+           <!-- <map:select type="request-parameter">
                 <map:parameter name="parameter-name" value="xml"/>
                 <map:when test="true">
                     <map:call resource="xml">
                         <map:parameter name="block" value="{block}"/>
                     </map:call>
-                </map:when>
+                </map:when>-->
                 <!--<map:parameter name="parameter-name" value="pdf" />
                 <map:when test="true">
                     <map:call resource="pdf">
                         <map:parameter name="block" value="{block}"/>
                     </map:call>
                 </map:when>-->
-                <map:otherwise>
+                <!--<map:otherwise>-->
                     <map:transform type="xslt" src="cocoon:/generateXSLTFromSession"/>
                     <map:transform type="i18n">
                         <map:parameter name="locale" value="{session-attr:locale}"/>
                     </map:transform>
                     <map:serialize type="html"/>
-                    <!--<map:select type="parameter">
-                        <map:parameter name="parameter-selector-test" value="{block}"/>
-                        <map:when test="true">
-                            <map:serialize type="xml"/>
-                        </map:when>
-                        <map:otherwise>
-                            <map:serialize type="html"/>
-                        </map:otherwise>
-                    </map:select>-->
-                </map:otherwise>
-            </map:select>
+
+                <!--</map:otherwise>-->
+            <!--</map:select>-->
         </map:resource>
 
 
