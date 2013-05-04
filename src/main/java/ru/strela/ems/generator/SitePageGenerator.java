@@ -24,7 +24,6 @@ import ru.strela.ems.core.model.*;
 import ru.strela.ems.tools.ServerTools;
 import ru.tastika.tools.util.Utilities;
 
-import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
@@ -194,7 +193,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         for (Object obj : objectTypeActions) {
             ObjectTypeAction typeAction = (ObjectTypeAction) obj;
             String typeName = typeActionIds.get(typeAction.getId());
-            String typeActionString = typeName + ":" + typeAction.getName();
+            String typeActionString = typeName + ":" + typeAction.getName()+":" + typeAction.getXsltPath()+":" + typeAction.getRenderLike();
             if (!typesActions.contains(typeActionString)) {
                 typesActions.add(typeActionString);
             }

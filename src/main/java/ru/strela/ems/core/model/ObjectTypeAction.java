@@ -16,7 +16,7 @@ public class ObjectTypeAction implements java.io.Serializable {
     private ObjectType objectType;
     private String name;
     private String xsltPath;
-
+    private String renderLike;
 
 
     public ObjectTypeAction() {
@@ -84,5 +84,15 @@ public class ObjectTypeAction implements java.io.Serializable {
     public void setXsltPath(String xsltPath) {
         this.xsltPath = xsltPath;
     }
+
+    public String getRenderLike() {
+        return renderLike;
+    }
+
+
+    public void setRenderLike(String renderLike) {
+        this.renderLike = renderLike;
+    }
+
 }
 
