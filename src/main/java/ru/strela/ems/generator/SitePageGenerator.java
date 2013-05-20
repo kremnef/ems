@@ -51,8 +51,11 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(SitePageGenerator.class);
     public static final String CHILDREN_KEY = "children";
     public static final String OBJECTS_KEY = "objects";
+    public static final String DOCUMENT_TYPES = "documentTypes";
+    public static ArrayList<String> documentTypes = new ArrayList<String>();
 
     private Pattern systemNamesPattern = Pattern.compile("[^\\w/]");
+
     private static final String TYPES_ACTIONS = "typesActions";
     private static final String XSLT_TEMPLATE_FILE = "xsltTemplateFile";
     private static final String REAL_ROOT_PATH = "realRootPath";
@@ -96,22 +99,18 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         ////log.info("request.getScheme() = " + request.getScheme());
 
 
-
-
 //        int languageId = ServerTools.checkLocaleWithLanguageId(request);
         String languageCode = ServerTools.checkLocaleWithLanguageCode(request);
         String indexPage = "";
         try {
             indexPage = params.getParameter("index");
-        }
-        catch (ParameterException e) {
+        } catch (ParameterException e) {
             //
         }
         omitRoot = false;
         try {
             omitRoot = Utilities.parseStringToBoolean(params.getParameter("omitRoot"));
-        }
-        catch (ParameterException e) {
+        } catch (ParameterException e) {
             //
         }
 
@@ -193,18 +192,20 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         for (Object obj : objectTypeActions) {
             ObjectTypeAction typeAction = (ObjectTypeAction) obj;
             String typeName = typeActionIds.get(typeAction.getId());
-            String typeActionString = typeName + ":" + typeAction.getName()+":" + typeAction.getXsltPath()+":" + typeAction.getRenderLike();
+            String typeActionString = typeName + ":" + typeAction.getName() + ":" + typeAction.getXsltPath() + ":" + typeAction.getRenderLike();
             if (!typesActions.contains(typeActionString)) {
                 typesActions.add(typeActionString);
             }
         }
         request.setAttribute(TYPES_ACTIONS, Utilities.implode(typesActions, ","));
+        request.setAttribute(DOCUMENT_TYPES, Utilities.implode(documentTypes, ","));
+        System.out.println("DOCUMENT_TYPES :"+ documentTypes);
+
 //        //log.info("request.getAttribute(TYPES_ACTIONS) = " + request.getAttribute(TYPES_ACTIONS));
         request.setAttribute(REAL_ROOT_PATH, currentWebApplicationContext.getServletContext().getRealPath("/"));
 
         request.getSession().setAttribute(ServerTools.LOCALE_TITLE, request.getAttribute(ServerTools.LOCALE_TITLE));
         requestParams = fillRequestParams(request, src);
-
 
 
     }
@@ -218,8 +219,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             SystemNodeObjectType systemNodeObjectType = (SystemNodeObjectType) nodeObject;
             obj = systemNodeObjectType.getObjectType();
             objectName = systemNodeObjectType.getObjectType().getName();
-        }
-        else {
+        } else {
             SystemNodeTypifiedObject systemNodeTypifiedObject = (SystemNodeTypifiedObject) nodeObject;
             obj = systemNodeTypifiedObject.getTypifiedObject();
             objectName = systemNodeTypifiedObject.getTypifiedObject().getClass().getSimpleName();
@@ -235,14 +235,11 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             Method method = bean.getClass().getMethod(typeActionName, Map.class, Object.class, String.class);
 //            //log.info("method = " + method);
             method.invoke(bean, model, obj, src);
-        }
-        catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             //Logger.getLogger(SitePageGenerator.class).warn(e.getMessage(), e);
-        }
-        catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             Logger.getLogger(SitePageGenerator.class).warn(e.getMessage(), e);
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             Logger.getLogger(SitePageGenerator.class).warn(e.getMessage(), e);
         }
         /*System.out.println("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());*/
@@ -267,6 +264,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         classes.add(SystemNodeTypifiedObject.class);
         classes.add(SystemNodeObjectType.class);
         classes.add(pageObjects.getClass());
+
         for (SystemNodeObject nodeObject : pageObjects.values()) {
             Object obj;
             if (nodeObject instanceof SystemNodeObjectType) {
@@ -274,33 +272,39 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
                 obj = objectType;
                 try {
                     classes.add(Class.forName(objectType.getClassName()));
-                }
-                catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 obj = ((SystemNodeTypifiedObject) nodeObject).getTypifiedObject();
             }
             classes.add(obj.getClass());
             if (obj instanceof Content) {
+
                 classes.add(Document.class);
                 classes.add(DocumentType.class);
                 classes.add(Tag.class);
                 classes.add(Folder.class);
                 classes.add(FileObject.class);
+
+                 /*   String documentTypeName = ((Content) obj).getDocumentType().getName();
+                    if (!documentTypes.contains(documentTypeName)) {
+                        documentTypes.add(documentTypeName);
+                    }*/
+
+
             }
         }
 
         System.out.println("2XML " + System.currentTimeMillis());
         TransformerFactory transFactory = TransformerFactory.newInstance();
-        SAXTransformerFactory saxTransFactory = (SAXTransformerFactory)transFactory;
+        SAXTransformerFactory saxTransFactory = (SAXTransformerFactory) transFactory;
         SAXResult saxResult = new SAXResult(innerContentSaxHandler);
 
         try {
             JAXBContext jaxbContext
-                = JAXBContext.newInstance(classes.toArray(new Class[classes.size()]));
+                    = JAXBContext.newInstance(classes.toArray(new Class[classes.size()]));
             JAXBSource jaxbSource = new JAXBSource(jaxbContext, systemNode);
             Transformer trans = saxTransFactory.newTransformer();
             trans.transform(jaxbSource, saxResult);
@@ -321,14 +325,11 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             trans.transform(jaxbSource, saxResult);
             System.out.println("5XML " + System.currentTimeMillis());
 
-        }
-        catch (JAXBException e) {
+        } catch (JAXBException e) {
             throw new IOException(e);
-        }
-        catch (TransformerConfigurationException e) {
+        } catch (TransformerConfigurationException e) {
             throw new IOException(e);
-        }
-        catch (TransformerException e) {
+        } catch (TransformerException e) {
             throw new SAXException(e);
         }
 
@@ -377,7 +378,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         params = new HashMap<String, Object>();
         requestParams.put("parameters", params);
 
-        for (Enumeration enumeration = request.getParameterNames(); enumeration.hasMoreElements();) {
+        for (Enumeration enumeration = request.getParameterNames(); enumeration.hasMoreElements(); ) {
             String parameterName = String.valueOf(enumeration.nextElement());
             ArrayList<String> parameters = new ArrayList<String>();
             params.put(parameterName, parameters);
@@ -409,8 +410,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
                         contentHandler.characters(paramValueStr.toCharArray(), 0, paramValueStr.length());
                         contentHandler.endElement("", "param", "param");
                     }
-                }
-                else {
+                } else {
                     String paramValueStr = String.valueOf(paramValueObj);
                     contentHandler.startElement("", "param", "param", attributes);
                     contentHandler.characters(paramValueStr.toCharArray(), 0, paramValueStr.length());
@@ -433,5 +433,10 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         requestParams = null;
         super.recycle();
     }
+
+    /*public setDocumentTypesNames(ArrayList<String> documentTypes) {
+        this.documentTypes = documentTypes;
+    }*/
+
 
 }

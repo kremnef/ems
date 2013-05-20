@@ -404,6 +404,7 @@
                 <map:generate type="jx" src="view/generateXSLT.jx">
                     <map:parameter name="xsltTemplateFile" value="{request-attr:xsltTemplateFile}"/>
                     <map:parameter name="typesActions" value="{request-attr:typesActions}"/>
+                    <map:parameter name="documentTypes" value="{request-attr:documentTypes}"/>
                     <map:parameter name="realRootPath" value="{request-attr:realRootPath}"/>
                     <map:parameter name="servletPath" value="{request:servletPath}"/>
                     <map:parameter name="locale" value="{request-attr:locale}"/>

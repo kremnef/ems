@@ -29,6 +29,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     private String currentLocale;
     private String requestQueryString;
     private final static Logger log = LoggerFactory.getLogger(SiteProcessorDaoImpl.class);
+    private ArrayList<String> documentTypes = new ArrayList<String>();
 
 
     public SiteProcessorDaoImpl() {
@@ -153,7 +154,17 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                         }
                                         if (typifiedObject instanceof Content) {
                                             Content content = (Content) typifiedObject;
-                                            System.out.println("content = " + content.getName());
+                                            String documentTypeName = content.getDocumentType().getName();
+
+
+                                                             if (!SitePageGenerator.documentTypes.contains(documentTypeName)) {
+                                                                 SitePageGenerator.documentTypes.add(documentTypeName);
+                                                             }
+//                                            System.out.println("content = " + content.getName());
+//                                            request.setAttribute(DOCUMENT_TYPES, documentTypes);
+
+
+
                                             if (content.getHomeId() > 0) {
                                                 systemNodeIdsForUrls.add(content.getHomeId());
                                             }
@@ -177,6 +188,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                 System.out.println("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
                             }
                             if (children.size() > 0) {
+
                                 systemObjects.put(SitePageGenerator.CHILDREN_KEY, children);
                             }
 

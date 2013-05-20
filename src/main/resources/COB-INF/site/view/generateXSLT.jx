@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <!--todo: Вынести эти пути в настройки сайта -->
     <jx:set var="XSLT_TYPE_FILES_REAL_LOCATION" value="WEB-INF/xslt/types/"/>
     <jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>
     <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/pages/"/>
-    <!--<jx:set var="XSLT_DOCUMENT_TYPE_LOCATION" value="context:/WEB-INF/xslt/documentType/"/>-->
+    <jx:set var="XSLT_DOCUMENT_TYPE_LOCATION" value="context:/WEB-INF/xslt/types/Content/documentType/"/>
     <!--<jx:set var="XSLT_WIDGET_LOCATION" value="context:/WEB-INF/xslt/widgets/"/>-->
+    <jx:set var="XSLT_COMMON_LOCATION" value="context:/WEB-INF/xslt/types/Content/common/"/>
+    <jx:set var="XSLT_EXT_LOCATION" value="context:/WEB-INF/xslt/ext/"/>
     <jx:set var="CSS_TYPE_FILES_REAL_LOCATION" value="css/types/"/>
     <jx:set var="CSS_TEMPLATE_FILE_REAL_LOCATION" value="css/pages/"/>
     <jx:set var="CSS_THEME_FILE_REAL_LOCATION" value="css/theme/"/>
@@ -14,7 +16,8 @@
     <!--<!DOCTYPE xsl:stylesheet SYSTEM "dtd/escape.dtd">-->
     <xsl:stylesheet version="1.0"
                     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                    xmlns:i18n="http://apache.org/cocoon/i18n/2.1" exclude-result-prefixes="xsl i18n jx">
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:i18n="http://apache.org/cocoon/i18n/2.1" exclude-result-prefixes="xsl i18n jx xsi">
 
         <jx:set var="makeRedirect" value="${cocoon.parameters.makeRedirect}"/>
         <jx:choose>
@@ -89,9 +92,34 @@
                             <xsl:import href="${XSLT_TYPE_FILES_LOCATION + filePath + '.xsl'}"/>
                         </jx:if>
                     </jx:forEach>
+
+
                 </jx:if>
 
+
+                <!--Импорт шаблонов-->
+                <!--<jx:comment>#2<xsl:value-of select="//typifiedObject/documentType/name"/></jx:comment>-->
+
+                <!--<xsl:import href="../documentType/NewsAndEvents.xsl"/>-->
+                <!--
+                    <xsl:import href="../documentType/Work.xsl"/>-->
+                <xsl:import href="${XSLT_TYPE_FILES_LOCATION +'functions.xsl'}"/>
+                <xsl:import href="${XSLT_EXT_LOCATION+'date.format-date.template.xsl'}"/>
+                <!--<xsl:import href="${XSLT_COMMON_LOCATION +'Content-ems-templates-documentTypeImport.xsl'}"/>-->
+                <xsl:import href="${XSLT_COMMON_LOCATION +'Content-ems-documentTypeImport.xsl'}"/>
+
+                <jx:set var="documentTypesString" value="${cocoon.parameters.documentTypes}"/>
+                <jx:if test="${documentTypesString.length() &gt; 0}">
+                    <jx:forEach var="doumentTypeName" items="${cocoon.parameters.documentTypes.split(',')}">
+                        <xsl:import href="${XSLT_DOCUMENT_TYPE_LOCATION + doumentTypeName +'.xsl'}"/>
+                        <!--<h1>${doumentTypeName}</h1>-->
+                    </jx:forEach>
+                </jx:if>
+
+
+                <!--<import-document-type-template/>-->
                 <!--Импорт основного шаблона страницы-->
+
                 <jx:set var="xsltTemplateFile" value="${cocoon.parameters.xsltTemplateFile}"/>
                 <xsl:import href="${XSLT_TEMPLATE_FILE_LOCATION}${xsltTemplateFile}"/>
 
@@ -186,8 +214,9 @@
                                 <link rel="stylesheet" type="text/css" href="${SERVLET_PATH}/${tempateCSSFilePath}"/>
                             </jx:if>
 
-                            <xsl:call-template name="scripts"/>
                             <xsl:call-template name="styles"/>
+                            <xsl:call-template name="scripts"/>
+
                         </head>
                         <body>
                             <xsl:apply-templates select="/root"/>
@@ -198,6 +227,7 @@
 
             </jx:otherwise>
         </jx:choose>
+
     </xsl:stylesheet>
 
 </jx:template>
