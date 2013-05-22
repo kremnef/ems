@@ -192,7 +192,8 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         for (Object obj : objectTypeActions) {
             ObjectTypeAction typeAction = (ObjectTypeAction) obj;
             String typeName = typeActionIds.get(typeAction.getId());
-            String typeActionString = typeName + ":" + typeAction.getName() + ":" + typeAction.getXsltPath() + ":" + typeAction.getRenderLike();
+            String typeActionString = typeName + ":" + typeAction.getXsltPath() + ":" + typeAction.getName()  + ":" + typeAction.getRenderLike();
+            System.out.println("typeActionString :"+ typeActionString);
             if (!typesActions.contains(typeActionString)) {
                 typesActions.add(typeActionString);
             }

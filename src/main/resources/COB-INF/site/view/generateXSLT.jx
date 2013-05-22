@@ -49,19 +49,24 @@
                         <jx:set var="typeActionSplitted" value="${typeAction.split(':')}"/>
                         <!--Тип системного объекта-->
                         <jx:set var="objectType" value="${typeActionSplitted.0}"/>
-                        <!--Имя Действия-->
-                        <jx:set var="actionName" value="${typeActionSplitted.1}"/>
+
                         <!--Путь к шаблону-->
-                        <jx:set var="xsltPath" value="${typeActionSplitted.2}"/>
+                        <jx:set var="xsltPath" value="${typeActionSplitted.1}"/>
+                        <!--Имя Действия-->
+                        <jx:set var="actionName" value="${typeActionSplitted.2}"/>
                         <!--Способ вывода-->
                         <jx:set var="renderLike" value="${typeActionSplitted.3}"/>
                         <!---->
                         <jx:set var="ignored1" value="${actions.add(actionName)}"/>
                         <!--Записываем пути к шаблонам для всех действий-->
                         <jx:choose>
-                            <jx:when test="${xsltPath !='null' and renderLike !='null'}">
+                            <jx:when test="${xsltPath =='widget' and renderLike !='null'}">
                                 <jx:set var="ignored"
                                         value="${actionXSLTFiles.add(objectType + '/'+ xsltPath + '/' + objectType + '-' + renderLike + '-' + actionName)}"/>
+                            </jx:when>
+                            <jx:when test="${xsltPath =='documentType' and renderLike !='null'}">
+                                <jx:set var="ignored"
+                                        value="${actionXSLTFiles.add(objectType + '/'+ xsltPath + '/' + actionName)}"/>
                             </jx:when>
 
                             <jx:otherwise>

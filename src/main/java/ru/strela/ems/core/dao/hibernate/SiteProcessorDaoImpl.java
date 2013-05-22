@@ -29,7 +29,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     private String currentLocale;
     private String requestQueryString;
     private final static Logger log = LoggerFactory.getLogger(SiteProcessorDaoImpl.class);
-    private ArrayList<String> documentTypes = new ArrayList<String>();
+//    private ArrayList<String> documentTypes = new ArrayList<String>();
 
 
     public SiteProcessorDaoImpl() {
@@ -62,6 +62,8 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
 
             System.out.println("1. System.currentTimeMillis() = " + System.currentTimeMillis());
+
+            SitePageGenerator.documentTypes.clear();
 //            System.out.println("systemNamesPath = " + systemNamesPath);
 
             HashSet<Integer> redirectCycle = new HashSet<Integer>();
