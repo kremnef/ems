@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.HashSet;
@@ -46,7 +47,7 @@ public class SiteMapView {
     }
 
 
-
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }
@@ -66,7 +67,7 @@ public class SiteMapView {
         this.url = url;
     }
 
-
+    @XmlAttribute(name="systemNodeId")
     public int getSystemNodeId() {
         return systemNodeId;
     }
@@ -76,7 +77,7 @@ public class SiteMapView {
         this.systemNodeId = systemNodeId;
     }
 
-
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return parentId;
     }
@@ -86,7 +87,7 @@ public class SiteMapView {
         this.parentId = parentId;
     }
 
-
+    @XmlAttribute(name="objectId")
     public int getObjectId() {
         return objectId;
     }
@@ -119,7 +120,7 @@ public class SiteMapView {
         return false;
     }
 
-
+    @XmlAttribute(name="activeObjectPosition")
     public int getActiveObjectPosition() {
         return activeObjectPosition;
     }
@@ -129,7 +130,7 @@ public class SiteMapView {
         this.activeObjectPosition = activeObjectPosition;
     }
 
-
+    @XmlAttribute(name="isMainObject")
     public boolean isMainObject() {
         return mainObject;
     }

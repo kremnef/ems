@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.security.model.Customer;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.*;
@@ -105,17 +106,17 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         this.navigation = navigation;
     }
 
-
+    @XmlAttribute(name="repositoryId")
     public Integer getRepositoryId() {
         return this.repositoryId;
     }
 
-
+    @XmlAttribute(name="templateId")
     public Integer getTemplateId() {
         return this.templateId;
     }
 
-
+    @XmlAttribute(name="isBranch")
     public boolean getIsBranch() {
         return this.isBranch;
     }
@@ -125,7 +126,7 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         return this.template;
     }
 
-
+    @XmlAttribute(name="nodeTypeId")
     public Integer getNodeTypeId() {
         return this.nodeTypeId;
     }
@@ -443,7 +444,7 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         return new SystemNodeObjectsData(0, 0, "Empty", position, 0, "", 0, new TreeSet<ObjectTypeAction>(), 0, false, 0, null, null, null);
     }
 
-
+    @XmlTransient
     public EmsObject getEmsObject() {
         if (emsObject == null) {
             emsObject = new EmsObject();
@@ -474,7 +475,7 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         }
     }
 
-
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
     }
@@ -484,7 +485,7 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         return emsObject.getParent();
     }
 
-
+    @XmlAttribute(name="emsObjectId")
     public int getEmsObjectId() {
         return emsObjectId;
     }
@@ -494,14 +495,6 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         this.emsObjectId = emsObjectId;
     }
 
-
-    /*public int getMetaInfoId() {
-        return metaInfoId;
-    }
-
-    public void setMetaInfoId(int metaInfoId) {
-        this.metaInfoId = metaInfoId;
-    }*/
 
     public int getRedirectTo() {
         return redirectTo;

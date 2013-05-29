@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -66,7 +67,7 @@ public class Folder extends TypifiedObject implements java.io.Serializable, Syst
         }
     }
 
-
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
     }

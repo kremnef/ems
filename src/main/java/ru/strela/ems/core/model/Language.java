@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -56,7 +57,7 @@ public class Language extends TypifiedObject implements java.io.Serializable {
         this.code = code;
     }
 
-
+    @XmlAttribute(name="charset")
     public String getCharset() {
         return this.charset;
     }
@@ -71,7 +72,7 @@ public class Language extends TypifiedObject implements java.io.Serializable {
         return name;
     }
 
-
+    @XmlTransient
     public boolean getIsPublished() {
         return this.isPublished;
     }

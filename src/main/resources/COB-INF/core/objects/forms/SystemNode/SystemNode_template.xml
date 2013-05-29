@@ -162,7 +162,12 @@
 
             <script type="text/javascript">
                 $(function() {
-                $("#tabs").tabs();
+
+                $('#tabs').tabs(
+                <jx:if test="${actionState == 'edit'} ">
+                    { selected: 1 }
+                </jx:if>);
+
                 $("#ftabs").tabs();
                 $("#redirect").tabs();
                 });
@@ -175,7 +180,7 @@
                             <i18n:text catalogue="core" key="SystemNode.settings"/>
                         </a>
                     </li>
-                    <!--<jx:if test="${actionState == 'edit'} ">-->
+
                     <li>
                         <a href="#tabs-2">
                             <i18n:text catalogue="core" key="SystemNode.widgets"/>
@@ -186,7 +191,6 @@
                             <i18n:text catalogue="core" key="Document.metaData"/>
                         </a>
                     </li>
-                    <!--</jx:if>-->
 
 
                 </ul>
@@ -287,9 +291,48 @@
                                             </td>
 
                                             <td>
+                                                <jx:if test="${repeater.getRow(repeaterLoop.index).getChild('objectTypeName').value == 'Content' }">
+                                                    <ft:widget id="typeSelector">
+                                                        <fi:styling i18n:attr="title"
+                                                                    title="core:action.${this.value}" style="width:150px;"/>
+                                                        <fi:selection-list>
+                                                            <fi:item value="widget">
+                                                                <fi:label>widget</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="documentType">
+                                                                <fi:label>documentType</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="common">
+                                                                <fi:label>common</fi:label>
+                                                            </fi:item>
+                                                        </fi:selection-list>
+                                                    </ft:widget>
+                                                    <ft:widget id="renderLike">
+                                                        <fi:styling  style="width:150px;"/>
+                                                        <fi:selection-list>
+                                                            <fi:item value="item">
+                                                                <fi:label>item</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="itemWithChild">
+                                                                <fi:label>itemWithChild</fi:label>
+                                                            </fi:item>
+                                                            <fi:item value="list">
+                                                                <fi:label>list</fi:label>
+                                                            </fi:item>
+
+                                                            <!--<jx:forEach items="${renderLikeItems}" var="renderLike">
+                                                                <fi:item value="${renderLike.item}">
+                                                                    &lt;!&ndash;<jx:if test="${renderLike.item} = "&ndash;&gt;
+                                                                    <fi:label>${renderLike.item}</fi:label>
+                                                                </fi:item>
+                                                            </jx:forEach>-->
+                                                        </fi:selection-list>
+                                                    </ft:widget>
+                                                </jx:if>
                                                 <ft:widget id="objectTypeAction">
-                                                    <fi:styling i18n:attr="title" title="core:action.${this.value}"/>
+                                                    <fi:styling i18n:attr="title"  style="width:150px;" title="core:action.${this.value}"/>
                                                 </ft:widget>
+
                                             </td>
 
                                             <td>
@@ -378,8 +421,11 @@
 
                                                         </fi:selection-list>
                                                     </ft:widget>
+
+
                                                 </td>
-                                                <td bgcolor="#efefef">
+
+                                                <td bgcolor="#efefef" colspan="3">
                                                     <label for="sortDirection:input" class="label">
                                                         <ft:widget-label id="sortDirection"/>
                                                     </label>
@@ -402,29 +448,6 @@
                                                             </fi:item>
                                                         </fi:selection-list>
                                                     </ft:widget>
-                                                </td>
-                                                <td bgcolor="#efefef" colspan="2">
-                                                    <ft:widget id="renderLike">
-                                                        <!--<fi:styling class="chzn-select" style="width:60px;"/>-->
-                                                        <fi:selection-list>
-                                                            <!-- <fi:item value="1">
-                                                                <fi:label>List</fi:label>
-                                                            </fi:item>
-                                                            <fi:item value="2">
-                                                                <fi:label>object</fi:label>
-                                                            </fi:item>
-                                                            <fi:item value="3">
-                                                                <fi:label>tree</fi:label>
-                                                            </fi:item>-->
-                                                            <jx:forEach items="${renderLikeItems}" var="renderLike">
-                                                                <fi:item value="${renderLike.item}">
-                                                                    <!--<jx:if test="${renderLike.item} = "-->
-                                                                    <fi:label>${renderLike.item}</fi:label>
-                                                                </fi:item>
-                                                            </jx:forEach>
-                                                        </fi:selection-list>
-                                                    </ft:widget>
-
                                                 </td>
                                             </tr>
                                         </jx:if>

@@ -396,23 +396,23 @@
                 </map:call>
             </map:match>
 
-            <!--<map:match pattern="login-pipeline">
-               &lt;!&ndash; <map:act type="cauth-login">
+            <map:match pattern="login-pipeline">
+               <!-- <map:act type="cauth-login">
                     <map:parameter name="application" value="ems"/>
                     <map:parameter name="name" value="{flow-attr:name}"/>
                     <map:parameter name="password" value="{flow-attr:password}"/>
                     <map:redirect-to uri="{flow-attr:redirectURI}"/>
-                </map:act>&ndash;&gt;
+                </map:act>-->
                 <map:redirect-to uri="/j_spring_security_check?name={flow-attr:name}&amp;redirectURI={flow-attr:redirectURI}"/>
-                &lt;!&ndash;<map:redirect-to uri="login?name={flow-attr:name}&amp;redirectURI={flow-attr:redirectURI}"/>&ndash;&gt;
-                &lt;!&ndash;map:call function="login">
+                <!--<map:redirect-to uri="login?name={flow-attr:name}&amp;redirectURI={flow-attr:redirectURI}"/>-->
+                <!--map:call function="login">
                     <map:parameter name="showFormURI" value="login-template-pipeline"/>
                     <map:parameter name="definitionURI" value="forms/login/login_definition.xml"/>
                     <map:parameter name="loginPipeline" value="login-pipeline"/>
                     <map:parameter name="name" value="{flow-attr:name}"/>
                     <map:parameter name="redirectURI" value="{flow-attr:redirectURI}"/>
-                </map:call&ndash;&gt;
-            </map:match>-->
+                </map:call-->
+            </map:match>
             <map:match pattern="login-fail-pipeline">
                 <map:call function="login">
                     <map:parameter name="showFormURI" value="login-template-pipeline"/>

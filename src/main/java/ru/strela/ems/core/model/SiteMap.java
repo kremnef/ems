@@ -1,6 +1,8 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.*;
 
 
@@ -46,7 +48,7 @@ public class SiteMap {
         this.children = children;
         this.siteMapObjects = siteMapObjects;
     }
-
+    @XmlTransient
     public int getId() {
         return id;
     }
@@ -69,7 +71,7 @@ public class SiteMap {
         this.url = url;
     }
 
-
+    @XmlAttribute(name="systemNodeId")
     public int getSystemNodeId() {
         return systemNodeId;
     }
@@ -79,7 +81,7 @@ public class SiteMap {
         this.systemNodeId = systemNodeId;
     }
 
-
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return parentId;
     }
@@ -99,7 +101,7 @@ public class SiteMap {
         this.siteMapObjects = siteMapObjects;
     }
 
-
+    @XmlAttribute(name="objectId")
     public int getObjectId() {
         return objectId;
     }
@@ -154,7 +156,7 @@ public class SiteMap {
         //siteMapObject.setSiteMapId(getId());
     }
 
-
+    @XmlAttribute(name="activeObjectPosition")
     public int getActiveObjectPosition() {
         return activeObjectPosition;
     }
@@ -164,7 +166,7 @@ public class SiteMap {
         this.activeObjectPosition = activeObjectPosition;
     }
 
-
+    @XmlAttribute(name="isMainObject")
     public boolean isMainObject() {
         return mainObject;
     }
@@ -211,7 +213,7 @@ public class SiteMap {
         return mapObjectCollection;
     }
 
-
+    @XmlAttribute(name="levels")
     public int getLevels() {
         return levels;
     }
@@ -234,7 +236,7 @@ public class SiteMap {
         this.redirectTo = redirectTo;
     }
 
-
+    @XmlAttribute(name="navigationId")
     public int getNavigationId() {
         return navigationId;
     }

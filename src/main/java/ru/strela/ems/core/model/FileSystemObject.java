@@ -1,6 +1,9 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * User: hobal
  * Date: 27.09.2010
@@ -47,7 +50,7 @@ public class FileSystemObject {
     }
 
 
-
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }
@@ -107,7 +110,7 @@ public class FileSystemObject {
         this.path = path;
     }
 
-
+    @XmlTransient
     public boolean isFolder() {
         return folder;
     }

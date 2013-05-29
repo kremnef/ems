@@ -24,8 +24,7 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd http://co
             <beans:property name = "roleHierarchy" ref=""/>
     </beans:bean>-->
     <!--<http use-expressions="true" access-denied-page="/error403" entry-point-ref="loginUrlAuthenticationEntryPoint">-->
-<!--        <http pattern="/**" security="none"/>-->
-<!--    <http pattern="/ems/site/**" security="none"/>
+    <http pattern="/ems/site/**" security="none"/>
     <http pattern="/ems/service/**" security="none"/>
     <http pattern="/ems/security/login" security="none"/>
     <http pattern="/js/**" security="none"/>
@@ -36,7 +35,7 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd http://co
     <http pattern="/ems/resource/**" security="none"/>
     <http pattern="/resource/**" security="none"/>
     <http pattern="/cocoon-ajax-impl/**" security="none"/>
-    <http pattern="/cocoon-forms-impl/**" security="none"/>-->
+    <http pattern="/cocoon-forms-impl/**" security="none"/>
 
     <http use-expressions="true" access-denied-page="/ems/security/login"
           entry-point-ref="loginUrlAuthenticationEntryPoint">
@@ -62,14 +61,11 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd http://co
         <!--<form-login login-page="/pass" default-target-url="/my/changePassword" authentication-failure-url="/pass"/>-->
 
 
-<!--        <intercept-url pattern="/ems/security/login" access="permitAll"/>-->
-<!--        <intercept-url pattern="/ems/core/**" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>-->
-<!--        <intercept-url pattern="/ems/ecommerce/**" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>-->
-<!--        <intercept-url pattern="/ems/security/**" access="hasRole('ROLE_ADMIN')"/>-->
-    
-    
-    
-        <intercept-url pattern="**" access="permitAll"/>
+        <!--<intercept-url pattern="/ems/security/login" access="permitAll"/>-->
+        <intercept-url pattern="/ems/core/**" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/ems/ecommerce/**" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/ems/security/**" access="hasRole('ROLE_ADMIN')"/>
+        <!--<intercept-url pattern="**" access="permitAll"/>-->
 
 
         <!--<intercept-url pattern="/ems/core/*-list" access="hasRole('ROLE_USER') and fullyAuthenticated" />-->

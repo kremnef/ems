@@ -7,7 +7,9 @@ import ru.strela.ems.actions.ThumbnailAction;
 import ru.strela.ems.tools.ServerTools;
 import ru.tastika.tools.file.FileAddition;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.File;
 import java.io.IOException;
 
@@ -90,6 +92,8 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
      *
      * @return the value of field 'size'.
      */
+
+
     public int getSize() {
         return this.size;
     }
@@ -130,6 +134,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
      *
      * @return the value of field 'used'.
      */
+    @XmlTransient
     public int getUsed() {
         return used;
     }
@@ -149,6 +154,8 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
      *
      * @return the value of field 'fileTypeGroupId'.
      */
+
+    @XmlAttribute(name="fileTypeGroupId")
     public int getFileTypeGroupId() {
         return fileTypeGroupId;
     }
@@ -248,6 +255,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
     }
 
 
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
     }

@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 //chenged
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -58,6 +59,7 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
     /**
      * @return the rootId
      */
+    @XmlAttribute(name="rootId")
     public int getRootId() {
         return rootId;
     }
@@ -70,7 +72,7 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
         this.rootId = rootId;
     }
 
-
+    @XmlAttribute(name="systemNodeId")
     public Integer getSystemNodeId() {
         return systemNodeId;
     }
@@ -134,7 +136,7 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
         }
     }
 
-
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
     }
@@ -150,7 +152,7 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
         return getName();
     }
 
-
+    @XmlAttribute(name="redirectTo")
     public int getRedirectTo() {
         return redirectTo;
     }

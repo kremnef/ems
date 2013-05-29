@@ -1,6 +1,8 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 /**
  * User: hobal
  * Date: 11.10.2010
@@ -29,7 +31,7 @@ public class SiteMapObject implements Cloneable {
         this.objectUrl = objectUrl;
     }
 
-
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }
@@ -39,7 +41,7 @@ public class SiteMapObject implements Cloneable {
         this.id = id;
     }
 
-
+    @XmlAttribute(name="objectId")
     public int getObjectId() {
         return objectId;
     }
@@ -49,7 +51,7 @@ public class SiteMapObject implements Cloneable {
         this.objectId = objectId;
     }
 
-
+    @XmlAttribute(name="siteMapId")
     public int getSiteMapId() {
         return siteMapId;
     }
@@ -99,7 +101,7 @@ public class SiteMapObject implements Cloneable {
         return false;
     }
 
-
+    @XmlAttribute(name="mainObjectId")
     public int getMainObjectId() {
         return mainObjectId;
     }

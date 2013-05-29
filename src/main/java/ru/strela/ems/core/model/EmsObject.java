@@ -3,6 +3,7 @@ package ru.strela.ems.core.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -48,6 +49,8 @@ public class EmsObject implements java.io.Serializable {
     /**
      * @return the systemName
      */
+
+
     public String getSystemName() {
         return systemName;
     }
@@ -90,6 +93,7 @@ public class EmsObject implements java.io.Serializable {
     /**
      * @return the parentId
      */
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return parentId;
     }
@@ -118,6 +122,7 @@ public class EmsObject implements java.io.Serializable {
     /**
      * @return the isPublished
      */
+    @XmlTransient
     public boolean getIsPublished() {
         return this.isPublished;
     }
@@ -141,6 +146,7 @@ public class EmsObject implements java.io.Serializable {
     /**
      * @return the childrenCount
      */
+    @XmlAttribute(name="childrenCount")
     public int getChildrenCount() {
         return childrenCount;
     }
@@ -198,7 +204,7 @@ public class EmsObject implements java.io.Serializable {
          this.isPublished = isPublished;
     }
 
-
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }

@@ -3,6 +3,7 @@ package ru.strela.ems.core.model;
 
 import ru.strela.ems.security.model.Customer;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
@@ -81,6 +82,7 @@ public abstract class TypifiedObject {
         this.metaInfoList = metaInfoList;
     }
 */
+    @XmlAttribute(name="id")
     public Integer getId() {
         return id;
     }
@@ -220,7 +222,7 @@ public abstract class TypifiedObject {
     public void setSystemName(String systemName) {
     }
 
-
+    @XmlTransient
     public Integer getParentId() {
         return null;
     }
@@ -298,7 +300,7 @@ public abstract class TypifiedObject {
         return sb.toString();
     }
 
-
+    @XmlAttribute(name="position")
     public int getPosition() {
         return position;
     }
@@ -317,7 +319,7 @@ public abstract class TypifiedObject {
         this.objectTypeId = objectTypeId;
     }
 
-    @XmlTransient
+    /*@XmlTransient
     public String getOrder() {
         return ORDER_ASC;
     }
@@ -326,7 +328,7 @@ public abstract class TypifiedObject {
     @XmlTransient
     public String getOrderField() {
         return ORDER_FIELD_POSITION;
-    }
+    }*/
 
     public MetaInfo getMetaInfo() {
         return this.metaInfo;

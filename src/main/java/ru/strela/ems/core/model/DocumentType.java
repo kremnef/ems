@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -33,7 +34,7 @@ public class DocumentType implements java.io.Serializable {
     public DocumentType() {
     }
 
-
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }
@@ -42,11 +43,9 @@ public class DocumentType implements java.io.Serializable {
         this.id = id;
     }
 
-
     public String getName() {
         return this.name;
     }
-
 
     public String getPath() {
         return this.path;
@@ -74,6 +73,7 @@ public class DocumentType implements java.io.Serializable {
     }
 
 //    @XmlTransient
+    @XmlAttribute(name="advertisement")
     public boolean isAdvertisement() {
         return advertisement;
     }

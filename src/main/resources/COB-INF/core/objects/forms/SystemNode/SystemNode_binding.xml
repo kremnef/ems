@@ -25,6 +25,8 @@
             <fb:value id="objectTypeSelect" path="typeId"/>
             <fb:value id="objectTypeName" path="typeName"/>
             <fb:value id="objectTypeAction" path="typeActionId"/>
+            <fb:value id="typeSelector" path="xsltPath"/>
+            <fb:value id="renderLike" path="renderLike"/>
             <!--<fb:value id="homeId" path="homeId"/>-->
             <fb:value id="objectLevels" path="levels"/>
             <fb:value id="objectType" path="objectType"/>

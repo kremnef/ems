@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
@@ -69,32 +70,12 @@ public class Document implements java.io.Serializable {
 
     private boolean isLastVersion;
 
-//    private int languageId;
-
-    //    private Language language;
     private List<FileObject> fileObjects;
-//    private Set<FileObject> fileObjects;
     private List<Folder> folders;
-//    private Set<Folder> folders;
 
     private List<FileSystemObject> fileSystemObjects;
     private Integer contentId;
 
-    /*  public Document(Date modifiedDateTime, Integer contentId,
-                int languageId,
-                Integer version, DocumentImpl XML, String xmlSource) {
-    this.contentId = contentId;
-    this.modifiedDateTime = modifiedDateTime;
-    this.languageId = languageId;
-    this.XML = XML;
-    *//*this.versionComment = versionComment;
-        this.versionModifierId = versionModifierId;*//*
-        this.version = version;
-        this.xmlSource = xmlSource;
-        fileObjects = new ArrayList();
-        folders = new ArrayList();
-        fileSystemObjects = new ArrayList();
-    }*/
 
 
     public Document() {
@@ -120,15 +101,12 @@ public class Document implements java.io.Serializable {
     }
 
 
-    /*public Set<FileObject> getFileObjects() {
-        return fileObjects;
-    }*/
     public List getFileObjects() {
         return fileObjects;
     }
 
 
-
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }
@@ -138,37 +116,7 @@ public class Document implements java.io.Serializable {
         this.id = id;
     }
 
-    /*
 
-    public Set getDocumentSourceXML() {
-    return this.documentSourceXML;
-    }
-
-    public void setDocumentSourceXML(Set documentSourceXML) {
-    this.documentSourceXML = documentSourceXML;
-    }
-     */
-
-    /*  @XmlTransient
-        public boolean getIsActive() {
-            return this.isActive;
-        }
-
-        @XmlTransient
-        public int getIsCheckedOut() {
-            return this.isCheckedOut;
-        }
-    */
-    /*@XmlTransient
-    public Language getLanguage() {
-        return this.language;
-    }*/
-
-    /*@XmlTransient
-    public int getLanguageId() {
-        return this.languageId;
-    }
-*/
     @XmlTransient
     public String getState() {
         return this.state;
@@ -181,10 +129,6 @@ public class Document implements java.io.Serializable {
     }
 
 
-    /*public void setLanguageId(int languageId) {
-        this.languageId = languageId;
-    }*/
-
 
     public void setState(String state) {
         this.state = state;
@@ -194,27 +138,12 @@ public class Document implements java.io.Serializable {
         this.contentId = contentId;
     }
 
-/*    public void setFileObjects(Set<FileObject> fileObjects) {
-            this.fileObjects = fileObjects;
-            updateFileSystemObjects();
-        }*/
 
     public void setFileObjects(List fileObjects) {
         this.fileObjects = fileObjects;
         updateFileSystemObjects();
     }
 
-
-
-    /*public Set<Folder> getFolders() {
-        return folders;
-    }*/
-
-
-    /*public void setFolders(Set<Folder> folders) {
-        this.folders = folders;
-        updateFileSystemObjects();
-    }*/
 
 
     public List getFolders() {
@@ -297,20 +226,6 @@ public class Document implements java.io.Serializable {
     }
 
 
-//    public void setVersionModifierId(int versionModifierId) {
-//        this.versionModifierId = versionModifierId;
-//    }
-
-    /*@XmlTransient
-    public int getVersion() {
-        return this.version;
-    }
-
-
-    public void setVersion(int version) {
-        this.version = version;
-    }*/
-
 
 
     @XmlTransient
@@ -363,7 +278,7 @@ public class Document implements java.io.Serializable {
         }
     }
 
-
+/*
     public static class String2CDATA extends XmlAdapter<String, String> {
 
 
@@ -395,7 +310,7 @@ public class Document implements java.io.Serializable {
             return "<![CDATA[" + v + "]]>";
         }
 
-    }
+    }*/
 
     @XmlTransient
     public boolean getIsLastVersion() {

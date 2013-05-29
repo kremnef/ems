@@ -1,6 +1,9 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Class Template.
  *
@@ -31,6 +34,7 @@ public class Template implements java.io.Serializable {
     /**
      * @return the id
      */
+    @XmlTransient
     public Integer getId() {
         return id;
     }
@@ -63,7 +67,7 @@ public class Template implements java.io.Serializable {
 
     }
 
-
+    @XmlAttribute(name="positionsAmount")
     public int getPositionsAmount() {
         return positionsAmount;
     }

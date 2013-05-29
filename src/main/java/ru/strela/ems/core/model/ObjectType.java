@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ public class ObjectType implements java.io.Serializable {
     /**
      * @return the id
      */
+    @XmlAttribute(name="id")
     public Integer getId() {
         return id;
     }
@@ -89,7 +91,7 @@ public class ObjectType implements java.io.Serializable {
         this.typeActions = typeActions;
     }
 
-
+    @XmlTransient
     public boolean isHasChildren() {
         return hasChildren;
     }

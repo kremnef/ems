@@ -1,7 +1,6 @@
 
-/*
-function restlogin() {
-            print( "!!!!LOGIN FORM"+userLocale);
+function login() {
+    print( "!!!!LOGIN FORM"+userLocale);
     var redirectURI = cocoon.request.getParameter("redirectURI");
     var queryString = "";
     for (var enumeration = cocoon.request.getParameterNames(); enumeration.hasMoreElements();) {
@@ -35,27 +34,31 @@ function restlogin() {
     }
 
 
+
     form.locale = new java.util.Locale(locale);
     importClass(org.apache.cocoon.forms.formmodel.WidgetState);
 
-    */
-/*var userData = getLoggedInUser();
-    if (userData.login) {
+    var userData = getLoggedInUser();
+
+    if (userData != null && userData.login) {
+        print("1");
         form.lookupWidget("loggedInMessage").setState(WidgetState.OUTPUT);
         form.lookupWidget("login").setValue(userData.name);
         form.lookupWidget("login").setState(WidgetState.DISABLED);
         form.lookupWidget("password").setState(WidgetState.DISABLED);
-        form.lookupWidget("password").setValue(Packages.ru.strela.ems.core.model.User.PASSWORD_PLACEHOLDER);
+//        form.lookupWidget("password").setValue(Packages.ru.strela.ems.core.model.User.PASSWORD_PLACEHOLDER);
         form.lookupWidget("changeAccount").setState(WidgetState.ACTIVE);
     }
     else {
+        print("2");
         form.lookupWidget("loggedInMessage").setState(WidgetState.INVISIBLE);
         form.lookupWidget("password").setState(WidgetState.ACTIVE);
         form.lookupWidget("changeAccount").setState(WidgetState.INVISIBLE);
     }
-     *//*
+
 
     if (login) {
+        print("3");
         form.lookupWidget("errorMessage").setState(WidgetState.OUTPUT);
         form.lookupWidget("login").setValue(login);
     }
@@ -66,17 +69,20 @@ function restlogin() {
     var inputName = form.getChild("login").getValue().trim();
     var inputPassword = form.getChild("password").getValue().trim();
 //    inputPassword = MD5Crypt.md5ToString16(inputPassword);
-//    print("inputPassword = " + inputPassword);
-    */
-/*if (!redirectURI) {
-        redirectURI = "../core/Content-list";
-    }*//*
+    print("inputPassword = " + inputPassword);
+
+    if (!redirectURI) {
+        print("4");
+            redirectURI = "../core/Content-list";
+    }
 
 //    cocoon.redirectTo("../../j_spring_security_check?j_username="+inputName+"&j_password="+inputPassword);
 //    cocoon.redirectTo("checklogin?j_username="+inputName+"&j_password="+inputPassword);
 //    cocoon.redirectTo("/ems/service/checklogin", {"loginform.login": inputName, "loginform.password": inputPassword});
 //    cocoon.sendPage("checklogin", {"loginform.login": inputName, "loginform.password": inputPassword});
+
     cocoon.redirectTo("checklogin?loginform.login"+inputName+"loginform.password"+inputPassword);
+
 //    cocoon.sendPage(loginPipeline, {"j_username": inputName, "j_password": inputPassword, "redirectURI" : redirectURI});
 //    var userService = cocoon.getComponent("userService");
 //    var user = userService.getUser(inputUsername);
@@ -99,4 +105,4 @@ function restlogin() {
 //        cocoon.sendPage(failPipeline, {"fail": true, "username": inputUsername, "redirectURI" : redirectURI});
 //    }
 
-}*/
+}

@@ -2,6 +2,8 @@ package ru.strela.ems.core.model;
 
 
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * User: hobal
@@ -27,6 +29,7 @@ public class ObjectTypeAction implements java.io.Serializable {
     /**
      * @return the id
      */
+    @XmlAttribute(name="id")
     public int getId() {
         return id;
     }
@@ -46,6 +49,7 @@ public class ObjectTypeAction implements java.io.Serializable {
     }
 
     @Transient
+    @XmlTransient
     public int getObjectTypeId() {
         return objectTypeId;
     }

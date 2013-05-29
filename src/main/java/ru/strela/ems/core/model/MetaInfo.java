@@ -119,7 +119,7 @@ public class MetaInfo {
         this.keywords = keywords;
     }
 
-//    @XmlTransient
+    @XmlTransient
     public String getLanguageCode() {
         return languageCode;
     }

@@ -1,6 +1,7 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
@@ -63,7 +64,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         linked = new ArrayList();
     }
 
-
+    @XmlAttribute(name="publishDateTime")
     public Date getPublishDateTime() {
         return this.publishDateTime;
     }
@@ -73,7 +74,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         this.publishDateTime = publishDateTime;
     }
 
-
+    @XmlAttribute(name="expireDateTime")
     public Date getExpireDateTime() {
         return this.expireDateTime;
     }
@@ -100,7 +101,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         this.isProtected = isProtected;
     }*/
 
-
+    @XmlAttribute(name="documentTypeId")
     public Integer getDocumentTypeId() {
         return this.documentTypeId;
     }
@@ -116,9 +117,9 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
     }
 
 
-    public Set getLastVersionDocuments() {
+   /* public Set getLastVersionDocuments() {
         return this.documents;
-    }
+    }*/
 
 
     public void setDocuments(Set documents) {
@@ -150,7 +151,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         this.emsObject = emsObject;
     }
 
-
+    @XmlAttribute(name="systemName")
     public String getSystemName() {
         return getEmsObject().getSystemName();
     }
@@ -168,7 +169,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         }
     }
 
-
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
     }
@@ -186,6 +187,8 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         this.metaInfo = metaInfo;
     }
 
+
+    @XmlAttribute(name="thumbnailId")
     public Integer getThumbnailId() {
         return this.thumbnailId;
     }
@@ -286,6 +289,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         this.documentType = documentType;
     }
 
+/*
 
     @Override
     @XmlTransient
@@ -299,6 +303,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
     public String getOrderField() {
         return ORDER_FIELD_PUBLISH_DATE_TIME;
     }
+*/
 
     @XmlTransient
     public int getHomeId() {
