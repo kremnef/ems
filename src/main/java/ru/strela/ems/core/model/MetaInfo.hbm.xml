@@ -30,6 +30,8 @@
             <many-to-many column="tag_id" class="Tag" lazy="false"/>
         </bag>
 
+
+
     </class>
 
 

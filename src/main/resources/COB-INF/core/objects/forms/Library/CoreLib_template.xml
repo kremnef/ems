@@ -353,7 +353,6 @@
                                 <ft:widget-label id="addTag"/>
                             </label>
                             <ft:widget id="addTag">
-
                                 <!--<fi:styling type="hidden"/>-->
                                 <fi:styling class="availableTags" style="font-size:20px; width:270px;"
                                             onChange="cocoon.forms.submitForm(this);"/>
@@ -385,7 +384,6 @@
                                 <div class="tags_${rowLanguageCode}">
                                     <ul class="tagedit-list">
                                         <ft:repeater-rows>
-                                            <!--<li class="tagedit-listelement tagedit-listelement-old">-->
                                             <li class="tagedit-listelement tagedit-listelement-old">
                                                 <span dir="ltr">
                                                     ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
@@ -400,49 +398,12 @@
                                                                 class="tagedit-close ui-icon ui-icon-closethick"
                                                                 title="Remove from list."/>
                                                 </ft:widget>
-                                                <!--<a class="tagedit-close" title="Remove from list." onclick="">x</a>-->
                                             </li>
-
-                                            <!--<ft:widget id="tagValue">
-                                                <fi:styling class="tag" name="tag[]"/>
-                                            </ft:widget>-->
                                         </ft:repeater-rows>
                                     </ul>
                                 </div>
 
                             </ft:repeater>
-
-
-                            <!--Пример Array List !но не нужный-->
-                            <!--<jx:forEach items="${viewData.tags}" var="tag" varStatus="status">
-
-                                <jx:if test="${status.index == repeaterLoop.index}">
-                                  &lt;!&ndash;  <input type="text" name="tags" id="metaInfo${repeaterLoop.index}tags"
-                                           value="${tag}"/>&ndash;&gt;
-                                    <ft:widget id="tags">
-                                        <fi:styling name="${repeaterLoop.index}tags"/>
-                                    </ft:widget>
-                                </jx:if>
-                            </jx:forEach>-->
-                            <!--Пример Array List !но не нужный-->
-
-
-                            <!--<ft:widget id="tags">
-                                <fi:styling class="chzn-select" style="width:350px;"/>
-                                <fi:selection-list>
-                                    <fi:item value="">
-                                        <fi:label>-</fi:label>
-                                    </fi:item>
-                                    <jx:forEach items="${viewData.availableTags}" var="tag">
-                                        <fi:item value="${tag.id}">
-                                            <fi:label>${tag.tag}</fi:label>
-                                        </fi:item>
-                                    </jx:forEach>
-                                </fi:selection-list>
-                            </ft:widget>
-                            <script>
-                                $(".chzn-select").chosen();
-                            </script>-->
                         </li>
                     </ul>
                 </div>

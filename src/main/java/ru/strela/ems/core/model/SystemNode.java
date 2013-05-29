@@ -495,7 +495,7 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         this.emsObjectId = emsObjectId;
     }
 
-
+    @XmlAttribute(name="redirectTo")
     public int getRedirectTo() {
         return redirectTo;
     }

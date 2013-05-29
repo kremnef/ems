@@ -50,7 +50,7 @@ public class EmsObject implements java.io.Serializable {
      * @return the systemName
      */
 
-
+    @XmlTransient
     public String getSystemName() {
         return systemName;
     }
@@ -214,7 +214,7 @@ public class EmsObject implements java.io.Serializable {
         this.id = id;
     }
 
-
+    @XmlTransient
     public String getEntity() {
         return entity;
     }

@@ -12,7 +12,7 @@ public class Tag implements java.io.Serializable{
 
 //    private static final int PREVIEW_DIMENSION = 80;
     private Integer id;
-    private String Tag;
+    private String tag;
 
 
 
@@ -20,10 +20,10 @@ public class Tag implements java.io.Serializable{
         super();
     }
 
-    public Tag(Integer id, String tag) {
+    public Tag(Integer id, String tagName) {
         super();
         this.id = id;
-        Tag = tag;
+        this.tag = tagName;
     }
     @XmlTransient
     public Integer getId() {
@@ -38,8 +38,9 @@ public class Tag implements java.io.Serializable{
      * Returns the value of field 'contentType'.
      * @return the value of field 'contentType'.
      */
+//    @XmlAttribute(name="tag")
     public String getTag() {
-        return this.Tag;
+        return this.tag;
     }
 
 
@@ -47,10 +48,10 @@ public class Tag implements java.io.Serializable{
 
     /**
      * Sets the value of field 'contentType'.
-     * @param tag the value of field 'contentType'
+     * @param tagName the value of field 'contentType'
      */
-    public void setTag(String tag) {
-        this.Tag = tag;
+    public void setTag(String tagName) {
+        this.tag = tagName;
     }
 
     /*public final static String getSearchfields(){

@@ -226,7 +226,7 @@ public class SiteMap {
         this.levels = levels;
     }
 
-
+    @XmlAttribute(name="redirectTo")
     public int getRedirectTo() {
         return redirectTo;
     }

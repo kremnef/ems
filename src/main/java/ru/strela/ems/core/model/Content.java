@@ -29,8 +29,6 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
     private Integer thumbnailId;
     private FileObject thumbnail;
 
-//    private List<MetaInfo> metaList;
-
     private MetaInfo metaInfo;
     private int homeId;
 

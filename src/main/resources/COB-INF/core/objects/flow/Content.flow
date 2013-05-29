@@ -76,6 +76,9 @@ function showContent(contentService, content, form, contentActionState) {
     var availableDocuments = documentService.getDocumentsByContentId(content.getId());
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
+
+    var tagService = cocoon.getComponent("tagService");
+    var availableTags = tagService.getTags();
     try {
         importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
         if (languageCode != null) {
@@ -105,9 +108,9 @@ function showContent(contentService, content, form, contentActionState) {
             "servletPath" : servletPath,
             "systemNodeName":systemNodeName,
             "systemNodeId":systemNodeId,
-//            "tags" : tags,
             "thumbnail" : thumbnail,
             "inner" : inner,
+            "availableTags" : availableTags,
             "actionState" : contentActionState,
             "documentType": documentType,
             "availableLanguages": availableLanguages,
@@ -158,11 +161,14 @@ function showContent(contentService, content, form, contentActionState) {
         cocoon.disposeObject(documentTypeList);
         cocoon.disposeObject(availableDocuments);
         cocoon.disposeObject(form);*/
+
+        cocoon.disposeObject(availableTags);
+        cocoon.releaseComponent(tagService);
     }
     catch(e){
          print("Error:"+e);
     }
-  /*  finally {
+    /*finally {
         print("make Content finally");
         cocoon.releaseComponent(contentService);
         cocoon.releaseComponent(documentTypeService);

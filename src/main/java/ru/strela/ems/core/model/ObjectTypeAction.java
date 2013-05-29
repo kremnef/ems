@@ -60,6 +60,7 @@ public class ObjectTypeAction implements java.io.Serializable {
     }
 
     @Transient
+    @XmlTransient
     public ObjectType getObjectType() {
         return objectType;
     }

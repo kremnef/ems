@@ -26,19 +26,19 @@ public class MetaInfo {
     private List<Tag> tags;
 
     public MetaInfo() {
-//        super();
         tags = new ArrayList<Tag>();
     }
 
 
     public MetaInfo(String title, String description, String keywords, String languageCode, int objectId) {
 //        this.id = 0;
+        tags = new ArrayList<Tag>();
         this.title = title;
         this.description = description;
         this.languageCode = languageCode;
         this.keywords = keywords;
         this.objectId = objectId;
-        tags = new ArrayList<Tag>();
+
       /*  System.out.println("title: "+this.title+" languageCode: "+this.languageCode+" objectId:"+this.objectId);*/
     }
 
@@ -52,7 +52,6 @@ public class MetaInfo {
     }
 
     public String getTitle() {
-        //log.info(" getTitle()1 -"+this.title);
         return this.title;
     }
 
@@ -71,7 +70,7 @@ public class MetaInfo {
     }
 
     public List<Tag> getTags() {
-        return this.tags;
+        return tags;
     }
 
     public void setTags(List<Tag> tags) {
@@ -80,7 +79,6 @@ public class MetaInfo {
 
 
     public void addTag(Tag tag) {
-//        System.out.println("Add New Tag"+ tag.getTag());
         if (!tags.contains(tag)) {
             tags.add(tag);
         }
@@ -90,25 +88,6 @@ public class MetaInfo {
            tags.remove(tag);
        }
 
-
-   /* public void addTag(MetaInfo metaInfo) {
-        List<Tag> tagList = metaInfo.getTags();
-        for (Object docObject : tag) {
-
-            System.out.println("Add New Tag"+ tag.getTag());
-        if (!tags.contains(tag)) {
-            tags.add(tag);
-        }
-        }
-
-    }*/
-  /*  public void addTag(String newTtag) {
-        Tag tag = new Tag();
-        tag.setTag(newTtag);
-        if (!tags.contains(tag)) {
-            tags.add(tag);
-        }
-    }*/
 
 
     public String getKeywords() {
@@ -136,13 +115,7 @@ public class MetaInfo {
     public void setObjectId(int objectId) {
         this.objectId = objectId;
     }
-   /* public MetaInfoNK getMetaInfoNK() {
-        return metaInfoNK;
-    }
 
-    public void setMetaInfoNK(MetaInfoNK metaInfoNK) {
-        this.metaInfoNK = metaInfoNK;
-    }*/
 }
 
 

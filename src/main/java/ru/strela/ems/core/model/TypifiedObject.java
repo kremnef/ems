@@ -222,10 +222,10 @@ public abstract class TypifiedObject {
     public void setSystemName(String systemName) {
     }
 
-    @XmlTransient
+    /*@XmlTransient
     public Integer getParentId() {
         return null;
-    }
+    }*/
 
 
     public String getSystemName() {
@@ -293,8 +293,8 @@ public abstract class TypifiedObject {
         sb.append(getSystemName());
         sb.append("',objectTypeId=");
         sb.append(objectTypeId);
-        sb.append(",parentId=");
-        sb.append(getParentId());
+        /*sb.append(",parentId=");
+        sb.append(getParentId());*/
         sb.append("]");
 
         return sb.toString();
