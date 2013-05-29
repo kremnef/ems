@@ -201,6 +201,7 @@
                                           href="${SERVLET_PATH}/${CSS_TYPE_FILES_REAL_LOCATION}common-${action}.css"/>
                                 </jx:if>
                             </jx:forEach>
+
                             <jx:forEach var="filePath" items="${actionXSLTFiles}">
                                 <jx:set var="actionFile"
                                         value="${java.io.File(REAL_ROOT_PATH + '/' + CSS_TYPE_FILES_REAL_LOCATION + filePath + '.css')}"/>
@@ -209,9 +210,11 @@
                                           href="${SERVLET_PATH}/${CSS_TYPE_FILES_REAL_LOCATION}${filePath}.css"/>
                                 </jx:if>
                             </jx:forEach>
+
                             <jx:set var="tempateCSSFilePath"
                                     value="${CSS_TEMPLATE_FILE_REAL_LOCATION + xsltTemplateFile.replaceAll('\.xsl$', '.css')}"/>
 
+                            <xsl:message>#@#@# ${tempateCSSFilePath}</xsl:message>
                             <jx:set var="tempateCSSFile"
                                     value="${java.io.File(REAL_ROOT_PATH + '/' + tempateCSSFilePath)}"/>
 
