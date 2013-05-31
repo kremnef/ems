@@ -76,9 +76,9 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 if (systemNamesPath.length() > systemNodesUrl.length()) {
                     objectURL = systemNamesPath.substring(systemNodesUrl.length() + 1);
 //                    если к странице добавлен документ с вложенностью
-                    if(objectURL.contains("/")){
+                    if (objectURL.contains("/")) {
 
-                         objectURL = objectURL.substring(0, objectURL.lastIndexOf("/"));
+                        objectURL = objectURL.substring(0, objectURL.lastIndexOf("/"));
                     }
                     this.objectURL = objectURL;
                     System.out.println("objectURL = " + objectURL);
@@ -159,12 +159,11 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                             String documentTypeName = content.getDocumentType().getName();
 
 
-                                                             if (!SitePageGenerator.documentTypes.contains(documentTypeName)) {
-                                                                 SitePageGenerator.documentTypes.add(documentTypeName);
-                                                             }
+                                            if (!SitePageGenerator.documentTypes.contains(documentTypeName)) {
+                                                SitePageGenerator.documentTypes.add(documentTypeName);
+                                            }
 //                                            System.out.println("content = " + content.getName());
 //                                            request.setAttribute(DOCUMENT_TYPES, documentTypes);
-
 
 
                                             if (content.getHomeId() > 0) {
@@ -221,6 +220,15 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 //        System.out.println("fillTypifiedObjectUrls 1" +typifiedObject.getName());
         if (typifiedObject instanceof Content) {
             Content content = (Content) typifiedObject;
+            MetaInfo metaInfo = getMetaInfo(content);
+            if (metaInfo != null) {
+                content.setMetaInfo(metaInfo);
+            }
+            ObjectLabel objectLabel = getObjectLabel(content);
+            System.out.println("ObjectLabel name " + content.getName() + " -- label -" + objectLabel);
+            if (objectLabel != null) {
+                content.setObjectLabel(objectLabel);
+            }
             if (content.getHomeId() > 0) {
                 String url = systemNodeUrls.get(content.getHomeId());
 //                System.out.println("url "+ url);
@@ -318,25 +326,15 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private SystemNode getSystemNode(Session session, int systemNodeId) {
         SystemNode systemNode = (SystemNode) getObject(session, SystemNode.class, systemNodeId);
-//        int emsObjectId = systemNode.getEmsObject().getId();
-//        currentLocale = "ru";
-        /*MetaInfoDao metaInfoDao = new MetaInfoDaoImpl();
-        MetaInfo metaInfo = metaInfoDao.getMetaInfoNaturalId(emsObjectId, currentLocale);
-        if (metaInfo != null) {
-            systemNode.setMetaInfo(metaInfo);
-        }
-        ObjectLabelDao objectLabelDao = new ObjectLabelDaoImpl();
-        ObjectLabel objectLabel = objectLabelDao.getObjectLabelNaturalId(emsObjectId, currentLocale);
-        //System.out.println("SystemNode - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
-        if (objectLabel != null && objectLabel.getId() > 0) {
-            systemNode.setObjectLabel(objectLabel);
-        }*/
 
         MetaInfo metaInfo = getMetaInfo(systemNode);
         if (metaInfo != null) {
             systemNode.setMetaInfo(metaInfo);
         }
+
+
         ObjectLabel objectLabel = getObjectLabel(systemNode);
+        System.out.println("systemNode ObjectLabel name " + systemNode.getName() + " -- label -" + objectLabel);
         if (objectLabel != null) {
             systemNode.setObjectLabel(objectLabel);
         }
@@ -348,7 +346,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private Object getObject(Session session, Class entityClass, int id) {
 
-        //System.out.println("Class: " + entityClass + " and id: " + id);
+        System.out.println("Class: " + entityClass + " and id: " + id);
         return session.get(entityClass, id);
     }
 
@@ -566,7 +564,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 list.addAll(query.list());
             }
 
-            if(list != null){
+            if (list != null) {
                 TypifiedObject[] systemObjects = (TypifiedObject[]) list.toArray(new TypifiedObject[list.size()]);
                 children.put(typifiedObject.getId(), typifiedObject.getSystemName(), position, systemObjects);
                 for (TypifiedObject tObject : systemObjects) {
@@ -579,6 +577,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                             content.setMetaInfo(metaInfo);
                         }
                         ObjectLabel objectLabel = getObjectLabel(content);
+                        System.out.println("ObjectLabel name " + content.getName() + " -- label -" + objectLabel);
                         if (objectLabel != null) {
                             content.setObjectLabel(objectLabel);
                         }
@@ -594,7 +593,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                     session.disableFilter("hasTag");*/
 
 //                    добавить условие только для ObjectURL
-                        if(this.objectURL != null && content.getEmsObject().getSystemName().contains(this.objectURL)){
+                        if (this.objectURL != null && content.getEmsObject().getSystemName().contains(this.objectURL)) {
                             setDocumentToCurrentContent(content, children, session, languageCode, position);
                         }
 
@@ -621,7 +620,8 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                     if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
                         systemNodeIdsForUrls.add(navigation.getSystemNodeId());
                     }
-  */              }
+  */
+                    }
                 }
                 currentLevel++;
                 if (currentLevel < levels) {
@@ -631,8 +631,6 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                     }
                 }
             }
-
-
 
 
         }
