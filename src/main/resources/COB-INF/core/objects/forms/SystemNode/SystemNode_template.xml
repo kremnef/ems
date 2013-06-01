@@ -292,42 +292,7 @@
 
                                             <td>
                                                 <jx:if test="${repeater.getRow(repeaterLoop.index).getChild('objectTypeName').value == 'Content' }">
-                                                    <ft:widget id="typeSelector">
-                                                        <fi:styling i18n:attr="title"
-                                                                    title="core:action.${this.value}" style="width:150px;"/>
-                                                        <fi:selection-list>
-                                                            <fi:item value="widget">
-                                                                <fi:label>widget</fi:label>
-                                                            </fi:item>
-                                                            <fi:item value="documentType">
-                                                                <fi:label>documentType</fi:label>
-                                                            </fi:item>
-                                                            <fi:item value="common">
-                                                                <fi:label>common</fi:label>
-                                                            </fi:item>
-                                                        </fi:selection-list>
-                                                    </ft:widget>
-                                                    <ft:widget id="renderLike">
-                                                        <fi:styling  style="width:150px;"/>
-                                                        <fi:selection-list>
-                                                            <fi:item value="item">
-                                                                <fi:label>item</fi:label>
-                                                            </fi:item>
-                                                            <fi:item value="itemWithChild">
-                                                                <fi:label>itemWithChild</fi:label>
-                                                            </fi:item>
-                                                            <fi:item value="list">
-                                                                <fi:label>list</fi:label>
-                                                            </fi:item>
 
-                                                            <!--<jx:forEach items="${renderLikeItems}" var="renderLike">
-                                                                <fi:item value="${renderLike.item}">
-                                                                    &lt;!&ndash;<jx:if test="${renderLike.item} = "&ndash;&gt;
-                                                                    <fi:label>${renderLike.item}</fi:label>
-                                                                </fi:item>
-                                                            </jx:forEach>-->
-                                                        </fi:selection-list>
-                                                    </ft:widget>
                                                 </jx:if>
                                                 <ft:widget id="objectTypeAction">
                                                     <fi:styling i18n:attr="title"  style="width:150px;" title="core:action.${this.value}"/>

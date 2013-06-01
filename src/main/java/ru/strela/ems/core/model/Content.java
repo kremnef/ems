@@ -1,10 +1,7 @@
 package ru.strela.ems.core.model;
 
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
 //import org.hibernate.cache.spi.NaturalIdCacheKey
@@ -109,7 +106,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         this.documentTypeId = documentTypeId;
     }
 
-
+    @XmlElement(name="document")
     public Set getDocuments() {
         return this.documents;
     }

@@ -16,8 +16,9 @@
 -->
 <fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
     <!--<fb:group id="template" path=".">-->
-        <fb:value id="name" path="name"/>
-        <fb:value id="URI" path="xsltPath"/>
-        <fb:value id="objectTypeId" path="objectTypeId"/>
+    <fb:value id="name" path="name"/>
+    <fb:value id="typeSelector" path="xsltPath"/>
+    <fb:value id="renderLike" path="renderLike"/>
+    <fb:value id="objectTypeId" path="objectTypeId"/>
     <!--</fb:group>-->
 </fb:context>

@@ -34,7 +34,7 @@
                 <fd:length min="2" max="50"/>
             </fd:validation>
         </fd:field>
-        <fd:field id="URI" required="true">
+        <!--<fd:field id="URI" required="true">
             <fd:label>
                 <i18n:text catalogue="core" key="ObjectTypeAction.URI"/>
             </fd:label>
@@ -42,7 +42,7 @@
             <fd:validation>
                 <fd:length min="2"/>
             </fd:validation>
-        </fd:field>
+        </fd:field>-->
         <fd:field id="objectTypeId" required="true">
             <fd:label>
                 <i18n:text catalogue="core" key="ObjectTypeAction.objectTypeId"/>
@@ -71,6 +71,26 @@
             <!--<fd:validation>
                 <fd:length min="2" max="50"/>
             </fd:validation>-->
+        </fd:field>
+
+        <fd:field id="typeSelector">
+            <fd:label>
+                <i18n:text key="ObjectTypeAction.URI"/>
+            </fd:label>
+            <fd:hint>
+                <i18n:text key="ObjectTypeAction.URI"/>
+            </fd:hint>
+            <fd:datatype base="string"/>
+
+        </fd:field>
+        <fd:field id="renderLike">
+            <fd:label>
+                <i18n:text catalogue="core" key="SystemNodeObject.renderLike"/>
+            </fd:label>
+            <fd:hint>
+                <i18n:text catalogue="core" key="SystemNodeObject.renderLike"/>
+            </fd:hint>
+            <fd:datatype base="string"/>
         </fd:field>
         <!--</fd:widgets>-->
         <!--</fd:group>-->

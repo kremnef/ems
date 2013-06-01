@@ -247,31 +247,6 @@
                     <i18n:text key="EmsObject.typeAction"/>
                 </fd:hint>
                 <fd:datatype base="integer"/>
-                <!--<fd:selection-list src="cocoon:/typeActions/${widget.value}" cache="true"/>-->
-                <!--<fd:on-value-changed>
-                    <javascript>
-                        var repeater = widget.lookupWidget("/addedObjects");
-                        var selectedRow = repeater.getParentRow(widget);
-                        if (selectedRow.getChild("objectId").value > 0) {
-                        var selectedRowIndex = repeater.indexOf(selectedRow);
-                        var parentObjectsDataList = widget.form.getAttribute("parentObjectsDataList");
-                        if (parentObjectsDataList.size() > 0) {
-                        var parentObjectsData = parentObjectsDataList.get(selectedRowIndex);
-                        var linkId = parentObjectsData.getId();
-                        var parentTypeActionId = parentObjectsData.getTypeActionId();
-                        print("selectedRow.getChild(\"objectTypeAction\").value = " +
-                        selectedRow.getChild("objectTypeAction").value);
-                        if (linkId > 0 &amp;&amp;
-                        linkId == selectedRow.getChild("linkId").value &amp;&amp;
-                        parentTypeActionId != selectedRow.getChild("objectTypeAction").value) {
-                        selectedRow.getChild("linkId").value = new java.lang.Integer(0);
-                        selectedRow.getChild("delete").setState(Packages.org.apache.cocoon.forms.formmodel.WidgetState.ACTIVE);
-                        }
-                        }
-                        }
-                    </javascript>
-                </fd:on-value-changed>-->
-
             </fd:field>
 
 
@@ -364,9 +339,12 @@
                     </fd:on-value-changed>
                     <!--fd:selection-list type="flow-jxpath" list-path="objectTypeActions" value-path="value" label-path="label" /-->
                 </fd:field>
+
                 <fd:field id="objectType">
                     <fd:datatype base="boolean"/>
                 </fd:field>
+
+
                 <!--<fd:multivaluefield id="tagId">-->
                 <fd:field id="tagId">
                     <fd:label>
@@ -399,26 +377,7 @@
                     <fd:datatype base="string"/>
                 </fd:field>
 
-                <fd:field id="typeSelector">
-                    <fd:label>
-                        <i18n:text key="EmsObject.typeAction"/>
-                    </fd:label>
-                    <fd:hint>
-                        <i18n:text key="EmsObject.typeAction"/>
-                    </fd:hint>
-                    <fd:datatype base="string"/>
-                    <!--<fd:selection-list src="cocoon:/typeActions/${widget.value}" cache="true"/>-->
 
-                </fd:field>
-                <fd:field id="renderLike">
-                    <fd:label>
-                        <i18n:text catalogue="core" key="SystemNodeObject.renderLike"/>
-                    </fd:label>
-                    <fd:hint>
-                        <i18n:text catalogue="core" key="SystemNodeObject.renderLike"/>
-                    </fd:hint>
-                    <fd:datatype base="string"/>
-                </fd:field>
 
                 <!--<fd:row-action id="up" command="move-up">
                     <fd:on-action>

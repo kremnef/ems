@@ -11,13 +11,7 @@
         <property name="templateId" column="template_id" type="int" not-null="true"/>
         <property name="redirectTo" column="redirect_to" type="int" not-null="true"/>
         <property name="fullURL" column="full_url" type="string" not-null="true"/>
-        <!--many-to-one name="template"
-                     column="template_id"
-                     class="Template"
-                     not-null="true"
-                     insert="false"
-                     update="false"
-                     lazy="false"/-->
+
         <set name="typifiedObjects" lazy="false" cascade="all-delete-orphan">
             <key column="system_node_id" not-null="true"/>
             <one-to-many class="SystemNodeTypifiedObject"/>
@@ -26,10 +20,7 @@
             <key column="system_node_id" not-null="true"/>
             <one-to-many class="SystemNodeObjectType"/>
         </set>
-        <!--set name="objects" table="cmSystemNodeObject" cascade="all">
-            <key column="system_node_id"/>
-            <many-to-many column="content_id" class="EmsObject"/>
-        </set-->
+
         <many-to-one name="emsObject" class="EmsObject" column="ems_object_id" unique="true" cascade="all"
                      lazy="false"/>
 
