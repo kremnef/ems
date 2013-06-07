@@ -3,6 +3,7 @@ package ru.strela.ems.validators;
 
 import org.apache.cocoon.forms.formmodel.Field;
 import org.apache.cocoon.forms.formmodel.Widget;
+import org.apache.cocoon.forms.formmodel.WidgetState;
 import org.apache.cocoon.forms.validation.ValidationError;
 import org.apache.cocoon.forms.validation.WidgetValidator;
 import ru.strela.ems.core.dao.SystemObjectDao;
@@ -18,7 +19,6 @@ public class SystemNameUniquenessValidator implements WidgetValidator {
 
 
     public boolean validate(Widget widget) {
-
         Object value = widget.getValue();
         boolean success = false;
         if (value != null) {
@@ -34,15 +34,15 @@ public class SystemNameUniquenessValidator implements WidgetValidator {
             Widget entityWidget = widget.lookupWidget("../../entity");
             System.out.println("---entityWidget " + entityWidget.getValue());
 
-            Object entityWidgetValue = entityWidget != null ? entityWidget.getValue() : null;
+            Object entityWidgetValue = entityWidget.getValue();
 
             if (checkSystemNameWidget != null && emsObjectIdWidget != null && parentIdWidget != null && entityWidget != null) {
 //            if (checkSystemNameUniqueness(widget, value, emsObjectIdWidget.getValue(), parentIdWidget.getValue(), entityWidgetValue)) {
                 if (checkSystemNameUniqueness(widget, value, emsObjectIdWidget.getValue(), parentIdWidget.getValue(), entityWidgetValue)) {
                     success = true;
-                    checkSystemNameWidget.setState(org.apache.cocoon.forms.formmodel.WidgetState.OUTPUT);
+                    checkSystemNameWidget.setState(WidgetState.OUTPUT);
                 } else {
-                    checkSystemNameWidget.setState(org.apache.cocoon.forms.formmodel.WidgetState.INVISIBLE);
+                    checkSystemNameWidget.setState(WidgetState.INVISIBLE);
                 }
             }
         }

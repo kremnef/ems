@@ -31,6 +31,10 @@
         <fb:value id="systemName" path="emsObject/systemName"/>
     </fb:group>
 
+    <fb:group id="justName" path=".">
+        <fb:value id="name" path="name"/>
+    </fb:group>
+
 
     <fb:repeater id="labels" parent-path="." row-path="objectLabelList">
         <fb:identity>

@@ -3,11 +3,11 @@ importClass(Packages.ru.tastika.tools.util.Utilities);
 function listI18n() {
 
     var fileObjectService = cocoon.getComponent("fileObjectService");
-    var contextRealPath = fileObjectService.getContextRealPath();
+//    var contextRealPath = fileObjectService.getContextRealPath();
 
-    var i18n_ru = contextRealPath + "/i18n/messages_" + "ru" + ".xml";
+    /*var i18n_ru = contextRealPath + "/i18n/messages_" + "ru" + ".xml";
     var i18n_en = contextRealPath + "/i18n/messages_" + "en" + ".xml";
-
+*/
 
 //    print(i18n_ru);
 //    var list = new Array();
@@ -16,7 +16,7 @@ function listI18n() {
 //    var list = cocoon.load("list-directory-i18n");
 //    list.add(1,i18n_ru);
 //    list.add(2,i18n_en);
-    cocoon.sendPage(list.displayURI, list);
+//    cocoon.sendPage(list.displayURI, list);
 }
 
 
@@ -31,21 +31,18 @@ function createI18n(form) {
 
     /*var parentId = 0;
      var parentName = "";
-     var parentObject = template.getParent();
+     var parentObject = template.getEmsObject().getParent();
      if (parentObject != null) {
      parentId = parentObject.getId();
      parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
      }
      */
     var actionState = "create";
-    /*  var viewData = {
-     "actionState": actionState
-     }*/
+
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
 //    template = showEmsObjectForm(form, template, showFormURI, {    
     form.showForm(showFormURI, {
-//        "viewData": viewData,
         "servletPath" : servletPath,
         "userData": getLoggedInUser(),
         "actionState": actionState
@@ -83,17 +80,14 @@ function editI18nById(form) {
      cocoon.redirectTo("I18n-create");
      }*/
 
-    /*var parentId = template.getParentId();
+    /*var parentId = template.getEmsObject().getParentId();
      var parentName = "";
      if (parentId > 0) {
-     var parent = template.getParent();
+     var parent = template.getEmsObject().getParent();
      parentName = parent.getName() + " (" + parent.getSystemName() + ")";
      }*/
 
     var actionState = "edit";
-    /*var viewData = {
-     "actionState": actionState
-     }*/
     var availableLanguages = getAvailableLanguages();
 //    var xmlEditor = form.getChild("xmlEditor");
 
@@ -164,9 +158,8 @@ function editI18nById(form) {
 
 
 function deleteI18nById(id) {
-    var displayURI = cocoon.parameters.displayURI;
-    var id = null;
-    id = parseInt(cocoon.request.getParameter("id"));
+//    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
     var templateService = cocoon.getComponent("templateService");
     var template = templateService.getI18n(id);
     templateService.deleteI18n(template);

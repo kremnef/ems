@@ -87,7 +87,7 @@
     <message key="interface.forms">Формы</message>
 
     <message key="interface.objectTypeAction">Сниппеты</message>
-    <message key="interface.i18n">Лаколизация</message>
+    <message key="interface.i18n">Локализация</message>
 
     <!--Structure -->
 

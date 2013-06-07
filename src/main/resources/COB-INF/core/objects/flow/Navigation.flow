@@ -1,23 +1,24 @@
 function listNavigation(parentId) {
 //    print("listNavigation");
     var filter = null;
-    var listData = prepareListData(parentId);
+    var listData = listObjectsWithParentId(parentId, filter);
     var children = listData.children;
     var systemNodeIds = new java.util.HashSet();
+    var systemNodeId = null;
     for (var i = 0; i < children.size(); i++) {
-        var systemNodeId = children.get(i).getSystemNodeId();
+        systemNodeId = children.get(i).getSystemNodeId();
         if (systemNodeId != null && systemNodeId > 0) {
             systemNodeIds.add(systemNodeId);
         }
     }
-    if (systemNodeIds.size() > 0) {
+   /* if (systemNodeIds.size() > 0) {
         if (cocoon.parameters.entity != "") {
             var entity = cocoon.parameters.entity;
             var typifiedObjectService = getServiceByEntity(entity);
             var systemNodeUrls = typifiedObjectService.getSystemNodeUrls(systemNodeIds);
             if (systemNodeUrls.size() > 0) {
-                for (var i = 0; i < children.size(); i++) {
-                    var systemNodeId = children.get(i).getSystemNodeId();
+                for (var a = 0; a < children.size(); a++) {
+                    systemNodeId = children.get(a).getSystemNodeId();
                     if (systemNodeId != null && systemNodeId > 0) {
                         var url = systemNodeUrls.get(systemNodeId);
                         if (url != null) {
@@ -30,7 +31,7 @@ function listNavigation(parentId) {
             cocoon.releaseComponent(typifiedObjectService);
         }
 
-    }
+    }*/
 
     sendListPage(listData.displayURI, listData);
 }
@@ -45,7 +46,7 @@ function createNavigation(form) {
 
     var parentId = 0;
     var parentName = "";
-    var parentObject = navigation.getParent();
+    var parentObject = navigation.getEmsObject().getParent();
     if (parentObject != null) {
         parentId = parentObject.getId();
         parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
@@ -96,10 +97,10 @@ function editNavigationById(form) {
     }
 
 
-    var parentId = navigation.getParentId();
+    var parentId = navigation.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
-        var parent = navigation.getParent();
+        var parent = navigation.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }
     var systemNodeId = navigation.getSystemNodeId();
@@ -166,24 +167,4 @@ function deleteNavigationById() {
     deleteObjectById("Navigation");
 }
 
-/*
- function treeSystemNode(parentId){
- var displayXMLURI = cocoon.parameters.displayXMLURI;
- var listData = prepareListData(parentId);
- cocoon.sendPage(displayXMLURI, listData);
-
- }
-
- function treeNavigation(parentId){
- if (cocoon.request.getParameter("excludedId") != null) {
- var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
- }
- var displayXMLURI = cocoon.parameters.displayXMLURI;
- var listData = prepareListData(parentId);
- print("excludedId: "+excludedId);
-
- listData["excludedId"] =excludedId;
- cocoon.sendPage(displayXMLURI, listData);
- }
- */
 

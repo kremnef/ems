@@ -55,6 +55,10 @@ public class TypifiedObjectServiceImpl implements TypifiedObjectService {
         return typifiedObjectDao.getChildrenCount(id);
     }
 
+    public int getObjectsCount() {
+            return typifiedObjectDao.getObjectsCount();
+        }
+
 
 
 

@@ -3,7 +3,6 @@ package ru.strela.ems.core.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 @XmlRootElement
@@ -14,8 +13,7 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
 
 
     private String systemNodeName;
-    @XmlTransient
-    private SystemNode systemNode;
+
     private String outerURL;
 
 
@@ -34,26 +32,8 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
     }
 
 
-    /**
-     * @return the systemNode
-     */
-    @XmlTransient
-    public SystemNode getSystemNode() {
-        return systemNode;
-    }
 
 
-    /**
-     * @param systemNode the systemNode to set
-     */
-    public void setSystemNode(SystemNode systemNode) {
-        if (systemNode != null) {
-            setSystemNodeId(systemNode.getId());
-        } else {
-            setSystemNodeId(null);
-        }
-        this.systemNode = systemNode;
-    }
 
 
     /**
@@ -129,22 +109,22 @@ public class Navigation extends TypifiedObject implements java.io.Serializable, 
     }
 
 
-    @Override
+    /*@Override
     public void setParent(TypifiedObject typifiedObject) {
         if (typifiedObject instanceof SystemObject) {
             emsObject.setParent(typifiedObject);
         }
     }
-
-    @XmlAttribute(name="parentId")
+*/
+    /*@XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
-    }
+    }*/
 
 
-    public TypifiedObject getParent() {
+    /*public TypifiedObject getParent() {
         return emsObject.getParent();
-    }
+    }*/
 
 
     @Override

@@ -3,7 +3,7 @@
 importClass(Packages.ru.tastika.tools.util.Utilities);
 
 function listGroup() {
-    var list = listCommon("group", "groupName", "desc","")
+    var list = listCommon("group", "groupName", "desc","");
     cocoon.sendPage(list.displayURI,list);
 }
 
@@ -27,14 +27,13 @@ function createGroup(form) {
     }
 */
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
 //    group = showEmsObjectForm(form, group, showFormURI, {    
     form.showForm(showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
+
         "servletPath" : servletPath,
         "userData": getLoggedInUser()
     });
@@ -79,9 +78,7 @@ function editGroupById(form) {
     }*/
 
     var actionState = "edit";
-    var viewData = {
-        "actionState": actionState
-    }
+
 
     form.load(group);
     var locale = getLocale();
@@ -89,13 +86,13 @@ function editGroupById(form) {
      /*group = showEmsObjectForm(form, group, showFormURI, {;*/
     form.showForm(showFormURI, {
    
-        "viewData": viewData,
+        "actionState": actionState,
         "groupId": id,
 //        "parentId" : parentId,
 //        "parentName" : parentName,
         "userData" : getLoggedInUser(),
         "servletPath" : servletPath
-    })
+    });
     form.save(group);
     groupService.saveGroup(group);
     cocoon.releaseComponent(groupService);

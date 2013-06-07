@@ -2,17 +2,14 @@ package ru.strela.ems.core.dao.hibernate;
 //chenged
 
 import org.hibernate.*;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.MetaInfoDao;
 import ru.strela.ems.core.dao.ObjectLabelDao;
 import ru.strela.ems.core.dao.TypifiedObjectDao;
-import ru.strela.ems.core.model.*;
 import ru.strela.ems.core.model.Filter;
+import ru.strela.ems.core.model.*;
 import ru.tastika.tools.util.Utilities;
 
 import java.util.ArrayList;
@@ -72,7 +69,7 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
     }
 
 
-    public List getObjectTypes(boolean onlyEmbedded) {
+    /*public List getObjectTypes(boolean onlyEmbedded) {
         Session session = getCurrentSession();
 
         StringBuilder sql = new StringBuilder("from ObjectType ot");
@@ -83,7 +80,7 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
         closeSession();
         return list;
     }
-
+*/
 
     public List<TypifiedObject> getTypifiedObjects(Collection<Integer> ids) {
         return getTypifiedObjects(getEntityClass(), ids);
@@ -145,8 +142,17 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
 
     public int getChildrenCount(int id) {
         Session session = getCurrentSession();
-        StringBuilder sql = new StringBuilder("select count(*) from ").append(getEntityClass().getSimpleName()).append(" eo");
-        int count = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
+        String sql = "select count(*) from " + getEntityClass().getSimpleName() + " eo";
+        int count = ((Long) session.createQuery(sql).iterate().next()).intValue();
+        closeSession();
+        return count;
+    }
+
+    public int getObjectsCount() {
+        Session session = getCurrentSession();
+        String sql = "select count(*) from " + getEntityClass().getSimpleName();
+        System.out.println("SQL: " + sql);
+        int count = ((Long) session.createQuery(sql).iterate().next()).intValue();
         closeSession();
         return count;
     }
@@ -172,7 +178,9 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
          desc = true;
         }
 
-        Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
+        Order order;
+        if (desc) order = Order.desc(sortBy);
+        else order = Order.asc(sortBy);
         return getObjects(order, start, itemsOnPage);
     }
 
@@ -201,9 +209,9 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
         Session session = getCurrentSession();
         String typifiedObjectClass = getEntityClass().getSimpleName();
         List list = new ArrayList();
-        StringBuilder sql = new StringBuilder("select count(*) from " +typifiedObjectClass+
-                "  f where f.emsObject.parentId " + (parentId > 0 ? (" = " + parentId) : " is null"));
-        int foldersAmount = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
+        String sql = "select count(*) from " + typifiedObjectClass +
+                "  f where f.emsObject.parentId " + (parentId > 0 ? (" = " + parentId) : " is null");
+        int foldersAmount = ((Long) session.createQuery(sql).iterate().next()).intValue();
 
 //        int contentChildrenCount = content.getEmsObject().getChildrenCount();
 
@@ -272,8 +280,8 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
     public final TypifiedObject save(TypifiedObject typifiedObject) {
 //kremnef убрал здесь ссесию, потому как ниже у теяб еще убудт открыти я и закрытия , и хистори закомментил, его видимон надо будет потом преенсти в метод
 //                    typifiedObject = saveObject(typifiedObject);
-        Session session = beforeAction();
-        try {
+//        Session session = getCurrentSession();
+//        try {
 
             typifiedObject = saveObject(typifiedObject);
             //indexSiteMap(typifiedObject);
@@ -283,7 +291,7 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
 //            log.warn("typifiedObject.getId() = " + typifiedObject.getId());
 //            TransactionHistory transactionHistory = new TransactionHistory(typifiedObject, typifiedObject.getOwner(), "record", dateTime);
 //            session.saveOrUpdate(transactionHistory);
-            afterAction();
+            /*afterAction();
         } catch (HibernateException he) {
             he.printStackTrace();
             if (session.isOpen()) {
@@ -293,7 +301,8 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
                 }
             }
             throw he;
-        }
+        }*/
+//        closeSession();
         return typifiedObject;
     }
 
@@ -302,8 +311,8 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
     }
 
 
-    protected void clearSiteMap(TypifiedObject typifiedObject) {
-    }
+    /*protected void clearSiteMap(TypifiedObject typifiedObject) {
+    }*/
 
 
     protected TypifiedObject saveObject(TypifiedObject typifiedObject) {
@@ -335,12 +344,12 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
 
 
     public final void delete(TypifiedObject typifiedObject) {
-        Session session = beforeAction();
+//        Session session = getCurrentSession();
 
-        try {
+//        try {
 //            clearSiteMap(typifiedObject);
             deleteObject(typifiedObject);
-            afterAction();
+          /*  afterAction();
         } catch (HibernateException he) {
             if (session.isOpen()) {
                 Transaction tx = session.getTransaction();
@@ -350,7 +359,8 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
             }
             throw he;
         }
-
+*/
+        closeSession();
         /*    afterAction();
         } catch (HibernateException he) {
             if (tx != null) {
@@ -394,14 +404,6 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
     }
 
 
-    private Session beforeAction() {
-        return getCurrentSession();
-    }
-
-
-    private void afterAction() {
-        closeSession();
-    }
 
 
     protected Session getCurrentSession() {

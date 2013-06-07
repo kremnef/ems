@@ -3,9 +3,7 @@
 importClass(Packages.ru.tastika.tools.util.Utilities);
 
 function listCustomer() {
-    print("1111");
-//    listTypifiedObjects(0);
-    var list = listCommon("customer", "firstName", "desc","")
+    var list = listCommon("customer", "firstName", "desc","");
     cocoon.sendPage(list.displayURI,list);
 }
 
@@ -26,12 +24,10 @@ function createCustomer(form) {
 //    }
 
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
 
     customer = showEmsObjectForm(form, customerService, customer, showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
         "parentId" : parentId,
         "parentName" : parentName,
         "servletPath" : servletPath
@@ -76,13 +72,12 @@ function editCustomerById(form) {
     }
 
     var actionState = "edit";
-    var viewData = {
-        "actionState": actionState, "type": "photo"
-    }
+
 
 
     customer = showEmsObjectForm(form, customerService, customer, showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
+        "type": 'photo',
         "customerId": id,
         "parentId" : parentId,
         "parentName" : parentName,

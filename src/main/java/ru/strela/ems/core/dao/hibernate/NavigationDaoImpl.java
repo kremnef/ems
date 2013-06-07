@@ -2,9 +2,7 @@ package ru.strela.ems.core.dao.hibernate;
 //chenged
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -45,24 +43,22 @@ public class NavigationDaoImpl extends SystemObjectDaoImpl implements Navigation
 
 
     public Navigation getNavigation(int navigationId) {
-        Navigation navigation = (Navigation) getTypifiedObject(navigationId);
 
           /*if (navigation.getSystemNodeId() > 0) {
             navigation.getSystemNode();
         }*/
-        return navigation;
+        return (Navigation) getTypifiedObject(navigationId);
     }
 
 
     public Navigation getNavigation(int navigationId, boolean withFirstParent) {
-        Navigation navigation = (Navigation) super.getTypifiedObject(navigationId, withFirstParent);
         /*if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
             navigation.setSystemNode((SystemNode) getTypifiedObject(SystemNode.class, navigation.getSystemNodeId()));
         }*/
         /*if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
             navigation.setSystemNode((SystemNode) getTypifiedObject(SystemNode.class, navigation.getSystemNodeId()));
         }*/
-        return navigation;
+        return (Navigation) super.getTypifiedObject(navigationId, withFirstParent);
     }
 
 
@@ -143,28 +139,28 @@ public class NavigationDaoImpl extends SystemObjectDaoImpl implements Navigation
 
 
     public List findNavigations(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
         Criteria criteria = session.createCriteria(Navigation.class);
         Criterion criterion = null;
-        List list = new ArrayList();
-        try {
+//        List list = new ArrayList();
+        /*try {
             tx = session.beginTransaction();
-
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
-                    } else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+*/
+        for (String description1 : descriptions) {
+            String description = description1.trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
-            list = criteria.list();
-            tx.commit();
+        }
+        List list = criteria.list();
+            /*tx.commit();
             session.close();
             log.warn("closeSession");
 
@@ -172,7 +168,8 @@ public class NavigationDaoImpl extends SystemObjectDaoImpl implements Navigation
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         if (criterion != null) {
             criteria.add(criterion);
 
@@ -186,9 +183,10 @@ public class NavigationDaoImpl extends SystemObjectDaoImpl implements Navigation
     public List getUsedPages() {
         Session session = getCurrentSession();
         log.warn("getUsedPages");
-        StringBuilder sql = new StringBuilder("select systemNodeId from Navigation f where f.systemNodeId is not null");
+        String sql = "select systemNodeId from Navigation f where f.systemNodeId is not null";
 
-        List list = session.createQuery(sql.toString()).list();
+//        List list = session.createQuery(sql.toString()).list();
+        List list = session.createQuery(sql).list();
         closeSession();
         return list;
     }
@@ -204,14 +202,14 @@ public class NavigationDaoImpl extends SystemObjectDaoImpl implements Navigation
 
     public String getConcatURL(Integer id) {
         Integer parentId = id;
-        StringBuilder concatUrl = new StringBuilder("/");
+        String concatUrl = "/";
         List UrlList = null;
-        while (parentId > 0 && parentId != null) {
+        while (parentId > 0) {
             Navigation navigation = getNavigation(id);
             String navigationURL = navigation.getSystemName();
             UrlList.add(navigationURL);
             log.warn("URL =" + navigationURL);
-            parentId = navigation.getParentId();
+            parentId = navigation.getEmsObject().getParentId();
 //           concatUrl.append("navigationURL");
 /*
         for (int i = 0; !(parentId <= 0 || parentId == null); i++) {

@@ -2,7 +2,6 @@ importClass(Packages.ru.tastika.tools.util.Utilities);
 
 function listCommon(entityName, defSortName, defSotOrder, params) {
     var displayURI = cocoon.parameters.displayURI;
-    var itemsOnPage = Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
     var json = cocoon.request.getParameter("json") == 'true';
     var servletPath = cocoon.parameters.servletPath;
 
@@ -63,7 +62,6 @@ function listCommon(entityName, defSortName, defSotOrder, params) {
         "servletPath" : servletPath,
         "userData" : getLoggedInUser()
     };
-//    cocoon.sendPage(displayURI, {"transactionHistory": transactionHistory, "viewData":viewData, "userData" : getLoggedInUser()});
 }
 
 

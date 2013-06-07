@@ -21,6 +21,7 @@ public interface TypifiedObjectDao {
     TypifiedObject getTypifiedObject(int id);
     List<TypifiedObject> getTypifiedObjects(Collection<Integer> ids);
     int getChildrenCount(int id);
+    int getObjectsCount() ;
 
     TypifiedObject getTypifiedObject(Class entityClass, int id);
     TypifiedObject getParent(int id);
@@ -33,7 +34,7 @@ public interface TypifiedObjectDao {
     Class getEntityClass();
     ObjectType getObjectType(String className);
     ObjectType getObjectTypeById(int objectTypeId);
-    List getObjectTypes(boolean onlyEmbedded);
+//    List getObjectTypes(boolean onlyEmbedded);
     TypifiedObject save(TypifiedObject typifiedObject);
     void delete(TypifiedObject typifiedObject);
     void indexSiteMap(TypifiedObject typifiedObject);

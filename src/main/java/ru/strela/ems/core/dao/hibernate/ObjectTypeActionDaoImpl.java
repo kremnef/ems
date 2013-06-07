@@ -19,9 +19,7 @@ package ru.strela.ems.core.dao.hibernate;
 
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -38,6 +36,7 @@ import java.util.List;
 public class ObjectTypeActionDaoImpl extends CommonObjectDaoImpl implements ObjectTypeActionDao {
 
     private final static Logger log = LoggerFactory.getLogger(ObjectTypeActionDaoImpl.class);
+
     public ObjectTypeActionDaoImpl() {
         super();
     }
@@ -49,19 +48,19 @@ public class ObjectTypeActionDaoImpl extends CommonObjectDaoImpl implements Obje
      */
 
     public ObjectTypeAction getObjectTypeAction(Integer objectTypeActionId) {
-            Session currentSession = getCurrentSession();
-        Criteria criteria = null;
-        ObjectTypeAction objectTypeAction = null;
+        Session currentSession = getCurrentSession();
+//        Criteria criteria = null;
+//        ObjectTypeAction objectTypeAction = null;
      /*   try {
             tx = session.beginTransaction();*/
-            objectTypeAction = (ObjectTypeAction) currentSession.load(ObjectTypeAction.class, objectTypeActionId);
+        ObjectTypeAction objectTypeAction = (ObjectTypeAction) currentSession.load(ObjectTypeAction.class, objectTypeActionId);
             /*tx.commit();
             session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
         }*/
-           closeSession();
+        closeSession();
         return objectTypeAction;
     }
 
@@ -72,28 +71,29 @@ public class ObjectTypeActionDaoImpl extends CommonObjectDaoImpl implements Obje
      */
 
     public List getObjectTypeActions() {
-         int newSession = 0;
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        if (!session.isOpen()) {
+//         int newSession = 0;
+        Session session = getCurrentSession();
+        /*if (!session.isOpen()) {
             session = HibernateUtil.getSessionFactory().openSession();
             log.warn("openSession");
             newSession = 1;
         }
-        Transaction tx = null;
-        Criteria criteria = null;
-        List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
-            criteria = session.createCriteria(ObjectTypeAction.class);
-            list = criteria.list();
-            tx.commit();
+        Transaction tx = null;*/
+//        Criteria criteria = null;
+//        List list = new ArrayList();
+        /*try {
+            tx = session.beginTransaction();*/
+        Criteria criteria = session.createCriteria(ObjectTypeAction.class);
+        List list = criteria.list();
+            /*tx.commit();
             if(newSession==1){
                 session.close(); log.warn("closeSession");
             }
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return list;
     }
 
@@ -104,20 +104,21 @@ public class ObjectTypeActionDaoImpl extends CommonObjectDaoImpl implements Obje
      */
 
     public ObjectTypeAction saveObjectTypeAction(ObjectTypeAction objectTypeAction) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
-            session.saveOrUpdate(objectTypeAction);
+            tx = session.beginTransaction();*/
+        session.saveOrUpdate(objectTypeAction);
 
-            tx.commit();
+            /*tx.commit();
             session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return objectTypeAction;
     }
 
@@ -128,18 +129,19 @@ public class ObjectTypeActionDaoImpl extends CommonObjectDaoImpl implements Obje
      */
 
     public void deleteObjectTypeAction(ObjectTypeAction objectTypeAction) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
-            session.delete(objectTypeAction);
-            tx.commit();
+            tx = session.beginTransaction();*/
+        session.delete(objectTypeAction);
+            /*tx.commit();
             session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
     }
 
     /* (non-Javadoc)
@@ -147,40 +149,41 @@ public class ObjectTypeActionDaoImpl extends CommonObjectDaoImpl implements Obje
     */
 
     public List findObjectTypeActions(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
-        Criteria criteria = null;
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
+//        Criteria criteria = null;
         Criterion criterion = null;
         List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
-            criteria = session.createCriteria(ObjectTypeAction.class);
+        /*try {
+            tx = session.beginTransaction();*/
+        Criteria criteria = session.createCriteria(ObjectTypeAction.class);
 
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
-                    } else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+        for (String description1 : descriptions) {
+            String description = description1.trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
-            if (criterion != null) {
-                criteria.add(criterion);
-                list = criteria.list();
-            }
+        }
+        if (criterion != null) {
+            criteria.add(criterion);
+            list = criteria.list();
+        }
 
-            tx.commit();
+            /*tx.commit();
             session.close(); log.warn("closeSession");
 
 
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
 
         return list;
     }

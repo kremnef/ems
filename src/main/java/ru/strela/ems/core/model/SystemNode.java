@@ -3,7 +3,7 @@ package ru.strela.ems.core.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.strela.ems.security.model.Customer;
+//import ru.strela.ems.security.model.Customer;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,8 +30,8 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
     private String fullURL;
 //    todo: не вызывать полностью такую херь, если нет в этом необходимости
 
-    private Set content;
-    private Set navigation;
+    private Set<Content> content;
+    private Set<Navigation> navigation;
     private Integer nodeTypeId;
     private Set<SystemNodeTypifiedObject> typifiedObjects;
     private Set<SystemNodeObjectType> objectTypes;
@@ -63,7 +63,7 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
 
     }
 
-    public Set getContent() {
+    public Set<Content> getContent() {
         return this.content;
     }
 
@@ -336,8 +336,6 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
             Integer objectTypeId = objectType.getId();
             int id = systemNodeObjectType.getId();
             String name = objectType.getName();
-            int typeId = 0;
-            String typeName = "";
             int typeActionId = systemNodeObjectType.getTypeActionId();
             int levels = systemNodeObjectType.getLevels();
             int itemsOnPage = systemNodeObjectType.getItemsOnPage();
@@ -347,8 +345,8 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
             Integer tagId = systemNodeObjectType.getTagId();
 
             Set<ObjectTypeAction> typeActions = new TreeSet<ObjectTypeAction>();
-            typeId = objectType.getId();
-            typeName = objectType.getName();
+            int typeId = objectType.getId();
+            String typeName = objectType.getName();
             typeActions = objectType.getTypeActions();
 
 
@@ -468,22 +466,22 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
     }
 
 
-    @Override
+    /*@Override
     public void setParent(TypifiedObject typifiedObject) {
         if (typifiedObject instanceof SystemObject) {
             emsObject.setParent(typifiedObject);
         }
     }
-
-    @XmlAttribute(name="parentId")
+*/
+    /*@XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
-    }
+    }*/
 
 
-    public TypifiedObject getParent() {
+    /*public TypifiedObject getParent() {
         return emsObject.getParent();
-    }
+    }*/
 
     @XmlAttribute(name="emsObjectId")
     public int getEmsObjectId() {

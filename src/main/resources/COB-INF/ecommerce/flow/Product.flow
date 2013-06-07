@@ -18,19 +18,16 @@ function createProduct(form) {
 
     var parentId = 0;
     var parentName = "";
-//    var parentObject = product.getParent();
+//    var parentObject = product.getEmsObject().getParent();
 //    if (parentObject != null) {
 //        parentId = parentObject.getId();
 //        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
 //    }
 
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
 
     product = showEmsObjectForm(form, productService, product, showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
         "parentId" : parentId,
         "parentName" : parentName,
         "servletPath" : servletPath
@@ -67,25 +64,23 @@ function editProductById(form) {
         cocoon.redirectTo("Product-create");
     }
 
-    var parentId = product.getParentId();
+    var parentId = product.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
-        var parent = product.getParent();
+        var parent = product.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }
 
     var actionState = "edit";
-    var viewData = {
-        "actionState": actionState, "type": "photo"
-    }
 
 
     product = showEmsObjectForm(form, productService, product, showFormURI, {
-        "viewData": viewData,
         "productId": id,
         "parentId" : parentId,
         "parentName" : parentName,
-        "servletPath" : servletPath
+        "servletPath" : servletPath,
+        "actionState": actionState,
+        "type": "photo"
     });
 
 

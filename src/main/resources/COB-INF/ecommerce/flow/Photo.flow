@@ -3,15 +3,16 @@
 importClass(Packages.ru.tastika.tools.util.Utilities);
 
 function listPhoto() {
-    listTypifiedObjects(0);
+    var listData = ListObjectsData();
+        sendListPage(listData.displayURI, listData);
 }
 
 function showPhoto(photoService, photo, form, actionState) {
 
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
-    var inner = cocoon.parameters.inner;
-//    var parentId = photo.getParentId();
+//    var inner = cocoon.parameters.inner;
+//    var parentId = photo.getEmsObject().getParentId();
     var parentId = 0;
     var parentName = "";
     /*var parentName = "";
@@ -27,7 +28,7 @@ function showPhoto(photoService, photo, form, actionState) {
 
 
     var countryId = Utilities.parseStringToInteger(cocoon.request.getParameter("countryId"));
-    var defaultCountryId = 0;
+//    var defaultCountryId = 0;
     var countryService = cocoon.getComponent("countryService");
     var availableCountries = countryService.getVisibleCountries();
     var countryList = new Array(availableCountries.size());
@@ -47,9 +48,8 @@ function showPhoto(photoService, photo, form, actionState) {
             break;
         }*/
     }
-    print(1111);
     try {
-        photo = showEmsObjectForm(form, photoService, photo, showFormURI, {
+        showEmsObjectForm(form, photoService, photo, showFormURI, {
             "formLocale": locale,
             "availableLanguages": availableLanguages,
             "photoId": id,
@@ -60,7 +60,6 @@ function showPhoto(photoService, photo, form, actionState) {
             "id" : id,
             "actionState": actionState
         });
-        print(2222);
     }
 
     finally {
@@ -73,9 +72,9 @@ function createPhoto(form) {
     var photoService = cocoon.getComponent("photoService");
     var photo = createTypifiedObject(photoService);
 
-    var parentId = 0;
-    var parentName = "";
-//    var parentObject = photo.getParent();
+    /*var parentId = 0;
+    var parentName = "";*/
+//    var parentObject = photo.getEmsObject().getParent();
 //    if (paren     tObject != null) {
 //        parentId = parentObject.getId();
 //        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
@@ -101,8 +100,8 @@ function createPhoto(form) {
 
 
 function editPhotoById(form) {
-    var showFormURI = cocoon.parameters.showFormURI;
-    var servletPath = cocoon.parameters.servletPath;
+    /*var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;*/
 
     var id = 0;
     importClass(Packages.ru.tastika.tools.util.Utilities);
@@ -119,24 +118,21 @@ function editPhotoById(form) {
         cocoon.redirectTo("Photo-create");
     }
 
-//    var parentId = photo.getParentId();
+//    var parentId = photo.getEmsObject().getParentId();
     /*var parentName = "";
     if (parentId > 0) {
-        var parent = photo.getParent();
+        var parent = photo.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }*/
 
 
 
     var actionState = "edit";
-    /*var viewData = {
-        "actionState": actionState, "type": "photo"
-    }*/
+
 
 
     /*photo = showEmsObjectForm(form, photoService, photo, showFormURI, {
         "countryList":countryList,
-        "viewData": viewData,
         "photoId": id,
 //        "parentId" : parentId,
 //        "parentName" : parentName,

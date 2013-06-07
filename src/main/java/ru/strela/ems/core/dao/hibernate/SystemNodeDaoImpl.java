@@ -34,8 +34,9 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
 
     public SystemNode getSystemNode(int systemNodeId) {
 //    public SystemNode getSystemNode(int systemNodeId) {
-        Session session = getCurrentSession();
+//        Session session = getCurrentSession();
         SystemNode systemNode = (SystemNode) getTypifiedObject(systemNodeId);
+//        closeSession();
         return systemNode;
     }
 
@@ -43,6 +44,7 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
     public String getSystemNodeName(int systemNodeId) {
         Session session = getCurrentSession();
         Query query = session.createQuery("from systemNode where id =" + systemNodeId);
+        closeSession();
         return query.toString();
     }
 
@@ -61,25 +63,26 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
 //            System.out.println("parentSystemNodeId" + parentSystemNodeId);
 
             SystemNode parentSystemNode = null;
-            if (parentSystemNodeId!= null && parentSystemNodeId > 0) {
+            if (parentSystemNodeId != null && parentSystemNodeId > 0) {
                 parentSystemNode = (SystemNode) typifiedObjectDao.getParent(parentSystemNodeId);
 //                System.out.println("parentSystemNode" + parentSystemNode.getId());
 
-                if (withFirstParent && parentSystemNodeId != null && systemNode.getEmsObject().getParentId() > 0 && parentSystemNode != null) {
+                if (withFirstParent && systemNode.getEmsObject().getParentId() > 0 && parentSystemNode != null) {
 //            if (withFirstParent && systemNode.getEmsObject().getParentId() != null && systemNode.getEmsObject().getParentId() > 0 && systemNode.getEmsObject().getParent() != null) {
 //                    ((SystemObject) systemNode.getEmsObject().getParent()).getSystemName();
                     parentSystemNode.getSystemName();
                 }
             }
 
-            if (withTypeActions) {
+            /*if (withTypeActions) {
                 Set<ObjectTypeAction> objectTypeActions = systemNode.getObjectType().getTypeActions();
-            }
+            }*/
 
             int templateId = 0;
 
             List<SystemNodeObjectsData> datas = systemNode.getObjectsDataList();
-            ArrayList<SystemNodeObjectsData> parentDatas = new ArrayList<SystemNodeObjectsData>(datas.size());
+//            ArrayList<SystemNodeObjectsData> parentDatas = new ArrayList<SystemNodeObjectsData>(datas.size());
+
             ////log.info("systemNode.getTemplateId() = " + systemNode.getTemplateId());
 
             if (withTemplate) {
@@ -165,23 +168,23 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
 
 
     public SystemNode getSystemNodeByURI(String nodeURI) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
         SystemNode systemNode = (SystemNode) session.load(SystemNode.class, nodeURI);
-        try {
+        /*try {
             tx = session.beginTransaction();
 
             tx.commit();
             session.close();
             log.warn("closeSession");
-
-        } catch (HibernateException he) {
+*//*        } catch (HibernateException he) {
             if (tx != null) {
                 tx.rollback();
             }
             throw he;
-        }
+        }*/
+        closeSession();
         return systemNode;
     }
 
@@ -198,28 +201,27 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
 
 
     public List findSystemNodes(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
+        Session session = getCurrentSession();
+//        log.warn("openSession");
+//        Transaction tx = null;
         Criteria criteria = session.createCriteria(SystemNode.class);
         Criterion criterion = null;
-        List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
+//        try {
+//            tx = session.beginTransaction();
 
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("nodeURI", description, MatchMode.ANYWHERE);
-                    } else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+        for (int i = 0; i < descriptions.length; i++) {
+            String description = descriptions[i].trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("nodeURI", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
-            list = criteria.list();
-            tx.commit();
+        }
+        List list = criteria.list();
+            /*tx.commit();
             session.close();
             log.warn("closeSession");
 
@@ -229,7 +231,8 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
                 tx.rollback();
             }
             throw he;
-        }
+        }*/
+        closeSession();
         if (criterion != null) {
             criteria.add(criterion);
 

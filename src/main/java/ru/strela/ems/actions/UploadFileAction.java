@@ -91,7 +91,7 @@ public class UploadFileAction extends AbstractAction {
             }
             fileObject.setPosition(objectsCount + 1);
 
-            fileObject.setParent(parentObject);
+            fileObject.getEmsObject().setParent(parentObject);
 
             String freeSystemName = fileObjectService.getFreeSystemName();
             fileObject.setSystemName(freeSystemName);

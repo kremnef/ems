@@ -40,13 +40,13 @@
 
 
     <countryList>
-        <jx:forEach select="#{viewData/countryList}">
+        <jx:forEach select="#{countryList}">
         <document id="#{id}">
                     #{id}
 
         </document>
     </jx:forEach>
-        <!--<jx:forEach items="#{viewData/countryList}" var="c" varStatus="status">
+        <!--<jx:forEach items="#{countryList}" var="c" varStatus="status">
             <country>#{c/id}</country>
         </jx:forEach>-->
     </countryList>

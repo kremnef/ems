@@ -1,10 +1,8 @@
 package ru.strela.ems.core.dao.hibernate;
 
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.*;
@@ -36,6 +34,22 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
         super();
     }
 
+    protected Session getCurrentSession() {
+            log.warn("getCurrentSession()");
+            Session session = HibernateUtil.currentSession();
+            log.warn("beginTransaction()");
+            HibernateUtil.beginTransaction();
+            return session;
+        }
+
+
+        protected void closeSession() {
+            log.warn("commitTransaction()");
+            HibernateUtil.commitTransaction();
+            log.warn("closeSession()");
+            HibernateUtil.closeSession();
+        }
+
 
     public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
@@ -46,16 +60,16 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
         currentLocale = languageCode;
         TreeMap<String, Object> systemObjects = new TreeMap<String, Object>();
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         this.requestQueryString = requestQueryString;
 //        System.out.println("requestQueryString!! " + requestQueryString);
 //    kremnef
         session.setDefaultReadOnly(true);
 
-        Transaction tx = null;
+        /*Transaction tx = null;
         try {
             tx = session.beginTransaction();
-
+*/
             if (systemNamesPath.length() == 0) {
                 systemNamesPath = indexPage;
             }
@@ -126,7 +140,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                             HashSet<Integer> systemNodeIdsForUrls = new HashSet<Integer>();
                             for (Integer position : systemNodeObjectMap.keySet()) {
                                 SystemNodeObject systemNodeObject = systemNodeObjectMap.get(position);
-                                String rendreLike = systemNodeObject.getRenderLike();
+//                                String rendreLike = systemNodeObject.getRenderLike();
                                 String sortField = systemNodeObject.getSortField();
                                 if (sortField == null) {
                                     sortField = "position";
@@ -149,8 +163,8 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                     if (typifiedObject instanceof SystemObject) {
                                         int levels = systemNodeObject.getLevels();
 //                                        Определяем глубину отображаемых элементов
-//                                        System.out.println("typifiedObject = " + typifiedObject.getName());
-//                                        System.out.println("levels = " + levels);
+                                        System.out.println("typifiedObject = " + typifiedObject.getName());
+                                        System.out.println("levels = " + levels);
                                         if (levels > 0) {
                                             children.putAll(getChildren(typifiedObject, levels, 0, systemNodeTypifiedObject.getItemsOnPage(), sortField, sortDirection, systemNodeTypifiedObject.getTagId(), session, systemNodeIdsForUrls, languageCode, position));
                                         }
@@ -201,7 +215,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 }
             }
             System.out.println("5. System.currentTimeMillis() = " + System.currentTimeMillis());
-            tx.commit();
+            /*tx.commit();
             session.close();
         } catch (HibernateException he) {
             if (session.isOpen()) {
@@ -210,7 +224,8 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 }
             }
             throw he;
-        }
+        }*/
+        closeSession();
         return systemObjects;
     }
 
@@ -522,7 +537,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
                     }
 //                    int contentChildrenCount = typifiedObject.getEmsObject().getChildrenCount();
-                    ContentDaoImpl contentDaoImpl = new ContentDaoImpl();
+//                    ContentDaoImpl contentDaoImpl = new ContentDaoImpl();
 //                    list = contentDaoImpl.getChildren(typifiedObjectId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
                     sql = new StringBuilder("from ");
                     sql.append(typifiedObjectClass);
@@ -681,19 +696,16 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     private MetaInfo getMetaInfo(SystemObject systemObject) {
         MetaInfoDao metaInfoDao = new MetaInfoDaoImpl();
         int emsObjectId = systemObject.getEmsObject().getId();
-        MetaInfo metaInfo = metaInfoDao.getMetaInfoNaturalId(emsObjectId, currentLocale);
 
-
-        return metaInfo;
+        return metaInfoDao.getMetaInfoNaturalId(emsObjectId, currentLocale);
     }
 
     private ObjectLabel getObjectLabel(SystemObject systemObject) {
         int emsObjectId = systemObject.getEmsObject().getId();
         ObjectLabelDao objectLabelDao = new ObjectLabelDaoImpl();
-        ObjectLabel objectLabel = objectLabelDao.getObjectLabelNaturalId(emsObjectId, currentLocale);
-//        //System.out.println("TypifiedObject - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
+        //        //System.out.println("TypifiedObject - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
 
-        return objectLabel;
+        return objectLabelDao.getObjectLabelNaturalId(emsObjectId, currentLocale);
     }
 
 }

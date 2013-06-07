@@ -61,8 +61,8 @@ function createCatalogue(form) {
 
     var parentId = 0;
     var parentName = "";
-    var parentObject = catalogue.getParent();
-    var parentDocumentTypeId = 0;
+    var parentObject = catalogue.getEmsObject().getParent();
+//    var parentDocumentTypeId = 0;
     if (parentObject != null) {
         parentId = parentObject.getId();
         parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
@@ -119,10 +119,10 @@ function editCatalogueById(form) {
         cocoon.redirectTo("Catalogue-create");
     }
 
-    var parentId = catalogue.getParentId();
+    var parentId = catalogue.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
-        var parent = catalogue.getParent();
+        var parent = catalogue.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }
 
@@ -134,22 +134,16 @@ function editCatalogueById(form) {
 
 
     try {
-        var viewData = {
-            "actionState" : "edit",
-//            "documentType": documentType,
-            "availableLanguages": availableLanguages
-//            "availableDocuments": availableDocuments
-        }
-
         importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
 //        form.getChild("documentTypeId").setState(WidgetState.INVISIBLE);
 
         form.setAttribute('formName', 'catalogueForm');
 
         catalogue = showEmsObjectForm(form, catalogueService, catalogue, showFormURI, {
-            "viewData": viewData,
             "parentId" : parentId,
             "parentName" : parentName,
+            "actionState" : "edit",
+            "availableLanguages": availableLanguages,
 //            "documentTypeList" : documentTypeList,
             "id" : id,
             "servletPath" : servletPath,
@@ -163,8 +157,6 @@ function editCatalogueById(form) {
         cocoon.releaseComponent(catalogueService);
     }
     cocoon.redirectTo("Catalogue-edit?id=" + id);
-//    cocoon.sendStatus(200);
-    //cocoon.sendPage("listCatalogue", {"viewData": viewData, "catalogue": catalogue});
 
 }
 
@@ -197,8 +189,8 @@ function viewCatalogueById() {
 }
 
 function listCatalogue(parentId) {
-var listData = prepareListData(parentId);
-sendListPage(listData.displayURI, listData);
+    var listData = listObjectsWithParentId(parentId, null);
+    sendListPage(listData.displayURI, listData);
 
 }
 

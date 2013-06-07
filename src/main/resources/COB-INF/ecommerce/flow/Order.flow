@@ -1,9 +1,9 @@
-
-
 importClass(Packages.ru.tastika.tools.util.Utilities);
 
+
 function listOrder() {
-    listTypifiedObjects(0);
+    var listData = ListObjectsData();
+    sendListPage(listData.displayURI, listData);
 }
 
 
@@ -16,24 +16,21 @@ function createOrder(form) {
 
     var parentId = 0;
     var parentName = "";
-//    var parentObject = order.getParent();
+//    var parentObject = order.getEmsObject().getParent();
 //    if (parentObject != null) {
 //        parentId = parentObject.getId();
 //        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
 //    }
 
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
 
     order = showEmsObjectForm(form, orderService, order, showFormURI, {
-        "viewData": viewData,
-        "parentId" : parentId,
-        "parentName" : parentName,
-        "servletPath" : servletPath
+        "parentId": parentId,
+        "parentName": parentName,
+        "actionState": actionState,
+        "servletPath": servletPath
     });
-
 
 
     orderService.save(order);
@@ -65,26 +62,24 @@ function editOrderById(form) {
         cocoon.redirectTo("Order-create");
     }
 
-    var parentId = order.getParentId();
+    var parentId = order.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
-        var parent = order.getParent();
+        var parent = order.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }
 
 
     var actionState = "edit";
 //    var objectTypes = getTypeActions();
-    var viewData = {
-        "actionState": actionState}
 
 
     order = showEmsObjectForm(form, orderService, order, showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
         "orderId": id,
-        "parentId" : parentId,
-        "parentName" : parentName,
-        "servletPath" : servletPath
+        "parentId": parentId,
+        "parentName": parentName,
+        "servletPath": servletPath
     });
 
 
@@ -108,8 +103,6 @@ function viewOrderById() {
     cocoon.releaseComponent(orderService);
 
 
-
-
     cocoon.sendPage(displayURI, {"order": order});
 }
 
@@ -120,8 +113,6 @@ function viewOrderItemById() {
     var orderItemService = cocoon.getComponent("orderItemService");
     var order = orderItemService.getOrderItem(id);
     cocoon.releaseComponent(orderItemService);
-
-
 
 
     cocoon.sendPage(displayURI, {"order": order});

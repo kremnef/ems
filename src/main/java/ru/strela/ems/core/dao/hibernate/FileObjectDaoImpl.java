@@ -85,6 +85,7 @@ public class FileObjectDaoImpl extends SystemObjectDaoImpl implements FileObject
 
         super.deleteObject(typifiedObject);
         closeSession();
+
         String realRootPath = ServerTools.getContextRealPath();
         File realFile = new File(realRootPath, file.getPath());
         FileAddition.delete(realFile);
@@ -109,7 +110,7 @@ public class FileObjectDaoImpl extends SystemObjectDaoImpl implements FileObject
 
 
         if (typifiedObject instanceof SystemObject) {
-            String systemName = ((SystemObject) typifiedObject).getSystemName();
+            String systemName = typifiedObject.getSystemName();
             String extension = FileAddition.getFileExtension(realFile);
             File previewFile = new File(realFile.getParentFile(), systemName + (extension.length() > 0 ? ("." + extension) : ""));
             if (previewFile.exists()) {

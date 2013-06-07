@@ -19,28 +19,22 @@ public class FileObject extends TypifiedObject implements java.io.Serializable, 
 
 
     private static final String CONTEXT_TYPE_IMAGE_PREFIX = "image/";
-//    private static final String PNG_FORMAT = "png";
-//    private static final int PREVIEW_DIMENSION = 80;
 
     private String path;
     private String contentType;
     private int size;
 
     private int used;
+    private EmsObject emsObject;
+    private final static Logger log = LoggerFactory.getLogger(FileObject.class);
 
 
     private int fileTypeGroupId;
 
-    /*private int square = Integer.parseInt(ServerTools.getGlobalParameter("image.icon.square").toString());
-private int small = Integer.parseInt(ServerTools.getGlobalParameter("image.icon.small").toString());
-private int medium = Integer.parseInt(ServerTools.getGlobalParameter("image.icon.medium").toString());
-private int large = Integer.parseInt(ServerTools.getGlobalParameter("image.icon.large").toString());
-private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio").toString();*/
 
 
-    private EmsObject emsObject;
 
-    private final static Logger log = LoggerFactory.getLogger(FileObject.class);
+
 
     public FileObject() {
         super();
@@ -48,7 +42,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
         emsObject = new EmsObject();
         emsObject.setEntity(getClass().getSimpleName());
 
-        //log.debug("NEW FILE IS UPLOADED");
+        log.debug("NEW FILE IS UPLOADED");
     }
 
     public FileObject(String path, String contentType, int size, int used, int fileTypeGroupId, EmsObject emsObject) {
@@ -59,7 +53,6 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
         this.fileTypeGroupId = fileTypeGroupId;
         this.emsObject = emsObject;
     }
-
 
 
     public void setId(Integer id) {
@@ -129,7 +122,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
     }
 
 
-      /**
+    /**
      * Returns the value of field 'used'.
      *
      * @return the value of field 'used'.
@@ -149,13 +142,13 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
         this.used = used;
     }
 
-      /**
+    /**
      * Returns the value of field 'fileTypeGroupId'.
      *
      * @return the value of field 'fileTypeGroupId'.
      */
 
-    @XmlAttribute(name="fileTypeGroupId")
+    @XmlAttribute(name = "fileTypeGroupId")
     public int getFileTypeGroupId() {
         return fileTypeGroupId;
     }
@@ -177,7 +170,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
         int medium = Integer.parseInt(ServerTools.getGlobalParameter("image.icon.medium").toString());
         int large = Integer.parseInt(ServerTools.getGlobalParameter("image.icon.large").toString());
         String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio").toString();
-        String mediatekaFolder = ServerTools.getGlobalParameter("mediatekaFolder").toString();
+//        String mediatekaFolder = ServerTools.getGlobalParameter("mediatekaFolder").toString();
 
 
         log.warn("aspectRatio-" + aspectRatio);
@@ -209,10 +202,10 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
                     String localName = FileAddition.getFileBaseName(fileName);
 
                     ThumbnailAction thumbnail = new ThumbnailAction();
-                    thumbnail.createThumbnail(sourceFile,localName + "-square.jpg", square, "1:1");
-                    thumbnail.createThumbnail(sourceFile,localName + "-small.jpg", small, aspectRatio);
-                    thumbnail.createThumbnail(sourceFile,localName + "-medium.jpg", medium, aspectRatio);
-                    thumbnail.createThumbnail(sourceFile,localName + "-large.jpg", large, aspectRatio);
+                    thumbnail.createThumbnail(sourceFile, localName + "-square.jpg", square, "1:1");
+                    thumbnail.createThumbnail(sourceFile, localName + "-small.jpg", small, aspectRatio);
+                    thumbnail.createThumbnail(sourceFile, localName + "-medium.jpg", medium, aspectRatio);
+                    thumbnail.createThumbnail(sourceFile, localName + "-large.jpg", large, aspectRatio);
 
                     success = true;
                 } catch (IOException e) {
@@ -247,7 +240,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
     }
 
 
-    @Override
+    /*@Override
     public void setParent(TypifiedObject typifiedObject) {
         if (typifiedObject instanceof SystemObject) {
             emsObject.setParent(typifiedObject);
@@ -255,7 +248,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
     }
 
 
-    @XmlAttribute(name="parentId")
+    @XmlAttribute(name = "parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
     }
@@ -263,7 +256,7 @@ private String aspectRatio = ServerTools.getGlobalParameter("image.aspectRatio")
 
     public TypifiedObject getParent() {
         return emsObject.getParent();
-    }
+    }*/
 
 
     @Override

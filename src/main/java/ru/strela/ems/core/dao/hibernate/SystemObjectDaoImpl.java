@@ -32,6 +32,10 @@ public class SystemObjectDaoImpl extends TypifiedObjectDaoImpl implements System
 //    private ObjectTypeDao objectTypeDao;
 //    private HashSet<CommonObjectId> parentPathIds = new HashSet<CommonObjectId>();
 
+
+
+
+
     // todo: проверить не перекрывается ли метод
     public TypifiedObject getTypifiedObject(int id, boolean withFirstParent) {
         TypifiedObject typifiedObject = getTypifiedObject(id);
@@ -225,7 +229,7 @@ public class SystemObjectDaoImpl extends TypifiedObjectDaoImpl implements System
         String md5 = MD5Crypt.md5ToString16(longToBytes(System.currentTimeMillis())).substring(0, FREE_SYSTEM_NAME_LENGTH);
         TypifiedObject emsObjectBySystemName = getTypifiedObjectBySystemName(md5);
         while (emsObjectBySystemName != null) {
-            md5 = MD5Crypt.md5ToString16(longToBytes(System.currentTimeMillis())).substring(0, FREE_SYSTEM_NAME_LENGTH);
+//            md5 = MD5Crypt.md5ToString16(longToBytes(System.currentTimeMillis())).substring(0, FREE_SYSTEM_NAME_LENGTH);
             emsObjectBySystemName = getTypifiedObjectBySystemName(md5);
         }
         return md5;
@@ -249,11 +253,10 @@ public class SystemObjectDaoImpl extends TypifiedObjectDaoImpl implements System
                 if (typifiedObject instanceof SystemObject) {
                     SystemObject systemObject = (SystemObject) typifiedObject;
                     if (systemObject.getEmsObject().getParentId() != null && systemObject.getEmsObject().getParentId() > 0) {
-                        SystemObject parentObject = systemObject;
                         int parentId = systemObject.getEmsObject().getParentId() != null ? systemObject.getEmsObject().getParentId() : 0;
 
                         TypifiedObjectDao typifiedObjectDao = new TypifiedObjectDaoImpl();
-                        Object obj = (Object) typifiedObjectDao.getParent(parentId);
+                        Object obj = typifiedObjectDao.getParent(parentId);
 //                        Object obj = parentObject.getEmsObject().getParent();
 
 //                        System.out.println("parentObject_CLASS:" + obj.getClass());
@@ -265,7 +268,7 @@ public class SystemObjectDaoImpl extends TypifiedObjectDaoImpl implements System
                         while (parentId > 0 && (parentObjectT) != null && !parents.contains(parentObjectT)) {
 //                                parents.add(0, (TypifiedObject) parentObject);
                             parents.add(0, parentObjectT);
-                            parentId = parentObject.getEmsObject().getParentId() != null ? parentObject.getEmsObject().getParentId() : 0;
+                            parentId = systemObject.getEmsObject().getParentId() != null ? systemObject.getEmsObject().getParentId() : 0;
 //                            }
                         }
                     }

@@ -4,9 +4,7 @@ package ru.strela.ems.core.dao.hibernate;
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -110,29 +108,28 @@ public class LanguageDaoImpl extends TypifiedObjectDaoImpl implements LanguageDa
 
 
     public List findLanguages(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
         Criteria criteria = session.createCriteria(Language.class);
         Criterion criterion = null;
-        List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
+//        List list = new ArrayList();
+        /*try {
+            tx = session.beginTransaction();*/
 
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
-                    }
-                    else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+        for (String description1 : descriptions) {
+            String description = description1.trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
-            list = criteria.list();
-            tx.commit();
+        }
+        List list = criteria.list();
+            /*tx.commit();
             session.close(); log.warn("closeSession");
 
         }
@@ -141,7 +138,8 @@ public class LanguageDaoImpl extends TypifiedObjectDaoImpl implements LanguageDa
                 tx.rollback();
             }
             throw he;
-        }
+        }*/
+        closeSession();
         if (criterion != null) {
             criteria.add(criterion);
 
@@ -154,7 +152,7 @@ public class LanguageDaoImpl extends TypifiedObjectDaoImpl implements LanguageDa
     }
 
 
-    public void showLanguages(Map model, Object obj, String src) {
+    public void showLanguages(Map model) {
         Request request = ObjectModelHelper.getRequest(model);
         ServerTools.updateLocaleFromParameter(request);
     }

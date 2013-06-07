@@ -19,7 +19,6 @@ public class Photo extends TypifiedObject implements java.io.Serializable, Syste
     private String daytime;
     private String season;
     private EmsObject emsObject;
-    //    private int contentId;
     private int fileId;
     private Product product;
     private Country country;
@@ -155,7 +154,7 @@ public class Photo extends TypifiedObject implements java.io.Serializable, Syste
 
 
     public void setAuthorId(int authorId) {
-        authorId = authorId;
+        this.authorId = authorId;
     }
 
 
@@ -193,21 +192,21 @@ public class Photo extends TypifiedObject implements java.io.Serializable, Syste
         }
 
 
-        @Override
+        /*@Override
         public void setParent(TypifiedObject typifiedObject) {
             if (typifiedObject instanceof SystemObject) {
                 emsObject.setParent(typifiedObject);
             }
-        }
+        }*/
 
 
-        public Integer getParentId() {
+        /*public Integer getParentId() {
             return emsObject.getParentId();
-        }
+        }*/
 
 
-        public TypifiedObject getParent() {
+        /*public TypifiedObject getParent() {
             return emsObject.getParent();
-        }
+        }*/
 
 }

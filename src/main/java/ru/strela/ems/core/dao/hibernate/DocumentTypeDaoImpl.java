@@ -2,9 +2,7 @@ package ru.strela.ems.core.dao.hibernate;
 
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -26,45 +24,51 @@ public class DocumentTypeDaoImpl extends CommonObjectDaoImpl implements Document
 
 
     public DocumentType getDocumentType(int documentTypeId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
 
         Transaction tx = null;
-        DocumentType documentType = null;
-        try {
-            tx = session.beginTransaction();
-            documentType = (DocumentType) session.get(DocumentType.class, documentTypeId);
 
-            tx.commit(); session.close(); log.warn("closeSession");
+        */
+//         documentType = null;
+        /*try {
+                    tx = session.beginTransaction();*/
+        DocumentType    documentType = (DocumentType) session.get(DocumentType.class, documentTypeId);
+
+            /*tx.commit(); session.close(); log.warn("closeSession");
 //            session.flush();
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return documentType;
     }
 
 
     public List getDocumentTypes() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
 
+/*
         log.warn("openSession");
         Transaction tx = null;
-        Criteria criteria = null;
-        List list = new ArrayList();
+*/
+//        Criteria criteria = null;
+//        List list = new ArrayList();
 
-        try {
-            tx = session.beginTransaction();
-            criteria = session.createCriteria(DocumentType.class);
+/*        try {
+            tx = session.beginTransaction();*/
+        Criteria  criteria = session.createCriteria(DocumentType.class);
 //            speed test
 //            criteria.addOrder(Order.asc("name"));
-            list =criteria.list();
-            tx.commit(); session.close(); log.warn("closeSession");
+        List list =criteria.list();
+            /*tx.commit(); session.close(); log.warn("closeSession");
 //            session.flush();
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return list;
 
     }
@@ -86,23 +90,24 @@ public class DocumentTypeDaoImpl extends CommonObjectDaoImpl implements Document
         });
     }*/
     public DocumentType getDocumentTypeByName(String name) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
         DocumentType documentType;
 
-        try {
-            tx = session.beginTransaction();
+//        try {
+//            tx = session.beginTransaction();
             Criteria criteria = session.createCriteria(DocumentType.class);
 
             criteria.add(Restrictions.eq("name", name));
 
             documentType = (DocumentType) criteria.uniqueResult();
-            tx.commit(); session.close(); log.warn("closeSession");
+            /*tx.commit(); session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return documentType;
 //            }
 
@@ -111,69 +116,74 @@ public class DocumentTypeDaoImpl extends CommonObjectDaoImpl implements Document
 
 
     public DocumentType saveDocumentType(DocumentType documentType) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        /*Session session = HibernateUtil.getSessionFactory().openSession();
         log.warn("openSession");
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
+            tx = session.beginTransaction();*/
+        Session session = getCurrentSession();
             session.saveOrUpdate(documentType);
 
-            tx.commit(); session.close(); log.warn("closeSession");
+            /*tx.commit(); session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return documentType;
     }
 
 
     public void deleteDocumentType(DocumentType documentType) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
+            tx = session.beginTransaction();*/
             session.saveOrUpdate(documentType);
 
             session.delete(documentType);
-            tx.commit(); session.close(); log.warn("closeSession");
+            /*tx.commit(); session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
     }
 
 
     public List findDocumentTypes(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        /*Session session = HibernateUtil.getSessionFactory().openSession();
         log.warn("openSession");
-        Transaction tx = null;
+        Transaction tx = null;*/
+        Session session = getCurrentSession();
         Criteria criteria = session.createCriteria(DocumentType.class);
         Criterion criterion = null;
         List list  = null;
-        try {
-            tx = session.beginTransaction();
+        /*try {
+            tx = session.beginTransaction();*/
 
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
-                    } else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+        for (String description1 : descriptions) {
+            String description = description1.trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
+        }
 
             list = criteria.list();
-            tx.commit(); session.close(); log.warn("closeSession");
+            /*tx.commit(); session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         if (criterion != null) {
             criteria.add(criterion);
 

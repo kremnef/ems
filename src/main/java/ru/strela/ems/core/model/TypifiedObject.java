@@ -222,10 +222,12 @@ public abstract class TypifiedObject {
     public void setSystemName(String systemName) {
     }
 
-    /*@XmlTransient
+/*
+    @XmlTransient
     public Integer getParentId() {
         return null;
-    }*/
+    }
+*/
 
 
     public String getSystemName() {
@@ -373,7 +375,7 @@ public abstract class TypifiedObject {
         for (Object obj : list) {
             ObjectLabel objectLabel = (ObjectLabel) obj;
 //            System.out.println("id:"+objectLabel.getId());
-//            System.out.println("label: "+objectLabel.getLabel());
+            System.out.println("label: "+objectLabel.getLabel());
 //            System.out.println("languageCode: "+objectLabel.getLanguageCode());
 //            System.out.println("objectId: "+objectLabel.getObjectId());
         }

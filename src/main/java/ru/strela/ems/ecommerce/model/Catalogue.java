@@ -70,22 +70,22 @@ public class Catalogue extends TypifiedObject implements Serializable, SystemObj
     }
 
 
-    @Override
+    /*@Override
     public void setParent(TypifiedObject typifiedObject) {
         if (typifiedObject instanceof SystemObject) {
             emsObject.setParent(typifiedObject);
         }
-    }
+    }*/
 
 
-    public Integer getParentId() {
+    /*public Integer getParentId() {
         return emsObject.getParentId();
-    }
+    }*/
 
 
-    public TypifiedObject getParent() {
+    /*public TypifiedObject getParent() {
         return emsObject.getParent();
-    }
+    }*/
 
 
     @Override

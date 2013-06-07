@@ -13,7 +13,7 @@ import java.util.*;
 public class Content extends TypifiedObject implements Serializable, SystemObject {
 
 
-    public static final String ORDER_FIELD_PUBLISH_DATE_TIME = "publishDateTime";
+//    public static final String ORDER_FIELD_PUBLISH_DATE_TIME = "publishDateTime";
 
     private Date publishDateTime;
     private Date expireDateTime;
@@ -156,6 +156,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         getEmsObject().setSystemName(systemName);
     }
 
+/*
 
     @Override
     public void setParent(TypifiedObject typifiedObject) {
@@ -173,6 +174,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
     public TypifiedObject getParent() {
         return emsObject.getParent();
     }
+*/
 
     public MetaInfo getMetaInfo() {
         return metaInfo;
@@ -311,7 +313,7 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
     }
 
     @XmlTransient
-    public Document getDocument() {
+    private Document getDocument() {
         return document;
     }
 

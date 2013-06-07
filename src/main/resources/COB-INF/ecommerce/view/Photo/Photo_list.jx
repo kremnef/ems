@@ -49,7 +49,7 @@
 
         </items>
         <countryList>
-        <jx:forEach items="${viewData.countryList}" var="c" varStatus="status">
+        <jx:forEach items="${countryList}" var="c" varStatus="status">
             <country>${c.id}</country>
         </jx:forEach>
         </countryList>

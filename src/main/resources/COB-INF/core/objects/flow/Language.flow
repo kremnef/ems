@@ -1,9 +1,8 @@
-
-
 importClass(Packages.ru.tastika.tools.util.Utilities);
 
 function listLanguage() {
-    listTypifiedObjects(0);
+    var listData = ListObjectsData();
+    sendListPage(listData.displayURI, listData);
 }
 
 function createLanguage(form) {
@@ -14,16 +13,13 @@ function createLanguage(form) {
     var language = createTypifiedObject(languageService);
 
     var actionState = "create";
-    /*var viewData = {
-        "actionState": actionState
-    }*/
+
 
 
     language = showObjectForm(form, languageService, language, showFormURI, {
-//        "viewData": viewData,
-        "parentId" : 0,
-        "parentName" : '',
-        "servletPath" : servletPath,
+        "parentId": 0,
+        "parentName": '',
+        "servletPath": servletPath,
         "actionState": actionState
     });
 
@@ -55,14 +51,10 @@ function editLanguageById(form) {
     }
 
     var actionState = "edit";
-   /* var viewData = {
-        "actionState": actionState
-    };*/
 
     language = showObjectForm(form, languageService, language, showFormURI, {
-//        "viewData": viewData,
         "languageId": id,
-        "servletPath" : servletPath,
+        "servletPath": servletPath,
         "actionState": actionState
     });
 
@@ -80,18 +72,18 @@ function deleteLanguageById() {
         id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
     }
     if (id == 0) {
-        cocoon.redirectTo(entity+"-list");
+        cocoon.redirectTo(entity + "-list");
     }
     var languageService = cocoon.getComponent("languageService");
     var language = languageService.getLanguage(id);
     if (language == null) {
         cocoon.releaseComponent(languageService);
-        cocoon.redirectTo(entity+"-list");
+        cocoon.redirectTo(entity + "-list");
     }
 
     languageService.deleteLanguage(language);
 
     cocoon.releaseComponent(languageService);
 
-    cocoon.redirectTo(entity+"-list");
+    cocoon.redirectTo(entity + "-list");
 }

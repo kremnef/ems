@@ -23,10 +23,10 @@ function showSystemNode(systemNodeService, systemNode, form, actionState) {
 
     var id = systemNode.getId();
     var parentName = "";
-    var parentId = systemNode.getParentId();
+    var parentId = systemNode.getEmsObject().getParentId();
     if (parentId > 0) {
 //        print("systemNode = " + systemNode);
-//        var parent = systemNode.getParent();
+//        var parent = systemNode.getEmsObject().getParent();
 //        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
         var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
         var parent = typifiedObjectService.getParent(parentId);
@@ -66,8 +66,8 @@ function showSystemNode(systemNodeService, systemNode, form, actionState) {
     var redirectPath = "";
     if (systemNode.getRedirectTo() > 0) {
         var redirectParents = systemNodeService.getTypifiedObjectParents(systemNode.getRedirectTo(), true);
-        for (var i = 0; i < redirectParents.size(); i++) {
-            redirectPath += ' / ' + redirectParents.get(i).getName();
+        for (var a = 0; a < redirectParents.size(); a++) {
+            redirectPath += ' / ' + redirectParents.get(a).getName();
         }
     }
     if (redirectPath.length > 0) {
@@ -76,24 +76,23 @@ function showSystemNode(systemNodeService, systemNode, form, actionState) {
     form.getChild("redirectToName").value = redirectPath;
     form.setAttribute('objectTypeList', objectTypeList);
 
-  //  var  renderLikeItems['list','tree','object'];
+    //  var  renderLikeItems['list','tree','object'];
 
     var formData = {
         "objectTypeList": objectTypeList,
         "actionState": actionState,
-//        "viewData": viewData,
-        "parentId" : parentId,
-        "parentName" : parentName,
-        "redirectPath" : redirectPath,
-        "servletPath" : servletPath,
-        "id" : id,
-        "userData" : getLoggedInUser(),
-        "parents" : parents,
-    //    "renderLikeItems": renderLikeItems,
+        "parentId": parentId,
+        "parentName": parentName,
+        "redirectPath": redirectPath,
+        "servletPath": servletPath,
+        "id": id,
+        "userData": getLoggedInUser(),
+        "parents": parents,
+        //    "renderLikeItems": renderLikeItems,
         "availableTags": availableTags,
         "availableTemplates": availableTemplates,
-        "availableLanguages":availableLanguages,
-        "formLocale":locale
+        "availableLanguages": availableLanguages,
+        "formLocale": locale
     };
 
 
@@ -113,11 +112,11 @@ function showSystemNode(systemNodeService, systemNode, form, actionState) {
             }
         }
     }
-    var homeId = 0;
+    /*var homeId = 0;
     var navigation = systemNodeService.getNavigationBySystemNodeId(systemNode.getId());
     if (navigation != null) {
         homeId = navigation.getId();
-    }
+    }*/
 
     form.showForm(showFormURI, formData);
 
@@ -148,8 +147,7 @@ function editSystemNodeById(form) {
 
     var systemNodeService = cocoon.getComponent("systemNodeService");
 
-    var systemNode = null;
-    systemNode = systemNodeService.getSystemNode(id, true, true);
+    var systemNode = systemNodeService.getSystemNode(id, true, true);
 
     if (systemNode == null) {
         cocoon.releaseComponent(systemNodeService);
@@ -161,13 +159,13 @@ function editSystemNodeById(form) {
     var parentId = 0;
     var parentName = "";
     var parentPath = new java.lang.String("");
-       var parentObject = systemNode.getParent();
-       if (parentObject != null) {
-           parentId = parentObject.getId();
-           parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
-           parentPath = parentObject.getFullURL();
-       }
-       systemNode.setFullURL(parentPath.length() > 0 ? parentPath + '/' + systemNode.getSystemName() : systemNode.getSystemName());
+    var parentObject = systemNode.getEmsObject().getParent();
+    if (parentObject != null) {
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+        parentPath = parentObject.getFullURL();
+    }
+    systemNode.setFullURL(parentPath.length() > 0 ? parentPath + '/' + systemNode.getSystemName() : systemNode.getSystemName());
 
     try {
         systemNodeService.save(systemNode);
@@ -182,13 +180,13 @@ function editSystemNodeById(form) {
 
 
 function createSystemNode(form) {
-    var showFormURI = cocoon.parameters.showFormURI;
-    var servletPath = cocoon.parameters.servletPath;
+    /*var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;*/
 
     var systemNodeService = cocoon.getComponent("systemNodeService");
     var systemNode = createTypifiedObject(systemNodeService);
     var templateService = cocoon.getComponent("templateService");
-    var availableTemplates = templateService.getTemplates();
+//    var availableTemplates = templateService.getTemplates();
     cocoon.releaseComponent(templateService);
 
     var actionState = "create";
@@ -196,10 +194,10 @@ function createSystemNode(form) {
     var parentId = 0;
     var parentName = "";
     var parentPath = new java.lang.String("");
-    var parentObject = systemNode.getParent();
+    var parentObject = systemNode.getEmsObject().getParent();
     if (parentObject != null) {
-        parentId = parentObject.getId();
-        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
         parentPath = parentObject.getFullURL();
     }
     systemNode.setFullURL(parentPath.length() > 0 ? parentPath + '/' + systemNode.getSystemName() : systemNode.getSystemName());
@@ -209,7 +207,7 @@ function createSystemNode(form) {
     cocoon.releaseComponent(objectTypeDao);
     form.setAttribute('objectTypeList', objectTypeList);
 
-    var pathWidget = form.getChild('path');
+//    var pathWidget = form.getChild('path');
     showSystemNode(systemNodeService, systemNode, form, actionState);
     systemNodeService.save(systemNode);
 
@@ -233,7 +231,7 @@ function viewSystemNodeById() {
     var systemNodeService = cocoon.getComponent("systemNodeService");
     var systemNode = systemNodeService.getSystemNode(systemNodeId);
     cocoon.releaseComponent(systemNodeService);
-     cocoon.disposeObject(systemNode);
+    cocoon.disposeObject(systemNode);
 
     cocoon.sendPage(displayURI, {
         "systemNode": systemNode
@@ -255,7 +253,8 @@ function getSystemNodesByDocumentType() {
 
 
 function listSystemNode(parentId) {
-    listTypifiedObjects(parentId);
+    var listData = listObjectsWithParentId(parentId);
+    sendListPage(listData.displayURI, listData);
 
 }
 
@@ -263,15 +262,6 @@ function listSystemNode(parentId) {
 function deleteSystemNodeById() {
     deleteObjectById("SystemNode");
 }
-
-
-/*function treeSystemNode(parentId){
- var displayXMLURI = cocoon.parameters.displayXMLURI;
- var listData = prepareListData(parentId);
- cocoon.sendPage(displayXMLURI, listData);
-
- }*/
-
 
 /*
  function treeObjects(){

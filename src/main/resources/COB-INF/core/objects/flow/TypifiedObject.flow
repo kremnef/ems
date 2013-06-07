@@ -53,13 +53,6 @@ function getParentPath(entity, parentId) {
     return parentPath;
 }
 
-function listTypifiedObjects(parentId) {
-
-    var listData = prepareListData(parentId);
-    sendListPage(listData.displayURI, listData);
-}
-
-
 function changePositions(previousChild, child, typifiedObjectService) {
     var childPosition = child.getPosition();
     child.setPosition(previousChild.getPosition());
@@ -69,8 +62,81 @@ function changePositions(previousChild, child, typifiedObjectService) {
 }
 
 
-function prepareListData(parentId, filter) {
-//    print("prepareListData parentId"+parentId+" filter"+filter);
+ function listTypifiedObjects(parentId) {
+ print("listTypifiedObjects parentId :" + parentId );
+ var listData = listObjectsWithParentId(parentId);
+ sendListPage(listData.displayURI, listData);
+ }
+
+/*function listObjects() {
+ //list objects without children
+ var listOData = ListObjectsData();
+ sendListPage(listData.displayURI, listOData);
+ }*/
+
+
+function ListObjectsData() {
+
+    var displayURI = cocoon.parameters.displayURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var json = cocoon.request.getParameter("json") == 'true';
+
+    print("ListObjectsData() " + json);
+
+    var entity;
+    if (cocoon.parameters.entity != "") {
+        entity = cocoon.parameters.entity;
+    } else {
+        print("!!!!!ERORR NOT defined entity ")
+    }
+
+    var itemsOnPage = json ? Utilities.parseStringToInteger(cocoon.request.getParameter("rp")) : Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
+    if (itemsOnPage < 0) {
+        itemsOnPage = 0;
+    }
+    var page = Utilities.parseStringToInteger(cocoon.request.getParameter("page"));
+    if (page <= 1) {
+        page = new java.lang.Integer(1);
+    }
+    var sortField = cocoon.request.getParameter("sortname");
+    if (sortField != 'name' && sortField != 'systemName' && sortField != 'position') {
+        sortField = '';
+    }
+    var sortDirection = '';
+    if (cocoon.request.getParameter("sortorder") == 'desc' || cocoon.request.getParameter("sortorder") == 'asc') {
+        sortDirection = cocoon.request.getParameter("sortorder");
+    } else {
+        sortDirection = 'desc';
+    }
+
+
+    var typifiedObjectService = getServiceByEntity(entity);
+    var total = typifiedObjectService.getObjectsCount();
+
+
+    var objects = typifiedObjectService.getObjects((page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection);
+
+
+    cocoon.releaseComponent(typifiedObjectService);
+
+    if (json) {
+        displayURI += "-json";
+    }
+
+    return {
+        "displayURI": displayURI,
+        "children": objects,
+        "servletPath": servletPath,
+        "userData": getLoggedInUser(),
+        "page": page,
+        "total": total,
+        "itemsOnPage": itemsOnPage
+    };
+
+}
+
+
+function listObjectsWithParentId(parentId, filter) {
     if (!filter) {
         filter = null;
     }
@@ -81,25 +147,9 @@ function prepareListData(parentId, filter) {
     var entity;
     if (cocoon.parameters.entity != "") {
         entity = cocoon.parameters.entity;
-//        print("YES cocoon.parameters.entity" + entity);
-        /*} else if (cocoon.request.getParameter("entity") != "") {
-         entity = cocoon.request.getParameter("entity");*/
-//        print("YES cocoon.request.getParameter" + entity);
     } else {
-        print("!!!!!ERORR NOT defined entity " + entity)
+        print("!!!!!ERORR NOT defined entity ")
     }
-
-
-    //print ("FloWdisplayURI"+displayURI);
-
-    //    var entityName = cocoon.parameters.entityName;
-    //    if (entityName != null && entityName.length > 0) {
-    //        entityName = entityName.substring(0, 1).toLowerCase() + entityName.substring(1)
-    //    }
-    //    else {
-    //        entityName = "";
-    //    }
-
 
 
     if (!parentId || parentId == 0) {
@@ -121,27 +171,124 @@ function prepareListData(parentId, filter) {
 
     var typifiedObjectService = getServiceByEntity(entity);
     var total = typifiedObjectService.getChildrenCount(parentId);
-
-//    print("parentId:" + parentId);
+    var children = null;
     if (filter != null){
-        var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection, filter);
+        children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection, filter);
     }else{
-        print("1 - "+parentId);
+         /*print("1 - "+parentId);
          print("2 - "+(page - 1) * itemsOnPage);
          print("3 -"+itemsOnPage);
          print("4 - "+sortField);
-         print("5 - "+sortDirection);
-        var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection);
+         print("5 - "+sortDirection);*/
+        children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection);
 }
 
-//    print("children -:"+children);
-
-//    at prepareListData - file:///Users/andrejkremnev/Documents/PRG/svn/ems/src/main/resources/COB-INF/core/objects/flow/TypifiedObject.flow:140
 
     var parents = typifiedObjectService.getTypifiedObjectParents(parentId, true);
-//    var parents;
 
     var idToMove = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
+    var act = cocoon.request.getParameter("act");
+    if (idToMove > 0) {
+        var previousChild = null;
+        var childrenMap = new java.util.TreeMap();
+        for (var i = 0; i < children.size(); i++) {
+            var child = children.get(i);
+            childrenMap.put(child.getPosition(), child);
+        }
+
+        for (var iterator = childrenMap.values().iterator(); iterator.hasNext();) {
+            var xchild = iterator.next();
+            if (xchild.getId() == idToMove && act == 'up' && previousChild != null) {
+                changePositions(previousChild, xchild, typifiedObjectService);
+            }
+            else if (previousChild != null && previousChild.getId() == idToMove && act == 'down') {
+                changePositions(previousChild, xchild, typifiedObjectService);
+            }
+            previousChild = xchild;
+        }
+    }
+    /*var viewData = {
+        "parentId": parentId,
+        "itemsOnPage": itemsOnPage,
+        "filter":filter
+    }*/
+    cocoon.releaseComponent(typifiedObjectService);
+
+    if (json) {
+        displayURI += "-json";
+    }
+
+    return {
+        "displayURI" : displayURI,
+        "children": children,
+        "page": page,
+        "total": total,
+        "parents" : parents,
+//        "viewData": viewData,
+        "servletPath" : servletPath,
+        "userData" : getLoggedInUser(),
+        "parentId": parentId,
+        "itemsOnPage": itemsOnPage,
+        "filter":filter
+    };
+
+}
+
+function qlistObjectsWithParentId(parentId, filter) {
+    print("listObjectsWithParentId parentId :" + parentId + " filter :" + filter);
+
+    if (!filter) {
+        filter = null;
+    }
+
+    if (!parentId || parentId == 0) {
+        parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+        print("parentId :" + parentId);
+    }
+
+    var displayURI = cocoon.parameters.displayURI;
+    var servletPath = cocoon.parameters.servletPath;
+    var json = cocoon.request.getParameter("json") == 'true';
+
+    print("json :" + json);
+
+    var entity;
+    if (cocoon.parameters.entity != "") {
+        entity = cocoon.parameters.entity;
+    } else {
+        print("!!!!!ERORR NOT defined entity ");
+    }
+
+    var itemsOnPage = json ? Utilities.parseStringToInteger(cocoon.request.getParameter("rp")) : Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
+    if (itemsOnPage < 0) {
+        itemsOnPage = 0;
+    }
+
+    var page = Utilities.parseStringToInteger(cocoon.request.getParameter("page"));
+    if (page <= 1) {
+        page = new java.lang.Integer(1);
+    }
+    var sortField = cocoon.request.getParameter("sortname");
+    if (sortField != 'name' && sortField != 'systemName' && sortField != 'position') {
+        sortField = '';
+    }
+    var sortDirection = '';
+    if (cocoon.request.getParameter("sortorder") == 'desc' || cocoon.request.getParameter("sortorder") == 'asc') {
+        sortDirection = cocoon.request.getParameter("sortorder");
+    } else {
+        sortDirection = true;
+    }
+
+
+    var typifiedObjectService = getServiceByEntity(entity);
+    var total = typifiedObjectService.getChildrenCount(parentId);
+
+    var children = typifiedObjectService.getChildren(parentId, (page - 1) * itemsOnPage, itemsOnPage, sortField, sortDirection);
+
+//    var parents = typifiedObjectService.getTypifiedObjectParents(parentId, true);
+
+
+    /*var idToMove = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
     var act = cocoon.request.getParameter("act");
     if (idToMove > 0) {
         var previousChild = null;
@@ -161,43 +308,29 @@ function prepareListData(parentId, filter) {
             }
             previousChild = child;
         }
-    }
-//    todo:Проверить SiteMap !!!
-    var viewData = {
-        "parentId": parentId,
-        "itemsOnPage": itemsOnPage,
-        "filter":filter
-//                "content": content
-    }
-//    cocoon.releaseComponent(typifiedObjectService);
-//    cocoon.disposeObject(parents);
+    }*/
+
     cocoon.releaseComponent(typifiedObjectService);
 
     if (json) {
         displayURI += "-json";
     }
 
+
     return {
-        "displayURI" : displayURI,
+        "displayURI": displayURI,
         "children": children,
         "page": page,
         "total": total,
-        "parents" : parents,
-        "viewData": viewData,
-        "servletPath" : servletPath,
-        "userData" : getLoggedInUser(),
+//        "parents": parents,
+        "servletPath": servletPath,
+        "userData": getLoggedInUser(),
         "parentId": parentId,
         "itemsOnPage": itemsOnPage,
-        "filter":filter
+        "filter": filter
     };
 
 }
-/*
- function checkObjectLabelList(form, languageCode){
- var isNull = true;
- var obl_label = form.getChild("labels")
- }
- */
 
 function saveObjectLabelList(typifiedObject) {
     var objectLabelService = cocoon.getComponent("objectLabelService");
@@ -349,12 +482,12 @@ function showObjectForm(form, service, typifiedObject, showFormURI, formData) {
 
     formData.userData = getLoggedInUser();
 
-    if (!formData.locale) {
+    /*if (!formData.locale) {
         locale = getLocale();
         form.locale = new java.util.Locale(locale);
     } else {
         locale = formData.locale;
-    }
+    }*/
 
     form.load(typifiedObject);
     // show the form to the user until it is validated successfully
@@ -374,9 +507,9 @@ function showEmsObjectForm(form, service, typifiedObject, showFormURI, formData)
     } else {
         availableLanguages = formData.availableLanguages;
     }
-/*    var objId = typifiedObject.getEmsObject().getId();
-    if (objId > 0) {*/
-        loadTranslations(typifiedObject, availableLanguages);
+    /*    var objId = typifiedObject.getEmsObject().getId();
+     if (objId > 0) {*/
+    loadTranslations(typifiedObject, availableLanguages);
 //    }
     if (formData.parentId != null) {
         formData.parents = service.getTypifiedObjectParents(formData.parentId, true);
@@ -384,12 +517,12 @@ function showEmsObjectForm(form, service, typifiedObject, showFormURI, formData)
 
     formData.userData = getLoggedInUser();
 
-    if (!formData.locale) {
+    /*if (!formData.locale) {
         locale = getLocale();
         form.locale = new java.util.Locale(locale);
     } else {
         locale = formData.locale;
-    }
+    }*/
 
     form.load(typifiedObject);
     // show the form to the user until it is validated successfully
@@ -431,12 +564,12 @@ function getTypeActions() {
         items = new Array(typeActions.size());
         for (var i = 0; i < typeActions.size(); i++) {
             var action = typeActions.get(i);
-            items[i] = {value : action.id, label : action.name};
+            items[i] = {value: action.id, label: action.name};
         }
     }
     //    cocoon.releaseComponent(typifiedObjectService);
     cocoon.disposeObject(objectTypeDao);
-    cocoon.sendPage(displayURI, {"items" : items});
+    cocoon.sendPage(displayURI, {"items": items});
 }
 /*function getTypeNameById(id) {
  var objectTypeDao = cocoon.getComponent("objectTypeDao");
@@ -484,7 +617,7 @@ function getLoggedInUser() {
     print("!getLoggedInUser() function enter");
     var authUser = cocoon.session.getAttribute("authUser");
     if (authUser == null) {
-        print("authUserNull"+authUser);
+        print("authUserNull" + authUser);
         importClass(Packages.org.springframework.security.core.Authentication);
         importClass(Packages.org.springframework.security.core.context.SecurityContextHolder);
 
@@ -497,7 +630,7 @@ function getLoggedInUser() {
             cocoon.releaseComponent(customerService);
 //
 //            return {"login" : login, "customer": customer};
-            authUser = {"login" : login, "customer": customer};
+            authUser = {"login": login, "customer": customer};
             cocoon.session.setAttribute("authUser", authUser);
         }
         /*else {
@@ -527,7 +660,7 @@ function deleteObjectById(entity) {
         cocoon.redirectTo(entity + "-list");
     }
 
-    var parentId = object.getParentId();
+    var parentId = object.getEmsObject().getParentId();
 
     objectService.deleteObject(object);
 
@@ -569,13 +702,13 @@ function treeObjects(parentId) {
 
     var filterParam = cocoon.request.getParameter("filter");
     if (filterParam != null) {
-        var filterFieldValue = 0;
+
         var filter = new Packages.ru.strela.ems.core.model.Filter();
         filter.setEntity("FileObject");
         filter.setField("fileTypeGroupId");
 
-        var filters = {'images':1, 'sound' : 2, 'video' : 3, 'files': 4};
-        filterFieldValue = filters[filterParam];
+        var filters = {'images': 1, 'sound': 2, 'video': 3, 'files': 4};
+        var filterFieldValue = filters[filterParam];
         if (!filterFieldValue) {
             filterFieldValue = 0;
         }
@@ -602,7 +735,7 @@ function treeObjects(parentId) {
         var entity = cocoon.request.getParameter("entity");
 //        print("treeObjects: entity: "+entity);
     } else {
-        print("ERROR Not Defined entity: " + entity);
+        print("ERROR Not Defined entity: ");
     }
 
     var displayXMLURI = cocoon.parameters.displayXMLURI;
@@ -618,7 +751,7 @@ function treeObjects(parentId) {
 
 //    print("parentId" + parentId + " filter " + filter);
 
-    var listData = prepareListData(parentId, filter);
+    var listData = listObjectsWithParentId(parentId, filter);
     listData["entity"] = entity;
     listData["excludedId"] = excludedId;
     listData["excludedIds"] = excludedIds;

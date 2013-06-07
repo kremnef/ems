@@ -47,11 +47,11 @@ function createUser(form) {
 
 
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
 
     user = showEmsObjectForm(form, userService, user, showFormURI, {
+       "actionState": actionState,
+
         "viewData": viewData,
         "parentId" : parentId,
         "parentName" : parentName,
@@ -142,7 +142,7 @@ function deleteUserById() {
 
 function listUser() {
 
-    var list = listCommon("customer", "login", "desc","")
+    var list = listCommon("customer", "login", "desc","");
     cocoon.sendPage(list.displayURI,list);
 }
 
@@ -160,14 +160,12 @@ function createUser(form) {
     var user = cocoon.createObject("ru.strela.ems.security.model.User");
 
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
 //    user = showEmsObjectForm(form, user, showFormURI, {    
     form.showForm(showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
         "servletPath" : servletPath,
         "userData": getLoggedInUser()
     });

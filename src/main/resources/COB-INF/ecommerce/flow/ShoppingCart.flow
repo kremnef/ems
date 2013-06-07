@@ -6,20 +6,18 @@ function CheckoutAction() {
     var displayURI = cocoon.parameters.displayURI;
     var itemsOnPage = Utilities.parseStringToInteger(cocoon.request.getParameter("itemsOnPage"));
 
-    var viewData = {
-//    "parentContentId": parentContentId,
-        "itemsOnPage": itemsOnPage
-//        "documentTypeId": documentTypeId
-    }
+
     var orderService = cocoon.getComponent("orderService");
-    var order = null;
     //    var itemsOnPage = 30;
 //    if (documentTypeId != null) {
-        order = orderService.getOrders();
+       var order = orderService.getOrders();
     
 
 
-    cocoon.sendPage(displayURI, {"order": order, "viewData":viewData, "userData" : getLoggedInUser()});
+    cocoon.sendPage(displayURI, {
+        "order": order,
+        "itemsOnPage": itemsOnPage,
+        "userData" : getLoggedInUser()});
 }
 
 //function listOrder(parentId) {
@@ -38,21 +36,19 @@ function CheckoutComplete(form) {
 
     /*var parentId = 0;
     var parentName = "";
-    var parentObject = order.getParent();
+    var parentObject = order.getEmsObject().getParent();
     if (parentObject != null) {
         parentId = parentObject.getId();
         parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
     }
 */
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
 //    order = showEmsObjectForm(form, order, showFormURI, {    
     form.showForm(showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
         "servletPath" : servletPath,
         "userData": getLoggedInUser()
     });

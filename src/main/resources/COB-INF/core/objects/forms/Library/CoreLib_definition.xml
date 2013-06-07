@@ -21,6 +21,17 @@
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:fi="http://www.w3.org/1999/xhtml">
     <fd:widgets>
+        <fd:group id="justName">
+            <fd:widgets>
+                <fd:field id="name" required="true">
+                    <fd:datatype base="string">
+                    </fd:datatype>
+                    <fd:validation>
+                        <fd:length min="1" max="400"/>
+                    </fd:validation>
+                </fd:field>
+            </fd:widgets>
+        </fd:group>
         <fd:group id="systemURL">
             <!-- using to check uniqueness-->
             <fd:widgets>
@@ -372,7 +383,7 @@
                     cocoon.session.setAttribute("formLocale", languageCode);
                     cocoon.session.setAttribute("languageCode", languageCode);
                     if(cocoon.session.getAttribute("contentId") != null){
-                        print("session languageCode"+cocoon.session.getAttribute("languageCode"));
+                    print("session languageCode"+cocoon.session.getAttribute("languageCode"));
                     }
 
 
@@ -424,10 +435,10 @@
                             <fd:on-action>
                                 <fd:javascript>
                                     <!--var repeater = widget.lookupWidget("../tagList");-->
-                                    print("!----------------------!!! :" +  widget.getParent());
+                                    print("!----------------------!!! :" + widget.getParent());
                                     var repeaterRow = widget.getParent();
-                                    var repeater =  repeaterRow.getParent();
-                                    print("!----------------------!!! :" +  repeater);
+                                    var repeater = repeaterRow.getParent();
+                                    print("!----------------------!!! :" + repeater);
                                     <!--var selectedRow = repeater.getParentRow(widget);-->
                                     <!--var fileId = selectedRow.getChild("id").value;-->
                                     var selectedRowIndex = repeater.indexOf(repeaterRow);

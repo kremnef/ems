@@ -18,8 +18,7 @@ function createNewVersionDocument(contentId, languageCode) {
 
     documentVersionService.saveDocumentVersion(documentVersion);
     var documentService = cocoon.getComponent("documentService");
-    var newDocument = documentService.getDocumentByNaturalId(contentId, languageCode);
-    return   newDocument;
+    return   documentService.getDocumentByNaturalId(contentId, languageCode);
 }
 
 
@@ -52,7 +51,7 @@ function editDocument(form) {
     var content;
     if (cocoon.session.getAttribute("content") != null) {
 
-        var content = cocoon.session.getAttribute("content");
+        content = cocoon.session.getAttribute("content");
         print("content взят из сессии");
     } else {
         var contentService = cocoon.getComponent("contentService");
@@ -60,7 +59,6 @@ function editDocument(form) {
         cocoon.releaseComponent(contentService);
         print("content загружен из базы данных");
     }
-    ;
     if (content == null) {
         print("content не существует, приступаем к созданию");
         cocoon.redirectTo("Content-create?parentId=0");
@@ -221,7 +219,7 @@ function createDocument(form) {
     print("showFormURI: " + showFormURI + " servletPath: " + servletPath + " blockPrefix: " + blockPrefix + " inner: " + inner);
 
     importClass(Packages.ru.tastika.tools.util.Utilities);
-    var parentId = cocoon.session.getAttribute("contentParentId");
+//    var parentId = cocoon.session.getAttribute("contentParentId");
 
 
     var documentService = cocoon.getComponent("documentService");
@@ -437,7 +435,7 @@ function reloadXMlForm(languageCode) {
         print("as languageCode:" + languageCode);
         print("as document:" + document);
 //        document = loadXMLSource(contentId,languageCode);
-        var document = documentService.getDocumentByNaturalId(contentId, languageCode);
+        document = documentService.getDocumentByNaturalId(contentId, languageCode);
     }
 
 
@@ -476,7 +474,7 @@ function reloadXMlForm(languageCode) {
 
         print("saveDocument to DB");
         print("fileObjects1" + document.getFileSystemObjects());
-        var document = cocoon.session.getAttribute("document");
+        document = cocoon.session.getAttribute("document");
         saveDocument(document, contentId);
         cocoon.redirectTo(getRedirectUrl(contentId));
         print("--------- ecit function reloadXMlForm ---------");
@@ -561,12 +559,12 @@ function reloadXMlForm(languageCode) {
 
 //function getDocument(content, languageId, version, comment) {
 function getDocument(content, languageCode) {
-    var currentDocument = null;
-    var currentDocumentVersion = null;
-    var lastLanguageVersion = 0;
+//    var currentDocument = null;
+//    var currentDocumentVersion = null;
+//    var lastLanguageVersion = 0;
     var documentService = cocoon.getComponent("documentService");
 //    currentDocument =  documentService.getLastVersionDocument(content.getId(),languageId);
-    currentDocument = documentService.getDocumentByNaturalId(content.getId(), languageCode);
+    var currentDocument = documentService.getDocumentByNaturalId(content.getId(), languageCode);
 
     if (currentDocument == null) {
         currentDocument = cocoon.createObject("ru.strela.ems.core.model.Document");
@@ -612,7 +610,6 @@ function editXML() {
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
 
-//    var viewData = {"actionState": actionState, "displayURI": displayURI};
     form.showForm(showFormURI, {"actionState": actionState, "displayURI": displayURI});
     //    if (actionState == "edit") {
     form.save(xml);
@@ -655,8 +652,7 @@ function string2xml(document) {
     catch (e) {
         print("Problem getting a parser");
     }
-    var dom = builder.parse(new Packages.org.xml.sax.InputSource(new Packages.java.io.StringReader(document)));
-    return dom;
+    return builder.parse(new Packages.org.xml.sax.InputSource(new Packages.java.io.StringReader(document)));
 
 }
 
@@ -678,9 +674,9 @@ function getDocumentsByContent() {
 }
 
 function deleteDocumentById() {
-    var displayURI = cocoon.parameters.displayURI;
-    var id = null;
-    id = parseInt(cocoon.request.getParameter("id"));
+//    var displayURI = cocoon.parameters.displayURI;
+//    var id = null;
+    var id = parseInt(cocoon.request.getParameter("id"));
     var documentService = cocoon.getComponent("documentService");
     var document = documentService.getDocument(id);
     var contentId = document.getContentId();
@@ -694,28 +690,11 @@ function deleteDocumentById() {
 
 
 function listDocument(parentId) {
+
+    print ("!!!_!_!________listDocument()");
     if (!parentId || parentId == 0) {
         parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
     }
     cocoon.redirectTo("Content-list?parentId=" + parentId);
 }
 
-
-/*
- function treeDocument(parentId){
- if (cocoon.request.getParameter("excludedId") != null) {
- var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
- }
- var displayXMLURI = cocoon.parameters.displayXMLURI;
- var listData = prepareListData(parentId);
- print("excludedId: "+excludedId);
-
- listData["excludedId"] =excludedId;
- cocoon.sendPage(displayXMLURI, listData);
- }*/
-
-
-/*
- function createDocument(form){
- editDocument(form);
- }*/

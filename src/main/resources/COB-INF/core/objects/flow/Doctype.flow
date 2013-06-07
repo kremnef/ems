@@ -7,7 +7,7 @@ importClass(Packages.ru.tastika.tools.util.Utilities);
 
 
 function listDocumentType() {
-     var list = listCommon("documentType", "name", "desc","")
+     var list = listCommon("documentType", "name", "desc","");
     cocoon.sendPage(list.displayURI,list);
 }
 
@@ -223,12 +223,6 @@ function createDocumentType() {
 
         var form = new Form(definitionURI);
 
-      /*  var viewData = {
-            "actionState": actionState,
-            "displayURI": displayURI,
-            "documentTypeId" : documentTypeId,
-            "id" : contentId
-        };*/
 
         var locale = getLocale();
         form.locale = new java.util.Locale(locale);
@@ -236,7 +230,6 @@ function createDocumentType() {
         form.setAttribute('formName', 'dynamicForm');
         
         form.showForm(showFormURI, {
-//            "viewData": viewData,
             "servletPath" : servletPath,
             "userData": getLoggedInUser(),
             "inner" : inner,
@@ -315,12 +308,9 @@ function editDocumentTypeById(form) {
     }
 
     var actionState = "edit";
-    /*var viewData = {
-        "actionState": actionState
-    };*/
+
 
     documentType = showObjectForm(form, documentTypeService, documentType, showFormURI, {
-//        "viewData": viewData,
         "id": id,
         "servletPath" : servletPath,
         "actionState": actionState

@@ -18,10 +18,10 @@ function editFileObjectById(form) {
         cocoon.redirectTo("FileObject-create");
     }
 
-    var parentId = fileObject.getParentId();
+    var parentId = fileObject.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
-        var parent = fileObject.getParent();
+        var parent = fileObject.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }
 
@@ -87,7 +87,7 @@ function addFileObject() {
 //        print("treeObjects: excludedId: "+excludedId);
     }
     else {
-        print("ERROR Not Defined fileOjectId: " + fileOjectId);
+        print("ERROR Not Defined fileOjectId");
     }
     var documentService = cocoon.getComponent("documentService");
     var fileObjectService = cocoon.getComponent("fileObjectService");

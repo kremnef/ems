@@ -22,14 +22,7 @@
         </jx:forEach>
     </jx:macro>
 
-    <!--<jx:choose>-->
-    <!--<jx:when test="${viewData.parentNodeId > 0}">
-        <currentNavigation parentId="${viewData.parentNodeId}"/>
-    </jx:when>
-    <jx:otherwise>-->
 
-    <!--</jx:otherwise>-->
-    <!--</jx:choose>-->
     <!--<jx:macro name="currentNavigation">
             <jx:parameter name="parentId"/>
             <jx:forEach items="${navigation}" var="item" varStatus="status">

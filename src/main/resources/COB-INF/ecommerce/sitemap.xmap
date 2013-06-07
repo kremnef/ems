@@ -146,8 +146,8 @@
                 <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
                 <map:parameter name="requestURI" value="{request:requestURI}"/>
                 <map:parameter name="requestParam" value="{request-param:param}"/>
-                <map:parameter name="parentId" value="{flow-attr:viewData/parentId}"/>
-                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                <map:parameter name="parentId" value="{flow-attr:parentId}"/>
+                <map:parameter name="hasChildren" value="{flow-attr:hasChildren}"/>
                 <map:parameter name="servletPath" value="{request:servletPath}"/>
             </map:transform>
             <map:serialize type="text"/>
@@ -160,8 +160,8 @@
                 <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
                 <map:parameter name="requestURI" value="{request:requestURI}"/>
                 <map:parameter name="requestParam" value="{request-param:param}"/>
-                <map:parameter name="parentId" value="{flow-attr:viewData/parentId}"/>
-                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                <map:parameter name="parentId" value="{flow-attr:parentId}"/>
+                <map:parameter name="hasChildren" value="{flow-attr:hasChildren}"/>
             </map:transform>
 
         </map:resource>
@@ -270,8 +270,8 @@
                                 <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
                                 <map:parameter name="requestURI" value="{request:requestURI}"/>
                                 <map:parameter name="requestParam" value="{request-param:param}"/>
-                                <map:parameter name="parentId" value="{flow-attr:viewData/parentId}"/>
-                                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                                <map:parameter name="parentId" value="{flow-attr:parentId}"/>
+                                <map:parameter name="hasChildren" value="{flow-attr:hasChildren}"/>
                                 <map:parameter name="servletPath" value="{request:servletPath}"/>
                             </map:transform>
 
@@ -369,7 +369,7 @@
                 <map:parameter name="requestURI" value="{request:requestURI}"/>
                 <map:parameter name="requestParam" value="{request-param:param}"/>
                 <map:parameter name="parentId" value="{flow-attr:parentId}"/>
-                <map:parameter name="hasChildren" value="{flow-attr:viewData/hasChildren}"/>
+                <map:parameter name="hasChildren" value="{flow-attr:hasChildren}"/>
                 <map:parameter name="actionState" value="{actionState}"/>
             </map:transform>
             <map:call resource="ems-global"/>
@@ -464,7 +464,7 @@
     </map:resources>
 
 
-    <map:pipelines id="static">
+    <map:pipelines>
 
         <map:pipeline type="caching" id="listAction">
             <map:match pattern="*-list-pipeline-generate">
@@ -804,8 +804,8 @@
 
             <map:match pattern="*-redirect-pipeline/*">
                 <map:redirect-to uri="{1}?id={2}">
-                    <map:parameter name="requestParam" value="{request:param}"/>
-                    <map:parameter name="id" value="{2}"/>
+                    <!--<map:parameter name="requestParam" value="{request:param}"/>
+                    <map:parameter name="id" value="{2}"/>-->
                 </map:redirect-to>
             </map:match>
         </map:pipeline>

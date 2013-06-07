@@ -120,9 +120,7 @@
                     <i18n:text catalogue="ecommerce" key="Order.orderItems"/>
                 </fi:label>
                 <fi:items>
-                    <!--<jx:forEach select="#{viewdata/types}">
-                        #name
-                    </jx:forEach>-->
+
 
                     <ft:repeater id="orderItems">
                         <table border="1" class="order">

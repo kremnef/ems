@@ -3,7 +3,7 @@
 importClass(Packages.ru.tastika.tools.util.Utilities);
 
 function listRole() {
-    var list = listCommon("role", "roleName", "desc","")
+    var list = listCommon("role", "roleName", "desc","");
     cocoon.sendPage(list.displayURI,list);
 
 }
@@ -20,17 +20,15 @@ function createRole(form) {
     var role = cocoon.createObject("ru.strela.ems.security.model.User");
 
     var actionState = "create";
-    var viewData = {
-        "actionState": actionState
-    }
+
 
 
   form.load(role);
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
     form.showForm(showFormURI, {
-        "viewData": viewData,
-        "userId": id,
+        "actionState": actionState,
+//        "userId": id,
         "userData" : getLoggedInUser(),
         "servletPath" : servletPath
     })
@@ -64,27 +62,16 @@ function editRoleById(form) {
     }
 
     var actionState = "edit";
-    var viewData = {
-        "actionState": actionState
-    };
-
-
     form.load(role);
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
     form.showForm(showFormURI, {
-        "viewData": viewData,
+        "actionState": actionState,
         "userId": id,
         "userData" : getLoggedInUser(),
         "servletPath" : servletPath
-    })
+    });
     form.save(role);
-
-   /* role = showEmsObjectForm(form, roleService, role, showFormURI, {
-        "viewData": viewData,
-        "roleId": id,
-        "servletPath" : servletPath
-    });*/
 
     roleService.save(role);
     cocoon.releaseComponent(roleService);

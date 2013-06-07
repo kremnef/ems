@@ -82,7 +82,7 @@ public class ServerTools {
         //log.info("getLoggedInUserData login = " + login);
         Customer customer = сustomerService.getCustomerByLogin(login);
         if (customer != null) {
-            Integer id = (Integer) customer.getId();
+            Integer id = customer.getId();
             userData.put(USER_DATA_NAME, login);
             userData.put(USER_DATA_ID, id);
         }
@@ -103,7 +103,7 @@ public class ServerTools {
     }*/
 
 
-    public static String checkLocale(Request request) {
+    /*public static String checkLocale(Request request) {
         String languageCode = "";
         HttpSession session = request.getSession();
         Object attribute = session.getAttribute(LOCALE_TITLE);
@@ -137,7 +137,7 @@ public class ServerTools {
             }
         }
         return languageCode;
-    }
+    }*/
 
 
     public static String checkLocaleWithLanguageCode(Request request) {
@@ -185,7 +185,7 @@ public class ServerTools {
 //        return languageId;
         return languageCode;
     }
-
+   /*
     public static int checkLocaleWithLanguageId(Request request) {
         int languageId = 0;
         HttpSession session = request.getSession();
@@ -228,7 +228,7 @@ public class ServerTools {
         }
         return languageId;
     }
-
+*/
 
     public static void updateLocaleFromParameter(Request request) {
         String langParameter = request.getParameter(LANG_PARAMETER);

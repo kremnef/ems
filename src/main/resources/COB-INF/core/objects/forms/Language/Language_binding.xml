@@ -15,7 +15,7 @@
   limitations under the License.
 -->
 <fb:context xmlns:fb="http://apache.org/cocoon/forms/1.0#binding" path="/">
-    <fb:value id="id" path="id"/>
+    <!--<fb:value id="id" path="id"/>-->
     <fb:value id="code" path="code"/>
     <fb:value id="name" path="name"/>
     <fb:value id="charset" path="charset"/>
@@ -25,5 +25,6 @@
 
     <fb:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_binding.xml"/>
     <fb:expand id="core:labels"/>
+    <fb:expand id="core:justName"/>
 
 </fb:context>

@@ -37,6 +37,20 @@
     </jx:macro>
 
 
+    <jx:macro name="justName">
+            <ft:group id="justName">
+                <li>
+                    <label title="name" for="name" class="label">
+                        <ft:widget-label id="name"/>
+                    </label>
+                    <ft:widget id="name">
+                        <fi:styling size="50"/>
+                    </ft:widget>
+
+                </li>
+            </ft:group>
+        </jx:macro>
+
     <jx:macro name="systemURL">
         <ft:group id="systemURL">
             <li>
@@ -211,15 +225,23 @@
 
                 <div i18n:attr="title" title="core:Content.choose" id="parentTreeContainer" class="dialogContent">
                     <div class="common-div">
-                        <span class="ui-icon-home"></span>
+                        <span class="ui-icon-home"/>
                         <a id="parentTreeRootNode" href="#" class="">HOME</a>
                     </div>
-                    <div id="parentTree"></div>
+                    <div id="parentTree"/>
                 </div>
 
             </jx:if>
+            <jx:choose>
+                <jx:when test="${showParents == 1}">
+                    <systemURL/>
+                </jx:when>
+                <jx:otherwise>
+                    <justName/>
+                </jx:otherwise>
+            </jx:choose>
             <lables/>
-            <systemURL/>
+
             <objectRows/>
         </ul>
 
@@ -244,7 +266,7 @@
 
     <jx:macro name="metaInfo">
         <tags/>
-        <!-- <jx:forEach items="${viewData.availableTags}" var="tag">
+        <!-- <jx:forEach items="${availableTags}" var="tag">
            ${tag.tag}
         </jx:forEach>-->
         <ft:repeater id="metaInfo">
@@ -654,12 +676,12 @@
                         <tr class="forms-row">
                             <td>
                                 <jx:set var="linkId"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"></jx:set>
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
 
                                 <jx:set var="linkName"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"></jx:set>
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
                                 <jx:set var="linkDate"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('publishDateTime').value}"></jx:set>
+                                        value="${repeater.getRow(repeaterLoop.index).getChild('publishDateTime').value}"/>
                                 <!--<ft:widget id="id"/>-->
                             </td>
                             <td>

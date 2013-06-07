@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+<jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://apache.org/cocoon/templates/jx/1.0 ">
 
     <jx:macro name="currentNode">
         <items>
@@ -12,16 +13,16 @@
                       parentId="${item.parentId}"
                       position="${item.position}">
                     <name>${item.name}</name>
-                    <jx:choose>
+                    <!--<jx:choose>
                         <jx:when test="${item.systemNodeId > 0}">
-                            <!--@@@${item.getSystemNode()}@@@-->
+                            &lt;!&ndash;@@@${item.getSystemNode()}@@@&ndash;&gt;
                             <systemNodeId>${item.systemNodeId}</systemNodeId>
                             <systemNodeName>${item.pathURL}</systemNodeName>
                         </jx:when>
                         <jx:otherwise>
                             <systemNodeId>0</systemNodeId>
                         </jx:otherwise>
-                    </jx:choose>
+                    </jx:choose>-->
                 </item>
             </jx:forEach>
         </items>

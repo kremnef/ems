@@ -31,7 +31,7 @@ public class EmbeddedObjectsTreeModel extends DefaultTreeModel {
         WebApplicationContext currentWebApplicationContext = WebAppContextUtils.getCurrentWebApplicationContext();
         systemObjectDao = (SystemObjectDao) currentWebApplicationContext.getBean("systemObjectDao");
         objectTypeDao = (ObjectTypeDao) currentWebApplicationContext.getBean("objectTypeDao");
-        List types = systemObjectDao.getObjectTypes(true);
+        List types = objectTypeDao.getObjectTypes(true);
         addTypes((DefaultTreeNode) getRoot(), types);
     }
 
@@ -71,7 +71,7 @@ public class EmbeddedObjectsTreeModel extends DefaultTreeModel {
             }
         }
         else {
-            int parentId = ((TypifiedObject) ((DefaultTreeNode) parentTreeNode).getData()).getId();
+            int parentId = ((TypifiedObject) parentTreeNode.getData()).getId();
             List<TypifiedObject> children = systemObjectDao.getChildren(parentId);
             for (TypifiedObject typifiedObject : children) {
                 parentTreeNode.add(typifiedObject.getName(), new DefaultTreeNode(typifiedObject));

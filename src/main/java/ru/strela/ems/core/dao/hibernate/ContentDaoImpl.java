@@ -12,7 +12,6 @@ import ru.strela.ems.core.dao.ContentDao;
 import ru.strela.ems.core.dao.DocumentVersionDao;
 import ru.strela.ems.core.model.Content;
 import ru.strela.ems.core.model.DocumentVersion;
-import ru.strela.ems.core.model.Filter;
 import ru.strela.ems.core.model.TypifiedObject;
 import ru.tastika.tools.util.Utilities;
 
@@ -25,7 +24,7 @@ import java.util.*;
 
 public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
     private final static Logger log = LoggerFactory.getLogger(ContentDaoImpl.class);
-    private SessionFactory sessionFactory;
+//    private SessionFactory sessionFactory;
 
 
 //    private TransactionTemplate transactionTemplate;
@@ -59,22 +58,22 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
 
 
     public List getContents(final String owner) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
-        Criteria criteria = null;
-        List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
+//        Criteria criteria;
+//        List list;
+        /*try {
+            tx = session.beginTransaction();*/
 //            session.saveOrUpdate(tag);
 //            criteria = session.createCriteria(Content.class);
-            criteria = session.createCriteria(Content.class);
-            if (owner != null) {
-                criteria.add(Restrictions.eq("owner", owner));
-            }
+        Criteria criteria = session.createCriteria(Content.class);
+        if (owner != null) {
+            criteria.add(Restrictions.eq("owner", owner));
+        }
 //            criteria.addOrder(Order.desc("publishDateTime"));
-            list = criteria.list();
-            tx.commit();
+        List list = criteria.list();
+            /*tx.commit();
             session.close();
             log.warn("closeSession");
 
@@ -82,7 +81,8 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return list;
 
     }
@@ -120,21 +120,21 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
         }
     */
 
-    public List getContentsByParent(int parentId, int itemsOnPage, String sortField, String sortDirection, Integer tagId, int languageId, Session session) {
+    /*public List getContentsByParent(int parentId, int itemsOnPage, String sortField, String sortDirection, Integer tagId, int languageId, Session session) {
         Criteria criteria = session.createCriteria(Content.class);
         criteria.add(Restrictions.eq("parentId", parentId));
         if (itemsOnPage > 0) {
             criteria.setMaxResults(itemsOnPage);
         }
         //            speed test
-        /*if (sortField != null) {
+        *//*if (sortField != null) {
             if (sortDirection.equalsIgnoreCase("desc")) {
                 criteria.addOrder(Order.desc(sortField));
             }
             else if (sortDirection.equalsIgnoreCase("asc")) {
                 criteria.addOrder(Order.asc(sortField));
             }
-        }*/
+        }*//*
         //            speed test
 
 
@@ -146,7 +146,7 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
 //            criteria.add(Restrictions.ge("expireDateTime", dateTime));
         List list = criteria.list();
         return list;
-    }
+    }*/
 
 
     /*public List<TypifiedObject> getChildren(final int parentId, final int start, final int quantity, final String sortName, final boolean desc, final ru.strela.ems.core.model.Filter filter) {
@@ -235,7 +235,7 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
     }
 
 
-    public List<TypifiedObject> getContents(Integer parentId, int start, int itemsOnPage, String sortField, boolean desc, Filter filter) {
+    /*public List<TypifiedObject> getContents(Integer parentId, int start, int itemsOnPage, String sortField, boolean desc, Filter filter) {
         Session session = getCurrentSession();
         Query query = null;
         StringBuilder sql;
@@ -251,43 +251,16 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
 
         sql.append(" order by ").append(sortField).append(" ").append("desc");
         query = session.createQuery(sql.toString());
-        /*query.setFirstResult(start);
-        if (itemsOnPage > 0) {
-            query.setMaxResults(itemsOnPage);
-        }*/
+
 
 
         log.warn("getObjects()-5");
-//        Criteria criteria = session.createCriteria(getEntityClass());
-
-        /*if (parentId != null) {
-            Criterion criterion = Restrictions.sqlRestriction("emsObject.parentId = "+parentId);
-            criteria.add(criterion);
-        }
-
-        Criterion criterion1 = Restrictions.sqlRestriction("publishDateTime <= current_timestamp()");
-        criteria.add(criterion1);*/
-
-
-//        if (itemsOnPage > 0) {
-//            criteria.setFetchSize(quantity);
-//            criteria.setMaxResults(itemsOnPage);
-//        }
-//        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
-
         String sortBy = sortField.length() > 0 ? sortField : "position";
         Order order = desc ? Order.desc(sortBy) : Order.asc(sortBy);
-//        criteria.addOrder(order);
-
-//        = criteria.list()
-
-//        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
-
-
         list.addAll(query.list());
         closeSession();
         return list;
-    }
+    }*/
 
 
     public List getContents() {
@@ -296,19 +269,19 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
 
 
     public List getContentsByDocumentType(final Integer documentTypeId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
-        Criteria criteria = null;
-        List list = null;
-        try {
-            tx = session.beginTransaction();
-            criteria = session.createCriteria(Content.class);
-            criteria.add(Restrictions.eq("documentTypeId", documentTypeId));
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
+//        Criteria criteria = null;
+//        List list = null;
+        /*try {
+            tx = session.beginTransaction();*/
+        Criteria criteria = session.createCriteria(Content.class);
+        criteria.add(Restrictions.eq("documentTypeId", documentTypeId));
 //            criteria.addOrder(Order.desc("publishDateTime"));
-            list = criteria.list();
+        List list = criteria.list();
 
-
+/*
             tx.commit();
             session.close();
             log.warn("closeSession");
@@ -317,34 +290,36 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return list;
     }
 
 
     public List findContents(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+        /*Session session = HibernateUtil.getSessionFactory().openSession();
         log.warn("openSession");
-        Transaction tx = null;
+        Transaction tx = null;*/
         Criteria criteria = session.createCriteria(Content.class);
         Criterion criterion = null;
-        List list = new ArrayList();
-        try {
+//        List list = new ArrayList();
+        /*try {
             tx = session.beginTransaction();
-
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
-                    } else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+*/
+        for (int i = 0; i < descriptions.length; i++) {
+            String description = descriptions[i].trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
-            list = criteria.list();
-            tx.commit();
+        }
+        List list = criteria.list();
+           /* tx.commit();
             session.close();
             log.warn("closeSession");
 
@@ -352,7 +327,7 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
         if (criterion != null) {
             criteria.add(criterion);
 

@@ -1,14 +1,14 @@
 package ru.strela.ems.security.dao.hibernate;
 
 
-import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.hibernate.HibernateUtil;
 import ru.strela.ems.security.dao.CommonObjectDao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,27 +30,37 @@ public class CommonObjectDaoImpl implements CommonObjectDao {
     }
 
 
+    protected Session getCurrentSession() {
+        log.warn("getCurrentSession()");
+        Session session = HibernateUtil.currentSession();
+        log.warn("beginTransaction()");
+        HibernateUtil.beginTransaction();
+        return session;
+    }
+
+
+    protected void closeSession() {
+        log.warn("commitTransaction()");
+        HibernateUtil.commitTransaction();
+        log.warn("closeSession()");
+        HibernateUtil.closeSession();
+    }
+
     public int getChildrenCount(Class entityClass, int id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         log.warn("openSession");
-        Transaction tx = null;
+//        Transaction tx = null;
         int count;
-        try {
-            tx = session.beginTransaction();
+        /*try {
+            tx = session.beginTransaction();*/
 //          //log.info("--commonObject."+entityClass);
-            StringBuilder sql = new StringBuilder("select count(*) from " + entityClass.getSimpleName() + " eo");
-            count = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
+        String sql = "select count(*) from " + entityClass.getSimpleName() + " eo";
+        count = ((Long) session.createQuery(sql.toString()).iterate().next()).intValue();
 //        //log.info("--getChildrenCount"+count);
-            tx.commit();
-            session.close();
-            log.warn("closeSession");
-        }
-        catch (HibernateException he) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            throw he;
-        }
+            /*tx.commit();
+            session.close();*/
+        closeSession();
+
         return count;
     }
 
@@ -85,53 +95,25 @@ public int getChildrenCount(int id) {
 
 
     public List getObjects(final Class entityClass, final Order order, final int start, final int quantity) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
-        Criteria criteria = null;
-        List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
+        Session session = getCurrentSession();
 
 
-            int objectsCount = quantity == 0 ? Integer.MAX_VALUE : quantity;
-            criteria = session.createCriteria(entityClass);
-            //            speed test
+        int objectsCount = quantity == 0 ? Integer.MAX_VALUE : quantity;
+        Criteria criteria = session.createCriteria(entityClass);
+        //            speed test
             /*if (order != null) {
                 criteria.addOrder(order);
             }
             else {
                 criteria.addOrder(Order.asc("date"));
             }*/
-            criteria.setFirstResult(start);
-            criteria.setFetchSize(objectsCount);
-            criteria.setMaxResults(objectsCount);
-            list = criteria.list();
-            tx.commit();
-            session.close();
-            log.warn("closeSession");
-
-        }
-        catch (HibernateException he) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            throw he;
-        }
+        criteria.setFirstResult(start);
+        criteria.setFetchSize(objectsCount);
+        criteria.setMaxResults(objectsCount);
+        List list = criteria.list();
+        closeSession();
         return list;
     }
 
-
-    protected Session getCurrentSession() {
-        Session session = HibernateUtil.currentSession();
-        HibernateUtil.beginTransaction();
-        return session;
-    }
-
-
-    protected void closeSession() {
-        HibernateUtil.commitTransaction();
-        HibernateUtil.closeSession();
-    }
 
 }

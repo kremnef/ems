@@ -19,13 +19,10 @@ package ru.strela.ems.core.dao.hibernate;
 
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.strela.ems.core.dao.TemplateDao;
@@ -50,20 +47,21 @@ public class TemplateDaoImpl extends CommonObjectDaoImpl implements TemplateDao 
      */
 
     public Template getTemplate(Integer templateId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
-        Criteria criteria = null;
-        Template template = null;
-        try {
-            tx = session.beginTransaction();
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
+//        Criteria criteria = null;
+        Template template;
+//        try {
+//            tx = session.beginTransaction();
             template = (Template) session.load(Template.class, templateId);
-            tx.commit();
+          /*  tx.commit();
             session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+            closeSession();
         return template;
     }
 
@@ -74,28 +72,29 @@ public class TemplateDaoImpl extends CommonObjectDaoImpl implements TemplateDao 
      */
 
     public List getTemplates() {
-         int newSession = 0;
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        if (!session.isOpen()) {
+//         int newSession = 0;
+        Session session = getCurrentSession();
+        /*if (!session.isOpen()) {
             session = HibernateUtil.getSessionFactory().openSession();
             log.warn("openSession");
             newSession = 1;
         }
-        Transaction tx = null;
-        Criteria criteria = null;
-        List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
+        Transaction tx = null;*/
+        Criteria criteria;
+        List list;
+        /*try {
+            tx = session.beginTransaction();*/
             criteria = session.createCriteria(Template.class);
             list = criteria.list();
-            tx.commit();
+            /*tx.commit();
             if(newSession==1){
                 session.close(); log.warn("closeSession");
             }
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return list;
     }
 
@@ -106,20 +105,21 @@ public class TemplateDaoImpl extends CommonObjectDaoImpl implements TemplateDao 
      */
 
     public Template saveTemplate(Template template) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
+        Session session =getCurrentSession();
+        /*log.warn("openSession");
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
+            tx = session.beginTransaction();*/
             session.saveOrUpdate(template);
 
-            tx.commit();
+            /*tx.commit();
             session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
         return template;
     }
 
@@ -130,18 +130,19 @@ public class TemplateDaoImpl extends CommonObjectDaoImpl implements TemplateDao 
      */
 
     public void deleteTemplate(Template template) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = session.beginTransaction();*/
             session.delete(template);
-            tx.commit();
+            /*tx.commit();
             session.close(); log.warn("closeSession");
         } catch (HibernateException he) {
             if (tx != null) tx.rollback();
             throw he;
-        }
+        }*/
+        closeSession();
     }
 
     /* (non-Javadoc)
@@ -149,33 +150,33 @@ public class TemplateDaoImpl extends CommonObjectDaoImpl implements TemplateDao 
     */
 
     public List findTemplates(final String[] descriptions) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        log.warn("openSession");
-        Transaction tx = null;
-        Criteria criteria = null;
+        Session session = getCurrentSession();
+        /*log.warn("openSession");
+        Transaction tx = null;*/
+        Criteria criteria;
         Criterion criterion = null;
         List list = new ArrayList();
-        try {
-            tx = session.beginTransaction();
+        /*try {
+            tx = session.beginTransaction();*/
             criteria = session.createCriteria(Template.class);
 
-            for (int i = 0; i < descriptions.length; i++) {
-                String description = descriptions[i].trim();
-                if (description.length() > 0) {
-                    if (criterion == null) {
-                        criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
-                    } else {
-                        criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
-                    }
-                    criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
+        for (String description1 : descriptions) {
+            String description = description1.trim();
+            if (description.length() > 0) {
+                if (criterion == null) {
+                    criterion = Restrictions.like("description", description, MatchMode.ANYWHERE);
+                } else {
+                    criterion = Restrictions.or(criterion, Restrictions.like("description", description, MatchMode.ANYWHERE));
                 }
+                criterion = Restrictions.or(criterion, Restrictions.like("code", description, MatchMode.ANYWHERE));
             }
+        }
             if (criterion != null) {
                 criteria.add(criterion);
                 list = criteria.list();
             }
 
-            tx.commit();
+            /*tx.commit();
             session.close(); log.warn("closeSession");
 
 
@@ -183,7 +184,8 @@ public class TemplateDaoImpl extends CommonObjectDaoImpl implements TemplateDao 
             if (tx != null) tx.rollback();
             throw he;
         }
-
+*/
+        closeSession();
         return list;
     }
 }

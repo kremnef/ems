@@ -16,7 +16,7 @@ function listFolder(parentId) {
 
     }
 
-   var listData = prepareListData(parentId, filter);
+   var listData = listObjectsWithParentId(parentId, filter);
 
     var form = new Form("forms/FileObject/upload_definition.xml");
     var locale = getLocale();
@@ -35,11 +35,12 @@ function listFolder(parentId) {
         listData.video = getGlobal('fileTypes.video');
         listData.files = getGlobal('fileTypes.files');
 
+    var folderService = cocoon.getComponent("folderService");
     var fileTypeGroupService = cocoon.getComponent("fileTypeGroupService");
     listData.fileTypes = fileTypeGroupService.getFileTypeGroups();
 
         if (parentId > 0) {
-            var folderService = cocoon.getComponent("folderService");
+
             parentObject = folderService.getTypifiedObject(parentId);
             if (parentObject != null) {
                 parentFolder = parentObject.getPath();
@@ -48,11 +49,9 @@ function listFolder(parentId) {
         }
         var fileTypeGroupId = Utilities.parseStringToInteger(cocoon.request.getParameter("fileTypeGroupId"));
             if (fileTypeGroupId != 0) {
-            print("fileTypeGroupId "+fileTypeGroupId+":parentId "+parentId);
-                    var folderService = cocoon.getComponent("folderService");
-                    var files = folderService.getFoldersByFileTypeGroup(parentId, fileTypeGroupId);
-//                    var files = folderService.getFoldersByFileTypeGroup(0, 2);
-                    listData.children = files;
+//            print("fileTypeGroupId "+fileTypeGroupId+":parentId "+parentId);
+
+                listData.children = folderService.getFoldersByFileTypeGroup(parentId, fileTypeGroupId);
                 }
 
 
@@ -75,7 +74,7 @@ function listFolder(parentId) {
         var fileSize = file.getSize();
 
         var canCreate = true;
-        var fileTypeGroupId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+        fileTypeGroupId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
         parentId = listData.parentId;
 
         var parentFolder = mediatekaFolder;
@@ -85,7 +84,7 @@ function listFolder(parentId) {
 
         var fileObject = fileObjectService.getFileObjectByPath(parentFolder + fileName);
         if (fileObject == null) {
-            fileObject = createTypifiedObject(fileObjectService);
+//            fileObject = createTypifiedObject(fileObjectService);
             var className = "" + fileObjectService.getEntityClassName();
 
             fileObject = cocoon.createObject(className);
@@ -147,10 +146,10 @@ function createFolder(form) {
     var parentId = 0;
     var parentName = "";
     var parentPath = "";
-    var parentObject = folder.getParent();
+    var parentObject = folder.getEmsObject().getParent();
     if (parentObject != null) {
-        parentId = parentObject.getId();
-        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//        parentId = parentObject.getId();
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
         parentPath = parentObject.getPath();
     }
     else {
@@ -185,8 +184,8 @@ function showFolder(folderService, folder, form, actionState) {
 
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
-    var inner = cocoon.parameters.inner;
-    var parentId = folder.getParentId();
+//    var inner = cocoon.parameters.inner;
+    var parentId = folder.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
         var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
@@ -200,7 +199,7 @@ function showFolder(folderService, folder, form, actionState) {
 
 
     try {
-        folder = showEmsObjectForm(form, folderService, folder, showFormURI, {
+        showEmsObjectForm(form, folderService, folder, showFormURI, {
             "formLocale": locale,
             "availableLanguages": availableLanguages,
             "navigationId": id,
@@ -217,8 +216,8 @@ function showFolder(folderService, folder, form, actionState) {
 }
 
 function editFolderById(form) {
-    var showFormURI = cocoon.parameters.showFormURI;
-    var servletPath = cocoon.parameters.servletPath;
+    /*var showFormURI = cocoon.parameters.showFormURI;
+    var servletPath = cocoon.parameters.servletPath;*/
 
     var id = 0;
     importClass(Packages.ru.tastika.tools.util.Utilities);
@@ -239,7 +238,7 @@ function editFolderById(form) {
      var parentId = folder.getParentId();
      var parentName = "";
      if (parentId > 0) {
-     var parent = folder.getParent();
+     var parent = folder.getEmsObject().getParent();
      parentName = parent.getName() + " (" + parent.getSystemName() + ")";
      }
      */
@@ -266,7 +265,7 @@ function deleteFolderById() {
 
 function folderTree(form) {
     var showFormURI = cocoon.parameters.showFormURI;
-    var blockPrefix = cocoon.parameters.blockPrefix;
+//    var blockPrefix = cocoon.parameters.blockPrefix;
     var servletPath = cocoon.parameters.servletPath;
 
     var CKEditorFuncNum = Utilities.parseStringToInteger(cocoon.request.getParameter("CKEditorFuncNum"));
@@ -280,21 +279,8 @@ function folderTree(form) {
 
     form.showForm(showFormURI, formData);
 
-//    cocoon.redirectTo("editFolder?id=" + folder.getId());
+
 }
 
 
-/*
- function treeFolder(parentId){
- if (cocoon.request.getParameter("excludedId") != null) {
- var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
- }
- var displayXMLURI = cocoon.parameters.displayXMLURI;
- var listData = prepareListData(parentId);
- print("excludedId: "+excludedId);
-
- listData["excludedId"] =excludedId;
- cocoon.sendPage(displayXMLURI, listData);
- }
- */
 

@@ -20,7 +20,7 @@ function getContentsByOwner() {
     if (contents != null) {
         name = "contentName:";
     }
-     cocoon.releaseComponent(contentService);
+    cocoon.releaseComponent(contentService);
     cocoon.sendPage(displayURI, {"content": content, "name": name});
 }
 
@@ -30,7 +30,7 @@ function showContent(contentService, content, form, contentActionState) {
     var servletPath = cocoon.parameters.servletPath;
     var inner = cocoon.parameters.inner;
     var availableLanguages = getAvailableLanguages();
-    var parentId = content.getParentId();
+    var parentId = content.getEmsObject().getParentId();
     var id = content.getId();
 
     var languageCode = cocoon.request.getParameter("languageCode");
@@ -63,15 +63,15 @@ function showContent(contentService, content, form, contentActionState) {
     var documentTypeService = cocoon.getComponent("documentTypeService");
     // availableDocumentTypes
     var documentTypeList = documentTypeService.getDocumentTypes();
-
-    print("content.getDocumentTypeId()"+content.getDocumentTypeId());
+    var documentTypeId = content.getDocumentTypeId();
+//    print("content.getDocumentTypeId()" + documentTypeId);
 //    миниатюра
     var thumbnail = null;
     var thumbnailId = content.getThumbnailId();
     if (thumbnailId != null) {
         thumbnail = content.getThumbnail();
     }
-    var documentType = documentTypeService.getDocumentType(content.getDocumentTypeId());
+    var documentType = documentTypeService.getDocumentType(documentTypeId);
     var documentService = cocoon.getComponent("documentService");
     var availableDocuments = documentService.getDocumentsByContentId(content.getId());
     var locale = getLocale();
@@ -91,31 +91,28 @@ function showContent(contentService, content, form, contentActionState) {
         if (contentActionState == "edit") {
             form.getChild("documentTypeList").setValue(documentType.getId().toString());
         }
-        else if(contentActionState == "create") {
+        else if (contentActionState == "create") {
             form.getChild("documentTypeList").setValue(form.getChild("documentTypeId").getValue().toString());
         }
 
         form.setAttribute('formName', 'contentForm');
 
-//        content = sendEmsObjectPage(form, contentService, content, showFormURI, {
-
         content = showEmsObjectForm(form, contentService, content, showFormURI, {
-//            "viewData": viewData,
-            "parentId" : parentId,
-            "parentName" : parentName,
-            "documentTypeList" : documentTypeList,
-            "id" : id,
-            "servletPath" : servletPath,
-            "systemNodeName":systemNodeName,
-            "systemNodeId":systemNodeId,
-            "thumbnail" : thumbnail,
-            "inner" : inner,
-            "availableTags" : availableTags,
-            "actionState" : contentActionState,
+            "parentId": parentId,
+            "parentName": parentName,
+            "documentTypeList": documentTypeList,
+            "id": id,
+            "servletPath": servletPath,
+            "systemNodeName": systemNodeName,
+            "systemNodeId": systemNodeId,
+            "thumbnail": thumbnail,
+            "inner": inner,
+            "availableTags": availableTags,
+            "actionState": contentActionState,
             "documentType": documentType,
             "availableLanguages": availableLanguages,
-            "formLocale":locale,
-            "languageCode":languageCode,
+            "formLocale": locale,
+            "languageCode": languageCode,
             "availableDocuments": availableDocuments
 
         });
@@ -135,9 +132,9 @@ function showContent(contentService, content, form, contentActionState) {
         var documentTypeId_FromObject = content.getDocumentTypeId();
 //           print("AFTER SUBMIT: > documentTypeId_FromObject - " + documentTypeId_FromObject);
 
-        var documentType;
 
-        if(documentTypeId_FromForm > 0 && documentTypeId_FromForm != documentTypeId_FromObject){
+
+        if (documentTypeId_FromForm > 0 && documentTypeId_FromForm != documentTypeId_FromObject) {
             print("AFTER SUBMIT: > update documentTypeId_FromForm - " + documentTypeId_FromForm);
             documentType = documentTypeService.getDocumentType(documentTypeId_FromForm);
 
@@ -154,31 +151,31 @@ function showContent(contentService, content, form, contentActionState) {
 
 //        print("make Content finally");
         /*cocoon.releaseComponent(contentService);
-        cocoon.releaseComponent(documentTypeService);
-        cocoon.releaseComponent(documentService);
-        cocoon.releaseComponent(typifiedObjectService);
-        cocoon.disposeObject(documentType);
-        cocoon.disposeObject(documentTypeList);
-        cocoon.disposeObject(availableDocuments);
-        cocoon.disposeObject(form);*/
+         cocoon.releaseComponent(documentTypeService);
+         cocoon.releaseComponent(documentService);
+         cocoon.releaseComponent(typifiedObjectService);
+         cocoon.disposeObject(documentType);
+         cocoon.disposeObject(documentTypeList);
+         cocoon.disposeObject(availableDocuments);
+         cocoon.disposeObject(form);*/
 
         cocoon.disposeObject(availableTags);
         cocoon.releaseComponent(tagService);
     }
-    catch(e){
-         print("Error:"+e);
+    catch (e) {
+        print("Error:" + e);
     }
     /*finally {
-        print("make Content finally");
-        cocoon.releaseComponent(contentService);
-        cocoon.releaseComponent(documentTypeService);
-        cocoon.releaseComponent(documentService);
-        cocoon.releaseComponent(typifiedObjectService);
-        cocoon.disposeObject(documentType);
-        cocoon.disposeObject(documentTypeList);
-        cocoon.disposeObject(availableDocuments);
-        cocoon.disposeObject(form);
-    }*/
+     print("make Content finally");
+     cocoon.releaseComponent(contentService);
+     cocoon.releaseComponent(documentTypeService);
+     cocoon.releaseComponent(documentService);
+     cocoon.releaseComponent(typifiedObjectService);
+     cocoon.disposeObject(documentType);
+     cocoon.disposeObject(documentTypeList);
+     cocoon.disposeObject(availableDocuments);
+     cocoon.disposeObject(form);
+     }*/
 
 }
 
@@ -190,9 +187,9 @@ function createContent(form) {
     cocoon.session.setAttribute('contentActionState', contentActionState);
 //    print("c"+1);
     var isFolder = cocoon.request.getParameter("isFolder");
-    var showFormURI = cocoon.parameters.showFormURI;
+    /*var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
-    var inner = cocoon.parameters.inner;
+    var inner = cocoon.parameters.inner;*/
 
     var contentService = cocoon.getComponent("contentService");
     var content = createTypifiedObject(contentService);
@@ -208,15 +205,15 @@ function createContent(form) {
 
     var parentId = 0;
     var parentName = "";
-    var parentObject = content.getParent();
+    var parentObject = content.getEmsObject().getParent();
     var parentDocumentTypeId = 0;
     if (parentObject != null) {
         parentId = parentObject.getId();
-        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
+//        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
         parentDocumentTypeId = parentObject.getDocumentTypeId();
     }
 
-    cocoon.session.setAttribute('contentParentId',parentId);
+    cocoon.session.setAttribute('contentParentId', parentId);
     importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
 //    print("createContent - parentDocumentTypeId: " + parentDocumentTypeId);
 
@@ -255,16 +252,16 @@ function createContent(form) {
     cocoon.session.setAttribute('lastContent', content);
 
 
-    print("contentActionState:"+contentActionState);
+    print("contentActionState:" + contentActionState);
     cocoon.sendStatus(200);
 
     /*if(contentActionState =='create'){
-        print("contentActionState:"+contentActionState);
-        cocoon.redirectTo(getRedirectUrl(content.getId()));
-    }else{
-        print("contentActionState:"+contentActionState);
-        cocoon.sendStatus(200);
-    }*/
+     print("contentActionState:"+contentActionState);
+     cocoon.redirectTo(getRedirectUrl(content.getId()));
+     }else{
+     print("contentActionState:"+contentActionState);
+     cocoon.sendStatus(200);
+     }*/
 //    cocoon.releaseComponent(contentService);
 //    cocoon.releaseComponent(documentTypeService);
 }
@@ -305,7 +302,6 @@ function editContent(form) {
     cocoon.sendStatus(200);
     cocoon.disposeObject(content);
 
-    //cocoon.sendPage("listContent", {"viewData": viewData, "content": content});
 
 }
 
@@ -356,18 +352,18 @@ function viewContent() {
 
 
 function listContent(parentId) {
-    var listData = prepareListData(parentId);
+    var listData = listObjectsWithParentId(parentId);
+//    var listData = listTypifiedObjects(parentId);
     importClass(Packages.ru.tastika.tools.util.Utilities);
     var documentTypeId = Utilities.parseStringToInteger(cocoon.request.getParameter("documentTypeId"));
-//    print("parentId1 - " + parentId);
+    //    print("parentId1 - " + parentId);
     if (parentId == null) {
         parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
 //        print("parentId2- " + parentId);
     }
 
     var documentTypeService = cocoon.getComponent("documentTypeService");
-    var documentTypeList = null;
-    documentTypeList = documentTypeService.getDocumentTypes();
+    var documentTypeList = documentTypeService.getDocumentTypes();
     listData.documentTypeList = documentTypeList;
 
     listData.documentType = documentTypeList;
@@ -386,7 +382,7 @@ function listContent(parentId) {
 
 function listAjaxContent(parentId) {
     var filter = cocoon.parameters.filter;
-    var listData = prepareListData(parentId);
+    var listData = listObjectsWithParentId(parentId);
 //    print("ListContentAjax filter" + filter);
 
 
@@ -394,8 +390,7 @@ function listAjaxContent(parentId) {
 //    var documentTypeId = Utilities.parseStringToInteger(cocoon.request.getParameter("documentTypeId"));
 
     var documentTypeService = cocoon.getComponent("documentTypeService");
-    var documentTypeList = null;
-    documentTypeList = documentTypeService.getDocumentTypes();
+    var documentTypeList = documentTypeService.getDocumentTypes();
     listData.documentType = documentTypeList;
     var documentType = documentTypeService.getDocumentTypeByName(filter);
     var documentTypeId = 0;
@@ -449,20 +444,12 @@ function loadDocument(uri) {
  var excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
  }
  var displayXMLURI = cocoon.parameters.displayXMLURI;
- var listData = prepareListData(parentId);
+ var listData = listObjectsWithParentId(parentId);
  print("excludedId: "+excludedId);
 
  listData["excludedId"] =excludedId;
  cocoon.sendPage(displayXMLURI, listData);
  }*/
-
-
-
-
-
-
-
-
 
 
 function createDocument2(form) {
@@ -493,13 +480,14 @@ function createDocument2(form) {
     form.setAttribute('formName', 'documentForm');
 
     form.showForm(showFormURI, {
-        "servletPath" : servletPath,
+        "servletPath": servletPath,
         "userData": userData,
-        "inner" : inner,
+        "inner": inner,
         //            "contentId": contentId,
         "languageCode": languageCode,
-        "actionState": documentActionState,
-        "document": document
+//        "document": document,
+        "actionState": documentActionState
+
     });
 
 
@@ -539,13 +527,8 @@ function createDocument2(form) {
         cocoon.session.setAttribute("contentId", contentId);
 
 
-
-
         var fileSystemObjectsIds = new java.util.HashSet();
         cocoon.session.setAttribute("excludedIds", fileSystemObjectsIds);
-
-
-
 
 
         document.setXmlSource(null);
@@ -559,16 +542,16 @@ function createDocument2(form) {
         cocoon.disposeObject(document);
 
     }
-    if(documentActionState =='create'){
-        print("documentActionState"+documentActionState);
+    if (documentActionState == 'create') {
+        print("documentActionState" + documentActionState);
         cocoon.redirectTo(getRedirectUrl(contentId));
-    }else{
-        print("documentActionState"+documentActionState);
+    } else {
+        print("documentActionState" + documentActionState);
         cocoon.sendStatus(200);
     }
 
     var sessionChangedLanguageCode = cocoon.session.getAttribute("languageCode");
-    if (sessionChangedLanguageCode != null && sessionChangedLanguageCode != languageCode){
+    if (sessionChangedLanguageCode != null && sessionChangedLanguageCode != languageCode) {
         languageCode = sessionChangedLanguageCode;
     }
     if (languageCode != null) {

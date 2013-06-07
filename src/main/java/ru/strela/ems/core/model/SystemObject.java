@@ -14,10 +14,10 @@ public interface SystemObject {
     String getSystemName();
     void setSystemName(String systemName);
     Integer getId();
-    void setParent(TypifiedObject parent);
+    /*void setParent(TypifiedObject parent);
     Integer getParentId();
-    TypifiedObject getParent();
+    TypifiedObject getParent();*/
 
-    String toExtendedString();
+//    String toExtendedString();
 }
     

@@ -22,10 +22,10 @@
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:fi="http://www.w3.org/1999/xhtml">
     <fd:widgets>
-        <fd:field id="id" state="output">
+       <!-- <fd:field id="id" state="output">
             <fd:label>ID</fd:label>
             <fd:datatype base="integer"/>
-        </fd:field>
+        </fd:field>-->
         <fd:field id="name" required="true">
             <fd:label>
                 <i18n:text catalogue="core" key="Language.name"/>
@@ -80,6 +80,7 @@
         <fd:import prefix="core" uri="blockcontext:/ems/core/objects/forms/Library/CoreLib_definition.xml"/>
 
         <fd:expand id="core:labels"/>
+        <fd:expand id="core:justName"/>
 
         <fd:submit id="saveLanguage">
             <fd:label>

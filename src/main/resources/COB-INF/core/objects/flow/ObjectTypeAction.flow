@@ -9,17 +9,11 @@ importClass(Packages.ru.tastika.tools.util.Utilities);
  */
 
 function listObjectTypeAction() {
-
-    importClass(Packages.ru.tastika.tools.util.Utilities);
-
-
     var objectTypeService = cocoon.getComponent("objectTypeService");
-    var objectTypeList = null;
-    objectTypeList = objectTypeService.getObjectTypes();
+    var objectTypeList= objectTypeService.getObjectTypes();
 
     var list = listCommon("objectTypeAction", "name", "desc", "");
     list.objectType = objectTypeList;
-//    print(listData.objectType);
     cocoon.sendPage(list.displayURI, list);
 }
 
@@ -35,22 +29,19 @@ function createObjectTypeAction(form) {
 
     /*var parentId = 0;
      var parentName = "";
-     var parentObject = objectTypeAction.getParent();
+     var parentObject = objectTypeAction.getEmsObject().getParent();
      if (parentObject != null) {
      parentId = parentObject.getId();
      parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
      }
      */
     var actionState = "create";
-    /*  var viewData = {
-     "actionState": actionState
-     }*/
+
     var locale = getLocale();
     form.locale = new java.util.Locale(locale);
 //    objectTypeAction = showEmsObjectForm(form, objectTypeAction, showFormURI, {    
     form.showForm(showFormURI, {
-//        "viewData": viewData,
-        "servletPath" : servletPath,
+        "servletPath": servletPath,
         "userData": getLoggedInUser(),
         "actionState": actionState
     });
@@ -81,7 +72,7 @@ function editObjectTypeActionById(form) {
 
     var objectTypeActionService = cocoon.getComponent("objectTypeActionService");
     var objectTypeAction = objectTypeActionService.getObjectTypeAction(id);
-    print("objectTypeAction"+objectTypeAction);
+    print("objectTypeAction" + objectTypeAction);
     var objectTypeActionName = objectTypeAction.getName();
 //    var entityId = objectTypeAction.getObjectTypeId();
     var entityId = 3;
@@ -91,17 +82,15 @@ function editObjectTypeActionById(form) {
         cocoon.redirectTo("ObjectTypeAction-create");
     }
 
-    /*var parentId = objectTypeAction.getParentId();
+    /*var parentId = objectTypeAction.getEmsObject().getParentId();
      var parentName = "";
      if (parentId > 0) {
-     var parent = objectTypeAction.getParent();
+     var parent = objectTypeAction.getEmsObject().getParent();
      parentName = parent.getName() + " (" + parent.getSystemName() + ")";
      }*/
 
     var actionState = "edit";
-    /*var viewData = {
-     "actionState": actionState
-     }*/
+
     var xslEditor = form.getChild("xslEditor");
     var cssEditor = form.getChild("cssEditor");
 
@@ -146,8 +135,8 @@ function editObjectTypeActionById(form) {
         "objectTypeActionId": id,
 //        "parentId" : parentId,
 //        "parentName" : parentName,
-        "userData" : getLoggedInUser(),
-        "servletPath" : servletPath,
+        "userData": getLoggedInUser(),
+        "servletPath": servletPath,
         "actionState": actionState
     });
     form.save(objectTypeAction);
@@ -166,9 +155,8 @@ function editObjectTypeActionById(form) {
 
 
 function deleteObjectTypeActionById(id) {
-    var displayURI = cocoon.parameters.displayURI;
-    var id = null;
-    id = parseInt(cocoon.request.getParameter("id"));
+//    var displayURI = cocoon.parameters.displayURI;
+    var id = parseInt(cocoon.request.getParameter("id"));
     var objectTypeActionService = cocoon.getComponent("objectTypeActionService");
     var objectTypeAction = objectTypeActionService.getObjectTypeAction(id);
     objectTypeActionService.deleteObjectTypeAction(objectTypeAction);
