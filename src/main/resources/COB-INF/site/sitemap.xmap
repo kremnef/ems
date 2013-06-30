@@ -71,8 +71,7 @@
                             src="org.apache.cocoon.serialization.XMLSerializer"
                             mime-type="text/html"
                             logger="sitemap.serializer.xhtml"
-                            pool-max="64"
-                    >
+                            pool-max="64">
                 <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
                 <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
                 <encoding>UTF-8</encoding>
@@ -106,6 +105,8 @@
             </map:serializer>
             <!-- CMS (changes end) -->
         </map:serializers>
+
+
         <map:selectors>
             <map:selector name="ajax-request" src="org.apache.cocoon.ajax.AjaxRequestSelector"/>
         </map:selectors>
@@ -146,18 +147,18 @@
 
 
         <map:resource name="xml">
-           <!-- <map:transform src="blockcontext:/ems/stylesheets/system/xml2html.xslt">
-                <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
-            </map:transform>
-            <map:select type="parameter">
-                <map:parameter name="parameter-selector-test" value="{block}"/>
-                <map:when test="true">
-                    <map:serialize type="xml"/>
-                </map:when>
-                <map:otherwise>
-                    <map:serialize type="html"/>
-                </map:otherwise>
-            </map:select>-->
+            <!-- <map:transform src="blockcontext:/ems/stylesheets/system/xml2html.xslt">
+                 <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+             </map:transform>
+             <map:select type="parameter">
+                 <map:parameter name="parameter-selector-test" value="{block}"/>
+                 <map:when test="true">
+                     <map:serialize type="xml"/>
+                 </map:when>
+                 <map:otherwise>
+                     <map:serialize type="html"/>
+                 </map:otherwise>
+             </map:select>-->
             <map:serialize type="xml"/>
         </map:resource>
         <!-- <map:resource name="pdf">
@@ -169,28 +170,28 @@
 
 
         <map:resource name="generate">
-            <map:select type="request-parameter">
+            <!--<map:select type="request-parameter">
                 <map:parameter name="parameter-name" value="xml"/>
                 <map:when test="true">
                     <map:call resource="xml">
                         <map:parameter name="block" value="{block}"/>
                     </map:call>
-                </map:when>
+                </map:when>-->
                 <!--<map:parameter name="parameter-name" value="pdf" />
                 <map:when test="true">
                     <map:call resource="pdf">
                         <map:parameter name="block" value="{block}"/>
                     </map:call>
                 </map:when>-->
-                <map:otherwise>
+                <!--<map:otherwise>-->
                     <map:transform type="xslt" src="cocoon:/generateXSLTFromSession"/>
                     <map:transform type="i18n">
                         <map:parameter name="locale" value="{session-attr:locale}"/>
                     </map:transform>
-                    <map:serialize type="html"/>
+                    <map:serialize type="xhtml"/>
 
-                </map:otherwise>
-            </map:select>
+                <!--</map:otherwise>-->
+            <!--</map:select>-->
         </map:resource>
 
 
@@ -231,13 +232,13 @@
             </map:match>
 
             <!--<map:match pattern="resource/img/**.gif">-->
-                <!--<map:read mime-type="image/gif" src="resources/img/{1}.gif"/>-->
+            <!--<map:read mime-type="image/gif" src="resources/img/{1}.gif"/>-->
             <!--</map:match>-->
             <!--<map:match pattern="resource/img/**.png">-->
-                <!--<map:read mime-type="image/png" src="resources/img/{1}.png"/>-->
+            <!--<map:read mime-type="image/png" src="resources/img/{1}.png"/>-->
             <!--</map:match>-->
             <!--<map:match pattern="resource/img/**.png">-->
-                <!--<map:read mime-type="image/png" src="resources/img/{1}.jpg"/>-->
+            <!--<map:read mime-type="image/png" src="resources/img/{1}.jpg"/>-->
             <!--</map:match>-->
 
             <!--  CSS stylesheets -->
@@ -411,26 +412,26 @@
                     <map:parameter name="makeRedirect" value="{request-attr:makeRedirect}"/>
                     <map:parameter name="redirect" value="{request-attr:redirect}"/>
                 </map:generate>
-                <!--map:call resource="xml" /-->
-
-                <map:serialize type="xml"/>
-
-            </map:match>
-           <!-- <map:match pattern="generateXSLTFromSessionTest">
-                <map:generate type="jx" src="view/generateXSLT.jx">
-                    <map:parameter name="xsltTemplateFile" value="index.xsl"/>
-                    <map:parameter name="typesActions" value="Content:xml,Navigation:showHor,SiteMap:showBreadCrumb"/>
-                    &lt;!&ndash;<map:parameter name="realRootPath" value="D:\work\java\projects\cms\ems\target\rcl\webapp\"/>&ndash;&gt;
-                    <map:parameter name="servletPath" value="{request:servletPath}"/>
-                    <map:parameter name="locale" value="{request-attr:locale}"/>
-                    <map:parameter name="makeRedirect" value="{request-attr:makeRedirect}"/>
-                    <map:parameter name="redirect" value="{request-attr:redirect}"/>
-                </map:generate>
                 <map:call resource="xml"/>
 
-                <map:serialize type="xml"/>
+                <!--<map:serialize type="xml"/>-->
 
-            </map:match>-->
+            </map:match>
+            <!-- <map:match pattern="generateXSLTFromSessionTest">
+                 <map:generate type="jx" src="view/generateXSLT.jx">
+                     <map:parameter name="xsltTemplateFile" value="index.xsl"/>
+                     <map:parameter name="typesActions" value="Content:xml,Navigation:showHor,SiteMap:showBreadCrumb"/>
+                     &lt;!&ndash;<map:parameter name="realRootPath" value="D:\work\java\projects\cms\ems\target\rcl\webapp\"/>&ndash;&gt;
+                     <map:parameter name="servletPath" value="{request:servletPath}"/>
+                     <map:parameter name="locale" value="{request-attr:locale}"/>
+                     <map:parameter name="makeRedirect" value="{request-attr:makeRedirect}"/>
+                     <map:parameter name="redirect" value="{request-attr:redirect}"/>
+                 </map:generate>
+                 <map:call resource="xml"/>
+
+                 <map:serialize type="xml"/>
+
+             </map:match>-->
             <map:match pattern="block">
                 <map:redirect-to uri="block/"/>
             </map:match>
@@ -449,12 +450,12 @@
             <map:match pattern="service/search-results">
                 <map:aggregate element="root">
                     <map:part src="cocoon://service/search"/>
-                        <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
-                        <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
-                        <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
-                        <map:parameter name="requestURI" value="{request:requestURI}"/>
-                        <map:parameter name="requestParam" value="{request-param:param}"/>
-                        <map:parameter name="query" value="{request-param:query}"/>-->
+                    <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                    <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                    <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                    <map:parameter name="requestURI" value="{request:requestURI}"/>
+                    <map:parameter name="requestParam" value="{request-param:param}"/>
+                    <map:parameter name="query" value="{request-param:query}"/>-->
                     <!--</map:part>-->
                     <map:part src="cocoon:/omitRoot/service/search-results"/>
                 </map:aggregate>
@@ -466,12 +467,12 @@
             <map:match pattern="block/service/search-results">
                 <map:aggregate element="root">
                     <map:part src="cocoon://service/search"/>
-                        <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
-                        <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
-                        <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
-                        <map:parameter name="requestURI" value="{request:requestURI}"/>
-                        <map:parameter name="requestParam" value="{request-param:param}"/>
-                        <map:parameter name="query" value="{request-param:query}"/>-->
+                    <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>
+                    <map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>
+                    <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
+                    <map:parameter name="requestURI" value="{request:requestURI}"/>
+                    <map:parameter name="requestParam" value="{request-param:param}"/>
+                    <map:parameter name="query" value="{request-param:query}"/>-->
                     <!--</map:part>-->
                     <map:part src="cocoon:/omitRoot/service/search-results"/>
                 </map:aggregate>
@@ -483,27 +484,27 @@
 
 
             <!--<map:match pattern="search">-->
-                <!--<map:aggregate element="root">-->
-                    <!--<map:part src="cocoon://service/search">-->
-                        <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>-->
-                        <!--<map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>-->
-                        <!--<map:parameter name="blockPrefix" value="{global:blockPrefix}"/>-->
-                        <!--<map:parameter name="requestURI" value="{request:requestURI}"/>-->
-                        <!--<map:parameter name="requestParam" value="{request-param:param}"/>-->
-                        <!--<map:parameter name="query" value="{request-param:query}"/>-->
-                    <!--</map:part>-->
-                    <!--&lt;!&ndash;<map:part src="cocoon:/search/*"/>&ndash;&gt;-->
-                <!--</map:aggregate>-->
-                <!--<map:serialize type="xml"/>-->
-                <!--&lt;!&ndash;<map:call resource="generate">-->
-                    <!--<map:parameter name="block" value="true"/>-->
-                <!--</map:call>&ndash;&gt;-->
+            <!--<map:aggregate element="root">-->
+            <!--<map:part src="cocoon://service/search">-->
+            <!--<map:parameter name="dojo-resources" value="{servlet:ajax:/resource/external/dojo}"/>-->
+            <!--<map:parameter name="forms-resources" value="{servlet:forms:/resource/external/forms}"/>-->
+            <!--<map:parameter name="blockPrefix" value="{global:blockPrefix}"/>-->
+            <!--<map:parameter name="requestURI" value="{request:requestURI}"/>-->
+            <!--<map:parameter name="requestParam" value="{request-param:param}"/>-->
+            <!--<map:parameter name="query" value="{request-param:query}"/>-->
+            <!--</map:part>-->
+            <!--&lt;!&ndash;<map:part src="cocoon:/search/*"/>&ndash;&gt;-->
+            <!--</map:aggregate>-->
+            <!--<map:serialize type="xml"/>-->
+            <!--&lt;!&ndash;<map:call resource="generate">-->
+            <!--<map:parameter name="block" value="true"/>-->
+            <!--</map:call>&ndash;&gt;-->
             <!--</map:match>-->
             <!--<map:match pattern="search/*">-->
-                <!--<map:generate type="sitePage" src="{1}">-->
-                    <!--<map:parameter name="index" value="{global:startPage}"/>-->
-                <!--</map:generate>-->
-                <!--&lt;!&ndash;<map:call resource="generate"/>&ndash;&gt;-->
+            <!--<map:generate type="sitePage" src="{1}">-->
+            <!--<map:parameter name="index" value="{global:startPage}"/>-->
+            <!--</map:generate>-->
+            <!--&lt;!&ndash;<map:call resource="generate"/>&ndash;&gt;-->
             <!--</map:match>-->
 
             <!--<map:match pattern="search-results">
@@ -553,10 +554,10 @@
                 <map:call resource="generate"/>
             </map:match>
             <!--<map:match pattern="**/**">-->
-                <!--<map:generate type="sitePage" src="{1}">-->
-                    <!--<map:parameter name="index" value="{global:startPage}"/>-->
-                <!--</map:generate>-->
-                <!--<map:call resource="generate"/>-->
+            <!--<map:generate type="sitePage" src="{1}">-->
+            <!--<map:parameter name="index" value="{global:startPage}"/>-->
+            <!--</map:generate>-->
+            <!--<map:call resource="generate"/>-->
             <!--</map:match>-->
         </map:pipeline>
 
