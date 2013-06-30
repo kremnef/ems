@@ -21,9 +21,9 @@ public class PathValidator implements WidgetValidator  {
         if (value != null) {
             success = true;
             Widget pathWidget = widget.lookupWidget("../path");
-            System.out.println("DEBUG---pathWidget " + pathWidget.getValue());
+//            System.out.println("DEBUG---pathWidget " + pathWidget.getValue());
             Widget systemNameWidget = widget.lookupWidget("../systemURL/systemName");
-            System.out.println("DEBUG---systemNameWidget " + pathWidget.getValue());
+//            System.out.println("DEBUG---systemNameWidget " + pathWidget.getValue());
             if (pathWidget != null) {
                 Object pathObject = pathWidget.getValue();
                 if (pathObject != null) {

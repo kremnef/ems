@@ -103,7 +103,7 @@
             <!--<ft:widget id="tab-state"/>-->
             <!--</fi:state>-->
             <!--<fi:items>-->
-            <emsFields entity="Order" parentId="0" parentName="" showParents="0"/>
+            <emsFields id="${id}" entity="Order" parentId="0" parentName="" showParents="0"/>
             <fi:group>
                 <fi:styling layout="columns"/>
                 <!--<fi:label>-->

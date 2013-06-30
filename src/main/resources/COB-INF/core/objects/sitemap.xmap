@@ -894,6 +894,7 @@
         <map:pipeline type="caching" id="tree">
             <map:match pattern="treeObjects">
                 <map:call function="treeObjects">
+                    <map:parameter name="excludedId" value="{request-param:excludedId}"/>
                     <map:parameter name="entity" value="{request-param:entity}"/>
                     <map:parameter name="servletPath" value="{request:servletPath}"/>
                     <map:parameter name="displayXMLURI" value="Tree-xml-pipeline"/>

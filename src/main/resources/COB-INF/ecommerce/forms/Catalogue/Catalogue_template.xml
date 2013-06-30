@@ -46,7 +46,7 @@
         <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST" enctype="multipart/form-data"
                           ajax="true">
             <translate/>
-            <emsFields entity="Catalogue" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+            <emsFields id="${id}" entity="Catalogue" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
 
             <fi:group>
                 <fi:styling layout="columns"/>

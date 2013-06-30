@@ -38,15 +38,17 @@ function listNavigation(parentId) {
 
 //chenged
 function createNavigation(form) {
+
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
 
     var navigationService = cocoon.getComponent("navigationService");
     var navigation = createTypifiedObject(navigationService);
-
-    var parentId = 0;
+    var parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+    var parentObject = navigationService.getNavigation(parentId);
+    //    var parentObject = navigation.getEmsObject().getParent();
     var parentName = "";
-    var parentObject = navigation.getEmsObject().getParent();
+
     if (parentObject != null) {
         parentId = parentObject.getId();
         parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";

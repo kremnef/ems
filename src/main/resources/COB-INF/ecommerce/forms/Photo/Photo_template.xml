@@ -108,7 +108,7 @@
                 </ul>
                 <div id="photo-tabs-1">
 
-                    <emsFields entity="Photo" parentId="0" parentName="" showParents="0"/>
+                    <emsFields id="${id}" entity="Photo" parentId="0" parentName="" showParents="0"/>
                     <!--<ft:widget id="name" type="suggest"/>-->
                     <!--<fileSystemObjects/>-->
                     <ft:widget id="countryList">

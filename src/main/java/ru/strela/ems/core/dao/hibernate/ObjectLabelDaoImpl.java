@@ -53,12 +53,12 @@ public class ObjectLabelDaoImpl implements ObjectLabelDao {
 
     public ObjectLabel getObjectLabelNaturalId(int objectId, String languageCode) {
         Session session = getCurrentSession();
-//        System.out.println("ObjectLabel - session: " +session);
+//        log.warn("ObjectLabel - session: " +session);
         ObjectLabel ObjectLabel = (ObjectLabel) session.byNaturalId(ObjectLabel.class)
                 .using("languageCode", languageCode)
                 .using("objectId", objectId)
                 .load();
-//        System.out.println("ObjectLabel : " +ObjectLabel);
+//        log.warn("ObjectLabel : " +ObjectLabel);
         closeSession();
         return ObjectLabel;
     }
@@ -67,9 +67,9 @@ public class ObjectLabelDaoImpl implements ObjectLabelDao {
     public void saveObjectLabelListSession(Session session, List objectLabelList) {
         for (Object obj : objectLabelList) {
             ObjectLabel objectLabel = (ObjectLabel) obj;
-//            System.out.println("label: " + objectLabel.getLabel());
+//            log.warn("label: " + objectLabel.getLabel());
             if (objectLabel.getLabel() == null) {
-//                System.out.print("objectLabel NOT Saved");
+//                log.warn("objectLabel NOT Saved");
             } else {
                 session.saveOrUpdate(objectLabel);
             }
@@ -81,20 +81,20 @@ public class ObjectLabelDaoImpl implements ObjectLabelDao {
         Session session = getCurrentSession();
         for (Object obj : objectLabelList) {
             ObjectLabel objectLabel = (ObjectLabel) obj;
-//            System.out.println(" saveObjectLabelList ---------------------");
-//            System.out.println("id:"+objectLabel.getId());
-//            System.out.println("label: "+objectLabel.getLabel());
-//            System.out.println("languageCode: "+objectLabel.getLanguageCode());
-//            System.out.println("objectId: "+objectLabel.getObjectId());
+//            log.warn(" saveObjectLabelList ---------------------");
+//            log.warn("id:"+objectLabel.getId());
+//            log.warn("label: "+objectLabel.getLabel());
+//            log.warn("languageCode: "+objectLabel.getLanguageCode());
+//            log.warn("objectId: "+objectLabel.getObjectId());
 
 
-//            System.out.println("label: " + objectLabel.getLabel());
+//            log.warn("label: " + objectLabel.getLabel());
 
-//            System.out.println("languageCode: "+objectLabel.getLanguageCode());
-//            System.out.println("objectId: "+objectLabel.getObjectId());
+//            log.warn("languageCode: "+objectLabel.getLanguageCode());
+//            log.warn("objectId: "+objectLabel.getObjectId());
 //            if (!objectLabel.getLabel().equals("")) {
             if (objectLabel.getLabel() == null) {
-                System.out.print("objectLabel NOT Saved");
+                log.warn("objectLabel NOT Saved");
             } else {
                 session.saveOrUpdate(objectLabel);
             }

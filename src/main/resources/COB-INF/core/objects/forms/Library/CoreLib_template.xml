@@ -158,8 +158,9 @@
                             </jx:otherwise>
                         </jx:choose>
                     </span>
+                    <!--<h1>ID:${id}</h1>-->
                     <span align="right" width="300px">
-                        <input type="button" i18n:attr="value" value="Modify" onclick="openParentDialog()"/>
+                        <input type="button" i18n:attr="value" value="Modify" onclick="openParentDialog(${id})"/>
                         <ft:widget id="parentId">
                             <fi:styling type="hidden"/>
                         </ft:widget>
@@ -169,7 +170,7 @@
                 <script type="text/javascript">
                     var noParentLabel = '!<i18n:text key="EmsObject.noParentElement"/>';
 
-                    function openParentDialog() {
+                    function openParentDialog(thisId) {
                     $("#parentTreeContainer:ui-dialog").dialog("destroy");
                     $("#parentTreeContainer").dialog({
                     width: 800,
@@ -189,13 +190,11 @@
                     entity ='Folder'
                     }
                     var ajaxUrl;
-                    var thisId = parseInt('${id}');
                     if(thisId > 0){
-                    var excludedId =thisId;
-                    ajaxUrl = "/ems/core/treeObjects?entity="+entity+"&amp;excludedId="+excludedId;
+                        ajaxUrl = "/ems/core/treeObjects?entity="+entity+"&amp;excludedId="+thisId;
                     }
                     else{
-                    ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+                        ajaxUrl = "/ems/core/treeObjects?entity="+entity;
                     }
 
 

@@ -151,7 +151,7 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
     public int getObjectsCount() {
         Session session = getCurrentSession();
         String sql = "select count(*) from " + getEntityClass().getSimpleName();
-        System.out.println("SQL: " + sql);
+        log.warn("SQL: " + sql);
         int count = ((Long) session.createQuery(sql).iterate().next()).intValue();
         closeSession();
         return count;
@@ -192,13 +192,13 @@ public class TypifiedObjectDaoImpl implements TypifiedObjectDao {
         if (itemsOnPage > 0) {
             criteria.setMaxResults(itemsOnPage);
         }
-//        System.out.println("8. System.currentTimeMillis() = " + System.currentTimeMillis());
+//        log.warn("8. System.currentTimeMillis() = " + System.currentTimeMillis());
 
         criteria.addOrder(order);
 
 
         List<TypifiedObject> list = criteria.list();
-//        System.out.println("9. System.currentTimeMillis() = " + System.currentTimeMillis());
+//        log.warn("9. System.currentTimeMillis() = " + System.currentTimeMillis());
         closeSession();
         return list;
     }

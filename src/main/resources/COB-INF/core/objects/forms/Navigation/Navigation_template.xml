@@ -41,7 +41,7 @@
                 </ul>
                 <div id="navigation-tabs-1">
 
-                    <emsFields entity="Navigation" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                    <emsFields id="${id}" entity="Navigation" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
 
                 </div>
             </div>

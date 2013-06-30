@@ -150,7 +150,7 @@
 
             </ul>
             <div id="content-tabs-1">
-                <emsFields entity="Content" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                <emsFields id="${id}" entity="Content" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
             </div>
 
             <div id="content-tabs-2">

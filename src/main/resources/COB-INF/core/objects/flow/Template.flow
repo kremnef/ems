@@ -84,22 +84,26 @@ function editTemplateById(form) {
 
     var xslURI = contextRealPath+"/WEB-INF/xslt/pages/" + template.getURI();
     var cssURI = contextRealPath+"/css/pages/" + template.getName()+".css";
+    print("cssURI: "+ cssURI);
     importClass(Packages.ru.tastika.tools.file.FileAddition);
     var FileAdditional = new Packages.ru.tastika.tools.file.FileAddition();
-    print("--"+contextRealPath);
+    //print("--"+contextRealPath);
     var fileXSL = FileAdditional.getFile(xslURI);
     var fileXSL_str;
     if (fileXSL != null) {
         fileXSL_str = FileAdditional.getFileStringContent(fileXSL, true);
         xslEditor.value = fileXSL_str;
     }
-        print(fileXSL_str);
+     //  print(fileXSL_str);
     var fileCSS = FileAdditional.getFile(cssURI);
+
     var fileCSS_str;
+
     if (fileCSS != null) {
         fileCSS_str = FileAdditional.getFileStringContent(fileCSS, true);
         cssEditor.value = fileCSS_str;
     }
+//    print(fileCSS_str);
 
 
     form.load(template);
@@ -109,8 +113,6 @@ function editTemplateById(form) {
     form.showForm(showFormURI, {
 
         "templateId": id,
-//        "parentId" : parentId,
-//        "parentName" : parentName,
         "userData" : getLoggedInUser(),
         "servletPath" : servletPath,
         "actionState": actionState
@@ -118,7 +120,7 @@ function editTemplateById(form) {
     form.save(template);
     var resultXSL = form.getChild("xslEditor").value;
     var resultCSS = form.getChild("cssEditor").value;
-//    print(resultXSL);
+
     FileAdditional.createFile(xslURI, resultXSL);
     FileAdditional.createFile(cssURI, resultCSS);
     templateService.saveTemplate(template);

@@ -23,16 +23,16 @@ public class SystemNameUniquenessValidator implements WidgetValidator {
         boolean success = false;
         if (value != null) {
             Widget checkSystemNameWidget = widget.lookupWidget("../checkSystemName");
-            System.out.println("---checkSystemNameWidget " + checkSystemNameWidget.getValue());
+//            System.out.println("---checkSystemNameWidget " + checkSystemNameWidget.getValue());
 
             Widget emsObjectIdWidget = widget.lookupWidget("../emsObjectId");
-            System.out.println("---emsObjectIdWidget " + emsObjectIdWidget.getValue());
+//            System.out.println("---emsObjectIdWidget " + emsObjectIdWidget.getValue());
 
             Widget parentIdWidget = widget.lookupWidget("../../parentId");
-            System.out.println("---parentIdWidget " + parentIdWidget.getValue());
+//            System.out.println("---parentIdWidget " + parentIdWidget.getValue());
 
             Widget entityWidget = widget.lookupWidget("../../entity");
-            System.out.println("---entityWidget " + entityWidget.getValue());
+//            System.out.println("---entityWidget " + entityWidget.getValue());
 
             Object entityWidgetValue = entityWidget.getValue();
 

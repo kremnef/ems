@@ -86,8 +86,6 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         this.objectsDataList = objectsDataList;
         this.parentObjectsDataList = parentObjectsDataList;
         this.emsObject = emsObject;
-        /*this.metaInfo = metaInfo;
-        this.metaInfoList = metaInfoList;*/
         this.emsObjectId = emsObjectId;
     }
 
@@ -163,13 +161,6 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
         this.nodeTypeId = nodeTypeId;
     }
 
-   /* public MetaInfo getMetaInfo() {
-        return metaInfo;
-    }
-
-    public void setMetaInfo(MetaInfo metaInfo) {
-        this.metaInfo = metaInfo;
-    }*/
 
     @Override
     public String toString() {
@@ -466,22 +457,21 @@ public class SystemNode extends TypifiedObject implements java.io.Serializable, 
     }
 
 
-    /*@Override
+    @Override
     public void setParent(TypifiedObject typifiedObject) {
         if (typifiedObject instanceof SystemObject) {
             emsObject.setParent(typifiedObject);
         }
     }
-*/
-    /*@XmlAttribute(name="parentId")
+    @XmlAttribute(name="parentId")
     public Integer getParentId() {
         return emsObject.getParentId();
-    }*/
+    }
 
-
-    /*public TypifiedObject getParent() {
+    @XmlTransient
+    public TypifiedObject getParent() {
         return emsObject.getParent();
-    }*/
+    }
 
     @XmlAttribute(name="emsObjectId")
     public int getEmsObjectId() {

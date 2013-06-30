@@ -53,7 +53,7 @@
             <script src="/ems/resource/js/jquery-plugin/codemirror/mode/xml/xml.js"></script>
             <script>
                 $(function() {
-                $( "#tabs" ).tabs();
+                <!--$( "#tabs" ).tabs();-->
                 var xslEditor = document.getElementById("xslEditor");
                 var cssEditor = document.getElementById("cssEditor");
                 var xslCodeMirror = CodeMirror.fromTextArea(xslEditor);
@@ -63,7 +63,7 @@
             </script>
 
             <div id="tabs">
-                <ul>
+                <!--<ul>
                     <li>
                         <a href="#tabs-1">
                             XSL
@@ -79,15 +79,20 @@
                         </a>
                     </li>
 
-                </ul>
+                </ul>-->
                 <div id="tabs-1">
-                    <ft:widget id="xslEditor">
+
+                    <h1>CSS</h1>
+
+                    <ft:widget id="cssEditor">
                         <fi:styling type="textarea"/>
                     </ft:widget>
+
                 </div>
 
                 <div id="tabs-2">
-                    <ft:widget id="cssEditor">
+                    <h1>XSL</h1>
+                    <ft:widget id="xslEditor">
                         <fi:styling type="textarea"/>
                     </ft:widget>
                 </div>

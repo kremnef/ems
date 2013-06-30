@@ -35,7 +35,7 @@
 
                 </ul>
                 <div id="folder-tabs-1">
-                    <emsFields entity="Folder" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                    <emsFields id="${id}" entity="Folder" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
                 </div>
             </div>
             <ft:widget id="saveFolder" class="ui-button"/>

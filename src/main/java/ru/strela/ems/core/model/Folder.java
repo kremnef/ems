@@ -1,8 +1,10 @@
 package ru.strela.ems.core.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -59,7 +61,6 @@ public class Folder extends TypifiedObject implements java.io.Serializable, Syst
         getEmsObject().setSystemName(systemName);
     }
 
-/*
     @Override
     public void setParent(TypifiedObject typifiedObject) {
         if (typifiedObject instanceof SystemObject) {
@@ -72,9 +73,10 @@ public class Folder extends TypifiedObject implements java.io.Serializable, Syst
         return emsObject.getParentId();
     }
 
-
+    @XmlTransient
     public TypifiedObject getParent() {
         return emsObject.getParent();
-    }*/
+    }
+
 
 }

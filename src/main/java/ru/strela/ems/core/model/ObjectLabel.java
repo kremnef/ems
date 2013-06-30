@@ -39,7 +39,7 @@ public class ObjectLabel implements Serializable, Comparable<ObjectLabel> {
         this.languageCode = languageCode;
         this.label = label;
         this.objectId = objectId;
-//          System.out.println("ObjectLabel -- this.id: "+this.id+ " label: "+this.label+" languageCode: "+this.languageCode+" objectId:"+this.objectId);
+//          log.warn("ObjectLabel -- this.id: "+this.id+ " label: "+this.label+" languageCode: "+this.languageCode+" objectId:"+this.objectId);
     }
 
     /*public ObjectLabel(int id, String languageCode, String label) {

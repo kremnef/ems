@@ -64,12 +64,12 @@ function editCustomerById(form) {
         cocoon.redirectTo("createCustomer");
     }
 
-    var parentId = customer.getParentId();
+    /*var parentId = customer.getParentId();
     var parentName = "";
     if (parentId > 0) {
         var parent = customer.getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
-    }
+    }*/
 
     var actionState = "edit";
 
@@ -79,8 +79,8 @@ function editCustomerById(form) {
         "actionState": actionState,
         "type": 'photo',
         "customerId": id,
-        "parentId" : parentId,
-        "parentName" : parentName,
+//        "parentId" : parentId,
+//        "parentName" : parentName,
         "servletPath" : servletPath
     });
 

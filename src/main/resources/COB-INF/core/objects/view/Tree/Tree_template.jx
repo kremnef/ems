@@ -8,7 +8,8 @@
 
 
         <jx:forEach items="${children}" var="item" varStatus="status">
-                    <jx:if test="${!excludedIds.contains(item.id)}">
+                    <!--<jx:if test="${!excludedIds.contains(item.id)}">-->
+                    <jx:if test="${excludedId != item.id}">
                     <item id="${item.id}"
                           name="${item.name}"
                           systemName="${item.systemName}"
@@ -17,7 +18,8 @@
                           parentId="${item.emsObject.parentId}"
                           contentType="${item.contentType}"
                           path="${item.path}"
-                        excludedIds="${excludedIds}">
+                          excludedIds="${excludedIds}"
+                          excludedId="${excludedId}">
                         <!--<jx:if test="${item.contentType !=''}">
                             <jx:attribute name="size" value="${item.size}"/>
                         </jx:if>-->

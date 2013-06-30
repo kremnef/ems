@@ -58,7 +58,7 @@
         <userDataMacro/>
         <parentObjects/>
         <ft:form-template action="#{$cocoon/continuation/id}.continue" method="POST">
-            <emsFields entity="Language" parentId="0" parentName="" showParents="0"/>
+            <emsFields id="${id}" entity="Language" parentId="0" parentName="" showParents="0"/>
             <!--<ft:group id="language">-->
                 <!--<fi:group>-->
                     <!--<fi:styling layout="columns"/>-->

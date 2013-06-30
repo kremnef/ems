@@ -610,7 +610,7 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
                     </connectors>
                     <webAppSourceDirectory>${project.build.directory}/rcl/webapp</webAppSourceDirectory>
                     <contextPath>/</contextPath>
-                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <webXml>../emsWebApp/webapp/WEB-INF/web.xml</webXml>
                     <!--<overrideWebXml>src/main/webapp/WEB-INF/web.xml</overrideWebXml>-->
                     <!--<webAppConfig>-->
                     <!--<descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>-->

@@ -69,7 +69,7 @@ public class MetaInfoDaoImpl implements MetaInfoDao {
     public void saveMetaInfoListSession(Session session, List metaInfoList) {
         for (Object obj : metaInfoList) {
             MetaInfo metaInfo = (MetaInfo) obj;
-//            System.out.print("saveMetaInfoList - metaInfo ID:"+metaInfo.getId());
+//            log.warn("saveMetaInfoList - metaInfo ID:"+metaInfo.getId());
             session.saveOrUpdate(metaInfo);
         }
 
@@ -82,7 +82,7 @@ public class MetaInfoDaoImpl implements MetaInfoDao {
             MetaInfo metaInfo = (MetaInfo) obj;
 
             if (metaInfo.getTitle() == null && metaInfo.getDescription() == null && metaInfo.getKeywords() == null && metaInfo.getTags() == null) {
-                System.out.print("metaInfo NOT Saved");
+                log.warn("metaInfo NOT Saved");
 
             } else {
                 session.saveOrUpdate(metaInfo);
