@@ -39,7 +39,7 @@ public class MetaInfo {
         this.keywords = keywords;
         this.objectId = objectId;
 
-      /*  System.out.println("title: "+this.title+" languageCode: "+this.languageCode+" objectId:"+this.objectId);*/
+      /*  log.warn("title: "+this.title+" languageCode: "+this.languageCode+" objectId:"+this.objectId);*/
     }
 
     @XmlTransient

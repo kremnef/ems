@@ -156,7 +156,6 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         getEmsObject().setSystemName(systemName);
     }
 
-/*
 
     @Override
     public void setParent(TypifiedObject typifiedObject) {
@@ -170,11 +169,10 @@ public class Content extends TypifiedObject implements Serializable, SystemObjec
         return emsObject.getParentId();
     }
 
-
+    @XmlTransient
     public TypifiedObject getParent() {
         return emsObject.getParent();
     }
-*/
 
     public MetaInfo getMetaInfo() {
         return metaInfo;

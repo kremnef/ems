@@ -456,7 +456,7 @@ public class ContentDaoImpl extends SystemObjectDaoImpl implements ContentDao {
         */
         /*Content c = (Content) typifiedObject;
         Integer emsId = c.getEmsObject().getId();*/
-//        System.out.println("Content saveOrUpdate: " +emsId);
+//        log.warn("Content saveOrUpdate: " +emsId);
 //        if (emsId != null){
         super.saveObject(typifiedObject);
 //        }

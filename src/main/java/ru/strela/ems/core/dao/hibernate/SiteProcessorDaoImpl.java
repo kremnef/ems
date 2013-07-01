@@ -62,7 +62,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
         Session session = getCurrentSession();
         this.requestQueryString = requestQueryString;
-//        System.out.println("requestQueryString!! " + requestQueryString);
+//        log.warn("requestQueryString!! " + requestQueryString);
 //    kremnef
         session.setDefaultReadOnly(true);
 
@@ -75,17 +75,17 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
             }
 
 
-            System.out.println("1. System.currentTimeMillis() = " + System.currentTimeMillis());
+            log.warn("1. System.currentTimeMillis() = " + System.currentTimeMillis());
 
             SitePageGenerator.documentTypes.clear();
-//            System.out.println("systemNamesPath = " + systemNamesPath);
+//            log.warn("systemNamesPath = " + systemNamesPath);
 
             HashSet<Integer> redirectCycle = new HashSet<Integer>();
             // s.id, s.redirect_to s.full_path, e.system_name, t.id template_id, t.positions_amount
             ArrayList<Object[]> pathData = getPathData(session, systemNamesPath);
             if (pathData.size() > 0) {
                 String systemNodesUrl = (String) pathData.get(pathData.size() - 1)[2];
-//                System.out.println("systemNodesUrl = " + systemNodesUrl);
+//                log.warn("systemNodesUrl = " + systemNodesUrl);
                 String objectURL = "";
                 if (systemNamesPath.length() > systemNodesUrl.length()) {
                     objectURL = systemNamesPath.substring(systemNodesUrl.length() + 1);
@@ -95,7 +95,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                         objectURL = objectURL.substring(0, objectURL.lastIndexOf("/"));
                     }
                     this.objectURL = objectURL;
-                    System.out.println("objectURL = " + objectURL);
+                    log.warn("objectURL = " + objectURL);
                 }
                 boolean checkRedirect = true;
                 while (pathData.size() > 0 && checkRedirect) {
@@ -163,8 +163,8 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                     if (typifiedObject instanceof SystemObject) {
                                         int levels = systemNodeObject.getLevels();
 //                                        Определяем глубину отображаемых элементов
-                                        System.out.println("typifiedObject = " + typifiedObject.getName());
-                                        System.out.println("levels = " + levels);
+                                        log.warn("typifiedObject = " + typifiedObject.getName());
+                                        log.warn("levels = " + levels);
                                         if (levels > 0) {
                                             children.putAll(getChildren(typifiedObject, levels, 0, systemNodeTypifiedObject.getItemsOnPage(), sortField, sortDirection, systemNodeTypifiedObject.getTagId(), session, systemNodeIdsForUrls, languageCode, position));
                                         }
@@ -176,7 +176,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                             if (!SitePageGenerator.documentTypes.contains(documentTypeName)) {
                                                 SitePageGenerator.documentTypes.add(documentTypeName);
                                             }
-//                                            System.out.println("content = " + content.getName());
+//                                            log.warn("content = " + content.getName());
 //                                            request.setAttribute(DOCUMENT_TYPES, documentTypes);
 
 
@@ -200,7 +200,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                                         }
                                     }
                                 }
-                                System.out.println("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
+                                log.warn("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
                             }
                             if (children.size() > 0) {
 
@@ -214,7 +214,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                     }
                 }
             }
-            System.out.println("5. System.currentTimeMillis() = " + System.currentTimeMillis());
+            log.warn("5. System.currentTimeMillis() = " + System.currentTimeMillis());
             /*tx.commit();
             session.close();
         } catch (HibernateException he) {
@@ -232,7 +232,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private void fillTypifiedObjectUrls(TypifiedObject typifiedObject, String fullURL, String baseURL, String objectURL, HashMap<Integer, String> systemNodeUrls) {
         boolean customPath = false;
-//        System.out.println("fillTypifiedObjectUrls 1" +typifiedObject.getName());
+//        log.warn("fillTypifiedObjectUrls 1" +typifiedObject.getName());
         if (typifiedObject instanceof Content) {
             Content content = (Content) typifiedObject;
             MetaInfo metaInfo = getMetaInfo(content);
@@ -240,13 +240,13 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 content.setMetaInfo(metaInfo);
             }
             ObjectLabel objectLabel = getObjectLabel(content);
-            System.out.println("ObjectLabel name " + content.getName() + " -- label -" + objectLabel);
+            log.warn("ObjectLabel name " + content.getName() + " -- label -" + objectLabel);
             if (objectLabel != null) {
                 content.setObjectLabel(objectLabel);
             }
             if (content.getHomeId() > 0) {
                 String url = systemNodeUrls.get(content.getHomeId());
-//                System.out.println("url "+ url);
+//                log.warn("url "+ url);
                 if (url != null) {
                     customPath = true;
                     content.setBaseURL(url);
@@ -273,7 +273,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private void setFullUrltoObject(Collection<SystemNodeObject> values, String baseURL, String objectURL, HashMap<Integer, String> systemNodeUrls) {
         String fullURL = baseURL.length() > 0 && objectURL.length() > 0 ? baseURL + "/" + objectURL : baseURL + objectURL;
-//        System.out.println("setFullUrltoObject 1");
+//        log.warn("setFullUrltoObject 1");
         for (SystemNodeObject systemNodeObject : values) {
             if (systemNodeObject instanceof SystemNodeTypifiedObject) {
                 SystemNodeTypifiedObject systemNodeTypifiedObject = (SystemNodeTypifiedObject) systemNodeObject;
@@ -285,7 +285,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
 
     private void setFullUrltoObjectChildren(ChildrenMap children, String baseURL, String objectURL, HashMap<Integer, String> systemNodeUrls) {
-//        System.out.println("setFullUrltoObject 2");
+//        log.warn("setFullUrltoObject 2");
         String fullURL = baseURL.length() > 0 && objectURL.length() > 0 ? baseURL + "/" + objectURL : baseURL + objectURL;
         for (TypifiedObject[] tObjects : children.getChildren().values()) {
             for (TypifiedObject to : tObjects) {
@@ -349,7 +349,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
 
         ObjectLabel objectLabel = getObjectLabel(systemNode);
-        System.out.println("systemNode ObjectLabel name " + systemNode.getName() + " -- label -" + objectLabel);
+        log.warn("systemNode ObjectLabel name " + systemNode.getName() + " -- label -" + objectLabel);
         if (objectLabel != null) {
             systemNode.setObjectLabel(objectLabel);
         }
@@ -361,7 +361,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private Object getObject(Session session, Class entityClass, int id) {
 
-        System.out.println("Class: " + entityClass + " and id: " + id);
+        log.warn("Class: " + entityClass + " and id: " + id);
         return session.get(entityClass, id);
     }
 
@@ -369,7 +369,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentSimple document = (DocumentSimple) documentDao.getLastVersionDocument(content.getId(), languageId);
         if (document != null) {
-            //System.out.println("document id: " + document.getId() + " title: " + document.getTitle());
+            //log.warn("document id: " + document.getId() + " title: " + document.getTitle());
             content.setDocument(DocumentSimple);
 
     }*/
@@ -389,21 +389,21 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     //    private void setDocumentToCurrentContent(Content content, ChildrenMap children, Session session, int languageId, int position) {
     private void setDocumentToCurrentContent(Content content, ChildrenMap children, Session session, String languageCode, int position) {
-        //System.out.println("setDocumentToCurrentContent:>> ENtER");
+        //log.warn("setDocumentToCurrentContent:>> ENtER");
         DocumentDao documentDao = new DocumentDaoImpl();
         Document document = documentDao.getDocumentByNaturalId(content.getId(), languageCode);
 
         if (document != null) {
-            //System.out.println("setDocumentToCurrentContent:>> document.getId(): " + document.getId());
+            //log.warn("setDocumentToCurrentContent:>> document.getId(): " + document.getId());
             content.setDocument(document);
             for (Object obj : document.getFolders()) {
                 Folder folder = (Folder) obj;
-//                //System.out.println(folder.toExtendedString());
+//                //log.warn(folder.toExtendedString());
                 children.putAll(getChildren(folder, 1, 0, 0, "position", "asc", 0, session, new HashSet<Integer>(), languageCode, position));
             }
 
         } else {
-            //System.out.println("setDocumentToCurrentContent:>>  Need Remove Content with Id: " + content.getId());
+            //log.warn("setDocumentToCurrentContent:>>  Need Remove Content with Id: " + content.getId());
         }
     }
 
@@ -485,21 +485,21 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode, int position) {
         currentLocale = languageCode;
 //    private ChildrenMap getChildren(TypifiedObject typifiedObject, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
-//        //System.out.println("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
+//        //log.warn("typifiedObject.toExtendedString() = " + typifiedObject.toExtendedString());
 
 
         ChildrenMap children = new ChildrenMap();
         Integer typifiedObjectId = typifiedObject.getId();
 //        Integer typifiedObjectParentId = typifiedObject.getParentId();
 
-//        System.out.println("CLASS ID =  " + typifiedObjectId);
-//        System.out.println("CLASS PARENT ID =  " + typifiedObjectParentId);
-//        System.out.println("itemsOnPage =  " + itemsOnPage);
+//        log.warn("CLASS ID =  " + typifiedObjectId);
+//        log.warn("CLASS PARENT ID =  " + typifiedObjectParentId);
+//        log.warn("itemsOnPage =  " + itemsOnPage);
 
 
         if (typifiedObject instanceof SystemObject) {
             String typifiedObjectClass = typifiedObject.getClass().getSimpleName();
-//            System.out.println("CLASS NAME =  " + typifiedObjectClass);
+//            log.warn("CLASS NAME =  " + typifiedObjectClass);
             List list = null;
             Query query;
             StringBuilder sql = new StringBuilder("");
@@ -560,7 +560,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 sql.append(" where emsObject.parentId = ");
                 sql.append(typifiedObjectId);
                 sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
-                ////System.out.println("sql = " + sql);
+                ////log.warn("sql = " + sql);
 
                 query = session.createQuery(sql.toString());
                 if (itemsOnPage > 0) {
@@ -592,7 +592,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                             content.setMetaInfo(metaInfo);
                         }
                         ObjectLabel objectLabel = getObjectLabel(content);
-                        System.out.println("ObjectLabel name " + content.getName() + " -- label -" + objectLabel);
+                        log.warn("ObjectLabel name " + content.getName() + " -- label -" + objectLabel);
                         if (objectLabel != null) {
                             content.setObjectLabel(objectLabel);
                         }
@@ -601,10 +601,10 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                             systemNodeIdsForUrls.add(content.getHomeId());
                         }
                     /*  if (tagId != null) {
-                    //System.out.println("tagId != null"+tagId);
+                    //log.warn("tagId != null"+tagId);
                     session.enableFilter("hasTag").setParameter("tagId", tagId);
                 } else
-                //System.out.println("tagId = null"+tagId);
+                //log.warn("tagId = null"+tagId);
                     session.disableFilter("hasTag");*/
 
 //                    добавить условие только для ObjectURL
@@ -681,7 +681,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
             for (Object obj : list) {
 
                 TypifiedObject to = (TypifiedObject) obj;
-//                //System.out.println("systemObjects " + to.getName());
+//                //log.warn("systemObjects " + to.getName());
                 if (currentLevel < levels) {
                     children.putAll(getChildren(to, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageCode, position));
 //                    children.putAll(getChildren(to, levels, currentLevel, itemsOnPage, sortField, sortDirection, tagId, session, systemNodeIdsForUrls, languageId, position));
@@ -703,7 +703,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     private ObjectLabel getObjectLabel(SystemObject systemObject) {
         int emsObjectId = systemObject.getEmsObject().getId();
         ObjectLabelDao objectLabelDao = new ObjectLabelDaoImpl();
-        //        //System.out.println("TypifiedObject - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
+        //        //log.warn("TypifiedObject - objectLabel: " + objectLabel + " and currentLocale: " + currentLocale + " and emsObjectId: " + emsObjectId);
 
         return objectLabelDao.getObjectLabelNaturalId(emsObjectId, currentLocale);
     }

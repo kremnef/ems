@@ -94,7 +94,7 @@ public class DocumentDaoImpl implements DocumentDao {
 
 
     public Document saveDocument(Document document) {
-        System.out.println("DAO saveDocument:");
+        log.warn("DAO saveDocument:");
         //log.info("document getContentId " + document.getContentId());
         //log.info("document getXmlSource " + document.getXmlSource());
         List fileSystemObjects = document.getFileSystemObjects();
@@ -106,10 +106,10 @@ public class DocumentDaoImpl implements DocumentDao {
             FileSystemObject fileSystemObject = (FileSystemObject) iterator.next();
             if (fileSystemObject != null && fileSystemObject.getId() > 0) {
                 if (fileSystemObject.isFolder()) {
-                    System.out.println("isFolder:"+fileSystemObject.getId());
+                    log.warn("isFolder:"+fileSystemObject.getId());
                     foldersIds.add(fileSystemObject.getId());
                 } else {
-                    System.out.println("filesIds:"+fileSystemObject.getId());
+                    log.warn("filesIds:"+fileSystemObject.getId());
                     filesIds.add(fileSystemObject.getId());
                 }
             }

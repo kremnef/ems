@@ -33,17 +33,17 @@ public class SearchAction {
 
     public List search(Request request) {
         String match = request.getParameter("query");
-//        System.out.println("Charset.defaultCharset() = " + Charset.defaultCharset());
-//        System.out.println("1. match = " + match);
-//        System.out.println("request.getCharacterEncoding() = " + request.getCharacterEncoding());
+//        log.warn("Charset.defaultCharset() = " + Charset.defaultCharset());
+//        log.warn("1. match = " + match);
+//        log.warn("request.getCharacterEncoding() = " + request.getCharacterEncoding());
         try {
             match = new String(match.getBytes(), request.getCharacterEncoding());
         } catch (java.io.UnsupportedEncodingException ex) {
             System.err.println(ex);
         }
-//        System.out.println("2. match = " + match);
+//        log.warn("2. match = " + match);
         String languageCode = ServerTools.checkLocaleWithLanguageCode(request);
-//        System.out.println("languageCode = " + languageCode);
+//        log.warn("languageCode = " + languageCode);
         List<Document> correctedResult = new ArrayList<Document>();
         if (match != null) {
             match = match.trim();
@@ -68,7 +68,7 @@ public class SearchAction {
                             .matching(match)
                             .createQuery();
 
-//                    System.out.println("match = " + match);
+//                    log.warn("match = " + match);
                     // wrap Lucene query in a org.hibernate.Query
                     org.hibernate.Query hibQuery =
                             fullTextSession.createFullTextQuery(query, Document.class);

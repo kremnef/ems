@@ -60,12 +60,12 @@ public class SystemNodeDaoImpl extends SystemObjectDaoImpl implements SystemNode
             TypifiedObjectDao typifiedObjectDao = new TypifiedObjectDaoImpl();
             Integer parentSystemNodeId;
             parentSystemNodeId = systemNode.getEmsObject().getParentId();
-//            System.out.println("parentSystemNodeId" + parentSystemNodeId);
+//            log.warn("parentSystemNodeId" + parentSystemNodeId);
 
             SystemNode parentSystemNode = null;
             if (parentSystemNodeId != null && parentSystemNodeId > 0) {
                 parentSystemNode = (SystemNode) typifiedObjectDao.getParent(parentSystemNodeId);
-//                System.out.println("parentSystemNode" + parentSystemNode.getId());
+//                log.warn("parentSystemNode" + parentSystemNode.getId());
 
                 if (withFirstParent && systemNode.getEmsObject().getParentId() > 0 && parentSystemNode != null) {
 //            if (withFirstParent && systemNode.getEmsObject().getParentId() != null && systemNode.getEmsObject().getParentId() > 0 && systemNode.getEmsObject().getParent() != null) {

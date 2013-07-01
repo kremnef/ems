@@ -193,14 +193,14 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             ObjectTypeAction typeAction = (ObjectTypeAction) obj;
             String typeName = typeActionIds.get(typeAction.getId());
             String typeActionString = typeName + ":" + typeAction.getXsltPath() + ":" + typeAction.getName()  + ":" + typeAction.getRenderLike();
-            System.out.println("typeActionString :"+ typeActionString);
+            log.warn("typeActionString :"+ typeActionString);
             if (!typesActions.contains(typeActionString)) {
                 typesActions.add(typeActionString);
             }
         }
         request.setAttribute(TYPES_ACTIONS, Utilities.implode(typesActions, ","));
         request.setAttribute(DOCUMENT_TYPES, Utilities.implode(documentTypes, ","));
-        System.out.println("DOCUMENT_TYPES :"+ documentTypes);
+        log.warn("DOCUMENT_TYPES :"+ documentTypes);
 
 //        //log.info("request.getAttribute(TYPES_ACTIONS) = " + request.getAttribute(TYPES_ACTIONS));
         request.setAttribute(REAL_ROOT_PATH, currentWebApplicationContext.getServletContext().getRealPath("/"));
@@ -213,7 +213,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
 
     private void runTypeAction(SystemNodeObject nodeObject, String typeActionName, Map model, String src) {
-//        System.out.println("1-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
+//        log.warn("1-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());
         String objectName;
         Object obj;
         if (nodeObject instanceof SystemNodeObjectType) {
@@ -243,12 +243,12 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         } catch (IllegalAccessException e) {
             Logger.getLogger(SitePageGenerator.class).warn(e.getMessage(), e);
         }
-        /*System.out.println("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());*/
+        /*log.warn("2-runTypeAction. System.currentTimeMillis() = " + System.currentTimeMillis());*/
     }
 
 
     public void generate() throws IOException, SAXException, ProcessingException {
-        System.out.println("1XML " + System.currentTimeMillis());
+        log.warn("1XML " + System.currentTimeMillis());
         contentHandler.startDocument();
         if (!omitRoot) {
             contentHandler.startElement("", "root", "root", new AttributesImpl());
@@ -298,7 +298,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             }
         }
 
-        System.out.println("2XML " + System.currentTimeMillis());
+        log.warn("2XML " + System.currentTimeMillis());
         TransformerFactory transFactory = TransformerFactory.newInstance();
         SAXTransformerFactory saxTransFactory = (SAXTransformerFactory) transFactory;
         SAXResult saxResult = new SAXResult(innerContentSaxHandler);
@@ -310,12 +310,12 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             Transformer trans = saxTransFactory.newTransformer();
             trans.transform(jaxbSource, saxResult);
 
-            System.out.println("3XML " + System.currentTimeMillis());
+            log.warn("3XML " + System.currentTimeMillis());
             if (children != null) {
                 jaxbSource = new JAXBSource(jaxbContext, children);
                 trans.transform(jaxbSource, saxResult);
             }
-            System.out.println("4XML " + System.currentTimeMillis());
+            log.warn("4XML " + System.currentTimeMillis());
 
 //            if (siteMap != null) {
 //                jaxbSource = new JAXBSource(jaxbContext, siteMap);
@@ -324,7 +324,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
             jaxbSource = new JAXBSource(jaxbContext, pageObjects);
             trans.transform(jaxbSource, saxResult);
-            System.out.println("5XML " + System.currentTimeMillis());
+            log.warn("5XML " + System.currentTimeMillis());
 
         } catch (JAXBException e) {
             throw new IOException(e);
@@ -338,7 +338,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             contentHandler.endElement("", "root", "root");
         }
         contentHandler.endDocument();
-        System.out.println("6XML " + System.currentTimeMillis());
+        log.warn("6XML " + System.currentTimeMillis());
     }
 
     private HashMap<String, HashMap<String, Object>> fillRequestParams(Request request, String src) {

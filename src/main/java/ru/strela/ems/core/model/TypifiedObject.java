@@ -358,26 +358,26 @@ public abstract class TypifiedObject {
     }
 
     public void addObjectLabel(ObjectLabel objectLabel) {
-//        System.out.println("Add New objectLabel"+ objectLabel.getLanguageCode()+"-"+objectLabel.getObjectId());
+//        log.warn("Add New objectLabel"+ objectLabel.getLanguageCode()+"-"+objectLabel.getObjectId());
         if (!this.objectLabelList.contains(objectLabel)) {
             this.objectLabelList.add(objectLabel);
         }
     }
     public void addMetaInfo(MetaInfo metainfo) {
-//        System.out.println("Add New metainfo"+ metainfo.getTitle());
+//        log.warn("Add New metainfo"+ metainfo.getTitle());
         if (!this.metaInfoList.contains(metainfo)) {
             this.metaInfoList.add(metainfo);
         }
     }
 
     public void printList(List list){
-//        System.out.println("T PRINT LIST");
+//        log.warn("T PRINT LIST");
         for (Object obj : list) {
             ObjectLabel objectLabel = (ObjectLabel) obj;
-//            System.out.println("id:"+objectLabel.getId());
-            System.out.println("label: "+objectLabel.getLabel());
-//            System.out.println("languageCode: "+objectLabel.getLanguageCode());
-//            System.out.println("objectId: "+objectLabel.getObjectId());
+//            log.warn("id:"+objectLabel.getId());
+//            log.warn("label: "+objectLabel.getLabel());
+//            log.warn("languageCode: "+objectLabel.getLanguageCode());
+//            log.warn("objectId: "+objectLabel.getObjectId());
         }
     }
 

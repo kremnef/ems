@@ -230,7 +230,7 @@ public class Document implements java.io.Serializable {
 
     @XmlTransient
     public List getFileSystemObjects() {
-//        System.out.print("!_!getFileSystemObjects enter" );
+//        log.warn("!_!getFileSystemObjects enter" );
         return fileSystemObjects;
     }
 

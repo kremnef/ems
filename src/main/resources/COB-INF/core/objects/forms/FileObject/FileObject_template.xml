@@ -59,7 +59,7 @@
 
                 </ul>
                 <div id="fileObject-tabs-1">
-                    <emsFields entity="FileObject" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                    <emsFields id="${id}" entity="FileObject" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
                 </div>
                 <div id="fileObject-tabs-2">
                     <metaInfo/>

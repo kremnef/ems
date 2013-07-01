@@ -194,7 +194,10 @@ function createSystemNode(form) {
     var parentId = 0;
     var parentName = "";
     var parentPath = new java.lang.String("");
-    var parentObject = systemNode.getEmsObject().getParent();
+
+    var parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+    var parentObject = systemNodeService.getSystemNode(parentId);
+//    var parentObject = systemNode.getEmsObject().getParent();
     if (parentObject != null) {
 //        parentId = parentObject.getId();
 //        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
@@ -263,12 +266,3 @@ function deleteSystemNodeById() {
     deleteObjectById("SystemNode");
 }
 
-/*
- function treeObjects(){
- var displayXMLURI = cocoon.parameters.displayXMLURI;
- var navigationTreeService = cocoon.getComponent("embeddedObjectsTreeModel");
- //    navigationTreeService.setEntity("navigation");
- var children = navigationTreeService.getChildren(navigationTreeService.getRoot());
-
- cocoon.sendPage(displayXMLURI, {children : children});
- }*/

@@ -195,7 +195,7 @@
 
                 </ul>
                 <div id="tabs-1">
-                    <emsFields entity="SystemNode" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
+                    <emsFields id="${id}" entity="SystemNode" parentId="${parentId}" parentName="${parentName}" showParents="1"/>
                 </div>
 
                 <div id="tabs-2">

@@ -699,6 +699,10 @@ function isSystemObject(cl) {
 
 function treeObjects(parentId) {
 
+    var servletPath = cocoon.parameters.servletPath;
+    var excludedId = cocoon.parameters.excludedId;
+//    var excludedId = Utilities.parseStringToInteger(cocoon.parameters.excludedId);
+    var entity = cocoon.parameters.entity;
 
     var filterParam = cocoon.request.getParameter("filter");
     if (filterParam != null) {
@@ -715,31 +719,13 @@ function treeObjects(parentId) {
         filter.setFieldValue(filterFieldValue.toString());
     }
 
-    var excludedId;
-    if (cocoon.request.getParameter("excludedId") != null) {
-        excludedId = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedId"));
-//        print("treeObjects: excludedId: "+excludedId);
-    }
-    else {
-        //print("ERROR Not Defined excludedId: " + excludedId);
-    }
-    /*if (cocoon.request.getParameter("excludedIds") != null) {
-     var excludedIds = Utilities.parseStringToInteger(cocoon.request.getParameter("excludedIds"));
-     print("treeObjects: excludedIds: "+excludedIds);
-     }
-     else {
-     print("ERROR Not Defined excludedId: "+excludedIds);
-     }*/
-    if (cocoon.request.getParameter("entity") != null) {
-
-        var entity = cocoon.request.getParameter("entity");
-//        print("treeObjects: entity: "+entity);
-    } else {
-        print("ERROR Not Defined entity: ");
-    }
+//    print("excludedId: "+excludedId);
+//    print("entity: "+entity);
 
     var displayXMLURI = cocoon.parameters.displayXMLURI;
     var excludedIds = cocoon.session.getAttribute("excludedIds");
+     print("excludedIds: "+excludedIds);
+
 //    cocoon.session.setAttribute("excludedIds", "");
 
     /*if (entity == 'SystemNode' & excludedIds != '') {

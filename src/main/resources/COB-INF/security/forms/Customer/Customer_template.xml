@@ -76,7 +76,7 @@
                             <i18n:text catalogue="security" key="Customer"/>
                             <customer/>
                             <i18n:text catalogue="security" key="User"/>
-                            <emsFields entity="Customer" parentId="0" parentName="" showParents="0"/>
+                            <emsFields id="${id}" entity="Customer" parentId="0" parentName="" showParents="0"/>
 
             <ft:widget id="saveCustomer" class="ui-button"/>
         </ft:form-template>

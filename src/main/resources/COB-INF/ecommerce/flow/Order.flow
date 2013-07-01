@@ -62,12 +62,12 @@ function editOrderById(form) {
         cocoon.redirectTo("Order-create");
     }
 
-    var parentId = order.getEmsObject().getParentId();
+    /*var parentId = order.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
         var parent = order.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
-    }
+    }*/
 
 
     var actionState = "edit";
@@ -77,8 +77,6 @@ function editOrderById(form) {
     order = showEmsObjectForm(form, orderService, order, showFormURI, {
         "actionState": actionState,
         "orderId": id,
-        "parentId": parentId,
-        "parentName": parentName,
         "servletPath": servletPath
     });
 

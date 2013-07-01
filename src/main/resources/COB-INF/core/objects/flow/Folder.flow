@@ -146,7 +146,9 @@ function createFolder(form) {
     var parentId = 0;
     var parentName = "";
     var parentPath = "";
-    var parentObject = folder.getEmsObject().getParent();
+    var parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+    var parentObject = folderService.getFolder(parentId);
+//    var parentObject = folder.getEmsObject().getParent();
     if (parentObject != null) {
 //        parentId = parentObject.getId();
 //        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
@@ -185,11 +187,19 @@ function showFolder(folderService, folder, form, actionState) {
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
 //    var inner = cocoon.parameters.inner;
+
+    /*var parentId = folder.getParentId();
+    var parentName = "";
+    if (parentId > 0) {
+        var parent = folder.getEmsObject().getParent();
+        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+    }*/
     var parentId = folder.getEmsObject().getParentId();
     var parentName = "";
     if (parentId > 0) {
-        var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
-        var parent = typifiedObjectService.getParent(parentId);
+        /*var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
+        var parent = typifiedObjectService.getParent(parentId);*/
+        var parent = folder.getEmsObject().getParent();
         parentName = parent.getName() + " (" + parent.getSystemName() + ")";
     }
     var id = folder.getId();
@@ -198,7 +208,7 @@ function showFolder(folderService, folder, form, actionState) {
     form.locale = new java.util.Locale(locale);
 
 
-    try {
+
         showEmsObjectForm(form, folderService, folder, showFormURI, {
             "formLocale": locale,
             "availableLanguages": availableLanguages,
@@ -209,10 +219,8 @@ function showFolder(folderService, folder, form, actionState) {
             "id" : id,
             "actionState": actionState
         });
-    }
-    finally {
 
-    }
+
 }
 
 function editFolderById(form) {
@@ -227,26 +235,59 @@ function editFolderById(form) {
     if (id == 0) {
         cocoon.redirectTo("Folder-create");
     }
+
     var folderService = cocoon.getComponent("folderService");
     var folder = folderService.getTypifiedObject(id, true);
     if (folder == null) {
         cocoon.releaseComponent(folderService);
         cocoon.redirectTo("Folder-create");
     }
-    /*
 
-     var parentId = folder.getParentId();
-     var parentName = "";
-     if (parentId > 0) {
-     var parent = folder.getEmsObject().getParent();
-     parentName = parent.getName() + " (" + parent.getSystemName() + ")";
-     }
-     */
+    var oldParentId = folder.getParentId();
+    var oldURL = folder.getSystemName();
+    print ("oldURL--"+oldURL);
+    print ("oldParentId--"+oldParentId);
+
 
     var actionState = "edit";
     showFolder(folderService, folder, form, actionState);
 
+
+    var newParentId = folder.getParentId();
+    var newURL = folder.getSystemName();
+    print ("newURL--" + newURL);
+    print ("newParentId--" + newParentId);
+    if (oldURL != newURL || oldParentId != newParentId){
+
+        if (newParentId != null) {
+        var parentPath;
+        var typifiedObjectService = cocoon.getComponent("typifiedObjectService");
+        var parentObject = typifiedObjectService.getParent(newParentId);
+
+
+            parentPath = parentObject.getPath();
+        }
+        else {
+            parentPath = getGlobal("mediatekaFolder");
+        }
+
+        var oldPath = folder.getPath();
+        print("NeedChangePath"+oldPath);
+
+        folder.setPath(parentPath + folder.getSystemName() + "/");
+
+        print("newPath"+folder.getPath());
+    }
+    /*if (oldParentId != newParentId){
+        var oldPath = folder.getPath()
+        print("NeedChangePath"+oldPath);
+    }*/
+
+
     folderService.save(folder);
+
+
+
     if (folder.getId() > 0) {
         saveObjectLabelList(folder);
         saveMetaInfoList(folder);

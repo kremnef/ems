@@ -116,7 +116,7 @@ function showContent(contentService, content, form, contentActionState) {
             "availableDocuments": availableDocuments
 
         });
-        print("return to showContentForm");
+//        print("return to showContentForm");
         var newThumbnailId = form.getChild("thumbnailId").getValue();
         if (newThumbnailId != thumbnailId) {
             var fileObjectService = cocoon.getComponent("fileObjectService");
@@ -135,7 +135,7 @@ function showContent(contentService, content, form, contentActionState) {
 
 
         if (documentTypeId_FromForm > 0 && documentTypeId_FromForm != documentTypeId_FromObject) {
-            print("AFTER SUBMIT: > update documentTypeId_FromForm - " + documentTypeId_FromForm);
+//            print("AFTER SUBMIT: > update documentTypeId_FromForm - " + documentTypeId_FromForm);
             documentType = documentTypeService.getDocumentType(documentTypeId_FromForm);
 
         }
@@ -203,17 +203,19 @@ function createContent(form) {
     content.setPublishDateTime(currentDateTime);
     content.setExpireDateTime(currentDateTime);
 
-    var parentId = 0;
+ /*   var parentId = Utilities.parseStringToInteger(cocoon.request.getParameter("parentId"));
+    var parentObject = contentService.getContent(parentId);*/
     var parentName = "";
     var parentObject = content.getEmsObject().getParent();
     var parentDocumentTypeId = 0;
     if (parentObject != null) {
-        parentId = parentObject.getId();
+        var parentId = parentObject.getId();
 //        parentName = parentObject.getName() + " (" + parentObject.getSystemName() + ")";
         parentDocumentTypeId = parentObject.getDocumentTypeId();
+        cocoon.session.setAttribute('contentParentId', parentId);
     }
 
-    cocoon.session.setAttribute('contentParentId', parentId);
+
     importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
 //    print("createContent - parentDocumentTypeId: " + parentDocumentTypeId);
 
@@ -252,7 +254,7 @@ function createContent(form) {
     cocoon.session.setAttribute('lastContent', content);
 
 
-    print("contentActionState:" + contentActionState);
+//    print("contentActionState:" + contentActionState);
     cocoon.sendStatus(200);
 
     /*if(contentActionState =='create'){
@@ -290,7 +292,7 @@ function editContent(form) {
     showContent(contentService, content, form, contentActionState);
 
     if (content.getEmsObject().getId() > 0) {
-        print("content to save: " + content);
+//        print("content to save: " + content);
         contentService.save(content);
     }
     if (content.getId() > 0) {
@@ -453,7 +455,7 @@ function loadDocument(uri) {
 
 
 function createDocument2(form) {
-    print("createDocument start");
+//    print("createDocument start");
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
     var inner = cocoon.parameters.inner;
@@ -543,10 +545,10 @@ function createDocument2(form) {
 
     }
     if (documentActionState == 'create') {
-        print("documentActionState" + documentActionState);
+//        print("documentActionState" + documentActionState);
         cocoon.redirectTo(getRedirectUrl(contentId));
     } else {
-        print("documentActionState" + documentActionState);
+//        print("documentActionState" + documentActionState);
         cocoon.sendStatus(200);
     }
 

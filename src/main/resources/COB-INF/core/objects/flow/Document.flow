@@ -23,24 +23,24 @@ function createNewVersionDocument(contentId, languageCode) {
 
 
 function editDocument(form) {
-    print("--------- enter function editDocument ---------");
+//    print("--------- enter function editDocument ---------");
 
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
     var blockPrefix = cocoon.parameters.blockPrefix;
     var inner = cocoon.parameters.inner;
-    print("showFormURI: " + showFormURI + " servletPath: " + servletPath + " blockPrefix: " + blockPrefix + " inner: " + inner);
+//    print("showFormURI: " + showFormURI + " servletPath: " + servletPath + " blockPrefix: " + blockPrefix + " inner: " + inner);
 
     importClass(Packages.ru.tastika.tools.util.Utilities);
     var contentId = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
-    print("contentId from request: " + contentId);
+//    print("contentId from request: " + contentId);
     var languageCode = cocoon.request.getParameter("languageCode");
-    print("languageCode from request: " + languageCode);
+//    print("languageCode from request: " + languageCode);
 
     var comment = cocoon.request.getParameter("comment");
-    print("comment from request: " + comment);
+//    print("comment from request: " + comment);
     var versionObj = cocoon.request.getParameter("version");
-    print("versionObj from request: " + versionObj);
+//    print("versionObj from request: " + versionObj);
 
 
     var documentService = cocoon.getComponent("documentService");

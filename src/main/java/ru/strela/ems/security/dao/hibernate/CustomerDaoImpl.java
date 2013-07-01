@@ -54,11 +54,11 @@ public class CustomerDaoImpl extends CommonObjectDaoImpl implements CustomerDao 
             throw he;
         }
 
-       /* System.out.println("getCustomer:"+сustomerId);
+       /* log.warn("getCustomer:"+сustomerId);
         Session session = getCurrentSession();
         Customer customer = (Customer) session.load(Customer.class, сustomerId);
         closeSession();
-        System.out.println("Customer:" + customer.getLogin());*/
+        log.warn("Customer:" + customer.getLogin());*/
         return customer;
     }
 

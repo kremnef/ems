@@ -64,20 +64,20 @@ function editProductById(form) {
         cocoon.redirectTo("Product-create");
     }
 
-    var parentId = product.getEmsObject().getParentId();
-    var parentName = "";
-    if (parentId > 0) {
-        var parent = product.getEmsObject().getParent();
-        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
-    }
+//    var parentId = product.getEmsObject().getParentId();
+//    var parentName = "";
+//    if (parentId > 0) {
+//        var parent = product.getEmsObject().getParent();
+//        parentName = parent.getName() + " (" + parent.getSystemName() + ")";
+//    }
 
     var actionState = "edit";
 
 
     product = showEmsObjectForm(form, productService, product, showFormURI, {
         "productId": id,
-        "parentId" : parentId,
-        "parentName" : parentName,
+        /*"parentId" : parentId,
+        "parentName" : parentName,*/
         "servletPath" : servletPath,
         "actionState": actionState,
         "type": "photo"

@@ -259,10 +259,10 @@ public class SystemObjectDaoImpl extends TypifiedObjectDaoImpl implements System
                         Object obj = typifiedObjectDao.getParent(parentId);
 //                        Object obj = parentObject.getEmsObject().getParent();
 
-//                        System.out.println("parentObject_CLASS:" + obj.getClass());
+//                        log.warn("parentObject_CLASS:" + obj.getClass());
                         TypifiedObject parentObjectT = (TypifiedObject) obj;
-//                        System.out.println("parentObject_Id:" + typ.getId());
-//                        System.out.println("parentObject_Name:" + typ.getName());
+//                        log.warn("parentObject_Id:" + typ.getId());
+//                        log.warn("parentObject_Name:" + typ.getName());
 //                        if (obj instanceof SystemObject) {
 //                            while (parentId > 0 && (parentObject = (SystemObject) parentObject.getEmsObject().getParent()) != null && !parents.contains(parentObject)) {
                         while (parentId > 0 && (parentObjectT) != null && !parents.contains(parentObjectT)) {
