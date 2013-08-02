@@ -238,16 +238,16 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.5.6</version>
         </dependency>-->
-        <dependency>
+        <!--<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.6.2</version>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.2</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
@@ -533,6 +533,27 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
         </dependency>-->
 
 
+
+
+        <!--<dependency>
+            <groupId> org.apache.cassandra</groupId>
+            <artifactId>cassandra-all</artifactId>
+            <version>0.8.1</version>
+
+            <exclusions>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+              </exclusion>
+            </exclusions>
+
+          </dependency>-->
+
+
     </dependencies>
     <!--<version>1.0.0-M2</version>-->
     <build>
@@ -617,11 +638,11 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
                     <!--<contextPath>/</contextPath>-->
                     <!--</webAppConfig>-->
                     <systemProperties>
-                        <systemProperty>
+                        <!--<systemProperty>
                             <name>org.apache.cocoon.mode</name>
-                            <value>dev</value>
-                        </systemProperty>
-                        <systemProperty>
+                            <value>prod</value>
+                        </systemProperty>-->
+                        <!--<systemProperty>
                             <name>org.apache.commons.logging.Log</name>
                             <value>
                                 org.apache.commons.logging.impl.Log4JLogger
@@ -634,7 +655,7 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
                         <systemProperty>
                             <name>log4j.configuration</name>
                             <value>./log4j.properties</value>
-                        </systemProperty>
+                        </systemProperty>-->
                     </systemProperties>
                 </configuration>
                 <dependencies>

@@ -131,7 +131,10 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
 //        //log.info("systemNamesPath = " + systemNamesPath);
 //        //log.info("indexPage = " + indexPage);
-        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, request.getQueryString());
+        System.out.println("REQUETS PARAMS --:  "+request.getParameters());
+        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, request.getParameters());
+//        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, request.getQueryString());
+
 //        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageId);
 //        //log.info("map = " + map);
 
@@ -344,6 +347,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
     private HashMap<String, HashMap<String, Object>> fillRequestParams(Request request, String src) {
         HashMap<String, HashMap<String, Object>> requestParams = new HashMap<String, HashMap<String, Object>>();
         HashMap<String, Object> params = new HashMap<String, Object>();
+
         requestParams.put("src", params);
         params.put("src", src);
 

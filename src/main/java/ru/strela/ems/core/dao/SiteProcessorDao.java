@@ -1,6 +1,7 @@
 package ru.strela.ems.core.dao;
 
 
+import java.util.Map;
 import java.util.TreeMap;
 
 
@@ -13,6 +14,7 @@ public interface SiteProcessorDao {
 
 
     TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode);
-    TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString);
+//    TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString);
+    TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, Map requestParameters);
 
 }

@@ -15,8 +15,8 @@
         <property name="connection.password">nx4MViU3Gg2n</property>
         <!--<property name="connection.driver_class">net.rkbloom.logdriver.LogDriver</property>-->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="dialect">org.hibernate.dialect.MySQLMyISAMDialect</property>
-        <!--<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>-->
+        <!--<property name="dialect">org.hibernate.dialect.MySQLMyISAMDialect</property>-->
+        <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
         <!--<property name="connection.datasource">datasource</property>-->
         <!--<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>-->
         <property name="connection.provider_class">
@@ -62,7 +62,7 @@
         <property name="hibernate.jdbc.use_scrollable_resultset">true</property>
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">150</property>
+        <property name="connection.pool_size">30</property>
         <property name="current_session_context_class">thread</property>
 
         <!-- Mapping files will go here.... -->
@@ -72,10 +72,10 @@
         <property name="hibernate.c3p0.acquire_increment">2</property>
 
         <property name="hibernate.c3p0.min_size">2</property>
-        <property name="hibernate.c3p0.max_size">150</property>
-        <property name="hibernate.c3p0.timeout">1800</property>
-        <property name="hibernate.c3p0.max_statements">150</property>
-        <property name="hibernate.c3p0.idle_test_period">300</property>
+        <property name="hibernate.c3p0.max_size">30</property>
+        <property name="hibernate.c3p0.timeout">180</property>
+        <property name="hibernate.c3p0.max_statements">30</property>
+        <property name="hibernate.c3p0.idle_test_period">180</property>
 
 
         <!--core-->

@@ -4,7 +4,7 @@ package ru.strela.ems.core.service.spring;
 import ru.strela.ems.core.dao.SiteProcessorDao;
 import ru.strela.ems.core.service.SiteProcessorService;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 
@@ -40,8 +40,10 @@ public class SiteProcessorServiceImpl implements SiteProcessorService {
         return siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode);
     }
 
-    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString) {
-        return siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, requestQueryString);
+//    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString) {
+    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, Map requestParameters) {
+//        return siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, requestQueryString);
+        return siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, requestParameters);
     }
 
 }

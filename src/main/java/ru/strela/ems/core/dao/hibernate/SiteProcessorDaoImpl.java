@@ -26,6 +26,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     private String objectURL;
     private String currentLocale;
     private String requestQueryString;
+    private Map requestParameters;
     private final static Logger log = LoggerFactory.getLogger(SiteProcessorDaoImpl.class);
 //    private ArrayList<String> documentTypes = new ArrayList<String>();
 
@@ -56,12 +57,14 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     }
 
     //    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, int languageId) {
-    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString) {
+//    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, String requestQueryString) {
+    public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode, Map requestParameters) {
         currentLocale = languageCode;
         TreeMap<String, Object> systemObjects = new TreeMap<String, Object>();
 
         Session session = getCurrentSession();
-        this.requestQueryString = requestQueryString;
+        this.requestParameters = requestParameters;
+//        this.requestQueryString = requestQueryString;
 //        log.warn("requestQueryString!! " + requestQueryString);
 //    kremnef
         session.setDefaultReadOnly(true);
@@ -509,9 +512,11 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                 DocumentDao documentDao = new DocumentDaoImpl();
                 if (documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
                     Integer pageNumber = 1;
-                    if (requestQueryString != null && requestQueryString.contains("page")) {
-                        try {
-                            Map<String, String> paramsMap = getUrlParameters(requestQueryString);
+//                    if (requestQueryString != null && requestQueryString.contains("page")) {
+                    if (requestParameters.containsKey("page")) {
+//                        try {
+//                            Map<String, String> paramsMap = getUrlParameters(requestQueryString);
+                            Map<String, String> paramsMap = requestParameters;
 //                            String pageValue = null;
                             Set<String> keys = paramsMap.keySet();
                             for (String key : keys) {
@@ -531,9 +536,9 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
                             }
 //                            pageNumber = Integer.parseInt(pageValue);
-                        } catch (UnsupportedEncodingException e) {
+                        /*} catch (UnsupportedEncodingException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        }
+                        }*/
 
                     }
 //                    int contentChildrenCount = typifiedObject.getEmsObject().getChildrenCount();

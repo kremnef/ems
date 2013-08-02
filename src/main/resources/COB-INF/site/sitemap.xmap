@@ -40,34 +40,31 @@
 
         </map:actions>
 
-       <!-- <map:transformers default="xslt">
-            &lt;!&ndash;<map:transformer name="browser-update" src="org.apache.cocoon.ajax.BrowserUpdateTransformer"/>&ndash;&gt;
-            <map:transformer name="i18n"
-                             src="org.apache.cocoon.transformation.I18nTransformer">
-                <use-store>true</use-store>
-                &lt;!&ndash;<use-request-parameters>true</use-request-parameters>&ndash;&gt;
-                &lt;!&ndash;<use-session-parameters>true</use-session-parameters>&ndash;&gt;
-                &lt;!&ndash;<use-cookie-parameters>true</use-cookie-parameters>&ndash;&gt;
-                &lt;!&ndash;<xslt-processor-role>xalan</xslt-processor-role>&ndash;&gt;
-                <check-includes>true</check-includes>
-                <use-request-parameters>true</use-request-parameters>
-                <catalogues default="site">
-                    <catalogue id="site" name="messages" location="context://i18n"/>
-                    <catalogue id="forms" name="messages"
-                               location="resource://org/apache/cocoon/forms/system/i18n"/>
-                </catalogues>
-                <cache-at-startup>true</cache-at-startup>
-                <encoding>UTF-8</encoding>
-            </map:transformer>
-        </map:transformers>-->
+        <!-- <map:transformers default="xslt">
+             &lt;!&ndash;<map:transformer name="browser-update" src="org.apache.cocoon.ajax.BrowserUpdateTransformer"/>&ndash;&gt;
+             <map:transformer name="i18n"
+                              src="org.apache.cocoon.transformation.I18nTransformer">
+                 <use-store>true</use-store>
+                 &lt;!&ndash;<use-request-parameters>true</use-request-parameters>&ndash;&gt;
+                 &lt;!&ndash;<use-session-parameters>true</use-session-parameters>&ndash;&gt;
+                 &lt;!&ndash;<use-cookie-parameters>true</use-cookie-parameters>&ndash;&gt;
+                 &lt;!&ndash;<xslt-processor-role>xalan</xslt-processor-role>&ndash;&gt;
+                 <check-includes>true</check-includes>
+                 <use-request-parameters>true</use-request-parameters>
+                 <catalogues default="site">
+                     <catalogue id="site" name="messages" location="context://i18n"/>
+                     <catalogue id="forms" name="messages"
+                                location="resource://org/apache/cocoon/forms/system/i18n"/>
+                 </catalogues>
+                 <cache-at-startup>true</cache-at-startup>
+                 <encoding>UTF-8</encoding>
+             </map:transformer>
+         </map:transformers>-->
         <!-- Serializers -->
 
-        <!--<map:serializers default="xhtml">-->
+        <map:serializers default="xhtml">
 
-            <!-- CMS (changes begin): setting encoding UTF-8 -->
-
-
-           <!-- <map:serializer name="xhtml"
+            <map:serializer name="xhtml"
                             src="org.apache.cocoon.serialization.XMLSerializer"
                             mime-type="text/html"
                             logger="sitemap.serializer.xhtml"
@@ -79,37 +76,37 @@
 
             <map:serializer logger="sitemap.serializer.xml" mime-type="text/xml" name="xml"
                             src="org.apache.cocoon.serialization.XMLSerializer">
-                &lt;!&ndash;<doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
-                <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>&ndash;&gt;
+                <!--<doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+                <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>-->
                 <doctype-public>-//Strela//DTD Entities//EN</doctype-public>
                 <doctype-system>xhtml.ent</doctype-system>
-                &lt;!&ndash;<doctype-system>file:xhtml.ent</doctype-system>&ndash;&gt;
-                &lt;!&ndash;<doctype-system>https://dl-ssl.google.com/gwt/DTD/xhtml.ent</doctype-system>&ndash;&gt;
+                <!--<doctype-system>file:xhtml.ent</doctype-system>-->
+                <!--<doctype-system>https://dl-ssl.google.com/gwt/DTD/xhtml.ent</doctype-system>-->
                 <encoding>UTF-8</encoding>
             </map:serializer>
 
 
             <map:serializer logger="sitemap.serializer.html" mime-type="text/html" name="html"
-                            pool-max="32" src="org.apache.cocoon.serialization.HTMLSerializer">
+                            pool-max="64" src="org.apache.cocoon.serialization.HTMLSerializer">
                 <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
                 <doctype-system>http://www.w3.org/TR/html4/strict.dtd</doctype-system>
                 <encoding>UTF-8</encoding>
                 <method>html</method>
                 <version>4.0</version>
+                <use-request-parameters>true</use-request-parameters>
                 <omit-xml-declaration>yes</omit-xml-declaration>
-            </map:serializer>-->
-            <!--<map:serializer name="fo2pdf"
+            </map:serializer>
+            <map:serializer name="fo2pdf"
                             src="org.apache.cocoon.serialization.FOPSerializer"
                             mime-type="application/pdf">
                 <user-config>classpath:/META-INF/cocoon/fo2pdf/fo2pdf-config.xml</user-config>
-            </map:serializer>-->
-            <!-- CMS (changes end) -->
-        <!--</map:serializers>-->
+            </map:serializer>
+        </map:serializers>
 
-<!--
-        <map:selectors>
-            <map:selector name="ajax-request" src="org.apache.cocoon.ajax.AjaxRequestSelector"/>
-        </map:selectors>-->
+        <!--
+                <map:selectors>
+                    <map:selector name="ajax-request" src="org.apache.cocoon.ajax.AjaxRequestSelector"/>
+                </map:selectors>-->
 
     </map:components>
 
@@ -128,7 +125,6 @@
     | Definition of the control flow implementation.
     +-->
     <map:resources>
-
 
 
         <map:resource name="xml">
@@ -192,8 +188,6 @@
             <map:match pattern="**/xhtml.ent">
                 <map:read src="../resources/xhtml.ent"/>
             </map:match>
-
-
 
 
             <map:match pattern="mediateka/**.pdf">
@@ -272,8 +266,6 @@
                     <map:parameter name="makeRedirect" value="{request-attr:makeRedirect}"/>
                     <map:parameter name="redirect" value="{request-attr:redirect}"/>
                 </map:generate>
-                <!--<map:call resource="xml"/>-->
-
                 <map:serialize type="xml"/>
 
             </map:match>
@@ -397,6 +389,9 @@
             <map:match pattern="**">
                 <map:generate type="sitePage" src="{1}">
                     <map:parameter name="index" value="{global:startPage}"/>
+                    <map:parameter name="requestURI" value="{request:requestURI}"/>
+                    <map:parameter name="requestParam" value="{request-param:param}"/>
+                    <map:parameter name="query" value="{request-param:query}"/>
                 </map:generate>
                 <map:call resource="generate"/>
             </map:match>

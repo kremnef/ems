@@ -227,6 +227,7 @@
 
                         </head>
                         <body>
+                            <!--<h1>PAGE= <xsl:value-of select="$page"/></h1>-->
                             <xsl:apply-templates select="/root"/>
                         </body>
                     </html>
