@@ -107,6 +107,7 @@
         <!--<map:script src="flow/ImageGallery.flow"/>-->
         <map:script src="blockcontext:/ems/flow/Form.js"/>
         <map:script src="blockcontext:/ems/flow/CommonObject.flow"/>
+        <map:script src="blockcontext:/ems/security/flow/login.flow"/>
         <!--<map:script src="flow/Form.js"/>-->
         <map:script src="flow/Desktop.flow"/>
     </map:flow>

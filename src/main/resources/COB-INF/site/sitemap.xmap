@@ -128,18 +128,6 @@
 
 
         <map:resource name="xml">
-            <!-- <map:transform src="blockcontext:/ems/stylesheets/system/xml2html.xslt">
-                 <map:parameter name="blockPrefix" value="{global:blockPrefix}"/>
-             </map:transform>
-             <map:select type="parameter">
-                 <map:parameter name="parameter-selector-test" value="{block}"/>
-                 <map:when test="true">
-                     <map:serialize type="xml"/>
-                 </map:when>
-                 <map:otherwise>
-                     <map:serialize type="html"/>
-                 </map:otherwise>
-             </map:select>-->
             <map:serialize type="xml"/>
         </map:resource>
         <!-- <map:resource name="pdf">
@@ -364,11 +352,8 @@
             </map:match>
 -->
 
-            <map:match pattern="block/**">
 
-                <!--map:call function="processPath">
-                    <map:parameter name="path" value="{1}"/>
-                </map:call-->
+            <map:match pattern="block/**">
                 <map:generate type="sitePage" src="{1}">
                     <map:parameter name="index" value="{global:startPage}"/>
                 </map:generate>
@@ -377,6 +362,7 @@
                     <map:parameter name="block" value="true"/>
                 </map:call>
             </map:match>
+            <!--
 
             <map:match pattern="omitRoot/**">
                 <map:generate type="sitePage" src="{1}">
@@ -384,7 +370,14 @@
                     <map:parameter name="omitRoot" value="true"/>
                 </map:generate>
                 <map:serialize type="xml"/>
-            </map:match>
+            </map:match>-->
+
+
+        <!--    <map:match pattern="**">
+                <map:generate type="sitePage" src="{1}">
+                    <map:parameter name="index" value="{global:startPage}"/>
+                </map:generate>
+            </map:match>-->
 
             <map:match pattern="**">
                 <map:generate type="sitePage" src="{1}">

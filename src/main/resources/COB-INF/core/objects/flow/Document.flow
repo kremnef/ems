@@ -178,6 +178,7 @@ function editDocument(form) {
 
 //    saveDocument(document,contentId)
 //todo: убрать сохраение, заменить на корректную передачу документа в сессию
+
     documentService.saveDocument(document);
     cocoon.session.setAttribute("document", document);
     cocoon.session.removeAttribute("excludedIds");

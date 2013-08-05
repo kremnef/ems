@@ -612,35 +612,7 @@ function getTypeActions() {
  }
  }*/
 
-//Sprig Security Auth
-function getLoggedInUser() {
-    print("!getLoggedInUser() function enter");
-    var authUser = cocoon.session.getAttribute("authUser");
-    if (authUser == null) {
-        print("authUserNull" + authUser);
-        importClass(Packages.org.springframework.security.core.Authentication);
-        importClass(Packages.org.springframework.security.core.context.SecurityContextHolder);
 
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth) {
-            var login = auth.getName();
-            var customerService = cocoon.getComponent("customerService");
-            var customer = customerService.getCustomerByLogin(login);
-            cocoon.releaseComponent(customerService);
-//
-//            return {"login" : login, "customer": customer};
-            authUser = {"login": login, "customer": customer};
-            cocoon.session.setAttribute("authUser", authUser);
-        }
-        /*else {
-         return {};
-         }*/
-    }
-//    print("authUser"+authUser);
-    return authUser;
-
-}
 
 
 function deleteObjectById(entity) {
