@@ -463,7 +463,7 @@
                         <fd:javascript>
                             var repeater = widget.lookupWidget("../tagList");
                             <!--print("repeater:" + repeater);-->
-                            <!--print("this.value:" + this.value);-->
+                            print("this.value:" + this.value);
                             var newRow = repeater.addRow();
                             newRow.getChild("tag").value = this.value;
                         </fd:javascript>

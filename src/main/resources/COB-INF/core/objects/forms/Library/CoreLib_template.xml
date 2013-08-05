@@ -332,7 +332,7 @@
                             </ft:widget>
                         </li>
                         <li>
-                            <!--<script type="text/javascript">
+                           <!-- <script type="text/javascript">
                                 function addTag(item){
                                 $("#tags").tagEditorAddTag(item);
                                 }
@@ -379,27 +379,28 @@
                                             onChange="cocoon.forms.submitForm(this);"/>
                                 <!--onChange="repeaterAddAction($(this).val());"/>-->
                             </ft:widget>
-                            <script type="text/javascript">
+                            <!--<script type="text/javascript">
                                 $(function() {
                                 var availableTags = [
                                 <jx:forEach items="${availableTags}" var="item">
                                     { "id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
                                 </jx:forEach>
                                 ];
-                                <!--$( '.tags_${rowLanguageCode} input.tag' ).tagedit({
-                                autocompleteOptions: {
-                                source: localJSON
-                                }
-                                });-->
+
                                 $( ".availableTags" ).autocomplete({
                                 source: availableTags
                                 });
 
 
-                                <!--})-->
+                                &lt;!&ndash;$( '.tags_${rowLanguageCode} input.tag' ).tagedit({
+                                autocompleteOptions: {
+                                source: localJSON
+                                }
+                                });&ndash;&gt;
+                                &lt;!&ndash;})&ndash;&gt;
 
                                 });
-                            </script>
+                            </script>-->
                             <ft:repeater id="tagList">
 
                                 <div class="tags_${rowLanguageCode}">

@@ -91,9 +91,10 @@ public class MetaInfoDaoImpl implements MetaInfoDao {
 
     public void saveMetaInfoList(List metaInfoList) {
         Session session = getCurrentSession();
+
         for (Object obj : metaInfoList) {
             MetaInfo metaInfo = (MetaInfo) obj;
-
+            System.out.println(metaInfo.getLanguageCode() + " TAGS: "+metaInfo.getTags());
             if (metaInfo.getTitle() == null && metaInfo.getDescription() == null && metaInfo.getKeywords() == null && metaInfo.getTags() == null) {
                 log.warn("metaInfo NOT Saved");
 
