@@ -12,6 +12,7 @@ public interface MetaInfoDao {
 
     MetaInfo getMetaInfo(int MetaInfoId);
     MetaInfo getMetaInfoNaturalId(int objectId, String languageCode);
+    List getObjectIdsByTagId(int tagId);
 
     MetaInfo saveMetaInfo(MetaInfo MetaInfo);
     void deleteMetaInfo(MetaInfo MetaInfo);

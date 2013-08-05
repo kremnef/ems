@@ -65,7 +65,7 @@
                 </fd:field>
 
 
-                <fd:field id="checkSystemName" state="output">
+                <fd:field id="checkSystemName">
                     <fd:datatype base="string"/>
                 </fd:field>
                 <fd:field id="systemName">

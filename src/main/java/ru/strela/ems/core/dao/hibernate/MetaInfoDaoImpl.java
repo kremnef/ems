@@ -56,6 +56,19 @@ public class MetaInfoDaoImpl implements MetaInfoDao {
         return MetaInfo;
     }*/
 
+    public List getObjectIdsByTagId(int tagId) {
+        Session session = getCurrentSession();
+
+        List listOfIds = session.createCriteria(MetaInfo.class)
+        .createAlias("tags", "t")
+            .add( Restrictions.eq("t.id", tagId) )
+            .list();
+        System.out.println(">>getObjectIdsByTagId--listOfIds: "+listOfIds);
+
+        closeSession();
+        return listOfIds;
+    }
+
     public MetaInfo getMetaInfoNaturalId(int objectId, String languageCode) {
         Session session = getCurrentSession();
         MetaInfo MetaInfo = (MetaInfo) session.byNaturalId(MetaInfo.class)

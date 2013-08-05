@@ -91,6 +91,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         ////log.info("request.getPathTranslated() = " + request.getPathTranslated());
         ////log.info("request.getHeaders() = " + request.getHeaders());
         ////log.info("request.getQueryString() = " + request.getQueryString());
+//        System.out.println("request.getQueryString() = " + request.getQueryString());
         ////log.info("request.getRequestURI() = " + request.getRequestURI());
         ////log.info("request.getServerName() = " + request.getServerName());
         ////log.info("request.getServletPath() = " + request.getServletPath());
@@ -131,7 +132,8 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
 //        //log.info("systemNamesPath = " + systemNamesPath);
 //        //log.info("indexPage = " + indexPage);
-        System.out.println("REQUETS PARAMS --:  "+request.getParameters());
+//        System.out.println("REQUETS PARAMS --:  "+request.getParameters());
+        requestParams = fillRequestParams(request, src);
         TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, request.getParameters());
 //        TreeMap<String, Object> map = siteProcessorDao.getSystemObjects(systemNamesPath, indexPage, languageCode, request.getQueryString());
 
@@ -209,7 +211,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         request.setAttribute(REAL_ROOT_PATH, currentWebApplicationContext.getServletContext().getRealPath("/"));
 
         request.getSession().setAttribute(ServerTools.LOCALE_TITLE, request.getAttribute(ServerTools.LOCALE_TITLE));
-        requestParams = fillRequestParams(request, src);
+
 
 
     }
@@ -361,6 +363,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         //params.put("pathTranslated", request.getPathTranslated());
         params.put("protocol", request.getProtocol());
         params.put("queryString", request.getQueryString());
+        params.put("params", request.getParameters());
         params.put("remoteAddr", request.getRemoteAddr());
         params.put("remoteHost", request.getRemoteHost());
         //params.put("requestedSessionId", request.getRequestedSessionId());
@@ -382,8 +385,9 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 //        }
         params = new HashMap<String, Object>();
         requestParams.put("parameters", params);
+        params.putAll(request.getParameters());
 
-        for (Enumeration enumeration = request.getParameterNames(); enumeration.hasMoreElements(); ) {
+        /*for (Enumeration enumeration = request.getParameterNames(); enumeration.hasMoreElements(); ) {
             String parameterName = String.valueOf(enumeration.nextElement());
             ArrayList<String> parameters = new ArrayList<String>();
             params.put(parameterName, parameters);
@@ -391,7 +395,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
             if (parameterValues != null) {
                 parameters.addAll(Arrays.asList(parameterValues));
             }
-        }
+        }*/
 
         //HttpSession session = request.getSession();
         return requestParams;

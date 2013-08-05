@@ -2,7 +2,8 @@
 <jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <!--todo: Вынести эти пути в настройки сайта -->
     <jx:set var="XSLT_TYPE_FILES_REAL_LOCATION" value="WEB-INF/xslt/types/"/>
-    <jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>
+    <!--<jx:set var="XSLT_TYPE_FILES_LOCATION" value="${'context:/' + XSLT_TYPE_FILES_REAL_LOCATION}"/>-->
+    <jx:set var="XSLT_TYPE_FILES_LOCATION" value="context:/WEB-INF/xslt/types/"/>
     <jx:set var="XSLT_TEMPLATE_FILE_LOCATION" value="context:/WEB-INF/xslt/pages/"/>
     <jx:set var="XSLT_DOCUMENT_TYPE_LOCATION" value="context:/WEB-INF/xslt/types/Content/documentType/"/>
     <!--<jx:set var="XSLT_WIDGET_LOCATION" value="context:/WEB-INF/xslt/widgets/"/>-->
@@ -177,7 +178,8 @@
 
                             <title>
                                 <xsl:value-of select="/root/systemNode/objectLabel/label"/>
-                                <xsl:text>|</xsl:text>
+                                <!--<xsl:text>&#160;|&#160;</xsl:text>-->
+                                <xsl:text>-</xsl:text>
                                 <xsl:value-of select="/root/systemNode/metaInfo/title"/>
                                 <!--    <xsl:choose>
                                         <xsl:when test="$title">

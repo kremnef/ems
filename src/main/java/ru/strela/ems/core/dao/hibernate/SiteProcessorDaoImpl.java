@@ -24,6 +24,7 @@ import java.util.*;
 public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private String objectURL;
+    private int temporaryCountItemsValue;
     private String currentLocale;
     private String requestQueryString;
     private Map requestParameters;
@@ -36,20 +37,20 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
     }
 
     protected Session getCurrentSession() {
-            log.warn("getCurrentSession()");
-            Session session = HibernateUtil.currentSession();
-            log.warn("beginTransaction()");
-            HibernateUtil.beginTransaction();
-            return session;
-        }
+        log.warn("getCurrentSession()");
+        Session session = HibernateUtil.currentSession();
+        log.warn("beginTransaction()");
+        HibernateUtil.beginTransaction();
+        return session;
+    }
 
 
-        protected void closeSession() {
-            log.warn("commitTransaction()");
-            HibernateUtil.commitTransaction();
-            log.warn("closeSession()");
-            HibernateUtil.closeSession();
-        }
+    protected void closeSession() {
+        log.warn("commitTransaction()");
+        HibernateUtil.commitTransaction();
+        log.warn("closeSession()");
+        HibernateUtil.closeSession();
+    }
 
 
     public TreeMap<String, Object> getSystemObjects(String systemNamesPath, String indexPage, String languageCode) {
@@ -73,151 +74,165 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
         try {
             tx = session.beginTransaction();
 */
-            if (systemNamesPath.length() == 0) {
-                systemNamesPath = indexPage;
-            }
+        if (systemNamesPath.length() == 0) {
+            systemNamesPath = indexPage;
+        }
 
 
-            log.warn("1. System.currentTimeMillis() = " + System.currentTimeMillis());
+        log.warn("1. System.currentTimeMillis() = " + System.currentTimeMillis());
 
-            SitePageGenerator.documentTypes.clear();
+        SitePageGenerator.documentTypes.clear();
 //            log.warn("systemNamesPath = " + systemNamesPath);
 
-            HashSet<Integer> redirectCycle = new HashSet<Integer>();
-            // s.id, s.redirect_to s.full_path, e.system_name, t.id template_id, t.positions_amount
-            ArrayList<Object[]> pathData = getPathData(session, systemNamesPath);
-            if (pathData.size() > 0) {
-                String systemNodesUrl = (String) pathData.get(pathData.size() - 1)[2];
+        HashSet<Integer> redirectCycle = new HashSet<Integer>();
+        // s.id, s.redirect_to s.full_path, e.system_name, t.id template_id, t.positions_amount
+        ArrayList<Object[]> pathData = getPathData(session, systemNamesPath);
+        if (pathData.size() > 0) {
+            String systemNodesUrl = (String) pathData.get(pathData.size() - 1)[2];
 //                log.warn("systemNodesUrl = " + systemNodesUrl);
-                String objectURL = "";
-                if (systemNamesPath.length() > systemNodesUrl.length()) {
-                    objectURL = systemNamesPath.substring(systemNodesUrl.length() + 1);
+            String objectURL = "";
+            if (systemNamesPath.length() > systemNodesUrl.length()) {
+                objectURL = systemNamesPath.substring(systemNodesUrl.length() + 1);
 //                    если к странице добавлен документ с вложенностью
-                    if (objectURL.contains("/")) {
+                if (objectURL.contains("/")) {
 
-                        objectURL = objectURL.substring(0, objectURL.lastIndexOf("/"));
-                    }
-                    this.objectURL = objectURL;
-                    log.warn("objectURL = " + objectURL);
+                    objectURL = objectURL.substring(0, objectURL.lastIndexOf("/"));
                 }
-                boolean checkRedirect = true;
-                while (pathData.size() > 0 && checkRedirect) {
-                    Object[] lastRow = pathData.get(pathData.size() - 1);
-                    Integer redirectTo = (Integer) lastRow[1];
-                    if (redirectTo > 0 && !redirectCycle.contains(redirectTo)) {
-                        redirectCycle.add(redirectTo);
-                        String fullUrl = (String) lastRow[2];
-                        pathData = getPathData(session, fullUrl);
-                    } else {
-                        checkRedirect = false;
+                this.objectURL = objectURL;
+                log.warn("objectURL = " + objectURL);
+            }
+            boolean checkRedirect = true;
+            while (pathData.size() > 0 && checkRedirect) {
+                Object[] lastRow = pathData.get(pathData.size() - 1);
+                Integer redirectTo = (Integer) lastRow[1];
+                if (redirectTo > 0 && !redirectCycle.contains(redirectTo)) {
+                    redirectCycle.add(redirectTo);
+                    String fullUrl = (String) lastRow[2];
+                    pathData = getPathData(session, fullUrl);
+                } else {
+                    checkRedirect = false;
+                }
+            }
+            if (pathData.size() > 0) {
+                int templatePositionsAmount = 0;
+                int templateId = 0;
+                for (int i = pathData.size() - 1; i >= 0 && templateId == 0; i--) {
+                    Object[] row = pathData.get(i);
+                    if (row[4] != null) {
+                        templateId = (Integer) row[4];
+                        templatePositionsAmount = (Byte) row[5];
                     }
                 }
-                if (pathData.size() > 0) {
-                    int templatePositionsAmount = 0;
-                    int templateId = 0;
-                    for (int i = pathData.size() - 1; i >= 0 && templateId == 0; i--) {
-                        Object[] row = pathData.get(i);
-                        if (row[4] != null) {
-                            templateId = (Integer) row[4];
-                            templatePositionsAmount = (Byte) row[5];
+                if (templateId > 0) {
+                    int systemNodeId = (Integer) pathData.get(pathData.size() - 1)[0];
+
+                    SystemNode systemNode = getSystemNode(session, systemNodeId);
+                    if (systemNode != null) {
+                        systemObjects.put(SystemNode.class.getSimpleName(), systemNode);
+                        HashMap<Integer, SystemNodeObject> systemNodeObjectMap = getSystemNodeObjects(systemNode, templatePositionsAmount);
+
+                        if (systemNodeObjectMap.size() > 0) {
+                            systemObjects.put(SitePageGenerator.OBJECTS_KEY, systemNodeObjectMap.values());
                         }
-                    }
-                    if (templateId > 0) {
-                        int systemNodeId = (Integer) pathData.get(pathData.size() - 1)[0];
 
-                        SystemNode systemNode = getSystemNode(session, systemNodeId);
-                        if (systemNode != null) {
-                            systemObjects.put(SystemNode.class.getSimpleName(), systemNode);
-                            HashMap<Integer, SystemNodeObject> systemNodeObjectMap = getSystemNodeObjects(systemNode, templatePositionsAmount);
+                        Template template = getTemplate(session, templateId);
+                        if (template != null) {
+                            systemObjects.put(template.getClass().getSimpleName(), template);
+                        }
 
-                            if (systemNodeObjectMap.size() > 0) {
-                                systemObjects.put(SitePageGenerator.OBJECTS_KEY, systemNodeObjectMap.values());
-                            }
-
-                            Template template = getTemplate(session, templateId);
-                            if (template != null) {
-                                systemObjects.put(template.getClass().getSimpleName(), template);
-                            }
-
-                            ChildrenMap children = new ChildrenMap();
-                            HashSet<Integer> systemNodeIdsForUrls = new HashSet<Integer>();
-                            for (Integer position : systemNodeObjectMap.keySet()) {
-                                SystemNodeObject systemNodeObject = systemNodeObjectMap.get(position);
+                        ChildrenMap children = new ChildrenMap();
+                        HashSet<Integer> systemNodeIdsForUrls = new HashSet<Integer>();
+                        for (Integer position : systemNodeObjectMap.keySet()) {
+                            SystemNodeObject systemNodeObject = systemNodeObjectMap.get(position);
 //                                String rendreLike = systemNodeObject.getRenderLike();
-                                String sortField = systemNodeObject.getSortField();
-                                if (sortField == null) {
-                                    sortField = "position";
-                                }
-                                String sortDirection = systemNodeObject.getSortDirection();
-                                if (sortDirection == null) {
-                                    sortDirection = "asc";
-                                }
-                                if (systemNodeObject instanceof SystemNodeObjectType) {
-                                    SystemNodeObjectType systemNodeObjectType = (SystemNodeObjectType) systemNodeObject;
+                            String sortField = systemNodeObject.getSortField();
+                            if (sortField == null) {
+                                sortField = "position";
+                            }
+                            String sortDirection = systemNodeObject.getSortDirection();
+                            if (sortDirection == null) {
+                                sortDirection = "asc";
+                            }
+                            if (systemNodeObject instanceof SystemNodeObjectType) {
+                                SystemNodeObjectType systemNodeObjectType = (SystemNodeObjectType) systemNodeObject;
 
-                                    int levels = systemNodeObject.getLevels();
-                                    if (levels > 0) {
-                                        children.putAll(getChildren(systemNodeObjectType.getObjectType(), systemNodeObjectType.getItemsOnPage(), levels, 0, sortField, sortDirection, systemNodeObjectType.getTagId(), session, systemNodeIdsForUrls, languageCode, position));
-                                    }
-                                } else {
+                                int levels = systemNodeObject.getLevels();
+                                if (levels > 0) {
+                                    children.putAll(getChildren(systemNodeObjectType.getObjectType(), systemNodeObjectType.getItemsOnPage(), levels, 0, sortField, sortDirection, systemNodeObjectType.getTagId(), session, systemNodeIdsForUrls, languageCode, position));
+                                }
+                            } else {
 //                                    Основное выполение
-                                    SystemNodeTypifiedObject systemNodeTypifiedObject = (SystemNodeTypifiedObject) systemNodeObject;
-                                    TypifiedObject typifiedObject = systemNodeTypifiedObject.getTypifiedObject();
-                                    if (typifiedObject instanceof SystemObject) {
-                                        int levels = systemNodeObject.getLevels();
+                                SystemNodeTypifiedObject systemNodeTypifiedObject = (SystemNodeTypifiedObject) systemNodeObject;
+                                TypifiedObject typifiedObject = systemNodeTypifiedObject.getTypifiedObject();
+                                if (typifiedObject instanceof SystemObject) {
+                                    int levels = systemNodeObject.getLevels();
 //                                        Определяем глубину отображаемых элементов
-                                        log.warn("typifiedObject = " + typifiedObject.getName());
-                                        log.warn("levels = " + levels);
-                                        if (levels > 0) {
+                                    log.warn("typifiedObject = " + typifiedObject.getName());
+                                    log.warn("levels = " + levels);
+
+
+                                    if (levels > 0) {
+                                        SystemObject systemObject = (SystemObject) typifiedObject;
+                                        int contentChildrenCount = systemObject.getEmsObject().getChildrenCount();
+                                        if (contentChildrenCount > 1) {
+                                            temporaryCountItemsValue = contentChildrenCount;
+//                                            System.out.println("temporaryCountItemsValue 1:" + temporaryCountItemsValue);
                                             children.putAll(getChildren(typifiedObject, levels, 0, systemNodeTypifiedObject.getItemsOnPage(), sortField, sortDirection, systemNodeTypifiedObject.getTagId(), session, systemNodeIdsForUrls, languageCode, position));
+//                                            System.out.println("temporaryCountItemsValue 3:" + temporaryCountItemsValue);
+//                                            System.out.println("systemNodeObject.getItemsOnPage() " + systemNodeObject.getItemsOnPage());
+
                                         }
-                                        if (typifiedObject instanceof Content) {
-                                            Content content = (Content) typifiedObject;
-                                            String documentTypeName = content.getDocumentType().getName();
+                                    }
+                                    if (typifiedObject instanceof Content) {
+                                        Content content = (Content) typifiedObject;
+                                        String documentTypeName = content.getDocumentType().getName();
 
 
-                                            if (!SitePageGenerator.documentTypes.contains(documentTypeName)) {
-                                                SitePageGenerator.documentTypes.add(documentTypeName);
-                                            }
+                                        if (!SitePageGenerator.documentTypes.contains(documentTypeName)) {
+                                            SitePageGenerator.documentTypes.add(documentTypeName);
+                                        }
 //                                            log.warn("content = " + content.getName());
 //                                            request.setAttribute(DOCUMENT_TYPES, documentTypes);
 
 
-                                            if (content.getHomeId() > 0) {
-                                                systemNodeIdsForUrls.add(content.getHomeId());
-                                            }
-                                            int contentChildrenCount = content.getEmsObject().getChildrenCount();
-                                            if (contentChildrenCount > 1) {
-                                                int totalPages = Math.round(contentChildrenCount / systemNodeObject.getItemsOnPage()) + 1;
-                                                systemNodeObject.setTotalPages(totalPages);
-                                            }
+                                        if (content.getHomeId() > 0) {
+                                            systemNodeIdsForUrls.add(content.getHomeId());
+                                        }
 
-
+//                                        System.out.println("systemNodeObject.getID:" + systemNodeObject.getId());
+//                                        System.out.println("systemNodeObject.getItemsOnPage():" + systemNodeObject.getItemsOnPage());
+                                        int itemsOnPage = systemNodeObject.getItemsOnPage();
+                                        int totalPages = 1;
+                                        if (itemsOnPage > 0) {
+                                            totalPages = Math.round(temporaryCountItemsValue / itemsOnPage) + 1;
+                                        }
+                                        ;
+                                        systemNodeObject.setTotalPages(totalPages);
 //                                            todo: need move to ContentDao
-                                            setDocumentToCurrentContent(content, children, session, languageCode, position);
-                                        } else if (typifiedObject instanceof Navigation) {
-                                            Navigation navigation = (Navigation) typifiedObject;
-                                            if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
-                                                systemNodeIdsForUrls.add(navigation.getSystemNodeId());
-                                            }
+                                        setDocumentToCurrentContent(content, children, session, languageCode, position);
+                                    } else if (typifiedObject instanceof Navigation) {
+                                        Navigation navigation = (Navigation) typifiedObject;
+                                        if (navigation.getSystemNodeId() != null && navigation.getSystemNodeId() > 0) {
+                                            systemNodeIdsForUrls.add(navigation.getSystemNodeId());
                                         }
                                     }
                                 }
-                                log.warn("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
                             }
-                            if (children.size() > 0) {
-
-                                systemObjects.put(SitePageGenerator.CHILDREN_KEY, children);
-                            }
-
-                            HashMap<Integer, String> systemNodeUrls = getSystemNodeUrls(session, systemNodeIdsForUrls);
-                            setFullUrltoObject(systemNodeObjectMap.values(), systemNodesUrl, objectURL, systemNodeUrls);
-                            setFullUrltoObjectChildren(children, systemNodesUrl, objectURL, systemNodeUrls);
+                            log.warn("4.1 System.currentTimeMillis() = " + System.currentTimeMillis());
                         }
+                        if (children.size() > 0) {
+
+                            systemObjects.put(SitePageGenerator.CHILDREN_KEY, children);
+                        }
+
+                        HashMap<Integer, String> systemNodeUrls = getSystemNodeUrls(session, systemNodeIdsForUrls);
+                        setFullUrltoObject(systemNodeObjectMap.values(), systemNodesUrl, objectURL, systemNodeUrls);
+                        setFullUrltoObjectChildren(children, systemNodesUrl, objectURL, systemNodeUrls);
                     }
                 }
             }
-            log.warn("5. System.currentTimeMillis() = " + System.currentTimeMillis());
+        }
+        log.warn("5. System.currentTimeMillis() = " + System.currentTimeMillis());
             /*tx.commit();
             session.close();
         } catch (HibernateException he) {
@@ -511,30 +526,32 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
             if (typifiedObject instanceof Content) {
                 DocumentDao documentDao = new DocumentDaoImpl();
                 if (documentDao.getDocumentByNaturalId(typifiedObjectId, languageCode) != null) {
+
+
                     Integer pageNumber = 1;
 //                    if (requestQueryString != null && requestQueryString.contains("page")) {
                     if (requestParameters.containsKey("page")) {
 //                        try {
 //                            Map<String, String> paramsMap = getUrlParameters(requestQueryString);
-                            Map<String, String> paramsMap = requestParameters;
+                        Map<String, String> paramsMap = requestParameters;
 //                            String pageValue = null;
-                            Set<String> keys = paramsMap.keySet();
-                            for (String key : keys) {
-                                if (key.equalsIgnoreCase("page")) {
-                                    pageNumber = Integer.parseInt(paramsMap.get(key));
+                        Set<String> keys = paramsMap.keySet();
+                        for (String key : keys) {
+                            if (key.equalsIgnoreCase("page")) {
+                                pageNumber = Integer.parseInt(paramsMap.get(key));
 //                                    pageValue = paramsMap.get(key);
-                                }
-                                if (key.equalsIgnoreCase("itemsOnPage")) {
-                                    itemsOnPage = Integer.parseInt(paramsMap.get(key));
-                                }
-                                if (key.equalsIgnoreCase("sortField")) {
-                                    sortField = paramsMap.get(key);
-                                }
-                                if (key.equalsIgnoreCase("sortDirection")) {
-                                    sortDirection = paramsMap.get(key);
-                                }
-
                             }
+                            if (key.equalsIgnoreCase("itemsOnPage")) {
+                                itemsOnPage = Integer.parseInt(paramsMap.get(key));
+                            }
+                            if (key.equalsIgnoreCase("sortField")) {
+                                sortField = paramsMap.get(key);
+                            }
+                            if (key.equalsIgnoreCase("sortDirection")) {
+                                sortDirection = paramsMap.get(key);
+                            }
+
+                        }
 //                            pageNumber = Integer.parseInt(pageValue);
                         /*} catch (UnsupportedEncodingException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -546,11 +563,37 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 //                    list = contentDaoImpl.getChildren(typifiedObjectId, (pageNumber - 1) * itemsOnPage, itemsOnPage, sortField, true, null);
                     sql = new StringBuilder("from ");
                     sql.append(typifiedObjectClass);
-                    sql.append(" where emsObject.parentId = ");
+                    sql.append(" where");
+                    if (tagId != null) {
+                        MetaInfoDao metaInfoDao = new MetaInfoDaoImpl();
+                        List<MetaInfo> objectsIds = metaInfoDao.getObjectIdsByTagId(tagId);
+                        temporaryCountItemsValue = objectsIds.size();
+//                        System.out.println("temporaryCountItemsValue:" + temporaryCountItemsValue);
+                        int lastObjectId = objectsIds.get(objectsIds.size() - 1).getObjectId();
+//                        System.out.println("lastObjectId " + lastObjectId);
+                        if (objectsIds != null) {
+                            sql.append(" emsObject.id IN ( ");
+                            for (MetaInfo mObject : objectsIds) {
+                                int objectId = mObject.getObjectId();
+                                sql.append(objectId);
+                                if (objectId != lastObjectId) {
+                                    sql.append(",");
+                                }
+                            }
+                            sql.append(" ) and ");
+
+                        }
+                    }
+                    sql.append(" emsObject.parentId = ");
                     sql.append(typifiedObjectId);
-                    sql.append(" and publishDateTime <= current_timestamp() ");
+
+
+                    sql.append(" and publishDateTime <= current_timestamp()");
                     sql.append(" order by ").append(sortField).append(" ").append(sortDirection);
+
+
                     query = session.createQuery(sql.toString());
+//                    System.out.println("SQL:" + sql.toString());
                     query.setFirstResult((pageNumber - 1) * itemsOnPage);
                     if (itemsOnPage > 0) {
                         query.setMaxResults(itemsOnPage);
@@ -605,7 +648,9 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
                         if (content.getHomeId() > 0) {
                             systemNodeIdsForUrls.add(content.getHomeId());
                         }
-                    /*  if (tagId != null) {
+
+
+                    /*
                     //log.warn("tagId != null"+tagId);
                     session.enableFilter("hasTag").setParameter("tagId", tagId);
                 } else
@@ -660,6 +705,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     //    private ChildrenMap getChildren(ObjectType objectType, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode) {
 //    private ChildrenMap getChildren(ObjectType objectType, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, int languageId, int position) {
+
     private ChildrenMap getChildren(ObjectType objectType, int levels, int currentLevel, int itemsOnPage, String sortField, String sortDirection, Integer tagId, Session session, HashSet<Integer> systemNodeIdsForUrls, String languageCode, int position) {
 
 
