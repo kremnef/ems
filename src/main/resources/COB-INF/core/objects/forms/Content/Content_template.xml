@@ -118,7 +118,10 @@
         <!--<translate/>-->
         <script type="text/javascript">
             $(function() {
-            $("#content-tabs").tabs();
+            $("#content-tabs").tabs(
+            <jx:if test="${documentActionState == 'edit'} ">
+                { selected: 1 }
+            </jx:if>);
             $("#ftabs").tabs();
             });
         </script>
@@ -136,6 +139,7 @@
 
                 <li>
                     <a href="#content-tabs-2">
+
                         <!--<i18n:text catalogue="core" key="Content.SEO"/>-->
                         <i18n:text catalogue="core" key="Document.metaData"/>
                     </a>

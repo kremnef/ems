@@ -112,6 +112,7 @@ public class MetaInfoDaoImpl implements MetaInfoDao {
 
         Session session = getCurrentSession();
 
+        System.out.println(MetaInfo.getLanguageCode() + " TAGS: "+MetaInfo.getTags());
         session.saveOrUpdate(MetaInfo);
         closeSession();
         return MetaInfo;

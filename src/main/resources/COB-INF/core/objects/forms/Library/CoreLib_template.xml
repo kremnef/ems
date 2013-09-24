@@ -38,18 +38,18 @@
 
 
     <jx:macro name="justName">
-            <ft:group id="justName">
-                <li>
-                    <label title="name" for="name" class="label">
-                        <ft:widget-label id="name"/>
-                    </label>
-                    <ft:widget id="name">
-                        <fi:styling size="50"/>
-                    </ft:widget>
+        <ft:group id="justName">
+            <li>
+                <label title="name" for="name" class="label">
+                    <ft:widget-label id="name"/>
+                </label>
+                <ft:widget id="name">
+                    <fi:styling size="50"/>
+                </ft:widget>
 
-                </li>
-            </ft:group>
-        </jx:macro>
+            </li>
+        </ft:group>
+    </jx:macro>
 
     <jx:macro name="systemURL">
         <ft:group id="systemURL">
@@ -91,9 +91,9 @@
             newFormLocale.value = languageCode;
 
             if(document.getElementById('documentForm') != null){
-                submitAll(languageCode);
+            submitAll(languageCode);
             }else{
-                cocoon.forms.submitForm(newFormLocale);
+            cocoon.forms.submitForm(newFormLocale);
             }
             <!--if(cocoon.session.getAttribute("languageCode")){
 
@@ -191,10 +191,10 @@
                     }
                     var ajaxUrl;
                     if(thisId > 0){
-                        ajaxUrl = "/ems/core/treeObjects?entity="+entity+"&amp;excludedId="+thisId;
+                    ajaxUrl = "/ems/core/treeObjects?entity="+entity+"&amp;excludedId="+thisId;
                     }
                     else{
-                        ajaxUrl = "/ems/core/treeObjects?entity="+entity;
+                    ajaxUrl = "/ems/core/treeObjects?entity="+entity;
                     }
 
 
@@ -268,6 +268,7 @@
         <!-- <jx:forEach items="${availableTags}" var="tag">
            ${tag.tag}
         </jx:forEach>-->
+
         <ft:repeater id="metaInfo">
 
             <ft:repeater-rows>
@@ -332,21 +333,21 @@
                             </ft:widget>
                         </li>
                         <li>
-                           <!-- <script type="text/javascript">
-                                function addTag(item){
-                                $("#tags").tagEditorAddTag(item);
-                                }
-                                $(document).ready(function() {
+                            <!-- <script type="text/javascript">
+                                 function addTag(item){
+                                 $("#tags").tagEditorAddTag(item);
+                                 }
+                                 $(document).ready(function() {
 
-                                $("#tags").tagEditor({
-                                confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
-                                confirmRemoval: true,
-                                continuousOutputBuild: true
-                                });
+                                 $("#tags").tagEditor({
+                                 confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
+                                 confirmRemoval: true,
+                                 continuousOutputBuild: true
+                                 });
 
 
-                                });
-                            </script>-->
+                                 });
+                             </script>-->
                             <jx:set var="rowIndex" value="${repeaterLoop.index}"/>
 
 
@@ -370,48 +371,71 @@
                                                                 $("#tags").autocomplete({ source:'{% url tags %}',minChars: 2 ,
                             -->
 
+                           <!-- <script type="text/javascript">
+                                $(function() {
+                                    var localJSON = [
+                                    <jx:forEach items="${availableTags}" var="item">
+                                        {"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
+                                    </jx:forEach>];
+
+                                    $('#metaInfo.${rowIndex}.tag input.tag').tagedit({
+                                        autocompleteOptions: {
+                                            source: localJSON
+                                        }
+                                    });
+
+                                });
+
+                            </script>
+-->
+
+
                             <label for="addTag" class="label">
                                 <ft:widget-label id="addTag"/>
                             </label>
-                            <ft:widget id="addTag">
-                                <!--<fi:styling type="hidden"/>-->
-                                <fi:styling class="availableTags" style="font-size:20px; width:270px;"
-                                            onChange="cocoon.forms.submitForm(this);"/>
-                                <!--onChange="repeaterAddAction($(this).val());"/>-->
-                            </ft:widget>
-                            <!--<script type="text/javascript">
-                                $(function() {
-                                var availableTags = [
-                                <jx:forEach items="${availableTags}" var="item">
-                                    { "id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
-                                </jx:forEach>
-                                ];
+                            <!--<div id="addTag">
+                                <input type="text" name="tag[]" value="" class="tag"/>
+                            </div>-->
 
-                                $( ".availableTags" ).autocomplete({
-                                source: availableTags
+                            <!--<div id="metaInfo.${rowIndex}.tag">
+                                <ft:widget id="addTag">
+                                    <fi:styling class="tag" name="tag[]" value="" style="font-size:20px; width:270px;"
+                                                onChange="cocoon.forms.submitForm(this);"/>
+                                </ft:widget>
+                            </div>-->
+
+
+
+
+
+
+                            <script type="text/javascript">
+                            $(function() {
+
+                            var availableTags = [
+                            <jx:forEach items="${availableTags}" var="item">
+                                '${item.tag}',
+                            </jx:forEach>];
+
+                                $("#myTags").tagit({
+                                    availableTags: availableTags
                                 });
 
-
-                                &lt;!&ndash;$( '.tags_${rowLanguageCode} input.tag' ).tagedit({
-                                autocompleteOptions: {
-                                source: localJSON
-                                }
-                                });&ndash;&gt;
-                                &lt;!&ndash;})&ndash;&gt;
-
-                                });
-                            </script>-->
+                            });
+                            </script>
                             <ft:repeater id="tagList">
-
                                 <div class="tags_${rowLanguageCode}">
-                                    <ul class="tagedit-list">
+                                    <ul id="myTags" class="tagedit-list">
                                         <ft:repeater-rows>
                                             <li class="tagedit-listelement tagedit-listelement-old">
                                                 <span dir="ltr">
                                                     ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
                                                 </span>
-                                                <ft:widget id="tag">
-                                                    <fi:styling class="tag" name="tag[]" type="hidden"/>
+                                                <ft:widget id="id">
+
+                                                </ft:widget>
+                                                <ft:widget id="addTag">
+                                                    <fi:styling class="tag" name="tag[]" type="hidden" onChange="cocoon.forms.submitForm(this);"/>
                                                 </ft:widget>
                                                 <ft:widget id="delete">
                                                     <!--<fi:styling type="link" role="button" class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>-->
@@ -426,6 +450,58 @@
                                 </div>
 
                             </ft:repeater>
+
+
+
+
+
+
+
+                            <!--Список тегов из базы-->
+                            <!--<ft:widget id="tagId">
+                                <fi:styling class="chzn-select" style="width:350px;"/>
+                                <fi:selection-list>
+                                    <fi:item value="">
+                                        <fi:label>-</fi:label>
+                                    </fi:item>
+                                    <jx:forEach items="${availableTags}" var="tag">
+                                        <fi:item value="${tag.id}">
+                                            <fi:label>${tag.tag}</fi:label>
+                                        </fi:item>
+                                    </jx:forEach>
+                                </fi:selection-list>
+                            </ft:widget>
+                            <script>
+                                $(".chzn-select").chosen();
+                            </script>-->
+
+                            <!--<ft:repeater id="tagList">
+                                <div class="tags_${rowLanguageCode}">
+                                    <ul class="tagedit-list">
+                                        <ft:repeater-rows>
+                                            <li class="tagedit-listelement tagedit-listelement-old">
+                                                <span dir="ltr">
+                                                    ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
+                                                </span>
+                                                <ft:widget id="id">
+
+                                                </ft:widget>
+                                                <ft:widget id="tag">
+                                                    <fi:styling class="tag" name="tag[]" type="hidden"/>
+                                                </ft:widget>
+                                                <ft:widget id="delete">
+                                                    &lt;!&ndash;<fi:styling type="link" role="button" class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>&ndash;&gt;
+                                                    &lt;!&ndash;tagedit-close&ndash;&gt;
+                                                    <fi:styling type="link"
+                                                                class="tagedit-close ui-icon ui-icon-closethick"
+                                                                title="Remove from list."/>
+                                                </ft:widget>
+                                            </li>
+                                        </ft:repeater-rows>
+                                    </ul>
+                                </div>
+
+                            </ft:repeater>-->
                         </li>
                     </ul>
                 </div>
@@ -435,52 +511,18 @@
 
     </jx:macro>
 
-    <!--<jx:macro name="simpleTags">
-        <div class="line-item">
-            <script type="text/javascript"
-                    src="/ems/resource/js/jquery-plugin/tageditor/jquery.tag.editor.js"/>
-            <link rel="stylesheet" type="text/css"
-                  href="/ems/resource/js/jquery-plugin/tageditor/demo.css"
-                  media="all"/>
-
-            <script type="text/javascript">
-                function addTag(item){
-                &lt;!&ndash;if (!jQuery.contains(item, $("#tags").val())){&ndash;&gt;
-                $("#tags").tagEditorAddTag(item);
-                &lt;!&ndash;}&ndash;&gt;
-                }
-                $(document).ready(function() {
-
-                $("#tags").tagEditor({
-                confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
-                confirmRemoval: true,
-                continuousOutputBuild: true
-                });
-
-
-                });
-            </script>
-            &lt;!&ndash;
-                                                $("#tags").autocomplete({ source:'{% url tags %}',minChars: 2 ,
-                                                                                                                                      select: function(event, ui) {
-                                                                                                                                         $("#tags").tagEditorAddTag(ui.item.value);
-                                                                                                                                         $("#tags").val('');
-                                                                                                                                      return false;
-                                                                                                                                      }
-                                                                                                                                  });
-            &ndash;&gt;
-
-            <label for="simpleTags" class="label">
-                <ft:widget-label id="simpleTags"/>
-            </label>
-
-            <input type="text" name="tags" id="tags" value="${tags}"/>
-        </div>
-    </jx:macro>-->
 
     <jx:macro name="tags">
-        <!-- <script type="text/javascript"
-        src="/ems/resource/js/jquery-plugin/tagedit/js/jquery-ui-1.8.6.custom.min.js"/>-->
+        <!--Ptags-->
+
+        <!--<script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/ptags/jquery.ptags.min.js"/>
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/ptags/jquery.ptags.default.css"
+              media="all"/>-->
+
+        <!--Tag editor-->
+
         <script type="text/javascript"
                 src="/ems/resource/js/jquery-plugin/tagedit/js/jquery.tagedit.js"/>
         <script type="text/javascript"
@@ -488,9 +530,24 @@
         <link rel="stylesheet" type="text/css"
               href="/ems/resource/js/jquery-plugin/tagedit/css/jquery.tagedit.css"
               media="all"/>
+        <!--<script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagedit/js/jquery-ui-1.8.6.custom.min.js"/>-->
         <!--<link rel="stylesheet" type="text/css"
               href="/ems/resource/js/jquery-plugin/tagedit/css/ui-lightness/jquery-ui-1.8.6.custom.css"
               media="all"/>-->
+
+
+        <!--Tag It-->
+
+        <script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagit/js/tag-it.min.js"/>
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/tagit/css/jquery.tagit.css"
+              media="all"/>
+
+
+
+
     </jx:macro>
     <jx:macro name="lables">
         <!--<a href="#" id="labelsLink2" i18n:attr="title" title="ems:common.labels"
@@ -530,7 +587,7 @@
                             <jx:attribute name="style">
                                 <jx:choose>
                                     <!--<jx:when test="${rowLanguageCode == formLocale}">-->
-                                        <jx:when test="${rowLanguageCode == languageCode}">
+                                    <jx:when test="${rowLanguageCode == languageCode}">
                                         display:block;
                                     </jx:when>
                                     <jx:otherwise>
@@ -564,110 +621,7 @@
             <!--</div>-->
         </ft:repeater>
     </jx:macro>
-   <!-- <jx:macro name="fileSystemObjects">
 
-        <ft:repeater id="fileSystemObjects">
-            &lt;!&ndash;id="attachedFiles"&ndash;&gt;
-            <table border="0" class="order">
-                <tbody>
-                    <ft:repeater-rows>
-                        <tr class="forms-row">
-                            &lt;!&ndash;<td>
-                                <ft:widget id="position"/>
-                            </td>&ndash;&gt;
-                            &lt;!&ndash;<td>
-                                <ft:widget id="id">
-                                    &lt;!&ndash;<fi:styling type="hidden"/>&ndash;&gt;
-                                </ft:widget>
-                            </td>&ndash;&gt;
-                            &lt;!&ndash;<td>
-                                <ft:widget id="used">
-                                    &lt;!&ndash;<fi:styling type="hidden"/>&ndash;&gt;
-                                </ft:widget>
-                            </td>&ndash;&gt;
-                            <td>
-                                <jx:set var="fileId"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('id').value}"/>
-                                <jx:set var="fileName"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('name').value}"/>
-                                <jx:set var="fileType"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('contentType').value}"/>
-                                <jx:set var="filePath"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('path').value}"/>
-                                <jx:set var="fileSystemName"
-                                        value="${repeater.getRow(repeaterLoop.index).getChild('systemName').value}"/>
-
-                                &lt;!&ndash;<jx:set var="fileSize"
-                                value="${repeater.getRow(repeaterLoop.index).getChild('size').value}"></jx:set>&ndash;&gt;
-                                <jx:if test="${fileType.contains('image')}">
-                                    <jx:set var="prepath" value="${filePath.substring(0, filePath.lastIndexOf('/'))}"/>
-
-
-                                    <img src="/ems/${prepath}/thumbnails/${fileId}-${fileName}-square.jpg" border="0"
-                                         width="30px"
-                                         height="30px"/>
-                                </jx:if>
-                                <jx:if test="${fileType.contains('folder')}">
-                                    <a role="button"
-                                       class="ui-button ui-corner-all ui-icon ui-icon-folder-collapsed"/>
-                                </jx:if>
-                                &lt;!&ndash;<jx:if test="${item.fileType.contains('image')}">
-                                    <jx:set var="prepath"
-                                            value="${item.path.substring(0, item.path.indexOf(item.name))}"/>
-                                    <img src="/ems${prepath}${item.systemName}.png" border="0" width="30px"
-                                         height="30px"/>
-                                </jx:if>&ndash;&gt;
-                            </td>
-                            <td>
-                                <span class="label">
-                                    &lt;!&ndash;<a>&ndash;&gt;
-                                    &lt;!&ndash;<jx:if test="${fileType != 'folder'}">
-                                        <jx:attribute name="href">/ems/core/fileObject-edit?id=${fileId}</jx:attribute>
-                                    </jx:if>&ndash;&gt;
-                                    ${fileName}
-                                    &lt;!&ndash;</a>&ndash;&gt;
-                                </span>
-                                &lt;!&ndash;<ft:widget id="name"/>&ndash;&gt;
-                            </td>
-                            &lt;!&ndash;<td>
-                                <ft:widget id="systemName"/>
-                            </td>
-                            &ndash;&gt;&lt;!&ndash;<td>
-                                        <ft:widget id="contentType"/>
-                                    </td>&ndash;&gt;
-                            <td>
-                                <span class="label">
-                                    <a>
-                                        <jx:if test="${fileType != 'folder'}">
-                                            <jx:attribute name="href">/ems/${filePath}</jx:attribute>
-                                            <jx:attribute name="target">_blank</jx:attribute>
-                                        </jx:if>
-                                        ${filePath}
-                                    </a>
-                                </span>
-                                &lt;!&ndash;<ft:widget id="path"/>&ndash;&gt;
-                            </td>
-                            &lt;!&ndash;<td>&ndash;&gt;
-                            &lt;!&ndash;<jx:set var="sizeMb">&ndash;&gt;
-                            &lt;!&ndash;<ft:widget id="size"/>&ndash;&gt;
-                            &lt;!&ndash;</jx:set>&ndash;&gt;
-                            &lt;!&ndash;<jx:out value="${fileSize/1024}"/>&ndash;&gt;
-                            &lt;!&ndash;</td>&ndash;&gt;
-
-                            <td>
-                                <ft:widget id="delete">
-                                    <fi:styling type="link" role="button"
-                                                class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>
-                                </ft:widget>
-                            </td>
-                        </tr>
-                    </ft:repeater-rows>
-
-
-                </tbody>
-            </table>
-        </ft:repeater>
-    </jx:macro>-->
     <jx:macro name="linked">
         <ft:repeater id="linked">
             <table border="0" class="order">
@@ -711,24 +665,5 @@
 
 
     </jx:macro>
-    <!--<jx:macro name="fileFields">
-        <ft:widget id="addFile">
-            <fi:styling type="hidden"/>
-        </ft:widget>
-        <ft:widget id="addFileName">
-            <fi:styling type="hidden"/>
-        </ft:widget>
-        <ft:widget id="addFileSystemName">
-            <fi:styling type="hidden"/>
-        </ft:widget>
-        <ft:widget id="addFilePath">
-            <fi:styling type="hidden"/>
-        </ft:widget>
-        <ft:widget id="addFileType">
-            <fi:styling type="hidden"/>
-        </ft:widget>
-        <ft:widget id="addFileSize">
-            <fi:styling type="hidden"/>
-        </ft:widget>
-    </jx:macro>-->
+
 </jx:template>

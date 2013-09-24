@@ -55,7 +55,7 @@
 			deletedPostfix: '-d',
 			addedPostfix: '-a',
 			additionalListClass: '',
-			allowEdit: true,
+			allowEdit: false,
 			allowDelete: true,
 			allowAdd: true,
 			direction: 'ltr',
@@ -95,6 +95,7 @@
 		}
 
 		var elements = this;
+        alert(elements);
 
 		var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
 
@@ -126,8 +127,7 @@
 
 						html += '<li class="tagedit-listelement tagedit-listelement-old">';
 						html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
-						html += '<input type="hidden" name="'+baseName+'['+elementId+']" value="'+$(this).val()+'" id="'+$(this).attr('id')+'" />';
-//						html += '<input type="hidden" name="'+baseName+'['+elementId+']" value="'+$(this).val()+'"/>';
+						html += '<input type="hidden" name="'+baseName+'['+elementId+']" value="'+$(this).val()+'" />';
 						html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
 						html += '</li>';
 					}
@@ -169,9 +169,8 @@
 							// check if the Value ist new
 							var isNewResult = isNew($(this).val(), checkAutocomplete);
 							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')) {
-                                repeaterAddAction($(this).val());
-//                                  cocoon.forms.submitForm(this);
-								/*if(oldValue == false && typeof isNewResult[1] == 'string') {
+
+								if(oldValue == false && typeof isNewResult[1] == 'string') {
 									oldValue = true;
 									id = isNewResult[1];
 								}
@@ -181,12 +180,12 @@
 									html = '<li class="tagedit-listelement tagedit-listelement-old">';
 									html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
 									var name = oldValue? baseName + '['+id+options.addedPostfix+']' : baseName + '[]';
-									html += '<input type="hidden" name="'+name+'" value="'+$(this).val()+'"/>';
+									html += '<input type="hidden" name="'+name+'" value="'+$(this).val()+'" />';
 									html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
 									html += '</li>';
 
 									$(this).parent().before(html);
-								}*/
+								}
 							}
 							$(this).val('');
 
@@ -204,7 +203,6 @@
 									if($(this).val().length == 0) {
 										// delete Last Tag
 										var elementToRemove = elements.find('li.tagedit-listelement-old').last();
-                                          repeaterRemoveAction(elementToRemove.id);
 										elementToRemove.fadeOut(options.animSpeed, function() {elementToRemove.remove();})
 										event.preventDefault();
 										return false;

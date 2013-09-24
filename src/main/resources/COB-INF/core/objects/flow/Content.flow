@@ -79,6 +79,17 @@ function showContent(contentService, content, form, contentActionState) {
 
     var tagService = cocoon.getComponent("tagService");
     var availableTags = tagService.getTags();
+    for (var i = 0; i < availableTags.size(); i++) {
+        var tag = availableTags.get(i);
+        print("tag:"+tag.getId()+"-"+tag.getTag()+";  ");
+
+    }
+
+
+
+
+
+
     try {
         importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
         if (languageCode != null) {
