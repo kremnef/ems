@@ -393,6 +393,7 @@
                             <label for="addTag" class="label">
                                 <ft:widget-label id="addTag"/>
                             </label>
+                            <!--aaa-->
                             <!--<div id="addTag">
                                 <input type="text" name="tag[]" value="" class="tag"/>
                             </div>-->
