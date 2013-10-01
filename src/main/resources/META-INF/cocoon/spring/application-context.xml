@@ -335,6 +335,12 @@
         </bean>
     -->
 
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="net.rkbloom.logdriver.LogDriver"/>
+        <property name="jdbcUrl" value="jdbc:log:com.mysql.jdbc.Driver:mysql://localhost:3306/kremnevdb?useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="user" value="tomcat"/>
+        <property name="password" value="nx4MViU3Gg2n"/>
+    </bean>
 
     <!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="net.rkbloom.logdriver.LogDriver"/>
