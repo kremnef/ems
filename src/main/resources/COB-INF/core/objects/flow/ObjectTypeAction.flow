@@ -57,7 +57,9 @@ function createObjectTypeAction(form) {
 }
 
 
+
 function editObjectTypeActionById(form) {
+    print("EDITTTTTT editObjectTypeActionById");
     var showFormURI = cocoon.parameters.showFormURI;
     var servletPath = cocoon.parameters.servletPath;
 
