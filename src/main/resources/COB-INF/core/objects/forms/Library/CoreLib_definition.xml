@@ -398,7 +398,7 @@
                     <fd:datatype base="integer"/>
                 </fd:field>-->
                 <!--Meta Group-->
-                <!--<fd:field id="tagId">
+                <fd:field id="tagId">
                     <fd:label>
                         <i18n:text catalogue="core" key="Tag.choose"/>
                     </fd:label>
@@ -406,7 +406,21 @@
                         <i18n:text catalogue="core" key="Tag.choose"/>
                     </fd:hint>
                     <fd:datatype base="integer"/>
-                </fd:field>-->
+                    <fd:on-value-changed>
+                        <fd:javascript>
+                            print("this.text:" + this.text);
+
+                            var repeater = widget.lookupWidget("../tagList");
+                            var newRow = repeater.addRow();
+                            newRow.getChild("id").value = this.value;
+                            newRow.getChild("tag").value = this.text;
+
+
+                            <!--newRow.getChild("id").value =new java.lang.Integer (this.tagId);-->
+
+                        </fd:javascript>
+                    </fd:on-value-changed>
+                </fd:field>
 
 
 

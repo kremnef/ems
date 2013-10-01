@@ -1,4 +1,149 @@
 <?xml version="1.0"?>
+<!DOCTYPE jx:template [
+        <!ELEMENT jx:template (jx:import|jx:macro)*>
+        <!ATTLIST jx:template
+                xmlns:jx CDATA #REQUIRED
+                xmlns:ft CDATA #REQUIRED
+                xmlns:fi CDATA #REQUIRED
+                xmlns:i18n CDATA #REQUIRED>
+        <!ELEMENT jx:import (#PCDATA)>
+        <!ATTLIST jx:import
+                uri CDATA #REQUIRED>
+        <!ELEMENT jx:macro (jx:parameter|jx:set|jx:choose|jx:if|ft:group|div|script|ft:widget|ul|userData|parents|tags|ft:repeater|link)*>
+        <!ATTLIST jx:macro
+                name CDATA #REQUIRED
+                targetNamespace CDATA #IMPLIED>
+        <!ELEMENT jx:parameter (#PCDATA)>
+        <!ATTLIST jx:parameter
+                default CDATA #IMPLIED
+                name CDATA #REQUIRED>
+        <!ELEMENT jx:set (#PCDATA)>
+        <!ATTLIST jx:set
+                value CDATA #REQUIRED
+                var CDATA #REQUIRED>
+        <!ELEMENT jx:choose (jx:when|jx:otherwise)*>
+        <!ELEMENT jx:when (jx:set|a|systemURL|br|em)*>
+        <!ATTLIST jx:when
+                test CDATA #REQUIRED>
+        <!ELEMENT jx:otherwise (jx:set|i18n:text|justName|ft:repeater-rows)*>
+        <!ELEMENT jx:if (jx:set|jx:evalBody|li|script|div)*>
+        <!ATTLIST jx:if
+                test CDATA #REQUIRED>
+        <!ELEMENT jx:evalBody (#PCDATA)>
+        <!ELEMENT ft:group (li)*>
+        <!ATTLIST ft:group
+                id CDATA #REQUIRED>
+        <!ELEMENT li (label|ft:widget|span|jx:set|script|ft:repeater)*>
+        <!ATTLIST li
+                class CDATA #IMPLIED>
+        <!ELEMENT label (ft:widget-label|i18n:text)*>
+        <!ATTLIST label
+                class CDATA #REQUIRED
+                for CDATA #REQUIRED
+                title CDATA #IMPLIED>
+        <!ELEMENT ft:widget-label (#PCDATA)>
+        <!ATTLIST ft:widget-label
+                id CDATA #REQUIRED>
+        <!ELEMENT ft:widget (fi:styling|fi:selection-list)*>
+        <!ATTLIST ft:widget
+                id CDATA #REQUIRED>
+        <!ELEMENT fi:styling (#PCDATA)>
+        <!ATTLIST fi:styling
+                class CDATA #IMPLIED
+                cols CDATA #IMPLIED
+                name CDATA #IMPLIED
+                onChange CDATA #IMPLIED
+                role CDATA #IMPLIED
+                rows CDATA #IMPLIED
+                size CDATA #IMPLIED
+                style CDATA #IMPLIED
+                title CDATA #IMPLIED
+                type CDATA #IMPLIED>
+        <!ELEMENT div (div|span|a|jx:attribute|ft:widget|ul|label)*>
+        <!ATTLIST div
+                class CDATA #IMPLIED
+                i18n:attr CDATA #IMPLIED
+                id CDATA #IMPLIED
+                name CDATA #IMPLIED
+                title CDATA #IMPLIED>
+        <!ELEMENT script (i18n:text|jx:forEach)*>
+        <!ATTLIST script
+                src CDATA #IMPLIED
+                type CDATA #REQUIRED>
+        <!ELEMENT fi:selection-list (jx:forEach)*>
+        <!ELEMENT jx:forEach (fi:item|parent)*>
+        <!ATTLIST jx:forEach
+                items CDATA #REQUIRED
+                var CDATA #REQUIRED
+                varStatus CDATA #IMPLIED>
+        <!ELEMENT fi:item (fi:label)*>
+        <!ATTLIST fi:item
+                value CDATA #REQUIRED>
+        <!ELEMENT fi:label (#PCDATA)>
+        <!ELEMENT ul (jx:if|jx:choose|lables|objectRows|li|ft:repeater-rows)*>
+        <!ATTLIST ul
+                class CDATA #REQUIRED
+                id CDATA #IMPLIED>
+        <!ELEMENT i18n:text (#PCDATA)>
+        <!ATTLIST i18n:text
+                key CDATA #REQUIRED>
+        <!ELEMENT span (jx:choose|input|ft:widget|a)*>
+        <!ATTLIST span
+                align CDATA #IMPLIED
+                class CDATA #IMPLIED
+                dir CDATA #IMPLIED
+                id CDATA #IMPLIED
+                width CDATA #IMPLIED>
+        <!ELEMENT a (jx:attribute)*>
+        <!ATTLIST a
+                class CDATA #IMPLIED
+                href CDATA #IMPLIED
+                id CDATA #IMPLIED>
+        <!ELEMENT input (#PCDATA)>
+        <!ATTLIST input
+                type CDATA #REQUIRED
+                i18n:attr CDATA #REQUIRED
+                value CDATA #REQUIRED
+                onclick CDATA #REQUIRED>
+        <!ELEMENT systemURL (#PCDATA)>
+        <!ELEMENT justName (#PCDATA)>
+        <!ELEMENT lables (#PCDATA)>
+        <!ELEMENT objectRows (#PCDATA)>
+        <!ELEMENT userData (#PCDATA)>
+        <!ATTLIST userData
+                name CDATA #REQUIRED
+                id CDATA #REQUIRED>
+        <!ELEMENT parents (jx:forEach)*>
+        <!ELEMENT parent (name)*>
+        <!ATTLIST parent
+                id CDATA #REQUIRED>
+        <!ELEMENT name (#PCDATA)>
+        <!ELEMENT tags (#PCDATA)>
+        <!ELEMENT ft:repeater (ft:repeater-rows|div|jx:choose|table)*>
+        <!ATTLIST ft:repeater
+                id CDATA #REQUIRED>
+        <!ELEMENT ft:repeater-rows (jx:set|div|li|tr)*>
+        <!ELEMENT jx:attribute (jx:choose)*>
+        <!ATTLIST jx:attribute
+                name CDATA #REQUIRED>
+        <!ELEMENT link (#PCDATA)>
+        <!ATTLIST link
+                href CDATA #REQUIRED
+                media CDATA #REQUIRED
+                rel CDATA #REQUIRED
+                type CDATA #REQUIRED>
+        <!ELEMENT br (#PCDATA)>
+        <!ELEMENT em (#PCDATA)>
+        <!ELEMENT table (tbody)*>
+        <!ATTLIST table
+                border CDATA #REQUIRED
+                class CDATA #REQUIRED>
+        <!ELEMENT tbody (ft:repeater-rows)*>
+        <!ELEMENT tr (td)*>
+        <!ATTLIST tr
+                class CDATA #REQUIRED>
+        <!ELEMENT td (jx:set|span|ft:widget)*>
+        ]>
 <jx:template xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
              xmlns:ft="http://apache.org/cocoon/forms/1.0#template"
              xmlns:fi="http://apache.org/cocoon/forms/1.0#instance"
@@ -371,46 +516,53 @@
                                                                 $("#tags").autocomplete({ source:'{% url tags %}',minChars: 2 ,
                             -->
 
-                           <!-- <script type="text/javascript">
+
+
+
+                            <!--<script type="text/javascript">
                                 $(function() {
-                                    var localJSON = [
-                                    <jx:forEach items="${availableTags}" var="item">
-                                        {"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
-                                    </jx:forEach>];
+                                var localJSON = [
+                                <jx:forEach items="${availableTags}" var="item">
+                                    {"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
+                                </jx:forEach>];
 
-                                    $('#metaInfo.${rowIndex}.tag input.tag').tagedit({
-                                        autocompleteOptions: {
-                                            source: localJSON
-                                        }
-                                    });
+                                &lt;!&ndash;input.tag&ndash;&gt;
+                                &lt;!&ndash;$('#metaInfo.${rowIndex}.addTag').tagedit({
+                                    autocompleteOptions: {source: localJSON}});
 
-                                });
+                                });&ndash;&gt;
 
+                            </script>-->
+
+                            <ft:widget id="tagId">
+                                <fi:styling class="chzn-select" style="width:350px;" onChange="cocoon.forms.submitForm(this);"/>
+                                <fi:selection-list>
+                                    <jx:forEach items="${availableTags}" var="tag">
+                                        <fi:item value="${tag.id}">
+                                            <fi:label>${tag.tag}</fi:label>
+                                        </fi:item>
+                                    </jx:forEach>
+                                </fi:selection-list>
+                            </ft:widget>
+                            <script type="text/javascript">
+                                $(".chzn-select").chosen();
                             </script>
--->
 
 
                             <label for="addTag" class="label">
                                 <ft:widget-label id="addTag"/>
                             </label>
-                            <!--aaa-->
                             <!--<div id="addTag">
                                 <input type="text" name="tag[]" value="" class="tag"/>
                             </div>-->
 
-                            <!--<div id="metaInfo.${rowIndex}.tag">
-                                <ft:widget id="addTag">
-                                    <fi:styling class="tag" name="tag[]" value="" style="font-size:20px; width:270px;"
-                                                onChange="cocoon.forms.submitForm(this);"/>
-                                </ft:widget>
-                            </div>-->
+                            <ft:widget id="addTag">
+                                <fi:styling class="tag" style="font-size:20px; width:270px;"
+                                            onChange="cocoon.forms.submitForm(this);"/>
+                            </ft:widget>
 
 
-
-
-
-
-                            <script type="text/javascript">
+                            <!--<script type="text/javascript">
                             $(function() {
 
                             var availableTags = [
@@ -423,7 +575,8 @@
                                 });
 
                             });
-                            </script>
+                            </script>-->
+
                             <ft:repeater id="tagList">
                                 <div class="tags_${rowLanguageCode}">
                                     <ul id="myTags" class="tagedit-list">
@@ -433,10 +586,9 @@
                                                     ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
                                                 </span>
                                                 <ft:widget id="id">
-
                                                 </ft:widget>
-                                                <ft:widget id="addTag">
-                                                    <fi:styling class="tag" name="tag[]" type="hidden" onChange="cocoon.forms.submitForm(this);"/>
+                                                <ft:widget id="tag">
+                                                    <fi:styling class="tag" name="tag[]" type="hidden"/>
                                                 </ft:widget>
                                                 <ft:widget id="delete">
                                                     <!--<fi:styling type="link" role="button" class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>-->
@@ -456,53 +608,6 @@
 
 
 
-
-
-                            <!--Список тегов из базы-->
-                            <!--<ft:widget id="tagId">
-                                <fi:styling class="chzn-select" style="width:350px;"/>
-                                <fi:selection-list>
-                                    <fi:item value="">
-                                        <fi:label>-</fi:label>
-                                    </fi:item>
-                                    <jx:forEach items="${availableTags}" var="tag">
-                                        <fi:item value="${tag.id}">
-                                            <fi:label>${tag.tag}</fi:label>
-                                        </fi:item>
-                                    </jx:forEach>
-                                </fi:selection-list>
-                            </ft:widget>
-                            <script>
-                                $(".chzn-select").chosen();
-                            </script>-->
-
-                            <!--<ft:repeater id="tagList">
-                                <div class="tags_${rowLanguageCode}">
-                                    <ul class="tagedit-list">
-                                        <ft:repeater-rows>
-                                            <li class="tagedit-listelement tagedit-listelement-old">
-                                                <span dir="ltr">
-                                                    ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
-                                                </span>
-                                                <ft:widget id="id">
-
-                                                </ft:widget>
-                                                <ft:widget id="tag">
-                                                    <fi:styling class="tag" name="tag[]" type="hidden"/>
-                                                </ft:widget>
-                                                <ft:widget id="delete">
-                                                    &lt;!&ndash;<fi:styling type="link" role="button" class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>&ndash;&gt;
-                                                    &lt;!&ndash;tagedit-close&ndash;&gt;
-                                                    <fi:styling type="link"
-                                                                class="tagedit-close ui-icon ui-icon-closethick"
-                                                                title="Remove from list."/>
-                                                </ft:widget>
-                                            </li>
-                                        </ft:repeater-rows>
-                                    </ul>
-                                </div>
-
-                            </ft:repeater>-->
                         </li>
                     </ul>
                 </div>
@@ -545,8 +650,6 @@
         <link rel="stylesheet" type="text/css"
               href="/ems/resource/js/jquery-plugin/tagit/css/jquery.tagit.css"
               media="all"/>
-
-
 
 
     </jx:macro>
