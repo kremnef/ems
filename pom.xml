@@ -29,37 +29,19 @@
     <artifactId>ems</artifactId>
     <version>1.0.0</version>
 
-    <parent>
+    <!--<parent>
         <groupId>ru.strela</groupId>
         <artifactId>parent</artifactId>
         <version>1-SNAPSHOT</version>
-    </parent>
+    </parent>-->
 
-
-    <repositories>
-        <repository>
-            <id>repository.springsource.milestone</id>
-            <name>SpringSource Milestone Repository</name>
-            <url>http://repo.springsource.org/milestone</url>
-
-        </repository>
-    </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.cocoon</groupId>
-            <artifactId>cocoon-xml-impl</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>org.outerj.xreporter</groupId>
             <artifactId>xreporter-expression</artifactId>
             <version>1.2.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cocoon</groupId>
-            <artifactId>cocoon-linkrewriter-impl</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.outerj.xreporter</groupId>
@@ -71,6 +53,20 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.cocoon</groupId>
+            <artifactId>cocoon-xml-impl</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cocoon</groupId>
+            <artifactId>cocoon-linkrewriter-impl</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.apache.cocoon</groupId>
             <artifactId>cocoon-core</artifactId>
@@ -112,6 +108,7 @@
             <!--<version>1.1.0</version>-->
             <version>1.2.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.cocoon</groupId>
             <artifactId>cocoon-captcha-impl</artifactId>
@@ -156,6 +153,7 @@
             <groupId>org.apache.cocoon</groupId>
             <artifactId>cocoon-maven-plugin</artifactId>
             <version>1.0.1-SNAPSHOT</version>
+            <!--<version>1.0.1-SNAPSHOT</version>-->
         </dependency>
 
         <dependency>
@@ -693,6 +691,16 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surfire-plugin</artifactId>
+                <version>2.12.4</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <source>1.5</source>
