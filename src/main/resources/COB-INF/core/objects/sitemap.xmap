@@ -91,6 +91,7 @@
     </map:components>
 
     <map:flow language="javascript">
+        <map:script src="flow/O2.flow"/>
         <map:script src="flow/TypifiedObject.flow"/>
         <map:script src="flow/SystemNode.flow"/>
         <map:script src="flow/Navigation.flow"/>

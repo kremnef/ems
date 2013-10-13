@@ -1,13 +1,4 @@
 importClass(Packages.ru.tastika.tools.util.Utilities);
-
-/*
- function listObjectTypeAction() {
- var list = listCommon("objectTypeAction", "name", "desc", "");
- cocoon.sendPage(list.displayURI, list);
- }
-
- */
-
 function listObjectTypeAction() {
     var objectTypeService = cocoon.getComponent("objectTypeService");
     var objectTypeList= objectTypeService.getObjectTypes();
@@ -67,13 +58,11 @@ function editObjectTypeActionById(form) {
     importClass(Packages.ru.tastika.tools.util.Utilities);
     if (cocoon.request.getParameter("id") != null) {
         id = Utilities.parseStringToInteger(cocoon.request.getParameter("id"));
-        print("EDITTTTTT di="+id);
     }
     if (id == 0) {
         cocoon.redirectTo("ObjectTypeAction-create");
     }
 
-print("EDITTTTTT di="+id);
     var objectTypeActionService = cocoon.getComponent("objectTypeActionService");
     var objectTypeAction = objectTypeActionService.getObjectTypeAction(id);
     print("objectTypeAction" + objectTypeAction);
@@ -111,8 +100,8 @@ print("EDITTTTTT di="+id);
     var objectTypeName = objectType.getName();
 //    print("objectTypeName"+objectTypeName);
 
-    var xslURI = contextRealPath + "/WEB-INF/xslt/types/documentType" + objectTypeName + "/" + objectTypeName + "-" + objectTypeActionName + ".xsl";
-    var cssURI = contextRealPath + "/css/types/"+objectTypeName + objectTypeActionName + ".css";
+    var xslURI = contextRealPath + "/WEB-INF/xslt/types/" + objectTypeName + "/" + objectTypeName + "-" + objectTypeActionName + ".xsl";
+    var cssURI = contextRealPath + "/css/objectTypeActions/" + objectTypeActionName + ".css";
     importClass(Packages.ru.tastika.tools.file.FileAddition);
     var FileAdditional = new Packages.ru.tastika.tools.file.FileAddition();
 

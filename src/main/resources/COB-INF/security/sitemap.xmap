@@ -423,12 +423,12 @@
                 </map:call>
             </map:match>
 
-            <map:match pattern="logout">
-                <map:act type="cauth-logout">
-                    <map:parameter name="application" value="ems"/>
-                    <map:redirect-to uri="login"/>
-                </map:act>
-            </map:match>
+            <!--<map:match pattern="logout">
+                &lt;!&ndash;<map:act type="cauth-logout">&ndash;&gt;
+                    &lt;!&ndash;<map:parameter name="application" value="ems"/>&ndash;&gt;
+                    <map:redirect-to uri="j_spring_security_logout"/>
+                &lt;!&ndash;</map:act>&ndash;&gt;
+            </map:match>-->
 
 
         </map:pipeline>
