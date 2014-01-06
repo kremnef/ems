@@ -38,7 +38,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.regex.Pattern;
 
 
 /**
@@ -54,7 +53,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
     public static final String DOCUMENT_TYPES = "documentTypes";
     public static ArrayList<String> documentTypes = new ArrayList<String>();
 
-    private Pattern systemNamesPattern = Pattern.compile("[^\\w/]");
+//    private Pattern systemNamesPattern = Pattern.compile("[^\\w/]");
 
     private static final String TYPES_ACTIONS = "typesActions";
     private static final String XSLT_TEMPLATE_FILE = "xsltTemplateFile";
@@ -82,26 +81,32 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
 
         WebApplicationContext currentWebApplicationContext = WebAppContextUtils.getCurrentWebApplicationContext();
         SiteProcessorDao siteProcessorDao = (SiteProcessorDao) currentWebApplicationContext.getBean("siteProcessorDao");
-
         Request request = ObjectModelHelper.getRequest(model);
-
-        ServerTools.updateLocaleFromParameter(request);
-        ////log.info("request.getContextPath() = " + request.getContextPath());
-        ////log.info("request.getPathInfo() = " + request.getPathInfo());
-        ////log.info("request.getPathTranslated() = " + request.getPathTranslated());
-        ////log.info("request.getHeaders() = " + request.getHeaders());
-        ////log.info("request.getQueryString() = " + request.getQueryString());
-//        System.out.println("request.getQueryString() = " + request.getQueryString());
-        ////log.info("request.getRequestURI() = " + request.getRequestURI());
-        ////log.info("request.getServerName() = " + request.getServerName());
-        ////log.info("request.getServletPath() = " + request.getServletPath());
-        ////log.info("request.getSitemapPath() = " + request.getSitemapPath());
-        ////log.info("request.getSitemapURIPrefix() = " + request.getSitemapURIPrefix());
-        ////log.info("request.getScheme() = " + request.getScheme());
+//        ServerTools.updateLocaleFromParameter(request);
 
 
-//        int languageId = ServerTools.checkLocaleWithLanguageId(request);
-        String languageCode = ServerTools.checkLocaleWithLanguageCode(request);
+        System.out.println("SitePageGenerator SETUP () _______________");
+
+//        System.out.println("request.getContextPath() = " + request.getContextPath());
+        System.out.println("request.getPathInfo() = " + request.getPathInfo());
+//        System.out.println("request.getPathTranslated() = " + request.getPathTranslated());
+//        System.out.println("request.getHeaders() = " + request.getHeaders());
+        System.out.println("request.getQueryString() = " + request.getQueryString());
+        System.out.println("request.getRequestURI() = " + request.getRequestURI());
+//        System.out.println("request.getServerName() = " + request.getServerName());
+//        System.out.println("request.getServletPath() = " + request.getServletPath());
+//        System.out.println("request.getSitemapPath() = " + request.getSitemapPath());
+//        System.out.println("request.getSitemapURIPrefix() = " + request.getSitemapURIPrefix());
+//        System.out.println("request.getScheme() = " + request.getScheme());
+
+
+        String languageCode;
+        if (request.getSession().getAttribute(ServerTools.LOCALE_TITLE) != null) {
+            languageCode = request.getSession().getAttribute(ServerTools.LOCALE_TITLE).toString();
+        } else {
+            languageCode = ServerTools.checkLocaleWithLanguageCode(request);
+        }
+        System.out.println("languageCode " + languageCode);
         String indexPage = "";
         try {
             indexPage = params.getParameter("index");
@@ -126,7 +131,7 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         }
         String systemNamesPath = src;
 //        String systemNamesPath = systemNamesPattern.matcher(src).replaceAll("");
-//        //log.info("systemNamesPath = " + systemNamesPath);
+//        log.info("systemNamesPath = " + systemNamesPath);
 //        //log.info("systemNamesPath SRC = " + src);
 //        String[] systemNames = systemNamesPath.split("/");
 
@@ -197,21 +202,23 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         for (Object obj : objectTypeActions) {
             ObjectTypeAction typeAction = (ObjectTypeAction) obj;
             String typeName = typeActionIds.get(typeAction.getId());
-            String typeActionString = typeName + ":" + typeAction.getXsltPath() + ":" + typeAction.getName()  + ":" + typeAction.getRenderLike();
-            log.warn("typeActionString :"+ typeActionString);
+            String typeActionString = typeName + ":" + typeAction.getXsltPath() + ":" + typeAction.getName() + ":" + typeAction.getRenderLike();
+            log.warn("typeActionString :" + typeActionString);
             if (!typesActions.contains(typeActionString)) {
                 typesActions.add(typeActionString);
             }
         }
         request.setAttribute(TYPES_ACTIONS, Utilities.implode(typesActions, ","));
         request.setAttribute(DOCUMENT_TYPES, Utilities.implode(documentTypes, ","));
-        log.warn("DOCUMENT_TYPES :"+ documentTypes);
+        log.warn("DOCUMENT_TYPES :" + documentTypes);
 
 //        //log.info("request.getAttribute(TYPES_ACTIONS) = " + request.getAttribute(TYPES_ACTIONS));
         request.setAttribute(REAL_ROOT_PATH, currentWebApplicationContext.getServletContext().getRealPath("/"));
 
-        request.getSession().setAttribute(ServerTools.LOCALE_TITLE, request.getAttribute(ServerTools.LOCALE_TITLE));
+//        request.getSession().setAttribute(ServerTools.LOCALE_TITLE, request.getAttribute(ServerTools.LOCALE_TITLE));
 
+        System.out.println("LOCALE SESSS " + request.getSession().getAttribute(ServerTools.LOCALE_TITLE));
+//        System.out.println("LOCALE REQ "+ request.getAttribute(ServerTools.LOCALE_TITLE));
 
 
     }
@@ -367,12 +374,12 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         params.put("remoteAddr", request.getRemoteAddr());
         params.put("remoteHost", request.getRemoteHost());
         //params.put("requestedSessionId", request.getRequestedSessionId());
-        params.put("requestURI", request.getRequestURI());
-        //params.put("scheme", request.getScheme());
+        System.out.println("requestURI" + request.getRequestURI());
         params.put("serverName", request.getServerName());
         params.put("serverPort", request.getServerPort());
         params.put("servletPath", request.getServletPath());
         params.put("sitemapPath", request.getSitemapPath());
+        params.put("languageCodePrefix", request.getSession().getAttribute(ServerTools.LOCALE_TITLE));
         //params.put("sitemapURI", request.getSitemapURI());
         params.put("sitemapURIPrefix", request.getSitemapURIPrefix());
 //        params = new HashMap<String, Object>();
@@ -442,10 +449,6 @@ public class SitePageGenerator extends AbstractGenerator implements CacheablePro
         requestParams = null;
         super.recycle();
     }
-
-    /*public setDocumentTypesNames(ArrayList<String> documentTypes) {
-        this.documentTypes = documentTypes;
-    }*/
 
 
 }

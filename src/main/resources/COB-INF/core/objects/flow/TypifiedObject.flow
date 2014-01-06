@@ -474,7 +474,7 @@ function getAvailableLanguages() {
 
 
 function showObjectForm(form, service, typifiedObject, showFormURI, formData) {
-    var locale;
+    var adminPanelLocale;
 
     if (formData.parentId != null) {
         formData.parents = service.getTypifiedObjectParents(formData.parentId, true);
@@ -483,10 +483,10 @@ function showObjectForm(form, service, typifiedObject, showFormURI, formData) {
     formData.userData = getLoggedInUser();
 
     /*if (!formData.locale) {
-        locale = getLocale();
-        form.locale = new java.util.Locale(locale);
+        adminPanelLocale = getLocale();
+        form.locale = new java.util.Locale(adminPanelLocale);
     } else {
-        locale = formData.locale;
+        adminPanelLocale = formData.locale;
     }*/
 
     form.load(typifiedObject);
@@ -501,7 +501,7 @@ function showObjectForm(form, service, typifiedObject, showFormURI, formData) {
 
 function showEmsObjectForm(form, service, typifiedObject, showFormURI, formData) {
     var availableLanguages;
-    var locale;
+    var adminPanelLocale;
     if (!formData.availableLanguages) {
         availableLanguages = getAvailableLanguages();
     } else {
@@ -518,10 +518,10 @@ function showEmsObjectForm(form, service, typifiedObject, showFormURI, formData)
     formData.userData = getLoggedInUser();
 
     /*if (!formData.locale) {
-        locale = getLocale();
-        form.locale = new java.util.Locale(locale);
+        adminPanelLocale = getLocale();
+        form.locale = new java.util.Locale(adminPanelLocale);
     } else {
-        locale = formData.locale;
+        adminPanelLocale = formData.locale;
     }*/
 
     form.load(typifiedObject);
@@ -542,8 +542,8 @@ function showEmsObjectForm(form, service, typifiedObject, showFormURI, formData)
      formData.parents = service.getTypifiedObjectParents(formData.parentId, true);
      }
      formData.userData = getLoggedInUser();
-     var locale = getLocale();
-     form.locale = new java.util.Locale(locale);
+     var adminPanelLocale = getLocale();
+     form.locale = new java.util.Locale(adminPanelLocale);
      form.load(typifiedObject);
 
      // show the form to the user until it is validated successfully
@@ -643,13 +643,15 @@ function deleteObjectById(entity) {
 
 
 function getLocale() {
-    var locale = cocoon.session.getAttribute("locale");
-    if (!locale) {
-        locale = cocoon.request.getLocale().getLanguage();
-        cocoon.session.setAttribute("locale", locale);
+    var adminPanelLocale = cocoon.session.getAttribute("adminPanelLocale");
+
+    if (!adminPanelLocale) {
+        // adminPanelLocale = cocoon.request.getLocale().getLanguage();
+        adminPanelLocale = getGlobal('defaultAdminPanelLocale');
+        cocoon.session.setAttribute("adminPanelLocale", adminPanelLocale);
     }
-//    print('locale = ' + locale);
-    return locale;
+//    print('adminPanelLocale = ' + adminPanelLocale);
+    return adminPanelLocale;
 }
 
 function getGlobal(name) {

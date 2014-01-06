@@ -182,7 +182,8 @@ public class JSONSerializer extends AbstractTextSerializer {
                 }
             }
             catch (IOException e) {
-                getLogger().error("Error while serializing to JSON", e);
+//                getLogger().error("Error while serializing to JSON", e);
+                System.out.println("Error while serializing to JSON" + e);
             }
         }
     }

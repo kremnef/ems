@@ -39,8 +39,8 @@ function createI18n(form) {
      */
     var actionState = "create";
 
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 //    template = showEmsObjectForm(form, template, showFormURI, {    
     form.showForm(showFormURI, {
         "servletPath" : servletPath,
@@ -129,15 +129,15 @@ function editI18nById(form) {
 
 
 //    form.load(template);
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     form.showForm(showFormURI, {
         "userData" : getLoggedInUser(),
         "servletPath" : servletPath,
         "availableLanguages" : availableLanguages,
         "actionState": actionState,
-        "formLocale": locale
+        "formLocale": adminPanelLocale
     });
 //    form.save(template);
 

@@ -28,8 +28,8 @@ function createObjectTypeAction(form) {
      */
     var actionState = "create";
 
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 //    objectTypeAction = showEmsObjectForm(form, objectTypeAction, showFormURI, {    
     form.showForm(showFormURI, {
         "servletPath": servletPath,
@@ -120,8 +120,8 @@ function editObjectTypeActionById(form) {
 
 
     form.load(objectTypeAction);
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     form.showForm(showFormURI, {
 

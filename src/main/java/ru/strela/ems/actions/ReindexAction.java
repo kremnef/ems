@@ -2,7 +2,7 @@ package ru.strela.ems.actions;
 
 
 import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.cocoon.acting.AbstractAction;
+import org.apache.cocoon.acting.Action;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.cocoon.environment.SourceResolver;
 import org.hibernate.HibernateException;
@@ -23,7 +23,8 @@ import java.util.Map;
  * Date: 16.09.2010
  * Time: 2:32:40
  */
-public class ReindexAction extends AbstractAction {
+
+public class ReindexAction implements Action {
 
 
     private final static Logger log = LoggerFactory.getLogger(ReindexAction.class);

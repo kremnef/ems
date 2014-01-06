@@ -3,8 +3,8 @@ package ru.strela.ems.actions;
 
 import eu.medsea.mimeutil.MimeUtil;
 import net.sf.jmimemagic.*;
-import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.cocoon.acting.AbstractAction;
+//import org.apache.avalon.framework.parameters.Parameters;
+//import org.apache.cocoon.acting.AbstractAction;
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.cocoon.environment.Request;
@@ -39,14 +39,13 @@ import java.util.Map;
  * Date: 16.09.2010
  * Time: 2:32:40
  */
-public class UploadFileAction extends AbstractAction {
+public class UploadFileAction  {
 
     private final static Logger log = LoggerFactory.getLogger(UploadFileAction.class);
     public Map act(Redirector redirector,
                    SourceResolver resolver,
                    Map objectModel,
-                   String source,
-                   Parameters params) {
+                   String source) {
         Map sitemapParams = null;
          MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
         Request request = ObjectModelHelper.getRequest(objectModel);

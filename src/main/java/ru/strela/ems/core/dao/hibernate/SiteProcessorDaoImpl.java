@@ -9,6 +9,7 @@ import ru.strela.ems.core.dao.*;
 import ru.strela.ems.core.model.*;
 import ru.strela.ems.generator.ChildrenMap;
 import ru.strela.ems.generator.SitePageGenerator;
+import ru.strela.ems.tools.ServerTools;
 import ru.tastika.tools.util.Utilities;
 
 import java.io.UnsupportedEncodingException;
@@ -267,7 +268,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 //                log.warn("url "+ url);
                 if (url != null) {
                     customPath = true;
-                    content.setBaseURL(url);
+                    content.setBaseURL(this.currentLocale+"/"+url);
                     if (fullURL.startsWith(url)) {
                         content.setObjectURL(fullURL.replaceFirst("^" + url, ""));
                     }
@@ -283,7 +284,7 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
             }
         }
         if (!customPath) {
-            typifiedObject.setBaseURL(baseURL);
+            typifiedObject.setBaseURL(this.currentLocale+"/"+baseURL);
             typifiedObject.setObjectURL(objectURL);
         }
     }
@@ -291,7 +292,8 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
     private void setFullUrltoObject(Collection<SystemNodeObject> values, String baseURL, String objectURL, HashMap<Integer, String> systemNodeUrls) {
         String fullURL = baseURL.length() > 0 && objectURL.length() > 0 ? baseURL + "/" + objectURL : baseURL + objectURL;
-//        log.warn("setFullUrltoObject 1");
+//        fullURL = this.currentLocale+fullURL;
+        System.out.println("setFullUrltoObject 1"+fullURL);
         for (SystemNodeObject systemNodeObject : values) {
             if (systemNodeObject instanceof SystemNodeTypifiedObject) {
                 SystemNodeTypifiedObject systemNodeTypifiedObject = (SystemNodeTypifiedObject) systemNodeObject;
@@ -303,8 +305,10 @@ public class SiteProcessorDaoImpl implements SiteProcessorDao {
 
 
     private void setFullUrltoObjectChildren(ChildrenMap children, String baseURL, String objectURL, HashMap<Integer, String> systemNodeUrls) {
-//        log.warn("setFullUrltoObject 2");
+
         String fullURL = baseURL.length() > 0 && objectURL.length() > 0 ? baseURL + "/" + objectURL : baseURL + objectURL;
+//        fullURL = this.currentLocale+fullURL;
+        System.out.println("setFullUrltoObject 2"+fullURL);
         for (TypifiedObject[] tObjects : children.getChildren().values()) {
             for (TypifiedObject to : tObjects) {
                 fillTypifiedObjectUrls(to, fullURL, baseURL, objectURL, systemNodeUrls);

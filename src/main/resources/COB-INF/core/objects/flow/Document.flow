@@ -608,8 +608,8 @@ function editXML() {
      actionState = "create";
      }*/
 
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     form.showForm(showFormURI, {"actionState": actionState, "displayURI": displayURI});
     //    if (actionState == "edit") {

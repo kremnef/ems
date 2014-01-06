@@ -25,8 +25,8 @@ function createTemplate(form) {
      */
     var actionState = "create";
 
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 //    template = showEmsObjectForm(form, template, showFormURI, {    
     form.showForm(showFormURI, {
         "servletPath" : servletPath,
@@ -107,8 +107,8 @@ function editTemplateById(form) {
 
 
     form.load(template);
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     form.showForm(showFormURI, {
 

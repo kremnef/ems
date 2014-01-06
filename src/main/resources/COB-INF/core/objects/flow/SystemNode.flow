@@ -51,8 +51,8 @@ function showSystemNode(systemNodeService, systemNode, form, actionState) {
     loadTranslations(systemNode, availableLanguages);
 
 
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     form.setAttribute("parentObjectsDataList", parentObjectsDataList);
     var parents;
@@ -92,7 +92,7 @@ function showSystemNode(systemNodeService, systemNode, form, actionState) {
         "availableTags": availableTags,
         "availableTemplates": availableTemplates,
         "availableLanguages": availableLanguages,
-        "formLocale": locale
+        "formLocale": adminPanelLocale
     };
 
 

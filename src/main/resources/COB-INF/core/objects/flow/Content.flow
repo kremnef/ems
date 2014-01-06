@@ -74,8 +74,8 @@ function showContent(contentService, content, form, contentActionState) {
     var documentType = documentTypeService.getDocumentType(documentTypeId);
     var documentService = cocoon.getComponent("documentService");
     var availableDocuments = documentService.getDocumentsByContentId(content.getId());
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     var tagService = cocoon.getComponent("tagService");
     var availableTags = tagService.getTags();
@@ -95,7 +95,7 @@ function showContent(contentService, content, form, contentActionState) {
         if (languageCode != null) {
             form.getChild("translate").setValue(languageCode);
         } else {
-            form.getChild("translate").setValue(locale);
+            form.getChild("translate").setValue(adminPanelLocale);
         }
 
 //        form.getChild("documentTypeId").setState(WidgetState.INVISIBLE);
@@ -122,7 +122,7 @@ function showContent(contentService, content, form, contentActionState) {
             "actionState": contentActionState,
             "documentType": documentType,
             "availableLanguages": availableLanguages,
-            "formLocale": locale,
+            "formLocale": adminPanelLocale,
             "languageCode": languageCode,
             "availableDocuments": availableDocuments
 
@@ -319,10 +319,10 @@ function editContent(form) {
 }
 
 
-function getLanguage(availableLanguages, locale) {
+function getLanguage(availableLanguages, adminPanelLocale) {
     for (var i = 0; i < availableLanguages.size(); i++) {
         var language = availableLanguages.get(i);
-        if (language.getCode().equals(locale)) {
+        if (language.getCode().equals(adminPanelLocale)) {
             return language;
         }
     }
