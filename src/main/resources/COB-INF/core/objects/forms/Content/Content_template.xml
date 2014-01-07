@@ -7,6 +7,349 @@
     <jx:import uri="forms/Library/CoreLib_template.xml"/>
     <!--dd-->
     <!-- OnlyContent -->
+
+    <jx:macro name="metaInfo">
+        <tags/>
+        <!-- <jx:forEach items="${availableTags}" var="tag">
+           ${tag.tag}
+        </jx:forEach>-->
+        <!--<script type="text/javascript">
+            $(function() {
+            var localJSON = [
+            <jx:forEach items="${availableTags}" var="item">
+                {"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
+            </jx:forEach>];
+
+            &lt;!&ndash;$('#metaInfo.${rowIndex}.addTag').tagedit({autocompleteOptions: {source: localJSON }});&ndash;&gt;
+            var rowTag =  document.getElementById('#metaInfo.${rowIndex}.addTag');
+            $(rowTag).tagedit({autocompleteOptions: { source: localJSON } });
+            });
+        </script>
+
+        <input id="local-source.x.y" type="text" name="tag[]" value="" class="tag"/>-->
+        <ft:repeater id="metaInfo">
+
+            <ft:repeater-rows>
+                <jx:set var="rowLanguageCode"
+                        value="${repeater.getRow(repeaterLoop.index).getChild('languageCode').value}"/>
+                <!--<ft:group id="metaInfo">-->
+
+                <div class="meta-info" name="translate_${rowLanguageCode}">
+                    <jx:attribute name="style">
+                        <jx:choose>
+                            <jx:when test="${rowLanguageCode == formLocale}">
+                                display:block;
+                            </jx:when>
+                            <jx:otherwise>
+                                display:none;
+                            </jx:otherwise>
+                        </jx:choose>
+
+                    </jx:attribute>
+                    <!--<ft:widget id="id">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>-->
+                    <ft:widget id="languageCode">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+                    <ft:widget id="objectId">
+                        <fi:styling type="hidden"/>
+                    </ft:widget>
+
+                    <ul class="simple-list">
+                        <li>
+                            <!--   <script type="text/javascript">
+                                <![CDATA[
+                        var metaTitle = document.getElementById("title");
+                        var contentName = document.getElementById("name");
+                        if (metaTitle.value == ''){
+                                metaTitle.value = contentName.value;
+                            }
+                        ]]>
+                            </script>-->
+                            <label for="title" class="label">
+                                <ft:widget-label id="title"/>
+                            </label>
+                            <ft:widget id="title">
+                                <fi:styling size="50"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <label for="description" class="label">
+                                <ft:widget-label id="description"/>
+                            </label>
+                            <ft:widget id="description">
+                                <fi:styling cols="50" type="textarea" rows="5"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <label for="keywords" class="label">
+                                <ft:widget-label id="keywords"/>
+                            </label>
+                            <ft:widget id="keywords">
+                                <fi:styling cols="50" type="textarea" rows="3"/>
+                            </ft:widget>
+                        </li>
+                        <li>
+                            <!-- <script type="text/javascript">
+                                 function addTag(item){
+                                 $("#tags").tagEditorAddTag(item);
+                                 }
+                                 $(document).ready(function() {
+
+                                 $("#tags").tagEditor({
+                                 confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
+                                 confirmRemoval: true,
+                                 continuousOutputBuild: true
+                                 });
+
+
+                                 });
+                             </script>-->
+                            <jx:set var="rowIndex" value="${repeaterLoop.index}"/>
+
+
+                            <!--<script type="text/javascript">
+                                function addTag(item){
+                                var rowTag = document.getElementById("metaInfo.${repeaterLoop.index}.tags");
+                                    $(rowTag).tagEditorAddTag(item);
+                                }
+                                $(document).ready(function() {
+                                 var rowTag = document.getElementById("metaInfo.${repeaterLoop.index}.tags");
+                                $(rowTag).tagEditor({
+                                confirmRemovalText: "<i18n:text catalogue="core" key="Tag.confirmRemoval"/>",
+                                confirmRemoval: true,
+                                continuousOutputBuild: true
+                                });
+
+
+                                });
+                            </script>-->
+                            <!--
+                                                                $("#tags").autocomplete({ source:'{% url tags %}',minChars: 2 ,
+                            -->
+
+
+
+
+
+                            <label for="addTag" class="label">
+                                <ft:widget-label id="addTag"/>
+                            </label>
+                            <!--<div id="addTag">
+                                <input type="text" name="tag[]" value="" class="tag"/>
+                            </div>-->
+                            <!--<ft:widget id="tagId">
+                                <fi:styling class="chzn-select" style="width:350px;" onChange="cocoon.forms.submitForm(this);"/>
+                                <fi:selection-list>
+                                    <jx:forEach items="${availableTags}" var="tag">
+                                        <fi:item value="${tag.id}">
+                                            <fi:label>${tag.tag}</fi:label>
+                                        </fi:item>
+                                    </jx:forEach>
+                                </fi:selection-list>
+                            </ft:widget>
+                            <script type="text/javascript">
+                                $(".chzn-select").chosen();
+                            </script>-->
+
+
+
+
+
+                                    <!--<input type="submit" name="save" value="Save"/>-->
+                            <!--Working variant with TagIt JS-->
+                            <!--start-->
+                           <!-- <script type="text/javascript">
+                                $(function() {
+                                var rowAddTag = document.getElementById("metaInfo.${repeaterLoop.index}.addTag");
+                                $(rowAddTag).autocomplete({ source: [ <jx:forEach items="${availableTags}" var="item" varStatus="idx">{"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },</jx:forEach>]});
+
+                                &lt;!&ndash;$( ".ui-autocomplete-input" ).change(function() {
+                                    alert( "trewwwww" );
+
+                                });&ndash;&gt;
+
+
+                                $("#myTags").tagit({
+                                availableTags: [
+                                <jx:forEach items="${availableTags}" var="item">
+                                    '${item.tag}',
+                                </jx:forEach>]});
+
+                                &lt;!&ndash;var rowAddTag = document.getElementById("metaInfo.${repeaterLoop.index}.tags");&ndash;&gt;
+                                &lt;!&ndash;$(#metaInfo.${repeaterLoop.index}.tags).autocomplete(<jx:forEach items="${availableTags}" var="item">'${item.tag}',</jx:forEach>);&ndash;&gt;
+                                });
+                            </script>-->
+
+
+                            <script type="text/javascript">
+
+                                function submitTag(tagId, tagValue){
+                                    var rowAddTag = document.getElementById("metaInfo.${repeaterLoop.index}.addTag");
+                                    alert (tagId + "-" + tagValue);
+                                    cocoon.forms.submitForm(rowAddTag);
+                                }
+                                $(function() {
+                                var rowAddTag = document.getElementById("metaInfo.${repeaterLoop.index}.addTag");
+                                $(rowAddTag).autocomplete({ source: [ <jx:forEach items="${availableTags}" var="item" varStatus="idx">{"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },</jx:forEach>],
+                                minLength: 2,
+                                select: function(event, ui) {
+                                    var tagId = ui.item.id;
+                                    var tagValue = ui.item.value;
+                                    submitTag(tagId, tagValue);
+
+
+                                }
+                                });
+                                <!--$(rowAddTag).autocomplete({change: function( event, ui ) {alert ("qeqeqeq")}});-->
+
+                                <!--$("#myTags").tagit();-->
+
+                                <!--var rowAddTag = document.getElementById("metaInfo.${repeaterLoop.index}.tags");-->
+                                <!--$(#metaInfo.${repeaterLoop.index}.tags).autocomplete(<jx:forEach items="${availableTags}" var="item">'${item.tag}',</jx:forEach>);-->
+                                });
+                            </script>
+                            <ft:widget id="addTag">
+                                <fi:styling class="tag" style="font-size:20px; width:270px;" onChange="cocoon.forms.submitForm(this);"/>
+                            </ft:widget>
+                            <ft:repeater id="tagList">
+                                <div class="tags_${rowLanguageCode}">
+                                    <ul id="myTags" class="tagit ui-widget ui-widget-content ui-corner-all">
+                                        <ft:repeater-rows>
+                                            <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
+                                                <span class="tagit-label">${repeater.getRow(repeaterLoop.index).getChild('tag').value}</span>
+                                                <a class="tagit-close"><span class="text-icon">×</span><span class="ui-icon ui-icon-close"></span></a>
+                                                <!--<span dir="ltr" isId="${repeater.getRow(repeaterLoop.index).getChild('id').value}">
+                                                    ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
+
+                                                </span>-->
+                                                <ft:widget id="id">
+                                                    <fi:styling name="id" type="hidden"/>
+                                                </ft:widget>
+
+                                                <ft:widget id="tag">
+                                                    <fi:styling name="tag[]" type="hidden"/>
+                                                </ft:widget>
+
+                                            </li>
+                                        </ft:repeater-rows>
+                                    </ul>
+                                </div>
+
+                            </ft:repeater>
+                            <!--end-->
+
+
+
+                            <!--TagEdit plugin work -->
+                            <!--start-->
+                            <!--<input type="text" name="formdata[tags][7-a]" value="Greylag Goose" class="tag" />
+                            <script type="text/javascript">
+                                $(function() {
+                                var localJSON = [
+                                <jx:forEach items="${availableTags}" var="item">
+                                    {"id": "${item.id}", "label": "${item.tag}", "value": "${item.tag}" },
+                                </jx:forEach>];
+                                var rowTag =  document.getElementById('metaInfo.${rowIndex}.addTag');
+                                $(rowTag).tagedit({autocompleteOptions: { source: localJSON } });
+                                });
+                            </script>
+                            <ft:widget id="addTag">
+                                <fi:styling class="tag" name="tag[]"  style="font-size:20px; width:270px;" onChange="cocoon.forms.submitForm(this);"/>
+                            </ft:widget>-->
+                            <!--end-->
+
+
+
+
+
+
+
+
+
+
+                            <!--<ft:repeater id="tagList">
+                                <div class="tags_${rowLanguageCode}">
+                                    <ul id="myTags" class="tagedit-list">
+                                        <ft:repeater-rows>
+                                            <li class="tagedit-listelement tagedit-listelement-old">
+                                                <span dir="ltr">
+                                                    ${repeater.getRow(repeaterLoop.index).getChild('tag').value}
+                                                </span>
+                                                <ft:widget id="id">
+                                                </ft:widget>
+                                                <ft:widget id="tag">
+                                                    <fi:styling class="tag" name="tag[]" type="hidden"/>
+                                                </ft:widget>
+                                                <ft:widget id="delete">
+                                                    &lt;!&ndash;<fi:styling type="link" role="button" class="ui-button ui-corner-all ui-icon ui-icon-closethick"/>&ndash;&gt;
+                                                    &lt;!&ndash;tagedit-close&ndash;&gt;
+                                                    <fi:styling type="link"
+                                                                class="tagedit-close ui-icon ui-icon-closethick"
+                                                                title="Remove from list."/>
+                                                </ft:widget>
+                                            </li>
+                                        </ft:repeater-rows>
+                                    </ul>
+                                </div>
+
+                            </ft:repeater>
+-->
+
+
+
+
+                        </li>
+                    </ul>
+                </div>
+                <!--</ft:group>-->
+            </ft:repeater-rows>
+        </ft:repeater>
+
+    </jx:macro>
+
+
+    <jx:macro name="tags">
+        <!--Ptags-->
+
+        <!--<script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/ptags/jquery.ptags.min.js"/>
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/ptags/jquery.ptags.default.css"
+              media="all"/>-->
+
+        <!--Tag editor-->
+
+        <!--<script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagedit/js/jquery.tagedit.js"/>
+        <script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagedit/js/jquery.autoGrowInput.js"/>
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/tagedit/css/jquery.tagedit.css"
+              media="all"/>
+-->
+
+        <!--<script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagedit/js/jquery-ui-1.8.6.custom.min.js"/>-->
+        <!--<link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/tagedit/css/ui-lightness/jquery-ui-1.8.6.custom.css"
+              media="all"/>-->
+
+
+
+
+        <!--Tag It-->
+
+        <script type="text/javascript"
+                src="/ems/resource/js/jquery-plugin/tagit/js/tag-it.min.js"/>
+        <link rel="stylesheet" type="text/css"
+              href="/ems/resource/js/jquery-plugin/tagit/css/jquery.tagit.css"
+              media="all"/>
+
+
+    </jx:macro>
+
     <jx:macro name="objectRows">
 
 

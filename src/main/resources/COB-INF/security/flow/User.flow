@@ -5,7 +5,7 @@ importClass(Packages.ru.tastika.tools.util.Utilities);
 
 
 function checkLoginUniqueness(loginWidget, login, id) {
-    print ("login:"+login+" id:"+id);
+    print ( "checkLoginUniqueness - login:"+login+" id:"+id);
     if (login == null) {
         login = new java.lang.String("");
     }

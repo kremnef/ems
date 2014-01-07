@@ -95,7 +95,7 @@
 		}
 
 		var elements = this;
-        alert(elements);
+//        alert(elements);
 
 		var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
 
