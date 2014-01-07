@@ -28,8 +28,8 @@ function editFileObjectById(form) {
     var actionState = "edit";
 
     var availableLanguages = getAvailableLanguages();
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
     importClass(Packages.org.apache.cocoon.forms.formmodel.WidgetState);
 
     fileObject = showEmsObjectForm(form, fileObjectService, fileObject, showFormURI, {
@@ -40,7 +40,7 @@ function editFileObjectById(form) {
         "id" : id,
         "blockPrefix" : blockPrefix,
         "availableLanguages" : availableLanguages,
-        "formLocale" : locale,
+        "formLocale" : adminPanelLocale,
         "actionState": actionState
     });
 

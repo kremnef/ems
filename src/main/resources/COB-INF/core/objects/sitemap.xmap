@@ -84,7 +84,7 @@
 
         <map:actions>
             <map:action name="uploadFile" src="ru.strela.ems.actions.UploadFileAction"/>
-            <map:action name="reindex" src="ru.strela.ems.actions.ReindexAction"/>
+            <!--<map:action name="reindex" src="ru.strela.ems.actions.ReindexAction"/>-->
         </map:actions>
 
 
@@ -157,7 +157,7 @@
                 <map:parameter name="requestParam" value="{request-param:param}"/>
             </map:transform>
             <map:transform type="i18n" label="messages">
-                <map:parameter name="locale" value="{session-attr:locale}"/>
+                <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
             </map:transform>
             <map:serialize type="html"/>
         </map:resource>
@@ -222,7 +222,7 @@
                 <map:when test="true">
                     <map:call resource="forms-styling"/>
                     <map:transform type="i18n">
-                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                        <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                     </map:transform>
                     &lt;!&ndash;  sending a partial Browser Update &ndash;&gt;
                     <map:select type="request-parameter">
@@ -274,12 +274,12 @@
         <map:resource name="ems-global">
             <map:call resource="ems-styling"/>
             <map:transform type="i18n" label="messages">
-                <map:parameter name="locale" value="{session-attr:locale}"/>
+                <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
             </map:transform>
             <map:call resource="forms-styling"/>
 
             <!--<map:transform type="i18n">
-                <map:parameter name="locale" value="{session-attr:locale}"/>
+                <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
             </map:transform>-->
 
             <!--<map:transform type="servletLinkRewriter"/>-->
@@ -352,7 +352,7 @@
                     </map:transform>
                     <map:call resource="ems-styling"/>
                     <map:transform type="i18n" label="messages">
-                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                        <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                     </map:transform>
                     <map:serialize type="html"/>
                 </map:otherwise>
@@ -369,7 +369,7 @@
                         <map:when test="true">
                             <map:call resource="forms-styling"/>
                             <map:transform type="i18n">
-                                <map:parameter name="locale" value="{session-attr:locale}"/>
+                                <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                             </map:transform>
                             <map:transform type="browser-update"/>
                             <!--  sending a partial Browser Update -->
@@ -444,7 +444,7 @@
                             <map:call resource="forms-styling"/>
 
                             <map:transform type="i18n">
-                                <map:parameter name="locale" value="{session-attr:locale}"/>
+                                <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                             </map:transform>
                             <map:transform type="browser-update"/>
 
@@ -520,12 +520,12 @@
                         <map:parameter name="hasChildren" value="{flow-attr:hasChildren}"/>
                     </map:transform>
                     <map:transform type="i18n" label="messages">
-                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                        <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                     </map:transform>
                     <map:call resource="forms-styling"/>
 
                     <!--<map:transform type="i18n">
-                        <map:parameter name="locale" value="{session-attr:locale}"/>
+                        <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                     </map:transform>-->
 
                     <!--<map:transform type="servletLinkRewriter"/>-->
@@ -732,8 +732,8 @@
                     <map:part src="cocoon:/Content/edit/inner"/>
                     <map:part src="cocoon:/Document/edit/inner"/>
                     <!--<map:part src="cocoon:/Doctype/edit/inner"/>-->
-                    <!--<map:part src="cocoon:/loadXMLSource/{session-attr:locale}"/>-->
-                    <map:part src="cocoon:/Doctype/{session-attr:locale}/inner"/>
+                    <!--<map:part src="cocoon:/loadXMLSource/{session-attr:adminPanelLocale}"/>-->
+                    <map:part src="cocoon:/Doctype/{session-attr:adminPanelLocale}/inner"/>
                     <map:part src="cocoon:/button.jx"/>
                 </map:aggregate>
                 <map:serialize type="xml"/>
@@ -965,14 +965,14 @@
                 <map:read mime-type="text/html"
                           src="blockcontext:/ems/resources/js/jquery-plugin/fileuploader/error.txt"/>
             </map:match>
-            <map:match pattern="reindex">
+            <!--<map:match pattern="reindex">
                 <map:act type="reindex">
                     <map:read mime-type="text/html"
                               src="blockcontext:/ems/resources/txt/success.txt"/>
                 </map:act>
                 <map:read mime-type="text/html"
                           src="blockcontext:/ems/resources/txt/error.txt"/>
-            </map:match>
+            </map:match>-->
         </map:pipeline>
 
 
@@ -1022,7 +1022,7 @@
                     <map:parameter name="locale" value="{flow-attribute:locale}"/>
                 </map:generate>
                 <map:transform type="i18n">
-                    <map:parameter name="locale" value="{session-attr:locale}"/>
+                    <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                 </map:transform>
                 <map:call resource="edit">
                     <map:parameter name="entity" value="{1}"/>
@@ -1034,7 +1034,7 @@
                 <map:generate type="jx" src="view/{1}/{1}_template.jx"/>
 
                 <map:transform type="i18n">
-                    <map:parameter name="locale" value="{session-attr:locale}"/>
+                    <map:parameter name="locale" value="{session-attr:adminPanelLocale}"/>
                 </map:transform>
                 <map:serialize type="xml"/>
             </map:match>

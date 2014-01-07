@@ -4,12 +4,12 @@ function getLoggedInUser() {
     print("!getLoggedInUser() function enter");
     var authUser = cocoon.session.getAttribute("authUser");
     if (authUser == null) {
-        print("user not autorized yet - " + authUser);
+        print("user not autorized yet" + authUser);
         importClass(Packages.org.springframework.security.core.Authentication);
         importClass(Packages.org.springframework.security.core.context.SecurityContextHolder);
 
         var auth = SecurityContextHolder.getContext().getAuthentication();
-        print("user autorized successull -" + authUser);
+
         if (auth) {
             var login = auth.getName();
             var customerService = cocoon.getComponent("customerService");
@@ -17,10 +17,11 @@ function getLoggedInUser() {
             cocoon.releaseComponent(customerService);
             authUser = {"login": login, "customer": customer};
             cocoon.session.setAttribute("authUser", authUser);
+            print("user autorized successull " + authUser);
         }
-        /*else {
-         return {};
-         }*/
+        else {
+         print("user autorized UNsuccessull!!! " + authUser);
+         }
     }
 //    print("authUser"+authUser);
     return authUser;
@@ -29,7 +30,7 @@ function getLoggedInUser() {
 
 
 function login() {
-    print( "!!!!LOGIN FORM - userLocale"+ userLocale);
+    print( "!!!!LOGIN FORM"+userLocale);
     var redirectURI = cocoon.request.getParameter("redirectURI");
     var queryString = "";
     for (var enumeration = cocoon.request.getParameterNames(); enumeration.hasMoreElements();) {

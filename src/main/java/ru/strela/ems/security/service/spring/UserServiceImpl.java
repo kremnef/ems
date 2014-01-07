@@ -21,6 +21,7 @@ package ru.strela.ems.security.service.spring;
 
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.security.core.userdetails.User;
+
 import ru.strela.ems.security.dao.UserDao;
 import ru.strela.ems.security.model.Group;
 import ru.strela.ems.security.model.Role;

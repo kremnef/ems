@@ -19,9 +19,9 @@ function listFolder(parentId) {
    var listData = listObjectsWithParentId(parentId, filter);
 
     var form = new Form("forms/FileObject/upload_definition.xml");
-    var locale = getLocale();
+    var adminPanelLocale = getLocale();
     cocoon.request.setAttribute("forms", true);
-    form.locale = new java.util.Locale(locale);
+    form.locale = new java.util.Locale(adminPanelLocale);
     var uploadWidget = form.lookupWidget("upload");
     var formMimeTypes = uploadWidget.getUploadDefinition().getMimeTypes();
     if (!formMimeTypes || formMimeTypes.length() == 0) {
@@ -204,13 +204,13 @@ function showFolder(folderService, folder, form, actionState) {
     }
     var id = folder.getId();
     var availableLanguages = getAvailableLanguages();
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
 
 
         showEmsObjectForm(form, folderService, folder, showFormURI, {
-            "formLocale": locale,
+            "formLocale": adminPanelLocale,
             "availableLanguages": availableLanguages,
             "navigationId": id,
             "parentId" : parentId,
@@ -310,8 +310,8 @@ function folderTree(form) {
     var servletPath = cocoon.parameters.servletPath;
 
     var CKEditorFuncNum = Utilities.parseStringToInteger(cocoon.request.getParameter("CKEditorFuncNum"));
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     var formData = {
         "servletPath" : servletPath,

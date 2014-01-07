@@ -121,8 +121,8 @@ function editNavigationById(form) {
     cocoon.request.setAttribute('navigationForm', form.getWidget());
 
     var availableLanguages = getAvailableLanguages();
-    var locale = getLocale();
-    form.locale = new java.util.Locale(locale);
+    var adminPanelLocale = getLocale();
+    form.locale = new java.util.Locale(adminPanelLocale);
 
     navigation = showEmsObjectForm(form, navigationService, navigation, showFormURI, {
         "navigationId": id,
@@ -135,7 +135,7 @@ function editNavigationById(form) {
         "formName" : "navigationForm",
         "actionState": actionState,
         "availableLanguages": availableLanguages,
-        "formLocale": locale
+        "formLocale": adminPanelLocale
 
     });
 //    typifiedObject.printList(navigation.getObjectLabelList());

@@ -21,6 +21,7 @@
 
 
     <map:components>
+
         <!--map:include dir="conf" pattern="*.xconf"/-->
         <!--<map:generator
                 label="content"
@@ -32,16 +33,27 @@
                 src="nl.hippo.cocoon.profiling.ProfilingGenerator"/>-->
 
 
-        <!--<map:actions>
-            <map:action name="cauth-is-logged-in"
+        <map:actions>
+            <!--<map:action name="cauth-is-logged-in"
                         src="org.apache.cocoon.auth.acting.LoggedInAction"/>
             <map:action name="cauth-login"
                         src="org.apache.cocoon.auth.acting.LoginAction"/>
             <map:action name="cauth-logout"
                         src="org.apache.cocoon.auth.acting.LogoutAction"/>
             <map:action name="clear-cache"
-                        src="org.apache.cocoon.acting.ClearCacheAction"/>
-        </map:actions>-->
+                        src="org.apache.cocoon.acting.ClearCacheAction"/>-->
+
+            <map:action name="site-locale" src="ru.strela.ems.actions.LanguageUriPrefixAction"/>
+            <!--<map:action name="locale" src="org.apache.cocoon.acting.LocaleAction">
+                <locale-attribute>locale</locale-attribute>
+                <use-locale>true</use-locale>
+                <default-locale language="ru" country="RUS"/>
+                <store-in-request>false</store-in-request>
+                <create-session>false</create-session>
+                <store-in-session>true</store-in-session>
+                <store-in-cookie>false</store-in-cookie>
+            </map:action>-->
+        </map:actions>
 
 
         <map:transformers default="xslt">
@@ -121,7 +133,12 @@
     <map:flow language="javascript">
     </map:flow>
 
+    <!--<map:action-sets>
+        <map:action-set name="">
+            <map:act type=""></act>
+        </map:action-set>
 
+    </map:action-sets>-->
     <!-- *** Common Pipeline *** -->
     <map:pipelines>
         <!--<map:pipeline id="profiler">
@@ -228,19 +245,9 @@
             <map:match pattern="js/**.js">
                 <map:read mime-type="text/javascript" src="context://js/{1}.js"/>
             </map:match>
-
-
         </map:pipeline>
 
         <map:pipeline id="mountSiteMap" type="noncaching">
-            <map:match pattern="site/**">
-                <map:mount
-                        check-reload="no"
-                        src="site/sitemap.xmap"
-                        uri-prefix="site/"
-                        />
-            </map:match>
-
 
             <map:match pattern="WEB-INF/**.xsl">
                 <map:read src="context://WEB-INF/{1}.xsl"/>
@@ -259,7 +266,6 @@
             </map:match>
 
 
-
             <map:match pattern="core">
                 <map:redirect-to uri="security/login"/>
             </map:match>
@@ -273,9 +279,6 @@
                 <map:call continuation="{1}"/>
             </map:match>
 
-            <map:match pattern="*">
-                <map:redirect-to uri="{1}/"/>
-            </map:match>
 
             <map:match pattern="core/**">
                 <!--<map:act type="cauth-is-logged-in">-->
@@ -311,13 +314,7 @@
             </map:match>
 
 
-            <!--<map:match pattern="auth/**">
-                <map:mount
-                        check-reload="no"
-                        src="auth/"
-                        uri-prefix="auth/"
-                        />
-            </map:match>-->
+
             <map:match pattern="service/*">
                 <map:mount
                         check-reload="no"
@@ -342,6 +339,18 @@
                 <map:generate src="view/ems_interface_menu.xml"/>
                 <map:serialize type="xml"/>
             </map:match>
+
+
+            <map:match pattern="**">
+                <map:act type="site-locale">
+                    <map:mount
+                        check-reload="yes"
+                        src="site/sitemap.xmap"
+                        uri-prefix=""/>
+                </map:act>
+            </map:match>
+
+
 
             <map:handle-errors>
                 <map:select type="exception">
@@ -374,6 +383,8 @@
                     </map:otherwise>
                 </map:select>
             </map:handle-errors>
+
+
 
         </map:pipeline>
     </map:pipelines>

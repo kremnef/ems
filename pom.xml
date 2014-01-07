@@ -174,6 +174,40 @@
             <version>1.0.1-SNAPSHOT</version>
         </dependency>-->
 
+
+
+        <!--<dependency>-->
+            <!--<groupId>org.apache.xerces</groupId>-->
+            <!--<artifactId>xerces-dom</artifactId>-->
+            <!--<version>2.0</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-api</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-impl</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+
+
+
+        <!--<dependency>
+            <groupId>org.apache.cocoon</groupId>
+            <artifactId>cocoon-core</artifactId>
+            <version>2.2.0</version>
+        </dependency>-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+
+
         <!--Javassist-->
         <!--<dependency>
             <groupId>javassist</groupId>
@@ -185,6 +219,7 @@
             <artifactId>javassist</artifactId>
             <version>3.15.0-GA</version>
         </dependency>
+
 
 
         <!-- JPA API and Hibernate -->
@@ -249,22 +284,7 @@
             <artifactId>xalan</artifactId>
             <version>2.7.1</version>
         </dependency>
-        <!--<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${org.springframework.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${org.springframework.version}</version>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
-            <version>2.5.6</version>
-        </dependency>-->
         <!--Core utilities used by other modules.
     Define this if you use Spring Utility APIs (org.springframework.core.*/org.springframework.util.*)-->
         <dependency>
@@ -393,9 +413,9 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
         </dependency>
 
         <dependency>
-        	<groupId>commons-jxpath</groupId>
-        	<artifactId>commons-jxpath</artifactId>
-        	<version>1.3</version>
+            <groupId>commons-jxpath</groupId>
+            <artifactId>commons-jxpath</artifactId>
+            <version>1.3</version>
         </dependency>
 
         <dependency>
@@ -491,6 +511,14 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+
+
+        <!--RhinO-->
+        <dependency>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <version>1.6R7</version>
+        </dependency>
         <!--<dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
@@ -529,8 +557,6 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
         </dependency>-->
 
 
-
-
         <!--<dependency>
             <groupId> org.apache.cassandra</groupId>
             <artifactId>cassandra-all</artifactId>
@@ -553,6 +579,7 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
     </dependencies>
     <!--<version>1.0.0-M2</version>-->
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.cocoon</groupId>
@@ -615,6 +642,10 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
             </plugin>
 
             <plugin>
+
+                <!--<groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin<</artifactId>
+                <version>9.1.0.v20131115</version>-->
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>6.1.26</version>
@@ -672,6 +703,11 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
                         <version>1.2.14</version>
                         <type>jar</type>
                     </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.16</version>
+                    </dependency>
                 </dependencies>
             </plugin>
             <plugin>
@@ -697,12 +733,12 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surfire-plugin</artifactId>
-                <version>2.12.4</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.16</version>
                 <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <!--<encoding>${project.build.sourceEncoding}</encoding>-->
+                    <!--<source>1.5</source>-->
+                    <!--<target>1.5</target>-->
                 </configuration>
             </plugin>
         </plugins>
@@ -713,6 +749,7 @@ Define this if you use Spring MVC with a Portlet Container (org.springframework.
         <org.springsecurity.version>3.1.4.RELEASE</org.springsecurity.version>
         <!--<org.springframework.version>3.1.0.RELEASE</org.springframework.version>-->
         <org.springframework.version>3.2.0.RELEASE</org.springframework.version>
+        <!--<org.springframework.version>4.0.0.RELEASE</org.springframework.version>-->
     </properties>
 </project>
 

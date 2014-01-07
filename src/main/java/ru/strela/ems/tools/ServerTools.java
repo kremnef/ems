@@ -37,7 +37,7 @@ public class ServerTools {
     private static WebApplicationContext springbean;
     public static final String USER_DATA_NAME = "name";
     public static final String USER_DATA_ID = "id";
-    public static final String LOCALE_TITLE = "locale";
+    public static final String LOCALE_TITLE = "site_locale";
     public static final String LANG_PARAMETER = "lang";
     public static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
 
@@ -141,6 +141,7 @@ public class ServerTools {
 
 
     public static String checkLocaleWithLanguageCode(Request request) {
+        System.out.println("checkLocaleWithLanguageCode ------------");
         String languageCode = "";
         HttpSession session = request.getSession();
         Object attribute = session.getAttribute(LOCALE_TITLE);
@@ -153,7 +154,12 @@ public class ServerTools {
             for (Language language : visibleLanguages) {
                 if (language.getCode().equalsIgnoreCase(RlanguageCode)) {
                     languageCode = language.getCode();
+                    request.setAttribute(LOCALE_TITLE, languageCode);
+                    session.setAttribute(LOCALE_TITLE, languageCode);
+//                    System.out.println("LOCALE_TITLE-Session 1"+ session.getAttribute(LOCALE_TITLE));
+//                    System.out.println("LOCALE_TITLE-request 2"+ request.getAttribute(LOCALE_TITLE));
                     break;
+
                 }
             }
         } else {
@@ -180,57 +186,18 @@ public class ServerTools {
                 }
                 request.setAttribute(LOCALE_TITLE, localeStr);
                 session.setAttribute(LOCALE_TITLE, localeStr);
+//                System.out.println("LOCALE_TITLE-Session "+ session.getAttribute(LOCALE_TITLE));
+//                System.out.println("LOCALE_TITLE-request "+ request.getAttribute(LOCALE_TITLE));
+
             }
         }
 //        return languageId;
         return languageCode;
     }
-   /*
-    public static int checkLocaleWithLanguageId(Request request) {
-        int languageId = 0;
-        HttpSession session = request.getSession();
-        Object attribute = session.getAttribute(LOCALE_TITLE);
-        WebApplicationContext currentWebApplicationContext = WebAppContextUtils.getCurrentWebApplicationContext();
-        LanguageDao languageDao = (LanguageDao) currentWebApplicationContext.getBean("languageDao");
-        List<Language> visibleLanguages = languageDao.getVisibleLanguages();
-        if (attribute != null && attribute.toString().length() > 0) {
-            request.setAttribute(LOCALE_TITLE, attribute.toString());
-            String languageCode = attribute.toString();
-            for (Language language : visibleLanguages) {
-                if (language.getCode().equalsIgnoreCase(languageCode)) {
-                    languageId = language.getId();
-                    break;
-                }
-            }
-        } else {
-            Locale locale = request.getLocale();
-            String localeStr = locale.getLanguage().toLowerCase();
-            if (visibleLanguages.size() > 0) {
-                boolean correctLanguage = false;
-                Language defaultLanguage = visibleLanguages.get(0);
-                for (Language language : visibleLanguages) {
-                    if (language.getIsDefaultLang()) {
-                        defaultLanguage = language;
-                    }
-                    if (language.getCode().equalsIgnoreCase(localeStr)) {
-                        correctLanguage = true;
-                        languageId = language.getId();
-                        break;
-                    }
-                }
-                if (!correctLanguage) {
-                    localeStr = defaultLanguage.getCode().toLowerCase();
-                    languageId = defaultLanguage.getId();
-                }
-                request.setAttribute(LOCALE_TITLE, localeStr);
-                session.setAttribute(LOCALE_TITLE, localeStr);
-            }
-        }
-        return languageId;
-    }
-*/
+
 
     public static void updateLocaleFromParameter(Request request) {
+        System.out.println("updateLocaleFromParameter----------------");
         String langParameter = request.getParameter(LANG_PARAMETER);
         if (langParameter != null && langParameter.trim().length() > 0) {
             langParameter = NON_WORD_PATTERN.matcher(langParameter).replaceAll("");
